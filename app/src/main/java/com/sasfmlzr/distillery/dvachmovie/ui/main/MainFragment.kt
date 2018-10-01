@@ -13,7 +13,7 @@ import com.sasfmlzr.distillery.dvachmovie.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
 
-    private lateinit var player : SimpleExoPlayer
+    private lateinit var player: SimpleExoPlayer
     private lateinit var playerView: PlayerView
 
     companion object {
@@ -21,7 +21,7 @@ class MainFragment : Fragment() {
     }
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var binding : MainFragmentBinding
+    private lateinit var binding: MainFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -31,8 +31,8 @@ class MainFragment : Fragment() {
 
         player = ExoPlayerFactory.newSimpleInstance(context)
         playerView = binding.playerView
-        playerView.player = player;
-        
+        playerView.player = player
+
         return binding.root
     }
 }
