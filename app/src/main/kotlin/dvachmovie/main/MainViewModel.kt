@@ -1,4 +1,4 @@
-package com.sasfmlzr.distillery.dvachmovie.ui.main
+package dvachmovie.main
 
 import android.arch.lifecycle.ViewModel
 

@@ -1,4 +1,4 @@
-package com.sasfmlzr.distillery.dvachmovie
+package dvachmovie
 
 import org.junit.Test
 

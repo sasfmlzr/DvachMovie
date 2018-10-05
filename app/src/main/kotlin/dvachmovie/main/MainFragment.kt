@@ -1,4 +1,4 @@
-package com.sasfmlzr.distillery.dvachmovie.ui.main
+package dvachmovie.main
 
 import android.arch.lifecycle.ViewModelProviders
 import android.net.Uri
@@ -15,7 +15,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.sasfmlzr.distillery.dvachmovie.databinding.MainFragmentBinding
+import dvachmovie.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
 

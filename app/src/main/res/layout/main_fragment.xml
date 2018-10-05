@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.sasfmlzr.distillery.dvachmovie.ui.main.MainViewModel" />
+            type="dvachmovie.main.MainViewModel" />
         <import type="android.view.View" />
     </data>
 
@@ -14,7 +14,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".main.MainFragment">
 
     <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view"
         android:layout_width="match_parent"

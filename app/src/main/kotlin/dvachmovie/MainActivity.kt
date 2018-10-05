@@ -1,8 +1,8 @@
-package com.sasfmlzr.distillery.dvachmovie
+package dvachmovie
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.sasfmlzr.distillery.dvachmovie.ui.main.MainFragment
+import dvachmovie.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

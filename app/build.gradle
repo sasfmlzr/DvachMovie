@@ -7,13 +7,20 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.sasfmlzr.distillery.dvachmovie"
+        applicationId 'com.sasfmlzr.dvachmovie.android'
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -27,21 +34,20 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "com.android.support:appcompat-v7:$appcompatVersion"
     implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
     implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
-
     implementation "com.google.code.gson:gson:$gsonVersion"
-
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion"
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
