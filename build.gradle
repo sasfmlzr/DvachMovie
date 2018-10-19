@@ -12,6 +12,7 @@ buildscript {
         mockitoVersion = '2.23.0'
         rxkotlinVersion = '2.3.0'
         rxandroidVersion = '2.0.2'
+        placeholderviewVersion = '1.0.3'
         junitVersion = '4.12'
     }
     repositories {
