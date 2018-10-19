@@ -15,12 +15,16 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import dvachmovie.base.NewFragment
 import dvachmovie.databinding.MainFragmentBinding
+import dvachmovie.di.core.ViewComponent
 
-class MainFragment : Fragment() {
+class MainFragment : NewFragment() {
 
     private lateinit var player: SimpleExoPlayer
     private lateinit var playerView: PlayerView
+
+    override fun inject(component: ViewComponent) = component.inject(this)
 
     companion object {
         fun newInstance() = MainFragment()
@@ -31,7 +35,7 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        var urlVideo: Uri = Uri.parse("https://2ch.hk/b/src/183948274/15383946733870.webm")
+        var urlVideo: Uri = Uri.parse("https://2ch.hk/b/src/184743141/15396153482850.webm")
         binding = MainFragmentBinding.inflate(inflater, container, false)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         binding.viewmodel = viewModel
