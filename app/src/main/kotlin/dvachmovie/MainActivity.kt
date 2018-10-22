@@ -9,6 +9,12 @@ import dvachmovie.databinding.MainActivityBinding
 import dvachmovie.di.core.Injector
 import dvachmovie.main.MainFragment
 import dvachmovie.main.MoviesViewPagerAdapter
+import dvachmovie.request.model.DvachCatalogRequest
+import dvachmovie.request.RetrofitSingleton
+import retrofit2.Callback;
+import retrofit2.Call
+import retrofit2.Response
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +37,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.viewPager.adapter = MoviesViewPagerAdapter(dvachMovies, supportFragmentManager)
 
+
+        test()
+
+
     }
 
     private fun initDI() {
@@ -42,6 +52,24 @@ class MainActivity : AppCompatActivity() {
         dvachMovies = mutableListOf(MainFragment.newInstance("https://2ch.hk/b/src/185160064/15401994992261.webm"),
                 MainFragment.newInstance("https://2ch.hk/b/src/185159451/15402067914440.webm"),
                 MainFragment.newInstance("https://2ch.hk/b/src/185165705/15402065817600.webm"))
+    }
+
+    private fun test() {
+        val dvachApi = RetrofitSingleton.getDvachMovieApi()
+
+        dvachApi?.getCatalog("b")?.enqueue(dvachCallback())
+
+
+    }
+
+    private fun dvachCallback() : Callback<DvachCatalogRequest>{
+        return object:Callback<DvachCatalogRequest> {
+        override fun onResponse(call: Call<DvachCatalogRequest>, response: Response<DvachCatalogRequest>) {
+            val resp = response.body()
+
+        }
+            override fun onFailure(call: Call<DvachCatalogRequest>, t: Throwable) {}
+        }
     }
 
 }

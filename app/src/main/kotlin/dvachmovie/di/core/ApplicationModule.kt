@@ -4,5 +4,4 @@ import dagger.Module
 
 @Module
 class ApplicationModule(private val application: MainApplication) {
-
 }

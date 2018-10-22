@@ -60,4 +60,6 @@ dependencies {
 
     testImplementation "junit:junit:$junitVersion"
     implementation "com.android.support:support-v4:$appcompatVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation project(path: ':domain')
 }
