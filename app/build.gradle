@@ -59,4 +59,5 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion"
 
     testImplementation "junit:junit:$junitVersion"
+    implementation "com.android.support:support-v4:$appcompatVersion"
 }

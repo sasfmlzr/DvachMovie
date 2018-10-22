@@ -3,7 +3,6 @@ package dvachmovie.main
 import android.arch.lifecycle.ViewModelProviders
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,22 +19,33 @@ import dvachmovie.databinding.MainFragmentBinding
 import dvachmovie.di.core.ViewComponent
 
 class MainFragment : NewFragment() {
+    private lateinit var URI_MOVIE: String
 
     private lateinit var player: SimpleExoPlayer
     private lateinit var playerView: PlayerView
 
-    override fun inject(component: ViewComponent) = component.inject(this)
-
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: MainFragmentBinding
 
+    override fun inject(component: ViewComponent) = component.inject(this)
+
+    companion object {
+
+        fun newInstance(uri: String): MainFragment {
+            val fragment = MainFragment()
+            val bundle = Bundle(1)
+            bundle.putString("uri", uri)
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        var urlVideo: Uri = Uri.parse("https://2ch.hk/b/src/184743141/15396153482850.webm")
+
+        URI_MOVIE = this.arguments?.getString("uri") ?: ""
+        val urlVideo: Uri = Uri.parse(URI_MOVIE)
+
         binding = MainFragmentBinding.inflate(inflater, container, false)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         binding.viewmodel = viewModel
@@ -44,11 +54,16 @@ class MainFragment : NewFragment() {
         playerView = binding.playerView
         playerView.player = player
 
-        var dataSourceFactory : DataSource.Factory = DefaultDataSourceFactory(context,
+        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(context,
                 Util.getUserAgent(context, "AppName"))
-        var videoSource : MediaSource = ExtractorMediaSource.Factory(dataSourceFactory).
-                createMediaSource(urlVideo)
+        val videoSource: MediaSource = ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(urlVideo)
         player.prepare(videoSource)
+
         return binding.root
+    }
+
+    override fun onPause() {
+        super.onPause()
+        playerView.onPause()
     }
 }
