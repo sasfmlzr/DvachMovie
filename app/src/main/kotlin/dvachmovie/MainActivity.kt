@@ -9,15 +9,17 @@ import dvachmovie.databinding.MainActivityBinding
 import dvachmovie.di.core.Injector
 import dvachmovie.main.MainFragment
 import dvachmovie.main.MoviesViewPagerAdapter
-import dvachmovie.request.model.DvachCatalogRequest
 import dvachmovie.request.RetrofitSingleton
-import retrofit2.Callback;
+import dvachmovie.request.model.catalog.DvachCatalogRequest
+import dvachmovie.request.model.thread.DvachThreadRequest
+import dvachmovie.request.model.thread.FileItem
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
-
+    private val BOARD = "b"
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var binding: MainActivityBinding
 
@@ -38,8 +40,8 @@ class MainActivity : AppCompatActivity() {
         binding.viewPager.adapter = MoviesViewPagerAdapter(dvachMovies, supportFragmentManager)
 
 
+        getNumThreads(BOARD)
         test()
-
 
     }
 
@@ -55,21 +57,81 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun test() {
-        val dvachApi = RetrofitSingleton.getDvachMovieApi()
-
-        dvachApi?.getCatalog("b")?.enqueue(dvachCallback())
 
 
     }
 
-    private fun dvachCallback() : Callback<DvachCatalogRequest>{
-        return object:Callback<DvachCatalogRequest> {
-        override fun onResponse(call: Call<DvachCatalogRequest>, response: Response<DvachCatalogRequest>) {
-            val resp = response.body()
+    private fun getNumThreads(board: String) {
+        val dvachApi = RetrofitSingleton.getDvachMovieApi()
+        dvachApi?.getCatalog(board)?.enqueue(dvachNumCallback(board))
+    }
 
-        }
+    private fun dvachNumCallback(board: String): Callback<DvachCatalogRequest> {
+        return object : Callback<DvachCatalogRequest> {
+            override fun onResponse(call: Call<DvachCatalogRequest>, response: Response<DvachCatalogRequest>) {
+                val resp = response.body()
+                val numthreads = resp?.threads?.map { it.num }
+                println("dvachNum started")
+                numthreads?.map { num -> getLinkFilesFromThreads(board, num) }
+                println("dvachNum finished")
+                count = numthreads!!.size
+            }
+
             override fun onFailure(call: Call<DvachCatalogRequest>, t: Throwable) {}
         }
+    }
+
+    private fun getLinkFilesFromThreads(board: String, numThread: String) {
+        val dvachApi = RetrofitSingleton.getDvachMovieApi()
+        dvachApi?.getThread(board, numThread)?.enqueue(dvachLinkFilesCallback())
+    }
+
+    private var listFilesItem= mutableListOf<FileItem>()
+    private var count = 0
+
+
+    private fun dvachLinkFilesCallback(): Callback<DvachThreadRequest> {
+        return object : Callback<DvachThreadRequest> {
+            override fun onResponse(call: Call<DvachThreadRequest>, response: Response<DvachThreadRequest>) {
+                val resp = response.body()
+
+                val num = resp?.title
+                println("dvachLinkFiles started for $num")
+                resp?.threads?.map { it.posts?.map { it.files?.forEach { listFilesItem.add(it) } } }
+                count--
+                println("dvachLinkFiles finished for $num")
+                if (count==0){
+                    println("")
+                    setupUriVideos()
+                }
+            }
+
+            override fun onFailure(call: Call<DvachThreadRequest>, t: Throwable) {}
+        }
+    }
+
+    private var listMovies = mutableListOf<String>()
+
+    private fun setupUriVideos () {
+        var count = listFilesItem.size
+        listFilesItem.map {
+            val path = it.path
+            if (path.contains(".webm")){
+                listMovies.add("https://2ch.hk$path")
+            }
+            count--
+            if (count==0){
+                initWebm()
+            }
+        }
+    }
+
+    private fun initWebm(){
+
+        val dvachMovies = mutableListOf<MainFragment>()
+        listMovies.forEach { uri -> dvachMovies.add(MainFragment.newInstance(uri)) }
+
+        binding.viewPager.adapter = MoviesViewPagerAdapter(dvachMovies, supportFragmentManager)
     }
 
 }

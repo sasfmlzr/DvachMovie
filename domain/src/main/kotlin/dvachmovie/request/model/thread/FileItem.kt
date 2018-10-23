@@ -2,29 +2,29 @@ package dvachmovie.request.model.thread
 
 import com.google.gson.annotations.SerializedName
 
-data class FilesItem(@SerializedName("tn_height")
+data class FileItem(@SerializedName("tn_height")
                      val tnHeight: Int = 0,
-                     @SerializedName("thumbnail")
+                    @SerializedName("thumbnail")
                      val thumbnail: String = "",
-                     @SerializedName("sticker")
+                    @SerializedName("sticker")
                      val sticker: String = "",
-                     @SerializedName("type")
+                    @SerializedName("type")
                      val type: Int = 0,
-                     @SerializedName("pack")
+                    @SerializedName("pack")
                      val pack: String = "",
-                     @SerializedName("path")
+                    @SerializedName("path")
                      val path: String = "",
-                     @SerializedName("tn_width")
+                    @SerializedName("tn_width")
                      val tnWidth: Int = 0,
-                     @SerializedName("size")
+                    @SerializedName("size")
                      val size: Int = 0,
-                     @SerializedName("install")
+                    @SerializedName("install")
                      val install: String = "",
-                     @SerializedName("displayname")
+                    @SerializedName("displayname")
                      val displayname: String = "",
-                     @SerializedName("name")
+                    @SerializedName("name")
                      val name: String = "",
-                     @SerializedName("width")
+                    @SerializedName("width")
                      val width: Int = 0,
-                     @SerializedName("height")
+                    @SerializedName("height")
                      val height: Int = 0)
