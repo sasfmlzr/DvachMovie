@@ -1,7 +1,7 @@
 package dvachmovie.di.core
 
 import dagger.Component
-import di.DataModule
+import dvachmovie.di.DataModule
 import javax.inject.Singleton
 
 @Singleton

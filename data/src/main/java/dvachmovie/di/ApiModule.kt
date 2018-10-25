@@ -1,4 +1,4 @@
-package di
+package dvachmovie.di
 
 import dagger.Provides
 import retrofit2.Retrofit

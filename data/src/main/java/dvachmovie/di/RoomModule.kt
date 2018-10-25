@@ -1,16 +1,14 @@
-package di
+package dvachmovie.di
 
-import DB.data.MovieDao
-import DB.MovieDatabase
-import DB.data.MovieEntity
-import DB.repository.MovieDataSource
-import DB.repository.MovieRepository
+import dvachmovie.db.MovieDatabase
+import dvachmovie.db.data.MovieDao
+import dvachmovie.db.repository.MovieDataSource
+import dvachmovie.db.repository.MovieRepository
 import android.app.Application
+import android.arch.persistence.room.Room
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
-import android.arch.persistence.room.Room
-
 
 
 @Module
