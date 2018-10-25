@@ -5,18 +5,17 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import dvachmovie.databinding.MainActivityBinding
-import dvachmovie.di.core.Injector
-import dvachmovie.main.MainFragment
-import dvachmovie.main.MoviesViewPagerAdapter
 import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
+import dvachmovie.databinding.MainActivityBinding
+import dvachmovie.di.core.Injector
+import dvachmovie.main.MainFragment
+import dvachmovie.main.MoviesViewPagerAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 class MainActivity : AppCompatActivity() {
     private val BOARD = "b"
