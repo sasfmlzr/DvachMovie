@@ -9,10 +9,10 @@ import dvachmovie.databinding.MainActivityBinding
 import dvachmovie.di.core.Injector
 import dvachmovie.main.MainFragment
 import dvachmovie.main.MoviesViewPagerAdapter
-import dvachmovie.request.RetrofitSingleton
-import dvachmovie.request.model.catalog.DvachCatalogRequest
-import dvachmovie.request.model.thread.DvachThreadRequest
-import dvachmovie.request.model.thread.FileItem
+import dvachmovie.api.RetrofitSingleton
+import dvachmovie.api.model.catalog.DvachCatalogRequest
+import dvachmovie.api.model.thread.DvachThreadRequest
+import dvachmovie.api.model.thread.FileItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

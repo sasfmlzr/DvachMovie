@@ -1,4 +1,4 @@
-package dvachmovie.request.model.thread
+package dvachmovie.api.model.catalog
 
 import com.google.gson.annotations.SerializedName
 
