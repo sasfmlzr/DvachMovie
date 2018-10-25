@@ -1,10 +1,11 @@
 package dvachmovie.di.core
 
 import dagger.Component
+import di.DataModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = arrayOf(ApplicationModule::class))
+@Component(modules = arrayOf(ApplicationModule::class, DataModule::class))
 interface ApplicationComponent {
     //fun viewModelComponent(): ViewModelComponent
     fun viewComponent(): ViewComponent
