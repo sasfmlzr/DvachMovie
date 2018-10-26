@@ -9,8 +9,6 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
         MutableLiveData<String>()
     }
 
-
-
     fun loadUri(link: String){
         uriMovie.value = link
     }

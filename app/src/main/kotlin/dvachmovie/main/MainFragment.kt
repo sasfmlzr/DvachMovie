@@ -2,6 +2,7 @@ package dvachmovie.main
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import dvachmovie.databinding.MainFragmentBinding
 import dvachmovie.di.core.ViewComponent
 
 class MainFragment : NewFragment() {
+    private val TAG = "APP"
 
     private lateinit var playerView: PlayerView
 
@@ -28,6 +30,7 @@ class MainFragment : NewFragment() {
             fragment.arguments = bundle
             return fragment
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +48,8 @@ class MainFragment : NewFragment() {
         return binding.root
     }
 
-    override fun onPause() {
-        super.onPause()
+    fun pauseVideo(){
         playerView.onPause()
     }
+
 }

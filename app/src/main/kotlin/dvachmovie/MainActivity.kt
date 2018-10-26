@@ -3,15 +3,14 @@ package dvachmovie
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
 import dvachmovie.databinding.MainActivityBinding
 import dvachmovie.di.core.Injector
-import dvachmovie.main.MainFragment
 import dvachmovie.main.MoviesViewPagerAdapter
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var binding: MainActivityBinding
 
-    private lateinit var dvachMovies: MutableList<Fragment>
+    private lateinit var dvachMovies: MutableList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +36,9 @@ class MainActivity : AppCompatActivity() {
         initMovies()
 
         binding.viewPager.adapter = MoviesViewPagerAdapter(dvachMovies, supportFragmentManager)
+        binding.viewPager.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+            hasFocus ?: this.binding.viewPager
+        }
 
 
         getNumThreads(BOARD)
@@ -50,9 +52,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initMovies() {
 
-        dvachMovies = mutableListOf(MainFragment.newInstance("https://2ch.hk/b/src/185160064/15401994992261.webm"),
-                MainFragment.newInstance("https://2ch.hk/b/src/185159451/15402067914440.webm"),
-                MainFragment.newInstance("https://2ch.hk/b/src/185165705/15402065817600.webm"))
+        dvachMovies = mutableListOf("https://2ch.hk/b/src/185160064/15401994992261.webm",
+                "https://2ch.hk/b/src/185159451/15402067914440.webm",
+                "https://2ch.hk/b/src/185165705/15402065817600.webm")
     }
 
     private fun test() {
@@ -85,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         dvachApi?.getThread(board, numThread)?.enqueue(dvachLinkFilesCallback())
     }
 
-    private var listFilesItem= mutableListOf<FileItem>()
+    private var listFilesItem = mutableListOf<FileItem>()
     private var count = 0
 
 
@@ -99,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                 resp?.threads?.map { it.posts?.map { it.files?.forEach { listFilesItem.add(it) } } }
                 count--
                 println("dvachLinkFiles finished for $num")
-                if (count==0){
+                if (count == 0) {
                     println("")
                     setupUriVideos()
                 }
@@ -111,26 +113,22 @@ class MainActivity : AppCompatActivity() {
 
     private var listMovies = mutableListOf<String>()
 
-    private fun setupUriVideos () {
+    private fun setupUriVideos() {
         var count = listFilesItem.size
         listFilesItem.map {
             val path = it.path
-            if (path.contains(".webm")){
+            if (path.contains(".webm")) {
                 listMovies.add("https://2ch.hk$path")
             }
             count--
-            if (count==0){
+            if (count == 0) {
                 initWebm()
             }
         }
     }
 
-    private fun initWebm(){
-
-        val dvachMovies = mutableListOf<MainFragment>()
-        listMovies.forEach { uri -> dvachMovies.add(MainFragment.newInstance(uri)) }
-
-        binding.viewPager.adapter = MoviesViewPagerAdapter(dvachMovies, supportFragmentManager)
+    private fun initWebm() {
+        binding.viewPager.adapter = MoviesViewPagerAdapter(listMovies, supportFragmentManager)
     }
 
 }
