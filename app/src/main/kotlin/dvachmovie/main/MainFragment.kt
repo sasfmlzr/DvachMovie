@@ -1,27 +1,17 @@
 package dvachmovie.main
 
 import android.arch.lifecycle.ViewModelProviders
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import dvachmovie.base.NewFragment
 import dvachmovie.databinding.MainFragmentBinding
 import dvachmovie.di.core.ViewComponent
 
 class MainFragment : NewFragment() {
-    private lateinit var URI_MOVIE: String
 
-    private lateinit var player: SimpleExoPlayer
     private lateinit var playerView: PlayerView
 
     private lateinit var viewModel: MainViewModel
@@ -43,21 +33,14 @@ class MainFragment : NewFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        URI_MOVIE = this.arguments?.getString("uri") ?: ""
-        val urlVideo: Uri = Uri.parse(URI_MOVIE)
+        val uri = this.arguments?.getString("uri") ?: ""
 
         binding = MainFragmentBinding.inflate(inflater, container, false)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel.loadUri(uri)
         binding.viewmodel = viewModel
 
-        player = ExoPlayerFactory.newSimpleInstance(context)
         playerView = binding.playerView
-        playerView.player = player
-
-        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(context,
-                Util.getUserAgent(context, "AppName"))
-        val videoSource: MediaSource = ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(urlVideo)
-        player.prepare(videoSource)
 
         return binding.root
     }

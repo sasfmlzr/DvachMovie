@@ -18,7 +18,8 @@
 
     <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:movie="@{viewmodel.uriMovie}"/>
 
     <TextView
         android:id="@+id/message"

@@ -1,7 +1,17 @@
 package dvachmovie.main
 
-import android.arch.lifecycle.ViewModel
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.MutableLiveData
 
-class MainViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class MainViewModel (application: Application) : AndroidViewModel(application) {
+    val uriMovie: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+
+
+    fun loadUri(link: String){
+        uriMovie.value = link
+    }
 }
