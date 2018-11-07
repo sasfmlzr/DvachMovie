@@ -4,14 +4,13 @@ import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
 import dvachmovie.databinding.MainActivityBinding
 import dvachmovie.di.core.Injector
-import dvachmovie.main.MoviesViewPagerAdapter
+import dvachmovie.main.MainFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,15 +34,19 @@ class MainActivity : AppCompatActivity() {
 
         initMovies()
 
-        binding.viewPager.adapter = MoviesViewPagerAdapter(dvachMovies, supportFragmentManager)
-        binding.viewPager.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
-            hasFocus ?: this.binding.viewPager
-        }
-
-
+        //binding.container = MainFragment.newInstance(dvachMovies)
+        // binding.viewPager.adapter = MoviesViewPagerAdapter(dvachMovies, supportFragmentManager)
+        //  binding.viewPager.offscreenPageLimit=0
+        initFragment(dvachMovies)
         getNumThreads(BOARD)
         test()
 
+    }
+
+    private fun initFragment(uriList: MutableList<String>) {
+        supportFragmentManager.beginTransaction()
+                .replace(binding.container.id, MainFragment.newInstance(uriList))
+                .commit()
     }
 
     private fun initDI() {
@@ -128,7 +131,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initWebm() {
-        binding.viewPager.adapter = MoviesViewPagerAdapter(listMovies, supportFragmentManager)
+        initFragment(listMovies)
+        //   binding.container = MainFragment.newInstance(listMovies)
+        //  binding.viewPager.adapter = MoviesViewPagerAdapter(listMovies, supportFragmentManager)
     }
 
 }

@@ -2,7 +2,6 @@ package dvachmovie.main
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.base.NewFragment
 import dvachmovie.databinding.MainFragmentBinding
 import dvachmovie.di.core.ViewComponent
+import java.util.*
 
 class MainFragment : NewFragment() {
     private val TAG = "APP"
@@ -23,10 +23,10 @@ class MainFragment : NewFragment() {
 
     companion object {
 
-        fun newInstance(uri: String): MainFragment {
+        fun newInstance(uriList: MutableList<String>): MainFragment {
             val fragment = MainFragment()
             val bundle = Bundle(1)
-            bundle.putString("uri", uri)
+            bundle.putStringArrayList("uri", uriList as ArrayList<String>?)
             fragment.arguments = bundle
             return fragment
         }
@@ -36,7 +36,7 @@ class MainFragment : NewFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        val uri = this.arguments?.getString("uri") ?: ""
+        val uri = this.arguments?.getStringArrayList("uri") ?: mutableListOf<String>()
 
         binding = MainFragmentBinding.inflate(inflater, container, false)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
@@ -48,8 +48,17 @@ class MainFragment : NewFragment() {
         return binding.root
     }
 
-    fun pauseVideo(){
+    fun pauseVideo() {
         playerView.onPause()
     }
 
+    override fun onPause() {
+        playerView.player.stop()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        playerView.player.stop()
+        super.onStop()
+    }
 }

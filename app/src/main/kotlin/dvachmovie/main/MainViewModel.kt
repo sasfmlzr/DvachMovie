@@ -4,12 +4,12 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 
-class MainViewModel (application: Application) : AndroidViewModel(application) {
-    val uriMovie: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    val uriMovie: MutableLiveData<List<String>> by lazy {
+        MutableLiveData<List<String>>()
     }
 
-    fun loadUri(link: String){
-        uriMovie.value = link
+    fun loadUri(links: List<String>) {
+        uriMovie.value = links
     }
 }
