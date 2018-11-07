@@ -1,9 +1,10 @@
-package dvachmovie
+package dvachmovie.activity.main
 
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import dvachmovie.R
 import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest

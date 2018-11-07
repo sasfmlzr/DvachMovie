@@ -1,4 +1,4 @@
-package dvachmovie
+package dvachmovie.activity.main
 
 import android.arch.lifecycle.ViewModel
 
