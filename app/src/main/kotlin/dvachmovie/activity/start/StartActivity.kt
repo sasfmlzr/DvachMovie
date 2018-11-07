@@ -17,9 +17,8 @@ class StartActivity : AppCompatActivity() {
     private lateinit var viewModel: StartActivityViewModel
     private lateinit var binding: StartActivityBinding
 
-
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.start_activity)
         viewModel = ViewModelProviders.of(this).get(StartActivityViewModel::class.java)
@@ -28,7 +27,6 @@ class StartActivity : AppCompatActivity() {
         initDI()
         //loadingMainActivity()
         //finish()
-
     }
 
     private fun loadingMainActivity(){
