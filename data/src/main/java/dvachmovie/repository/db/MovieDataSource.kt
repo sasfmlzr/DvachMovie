@@ -1,4 +1,4 @@
-package dvachmovie.db.repository
+package dvachmovie.repository.db
 
 import dvachmovie.db.data.MovieDao
 import dvachmovie.db.data.MovieEntity

@@ -6,8 +6,8 @@ import dagger.Module
 import dagger.Provides
 import dvachmovie.db.MovieDatabase
 import dvachmovie.db.data.MovieDao
-import dvachmovie.db.repository.MovieDataSource
-import dvachmovie.db.repository.MovieRepository
+import dvachmovie.repository.db.MovieDataSource
+import dvachmovie.repository.db.MovieRepository
 import javax.inject.Singleton
 
 @Module
