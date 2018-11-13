@@ -1,3 +1,6 @@
 package dvachmovie.repository.local
 
-data class MovieTempRepository(val movieLists: List<String> = listOf())
+import javax.inject.Singleton
+
+@Singleton
+data class MovieTempRepository(val movieLists: MutableList<String> = mutableListOf())

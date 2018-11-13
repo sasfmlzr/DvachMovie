@@ -42,8 +42,8 @@ class StartActivity : AppCompatActivity() {
 
     private fun initWebm(): InitWebm {
         return object : InitWebm {
-            override fun initWebm(listMovies: List<String>) {
-                loadingMainActivity(listMovies)
+            override fun initWebm() {
+                loadingMainActivity()
                 finish()
             }
 
@@ -57,12 +57,9 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadingMainActivity(listMovies: List<String>) {
+    private fun loadingMainActivity() {
         val intent = Intent(applicationContext,
                 MainActivity::class.java)
-        val bundle = Bundle()
-        bundle.putStringArrayList("url", listMovies as ArrayList<String>)
-        intent.putExtras(bundle)
         startActivity(intent)
     }
 

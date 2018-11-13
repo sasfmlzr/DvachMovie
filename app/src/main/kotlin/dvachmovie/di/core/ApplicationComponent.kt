@@ -5,7 +5,8 @@ import dvachmovie.di.DataModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = arrayOf(ApplicationModule::class, DataModule::class, ExoModule::class, ExoModule::class))
+@Component(modules = [ApplicationModule::class, DataModule::class,
+    ExoModule::class, ExoModule::class, ViewModuleFactoryModule::class])
 interface ApplicationComponent {
     fun viewComponent(): ViewComponent
 

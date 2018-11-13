@@ -5,12 +5,14 @@ import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
+import dvachmovie.repository.local.MovieTempRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi) {
+class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
+                                       private val movieTempRepository: MovieTempRepository) {
 
     private var listFilesItem = mutableListOf<FileItem>()
     private var listMovies = mutableListOf<String>()
@@ -21,7 +23,7 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi) {
 
     fun getNumThreads(board: String, initWebm: InitWebm) {
         this.initWebm = initWebm
-        dvachApis.getCatalog(board)?.enqueue(dvachNumCallback(board))
+        dvachApis.getCatalog(board).enqueue(dvachNumCallback(board))
     }
 
     private fun dvachNumCallback(board: String): Callback<DvachCatalogRequest> {
@@ -81,6 +83,7 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi) {
     }
 
     private fun initWebm() {
-        initWebm.initWebm(listMovies)
+        movieTempRepository.movieLists.addAll(listMovies)
+        initWebm.initWebm()
     }
 }

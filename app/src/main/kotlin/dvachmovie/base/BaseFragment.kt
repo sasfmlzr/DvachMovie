@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import dvachmovie.di.core.Injector
 import dvachmovie.di.core.ViewComponent
 
-abstract class NewFragment : Fragment() {
+abstract class BaseFragment : Fragment() {
     protected abstract fun inject(component: ViewComponent)
 
     @CallSuper

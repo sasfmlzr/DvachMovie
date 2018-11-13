@@ -23,25 +23,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.viewmodel = viewModel
 
-        val listMovies = intent.getStringArrayListExtra("url")
-        initFragment(listMovies as MutableList<String>)
+        initFragment()
     }
 
-    private fun initFragment(uriList: MutableList<String>) {
+    private fun initFragment() {
         supportFragmentManager.beginTransaction()
-                .replace(binding.container.id, MainFragment.newInstance(uriList))
+                .replace(binding.container.id, MainFragment())
                 .commit()
     }
 
     private fun initDI() {
         Injector.navigationComponent().inject(this)
     }
-
-    /*private fun initMovies() {
-
-        dvachMovies = mutableListOf("https://2ch.hk/b/src/185160064/15401994992261.webm",
-                "https://2ch.hk/b/src/185159451/15402067914440.webm",
-                "https://2ch.hk/b/src/185165705/15402065817600.webm")
-    }*/
-
 }
