@@ -12,12 +12,16 @@ import dvachmovie.di.core.Injector
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.InitWebm
 import java.util.*
+import javax.inject.Inject
 
 
 class StartActivity : AppCompatActivity() {
 
     private lateinit var viewModel: StartActivityViewModel
     private lateinit var binding: StartActivityBinding
+
+    @Inject
+    lateinit var dvachUseCase: DvachUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +32,7 @@ class StartActivity : AppCompatActivity() {
         binding.viewmodel = viewModel
         initDI()
 
-        val dvachUseCase = DvachUseCase(initWebm())
-        dvachUseCase.getNumThreads("b")
+        dvachUseCase.getNumThreads("b", initWebm())
     }
 
     private fun initDI() {

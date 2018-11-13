@@ -7,8 +7,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(ApplicationModule::class, DataModule::class, ExoModule::class, ExoModule::class))
 interface ApplicationComponent {
-    //fun viewModelComponent(): ViewModelComponent
     fun viewComponent(): ViewComponent
+
     fun navigationComponent(): NavigationComponent
     fun inject(mainApplication: MainApplication)
 }
