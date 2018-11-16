@@ -11,10 +11,11 @@ class MainViewModel @Inject constructor(movieTempRepository: MovieTempRepository
     }
 
     init {
-        loadUri(movieTempRepository.movieLists)
+        val movieUrl = movieTempRepository.movieLists.map { it.movieUrl }
+        loadUri(movieUrl)
     }
 
-    fun loadUri(links: List<String>) {
+    private fun loadUri(links: List<String>) {
         uriMovie.value = links
     }
 }

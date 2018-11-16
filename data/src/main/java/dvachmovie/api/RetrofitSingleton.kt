@@ -1,10 +1,10 @@
 package dvachmovie.api
 
+import dvachmovie.Constraints.Companion.BASE_URL
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 
 object RetrofitSingleton {
-    private val BASE_URL = "https://2ch.hk"
     private var dvachMovieApi: DvachMovieApi? = null
 
     fun getDvachMovieApi(): DvachMovieApi? {

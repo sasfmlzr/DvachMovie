@@ -1,10 +1,12 @@
 package dvachmovie.usecase
 
+import dvachmovie.Constraints
 import dvachmovie.api.DvachMovieApi
 import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
+import dvachmovie.repository.local.Movie
 import dvachmovie.repository.local.MovieTempRepository
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,7 +17,7 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
                                        private val movieTempRepository: MovieTempRepository) {
 
     private var listFilesItem = mutableListOf<FileItem>()
-    private var listMovies = mutableListOf<String>()
+    private var listMovies = mutableListOf<Movie>()
     private var listMovieSize = 0
     private var count = 0
 
@@ -59,7 +61,6 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
                 initWebm.countVideoUpdates(count)
                 println("dvachLinkFiles finished for $num")
                 if (count == listMovieSize) {
-                    println("")
                     setupUriVideos()
                 }
             }
@@ -73,7 +74,9 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
         listFilesItem.map {
             val path = it.path
             if (path.contains(".webm")) {
-                listMovies.add("https://2ch.hk$path")
+                val movie = Movie(Constraints.BASE_URL + path,
+                        Constraints.BASE_URL + it.thumbnail)
+                listMovies.add(movie)
             }
             count--
             if (count == 0) {
