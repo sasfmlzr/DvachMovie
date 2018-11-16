@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import dvachmovie.R
 import dvachmovie.activity.movie.MovieActivity
-import dvachmovie.databinding.StartActivityBinding
+import dvachmovie.databinding.ActivityStartBinding
 import dvachmovie.di.core.Injector
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.InitWebm
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class StartActivity : AppCompatActivity() {
 
     private lateinit var viewModel: StartActivityViewModel
-    private lateinit var binding: StartActivityBinding
+    private lateinit var binding: ActivityStartBinding
 
     @Inject
     lateinit var dvachUseCase: DvachUseCase
@@ -25,7 +25,7 @@ class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.start_activity)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_start)
         viewModel = ViewModelProviders.of(this).get(StartActivityViewModel::class.java)
 
         binding.viewmodel = viewModel
