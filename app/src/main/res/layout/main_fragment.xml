@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="dvachmovie.main.MainViewModel" />
+            type="dvachmovie.fragment.movie.MovieViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -16,7 +16,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main.MainFragment">
+        tools:context=".fragment.movie.MovieFragment">
 
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/player_view"

@@ -6,12 +6,11 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import dvachmovie.R
-import dvachmovie.activity.main.MainActivity
+import dvachmovie.activity.movie.MovieActivity
 import dvachmovie.databinding.StartActivityBinding
 import dvachmovie.di.core.Injector
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.InitWebm
-import java.util.*
 import javax.inject.Inject
 
 
@@ -59,7 +58,7 @@ class StartActivity : AppCompatActivity() {
 
     private fun loadingMainActivity() {
         val intent = Intent(applicationContext,
-                MainActivity::class.java)
+                MovieActivity::class.java)
         startActivity(intent)
     }
 

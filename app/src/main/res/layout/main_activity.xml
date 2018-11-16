@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="dvachmovie.activity.main.MainActivityViewModel" />
+            type="dvachmovie.activity.movie.MovieActivityViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -15,7 +15,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.main.MainActivity">
+        tools:context=".activity.movie.MovieActivity">
 
         <FrameLayout
             android:id="@+id/container"

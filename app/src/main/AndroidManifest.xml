@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.main.MainActivity"
+            android:name=".activity.movie.MovieActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 

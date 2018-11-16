@@ -1,4 +1,4 @@
-package dvachmovie.activity.main
+package dvachmovie.activity.movie
 
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -7,10 +7,10 @@ import android.support.v7.app.AppCompatActivity
 import dvachmovie.R
 import dvachmovie.databinding.MainActivityBinding
 import dvachmovie.di.core.Injector
-import dvachmovie.main.MainFragment
+import dvachmovie.fragment.movie.MovieFragment
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel: MainActivityViewModel
+class MovieActivity : AppCompatActivity() {
+    private lateinit var viewModel: MovieActivityViewModel
     private lateinit var binding: MainActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         initDI()
 
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity)
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(MovieActivityViewModel::class.java)
 
         binding.viewmodel = viewModel
 
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initFragment() {
         supportFragmentManager.beginTransaction()
-                .replace(binding.container.id, MainFragment())
+                .replace(binding.container.id, MovieFragment())
                 .commit()
     }
 

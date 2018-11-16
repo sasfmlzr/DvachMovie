@@ -2,11 +2,7 @@ package dvachmovie.di
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import dagger.Binds
 import dagger.MapKey
-import dagger.Module
-import dagger.multibindings.IntoMap
-import dvachmovie.main.MainViewModel
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton

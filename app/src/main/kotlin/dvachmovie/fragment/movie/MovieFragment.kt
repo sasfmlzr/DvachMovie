@@ -1,4 +1,4 @@
-package dvachmovie.main
+package dvachmovie.fragment.movie
 
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
@@ -6,13 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.MainFragmentBinding
 import dvachmovie.di.core.ViewComponent
 import javax.inject.Inject
 
-class MainFragment : BaseFragment() {
+class MovieFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -27,7 +26,7 @@ class MainFragment : BaseFragment() {
         binding = MainFragmentBinding.inflate(inflater, container, false)
         val viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
-                .get(MainViewModel::class.java)
+                .get(MovieViewModel::class.java)
         binding.viewmodel = viewModel
 
         return binding.root

@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import dvachmovie.di.ViewModelFactory
 import dvachmovie.di.ViewModelKey
-import dvachmovie.main.MainViewModel
+import dvachmovie.fragment.movie.MovieViewModel
 
 @Module
 abstract class ViewModuleFactoryModule {
@@ -17,7 +17,7 @@ abstract class ViewModuleFactoryModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MainViewModel::class)
-    internal abstract fun postListViewModel(viewModel: MainViewModel): ViewModel
+    @ViewModelKey(MovieViewModel::class)
+    internal abstract fun postListViewModel(viewModel: MovieViewModel): ViewModel
 
 }

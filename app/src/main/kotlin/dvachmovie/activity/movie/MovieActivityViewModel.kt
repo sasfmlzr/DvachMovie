@@ -1,7 +1,7 @@
-package dvachmovie.activity.main
+package dvachmovie.activity.movie
 
 import android.arch.lifecycle.ViewModel
 
-class MainActivityViewModel : ViewModel() {
+class MovieActivityViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }
