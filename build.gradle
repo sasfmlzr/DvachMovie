@@ -17,6 +17,7 @@ buildscript {
         retrofitVersion = '2.3.0'
         roomVersion = '1.1.1'
         archLifecycleVersion = '1.1.1'
+        glideVersion = '4.8.0'
     }
     repositories {
         google()
