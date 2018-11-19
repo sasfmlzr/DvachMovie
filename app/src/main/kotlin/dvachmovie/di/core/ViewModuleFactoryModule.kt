@@ -8,6 +8,7 @@ import dagger.multibindings.IntoMap
 import dvachmovie.di.ViewModelFactory
 import dvachmovie.di.ViewModelKey
 import dvachmovie.fragment.movie.MovieViewModel
+import dvachmovie.fragment.preview.PreviewViewModel
 
 @Module
 abstract class ViewModuleFactoryModule {
@@ -18,6 +19,11 @@ abstract class ViewModuleFactoryModule {
     @Binds
     @IntoMap
     @ViewModelKey(MovieViewModel::class)
-    internal abstract fun postListViewModel(viewModel: MovieViewModel): ViewModel
+    internal abstract fun movieViewModel(viewModel: MovieViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PreviewViewModel::class)
+    internal abstract fun previewViewModel(viewModel: PreviewViewModel): ViewModel
 
 }
