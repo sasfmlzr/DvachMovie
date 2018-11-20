@@ -45,6 +45,7 @@ class MovieFragment : BaseFragment() {
 
     private fun onGestureListener(): OnSwipeTouchListener {
         return object : OnSwipeTouchListener(context!!) {
+            @SuppressLint("ClickableViewAccessibility")
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 toggleControlsVisibility()
                 return super.onTouch(v, event)
