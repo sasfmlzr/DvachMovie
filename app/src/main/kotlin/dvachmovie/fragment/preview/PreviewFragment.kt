@@ -29,6 +29,9 @@ class PreviewFragment : BaseFragment() {
                 .get(PreviewViewModel::class.java)
         binding.viewmodel = viewModel
 
+        val adapter = PreviewMovieAdapter()
+        binding.moviesList.adapter = adapter
+
         return binding.root
     }
 
