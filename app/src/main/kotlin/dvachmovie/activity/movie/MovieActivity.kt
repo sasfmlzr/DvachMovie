@@ -1,9 +1,9 @@
 package dvachmovie.activity.movie
 
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import dvachmovie.R
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.Injector

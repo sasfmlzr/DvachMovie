@@ -1,7 +1,7 @@
 package dvachmovie.fragment.preview
 
-import android.arch.lifecycle.ViewModel
-import android.databinding.ObservableField
+import androidx.databinding.ObservableField
+import androidx.lifecycle.ViewModel
 import dvachmovie.repository.local.Movie
 
 class PreviewItemViewModel(movie: Movie) : ViewModel() {

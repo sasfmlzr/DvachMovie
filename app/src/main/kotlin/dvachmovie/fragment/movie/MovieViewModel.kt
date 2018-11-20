@@ -1,7 +1,7 @@
 package dvachmovie.fragment.movie
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 

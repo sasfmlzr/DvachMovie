@@ -1,8 +1,8 @@
 package dvachmovie.base
 
 import android.os.Bundle
-import android.support.annotation.CallSuper
-import android.support.v4.app.Fragment
+import androidx.annotation.CallSuper
+import androidx.fragment.app.Fragment
 import dvachmovie.di.core.Injector
 import dvachmovie.di.core.ViewComponent
 

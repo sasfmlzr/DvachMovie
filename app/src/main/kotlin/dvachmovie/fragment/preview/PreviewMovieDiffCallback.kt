@@ -1,6 +1,6 @@
 package dvachmovie.fragment.preview
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import dvachmovie.repository.local.Movie
 
 class PreviewMovieDiffCallback : DiffUtil.ItemCallback<Movie>() {

@@ -9,7 +9,7 @@
             type="dvachmovie.fragment.preview.PreviewItemViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -19,5 +19,5 @@
             android:layout_height="100dp"
             android:scaleType="centerCrop"
             app:imageFromUrl="@{viewModel.imageUrl}" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

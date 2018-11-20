@@ -1,13 +1,13 @@
 package dvachmovie.fragment.movie
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentMovieBinding

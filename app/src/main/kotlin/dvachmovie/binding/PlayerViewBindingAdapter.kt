@@ -1,8 +1,8 @@
 package dvachmovie.binding
 
-import android.databinding.BindingAdapter
-import android.databinding.BindingMethod
-import android.databinding.BindingMethods
+import androidx.databinding.BindingAdapter
+import androidx.databinding.BindingMethod
+import androidx.databinding.BindingMethods
 import android.net.Uri
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer

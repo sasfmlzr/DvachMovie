@@ -1,9 +1,9 @@
 package dvachmovie.db
 
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import dvachmovie.db.data.MovieDao
 import dvachmovie.db.data.MovieEntity
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
 
 @Database(entities = [MovieEntity::class], version = 1)
 abstract class MovieDatabase : RoomDatabase() {
