@@ -23,14 +23,6 @@ class MovieActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(MovieActivityViewModel::class.java)
 
         binding.viewmodel = viewModel
-
-        initFragment()
-    }
-
-    private fun initFragment() {
-        supportFragmentManager.beginTransaction()
-                .replace(binding.container.id, MovieFragment())
-                .commit()
     }
 
     private fun initDI() {
@@ -38,5 +30,5 @@ class MovieActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp() =
-            findNavController(this, R.id.navMovieFragment).navigateUp()
+            findNavController(this, R.id.navHostFragment).navigateUp()
 }

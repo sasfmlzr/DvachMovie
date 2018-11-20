@@ -28,5 +28,16 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
         tools:layout="@layout/fragment_preview_movies" />
+    <activity
+        android:id="@+id/movieActivity"
+        android:name="dvachmovie.activity.movie.MovieActivity"
+        android:label="MovieActivity"
+        tools:layout = "@layout/activity_movie"/>
+
+    <activity
+        android:id="@+id/startActivity"
+        android:name="dvachmovie.activity.start.StartActivity"
+        android:label="StartActivity"
+        tools:layout = "@layout/activity_start"/>
 
 </navigation>
