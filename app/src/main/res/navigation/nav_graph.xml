@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navMovieFragment">
+
+    <fragment
+        android:id="@+id/navMovieFragment"
+        android:name="dvachmovie.fragment.movie.MovieFragment"
+        android:label="MovieFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
+        tools:layout="@layout/fragment_movie">
+        <action
+            android:id="@+id/actionShowPreviewFragment"
+            app:destination="@id/navPreviewFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navPreviewFragment"
+        android:name="dvachmovie.fragment.preview.PreviewFragment"
+        android:label="PreviewFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
+        tools:layout="@layout/fragment_preview_movies" />
+
+</navigation>

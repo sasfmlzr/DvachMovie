@@ -78,4 +78,5 @@ dependencies {
 
     implementation project(path: ':domain')
     implementation project(path: ':data')
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha07'
 }

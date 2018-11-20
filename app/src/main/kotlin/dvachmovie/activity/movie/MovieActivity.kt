@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation.findNavController
 import dvachmovie.R
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.Injector
@@ -35,4 +36,7 @@ class MovieActivity : AppCompatActivity() {
     private fun initDI() {
         Injector.navigationComponent().inject(this)
     }
+
+    override fun onSupportNavigateUp() =
+            findNavController(this, R.id.navMovieFragment).navigateUp()
 }

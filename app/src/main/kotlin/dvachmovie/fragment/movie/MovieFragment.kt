@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ui.PlayerView
+import dvachmovie.R
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.ViewComponent
@@ -63,6 +65,7 @@ class MovieFragment : BaseFragment() {
             }
 
             override fun onSwipeTop() {
+                findNavController(this@MovieFragment).navigate(R.id.actionShowPreviewFragment)
                 println("onSwipeTop")
             }
 
