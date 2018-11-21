@@ -10,7 +10,7 @@ import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.repository.local.Movie
 
 class PreviewMovieAdapter :
-        ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>
+        ListAdapter<String, PreviewMovieAdapter.ViewHolder>
         (PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -34,7 +34,7 @@ class PreviewMovieAdapter :
     class ViewHolder(
             private val binding: ItemPreviewMoviesBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: Movie) {
+        fun bind(movie: String) {
             with(binding) {
                 viewModel = PreviewItemViewModel(movie)
                 executePendingBindings()

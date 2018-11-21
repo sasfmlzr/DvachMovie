@@ -1,13 +1,17 @@
 package dvachmovie.fragment.preview
 
-import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
-class PreviewViewModel @Inject constructor() : ViewModel() {
-    val uriMovie: MutableLiveData<List<Drawable>> by lazy {
-        MutableLiveData<List<Drawable>>()
+class PreviewViewModel @Inject constructor(movieTempRepository: MovieTempRepository) : ViewModel() {
+    private val uriMovie = MutableLiveData<List<String>>()
+
+    init {
+        uriMovie.value = movieTempRepository.movieLists.map { movie -> movie.moviePreviewUrl }
     }
+
+    fun getUriMovie() = uriMovie
 
 }
