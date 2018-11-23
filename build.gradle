@@ -18,6 +18,7 @@ buildscript {
         roomVersion = '1.1.1'
         archLifecycleVersion = '1.1.1'
         glideVersion = '4.8.0'
+        navigationVersion = '1.0.0-alpha07'
     }
     repositories {
         google()
