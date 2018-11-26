@@ -3,15 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="dvachmovie.fragment.preview.PreviewItemViewModel" />
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{clickListener}">
 
         <ImageView
             android:id="@+id/preview_image"

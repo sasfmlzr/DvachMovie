@@ -76,9 +76,8 @@ class MovieFragment : BaseFragment() {
                         movie = it
                     }
                 }
-                val direction = MovieFragmentDirections.actionShowPreviewFragment(movie)
+                val direction = MovieFragmentDirections.ActionShowPreviewFragment(movie)
                 findNavController(this@MovieFragment).navigate(direction)
-               // findNavController(this@MovieFragment).navigate(R.id.actionShowPreviewFragment)
                 println("onSwipeTop")
             }
 

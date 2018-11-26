@@ -16,6 +16,8 @@ class PreviewFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var adapter: PreviewMovieAdapter
 
     private lateinit var binding: FragmentPreviewMoviesBinding
 
@@ -30,7 +32,6 @@ class PreviewFragment : BaseFragment() {
                 .get(PreviewViewModel::class.java)
         binding.viewmodel = viewModel
 
-        val adapter = PreviewMovieAdapter()
         binding.moviesList.adapter = adapter
         subscribeUi(adapter)
 

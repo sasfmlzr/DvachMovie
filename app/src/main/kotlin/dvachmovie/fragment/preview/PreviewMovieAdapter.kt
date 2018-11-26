@@ -1,15 +1,19 @@
 package dvachmovie.fragment.preview
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dvachmovie.R
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.repository.local.Movie
+import dvachmovie.repository.local.MovieTempRepository
+import javax.inject.Inject
 
-class PreviewMovieAdapter :
+class PreviewMovieAdapter @Inject constructor(private val movieTempRepository: MovieTempRepository) :
         ListAdapter<String, PreviewMovieAdapter.ViewHolder>
         (PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,18 +29,32 @@ class PreviewMovieAdapter :
         getItem(position).let { movie ->
             with(holder) {
                 itemView.tag = movie
-                bind(movie)
+                bind(movie, createOnClickListener(movie))
             }
 
+        }
+    }
+
+    private fun createOnClickListener(tempUri: String): View.OnClickListener {
+        return View.OnClickListener {
+            var movie = Movie()
+            movieTempRepository.movieLists.map { currentMovie ->
+                if (currentMovie.moviePreviewUrl == tempUri) {
+                    movie = currentMovie
+                }
+            }
+            val direction = PreviewFragmentDirections.ActionShowMovieFragment(movie)
+            it.findNavController().navigate(direction)
         }
     }
 
     class ViewHolder(
             private val binding: ItemPreviewMoviesBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: String) {
+        fun bind(movie: String, listener: View.OnClickListener) {
             with(binding) {
                 viewModel = PreviewItemViewModel(movie)
+                clickListener = listener
                 executePendingBindings()
             }
         }
