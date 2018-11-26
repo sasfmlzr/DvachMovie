@@ -48,7 +48,11 @@ class PreviewFragment : BaseFragment() {
             pos = movieTempRepository.movieLists.indexOf(movieTempRepository.currentMovie)
         }
 
-        binding.moviesList.smoothScrollToPosition(pos)
+        if (pos<70) {
+            binding.moviesList.smoothScrollToPosition(pos)
+        } else {
+            binding.moviesList.scrollToPosition(pos)
+        }
 
         return binding.root
     }
