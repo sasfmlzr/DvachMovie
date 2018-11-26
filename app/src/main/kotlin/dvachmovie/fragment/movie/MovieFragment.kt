@@ -15,12 +15,16 @@ import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.ViewComponent
 import dvachmovie.listener.OnSwipeTouchListener
+import dvachmovie.repository.local.Movie
+import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var movieTempRepository: MovieTempRepository
 
     private lateinit var binding: FragmentMovieBinding
 
@@ -65,7 +69,16 @@ class MovieFragment : BaseFragment() {
             }
 
             override fun onSwipeTop() {
-                findNavController(this@MovieFragment).navigate(R.id.actionShowPreviewFragment)
+                val movieUri = binding.viewmodel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
+                var movie = Movie()
+                movieTempRepository.movieLists.map { it ->
+                    if (it.movieUrl == movieUri){
+                        movie = it
+                    }
+                }
+                val direction = MovieFragmentDirections.actionShowPreviewFragment(movie)
+                findNavController(this@MovieFragment).navigate(direction)
+               // findNavController(this@MovieFragment).navigate(R.id.actionShowPreviewFragment)
                 println("onSwipeTop")
             }
 

@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'androidx.navigation.safeargs'
 
 android {
     compileSdkVersion 28
@@ -36,6 +37,9 @@ android {
     }
     productFlavors {
     }
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
@@ -66,12 +70,12 @@ dependencies {
 
     // Room components
     implementation 'androidx.room:room-runtime:2.1.0-alpha02'
-    annotationProcessor 'androidx.room:room-compiler:2.1.0-alpha02'
+    kapt 'androidx.room:room-compiler:2.1.0-alpha02'
     androidTestImplementation 'androidx.room:room-testing:2.1.0-alpha02'
 
     // Lifecycle components
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
@@ -81,4 +85,6 @@ dependencies {
 
     implementation "android.arch.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
     implementation "android.arch.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
+
+    implementation "org.jetbrains.kotlin:kotlin-android-extensions-runtime:$kotlinVersion"
 }
