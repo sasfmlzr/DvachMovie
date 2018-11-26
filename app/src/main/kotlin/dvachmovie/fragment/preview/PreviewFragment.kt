@@ -10,12 +10,15 @@ import androidx.lifecycle.ViewModelProviders
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.ViewComponent
+import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
 class PreviewFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var movieTempRepository: MovieTempRepository
     @Inject
     lateinit var adapter: PreviewMovieAdapter
 
@@ -25,7 +28,10 @@ class PreviewFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        val args = PreviewFragmentArgs.fromBundle(arguments).currentMovie
+        if (arguments?.size() != 0) {
+            val movie = PreviewFragmentArgs.fromBundle(arguments).currentMovie
+            movieTempRepository.currentMovie = movie
+        }
 
         binding = FragmentPreviewMoviesBinding.inflate(inflater, container, false)
         val viewModel = ViewModelProviders
@@ -35,6 +41,14 @@ class PreviewFragment : BaseFragment() {
 
         binding.moviesList.adapter = adapter
         subscribeUi(adapter)
+
+        var pos = 0
+        if (movieTempRepository.movieLists
+                        .contains(movieTempRepository.currentMovie)) {
+            pos = movieTempRepository.movieLists.indexOf(movieTempRepository.currentMovie)
+        }
+
+        binding.moviesList.smoothScrollToPosition(pos)
 
         return binding.root
     }
