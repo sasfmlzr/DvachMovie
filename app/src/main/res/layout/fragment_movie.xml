@@ -22,7 +22,8 @@
             android:id="@+id/player_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:movie="@{viewmodel.uriMovie}" />
+            app:movie="@{viewmodel.uriMovie}"
+            app:movie_position="@{viewmodel.currentPosition}" />
 
         <TextView
             android:id="@+id/message"

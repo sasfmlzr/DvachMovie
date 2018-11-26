@@ -25,6 +25,7 @@ class PreviewFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        val args = PreviewFragmentArgs.fromBundle(arguments).currentMovie
 
         binding = FragmentPreviewMoviesBinding.inflate(inflater, container, false)
         val viewModel = ViewModelProviders
@@ -41,7 +42,7 @@ class PreviewFragment : BaseFragment() {
     private fun subscribeUi(adapter: PreviewMovieAdapter) {
         binding.viewmodel!!.getUriMovie()
                 .observe(viewLifecycleOwner, Observer { movie ->
-            if (movie != null) adapter.submitList(movie)
-        })
+                    if (movie != null) adapter.submitList(movie)
+                })
     }
 }

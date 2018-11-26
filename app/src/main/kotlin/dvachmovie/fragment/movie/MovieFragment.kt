@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ui.PlayerView
-import dvachmovie.R
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.ViewComponent
@@ -35,6 +34,10 @@ class MovieFragment : BaseFragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        if (arguments?.size() != 0) {
+            val movie = MovieFragmentArgs.fromBundle(arguments).currentMovie
+            movieTempRepository.currentMovie = movie
+        }
 
         binding = FragmentMovieBinding.inflate(inflater, container, false)
         val viewModel = ViewModelProviders
@@ -72,7 +75,7 @@ class MovieFragment : BaseFragment() {
                 val movieUri = binding.viewmodel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
                 var movie = Movie()
                 movieTempRepository.movieLists.map { it ->
-                    if (it.movieUrl == movieUri){
+                    if (it.movieUrl == movieUri) {
                         movie = it
                     }
                 }

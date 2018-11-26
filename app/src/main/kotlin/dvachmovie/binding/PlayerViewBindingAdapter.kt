@@ -1,9 +1,9 @@
 package dvachmovie.binding
 
+import android.net.Uri
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
-import android.net.Uri
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
@@ -25,7 +25,7 @@ class PlayerViewBindingAdapter {
     companion object {
         @BindingAdapter("movie")
         @JvmStatic
-        fun bindCurrentMovie(playerView: PlayerView, values: MutableList<String>) {
+        fun bindMovie(playerView: PlayerView, values: MutableList<String>) {
 
             val urlVideo: List<Uri> = values.map { value -> Uri.parse(value) }
             val player: SimpleExoPlayer =
@@ -45,6 +45,12 @@ class PlayerViewBindingAdapter {
 
             videoSources.map { url -> mediaSources.addMediaSource(url) }
             player.prepare(mediaSources)
+        }
+
+        @BindingAdapter("movie_position")
+        @JvmStatic
+        fun bindCurrentPosition(playerView: PlayerView, value: Int) {
+            playerView.player.seekToDefaultPosition(value)
         }
 
     }
