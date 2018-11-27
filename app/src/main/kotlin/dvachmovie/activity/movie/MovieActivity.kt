@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import dvachmovie.R
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.Injector
+import dvachmovie.fragment.movie.MovieFragmentDirections
 
 class MovieActivity : AppCompatActivity() {
     private lateinit var viewModel: MovieActivityViewModel
@@ -32,7 +34,16 @@ class MovieActivity : AppCompatActivity() {
             findNavController(this, R.id.navHostFragment).navigateUp()
 
     override fun onBackPressed() {
-        super.onBackPressed()
-
+        val navController = findNavController(this, R.id.navHostFragment)
+        
+        when (navController.currentDestination?.label) {
+            "MovieFragment" -> {
+                val direction = MovieFragmentDirections.ActionShowBackFragment()
+                NavHostFragment.findNavController(supportFragmentManager.primaryNavigationFragment!!).navigate(direction)
+            }
+            "BackFragment" -> {
+            }
+            else -> super.onBackPressed()
+        }
     }
 }
