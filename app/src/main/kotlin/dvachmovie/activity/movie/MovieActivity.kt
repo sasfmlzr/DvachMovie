@@ -8,7 +8,6 @@ import androidx.navigation.Navigation.findNavController
 import dvachmovie.R
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.Injector
-import dvachmovie.fragment.movie.MovieFragment
 
 class MovieActivity : AppCompatActivity() {
     private lateinit var viewModel: MovieActivityViewModel
@@ -31,4 +30,9 @@ class MovieActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp() =
             findNavController(this, R.id.navHostFragment).navigateUp()
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+    }
 }

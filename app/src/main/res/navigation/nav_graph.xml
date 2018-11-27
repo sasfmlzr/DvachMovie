@@ -22,6 +22,11 @@
             app:exitAnim="@anim/slide_out_top"
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom" />
+        <action
+            android:id="@+id/actionShowBackFragment"
+            app:destination="@+id/navBackFragment"
+            app:popUpTo="@+id/navBackFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -44,5 +49,9 @@
             app:popUpTo="@+id/navMovieFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/navBackFragment"
+        android:name="dvachmovie.fragment.back.BackFragment"
+        android:label="BackFragment" />
 
 </navigation>
