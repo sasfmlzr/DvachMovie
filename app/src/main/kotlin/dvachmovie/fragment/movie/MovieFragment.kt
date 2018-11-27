@@ -97,4 +97,9 @@ class MovieFragment : BaseFragment() {
             player.showController()
         }
     }
+
+    override fun onStop() {
+        player.player.stop()
+        super.onStop()
+    }
 }
