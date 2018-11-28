@@ -2,40 +2,30 @@ package dvachmovie.activity.start
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
 import dvachmovie.R
 import dvachmovie.activity.movie.MovieActivity
+import dvachmovie.base.BaseActivity
 import dvachmovie.databinding.ActivityStartBinding
-import dvachmovie.di.core.Injector
+import dvachmovie.di.core.NavigationComponent
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.InitWebm
 import javax.inject.Inject
 
 
-class StartActivity : AppCompatActivity() {
-
-    private lateinit var viewModel: StartActivityViewModel
-    private lateinit var binding: ActivityStartBinding
+class StartActivity : BaseActivity<StartActivityViewModel, ActivityStartBinding>(StartActivityViewModel::class.java) {
+    override val layoutId = R.layout.activity_start
 
     @Inject
     lateinit var dvachUseCase: DvachUseCase
 
+    override fun inject(component: NavigationComponent) = component.inject(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_start)
-        viewModel = ViewModelProviders.of(this).get(StartActivityViewModel::class.java)
-
         binding.viewModel = viewModel
-        initDI()
 
         dvachUseCase.getNumThreads("b", initWebm())
-    }
-
-    private fun initDI() {
-        Injector.navigationComponent().inject(this)
     }
 
     private fun initWebm(): InitWebm {

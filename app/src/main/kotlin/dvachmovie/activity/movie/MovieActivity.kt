@@ -1,34 +1,28 @@
 package dvachmovie.activity.movie
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import dvachmovie.R
+import dvachmovie.base.BaseActivity
 import dvachmovie.databinding.ActivityMovieBinding
-import dvachmovie.di.core.Injector
+import dvachmovie.di.core.NavigationComponent
 import dvachmovie.fragment.back.BackFragmentDirections
 import dvachmovie.fragment.movie.MovieFragmentDirections
 import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
-class MovieActivity : AppCompatActivity() {
-    private lateinit var viewModel: MovieActivityViewModel
-    private lateinit var binding: ActivityMovieBinding
+class MovieActivity : BaseActivity<MovieActivityViewModel, ActivityMovieBinding>(MovieActivityViewModel::class.java) {
+
+    override val layoutId = R.layout.activity_movie
 
     @Inject
     lateinit var movieTempRepository: MovieTempRepository
 
+    override fun inject(component: NavigationComponent) = component.inject(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        initDI()
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_movie)
-        viewModel = ViewModelProviders.of(this).get(MovieActivityViewModel::class.java)
-
         binding.viewModel = viewModel
     }
 
@@ -49,9 +43,5 @@ class MovieActivity : AppCompatActivity() {
             }
             else -> super.onBackPressed()
         }
-    }
-
-    private fun initDI() {
-        Injector.navigationComponent().inject(this)
     }
 }

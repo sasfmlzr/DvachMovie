@@ -11,5 +11,4 @@ import dvachmovie.di.base.ViewScope
 interface NavigationComponent {
     fun inject(activity: MovieActivity)
     fun inject(activity: StartActivity)
-    fun inject(activity: BackFragment)
 }
