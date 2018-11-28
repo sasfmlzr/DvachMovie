@@ -73,13 +73,8 @@ class MovieFragment : BaseFragment() {
 
             override fun onSwipeTop() {
                 val movieUri = binding.viewmodel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
-                var movie = Movie()
-                movieTempRepository.movieLists.map { it ->
-                    if (it.movieUrl == movieUri) {
-                        movie = it
-                    }
-                }
-                val direction = MovieFragmentDirections.ActionShowPreviewFragment(movie)
+                val direction = MovieFragmentDirections
+                        .ActionShowPreviewFragment(findMovieInRepository(movieUri!!))
                 findNavController(this@MovieFragment).navigate(direction)
                 println("onSwipeTop")
             }
@@ -99,7 +94,18 @@ class MovieFragment : BaseFragment() {
     }
 
     override fun onStop() {
+        movieTempRepository.currentMovie = movieTempRepository.movieLists[player.player.currentWindowIndex]
         player.player.stop()
         super.onStop()
+    }
+
+    private fun findMovieInRepository(movieUri:String) : Movie {
+        var movie = Movie()
+        movieTempRepository.movieLists.map { it ->
+            if (it.movieUrl == movieUri) {
+                movie = it
+            }
+        }
+        return movie
     }
 }
