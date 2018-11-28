@@ -17,10 +17,11 @@
         android:onClick="@{clickListener}">
 
         <ImageView
-            android:id="@+id/preview_image"
+            android:id="@+id/previewImage"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:scaleType="centerCrop"
-            app:imageFromUrl="@{viewModel.imageUrl}" />
+            app:imageFromUrl="@{viewModel.imageUrl}"
+            android:contentDescription="@string/preview_image" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

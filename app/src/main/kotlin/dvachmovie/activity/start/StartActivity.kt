@@ -1,9 +1,9 @@
 package dvachmovie.activity.start
 
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import dvachmovie.R
 import dvachmovie.activity.movie.MovieActivity
@@ -28,7 +28,7 @@ class StartActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_start)
         viewModel = ViewModelProviders.of(this).get(StartActivityViewModel::class.java)
 
-        binding.viewmodel = viewModel
+        binding.viewModel = viewModel
         initDI()
 
         dvachUseCase.getNumThreads("b", initWebm())
@@ -37,7 +37,6 @@ class StartActivity : AppCompatActivity() {
     private fun initDI() {
         Injector.navigationComponent().inject(this)
     }
-
 
     private fun initWebm(): InitWebm {
         return object : InitWebm {

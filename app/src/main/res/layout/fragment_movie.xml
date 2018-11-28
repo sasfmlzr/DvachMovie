@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="dvachmovie.fragment.movie.MovieViewModel" />
 
         <import type="android.view.View" />
@@ -19,22 +19,11 @@
         tools:context=".fragment.movie.MovieFragment">
 
         <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/player_view"
+            android:id="@+id/playerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:movie="@{viewmodel.uriMovie}"
-            app:movie_position="@{viewmodel.currentPosition}" />
-
-        <TextView
-            android:id="@+id/message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MainFragment"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:movie="@{viewModel.uriMovie}"
+            app:movie_position="@{viewModel.currentPosition}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

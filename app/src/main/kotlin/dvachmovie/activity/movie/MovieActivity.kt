@@ -29,11 +29,7 @@ class MovieActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie)
         viewModel = ViewModelProviders.of(this).get(MovieActivityViewModel::class.java)
 
-        binding.viewmodel = viewModel
-    }
-
-    private fun initDI() {
-        Injector.navigationComponent().inject(this)
+        binding.viewModel = viewModel
     }
 
     override fun onSupportNavigateUp() =
@@ -53,5 +49,9 @@ class MovieActivity : AppCompatActivity() {
             }
             else -> super.onBackPressed()
         }
+    }
+
+    private fun initDI() {
+        Injector.navigationComponent().inject(this)
     }
 }

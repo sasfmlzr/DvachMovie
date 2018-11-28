@@ -11,5 +11,4 @@ class PreviewMovieDiffCallback : DiffUtil.ItemCallback<String>() {
         return p0 == p1
     }
 
-
 }

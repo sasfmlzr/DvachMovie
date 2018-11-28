@@ -43,13 +43,19 @@ class MovieFragment : BaseFragment() {
         val viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(MovieViewModel::class.java)
-        binding.viewmodel = viewModel
+        binding.viewModel = viewModel
 
         player = binding.playerView
 
         player.setOnTouchListener(onGestureListener())
 
         return binding.root
+    }
+
+    override fun onStop() {
+        movieTempRepository.currentMovie = movieTempRepository.movieLists[player.player.currentWindowIndex]
+        player.player.stop()
+        super.onStop()
     }
 
     private fun onGestureListener(): OnSwipeTouchListener {
@@ -72,7 +78,7 @@ class MovieFragment : BaseFragment() {
             }
 
             override fun onSwipeTop() {
-                val movieUri = binding.viewmodel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
+                val movieUri = binding.viewModel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
                 val direction = MovieFragmentDirections
                         .ActionShowPreviewFragment(findMovieInRepository(movieUri!!))
                 findNavController(this@MovieFragment).navigate(direction)
@@ -93,13 +99,7 @@ class MovieFragment : BaseFragment() {
         }
     }
 
-    override fun onStop() {
-        movieTempRepository.currentMovie = movieTempRepository.movieLists[player.player.currentWindowIndex]
-        player.player.stop()
-        super.onStop()
-    }
-
-    private fun findMovieInRepository(movieUri:String) : Movie {
+    private fun findMovieInRepository(movieUri: String): Movie {
         var movie = Movie()
         movieTempRepository.movieLists.map { it ->
             if (it.movieUrl == movieUri) {

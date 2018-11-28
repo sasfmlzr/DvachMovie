@@ -11,6 +11,4 @@ class StartActivityViewModel : ViewModel() {
     init {
         initText.value = "Initialization"
     }
-
-
 }

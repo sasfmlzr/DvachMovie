@@ -10,7 +10,7 @@ import dagger.Provides
 class ExoModule {
 
     @Provides
-    internal fun provideExoplayer(context: Context): SimpleExoPlayer =
+    internal fun provideExoPlayer(context: Context): SimpleExoPlayer =
             ExoPlayerFactory.newSimpleInstance(context)
 
 }

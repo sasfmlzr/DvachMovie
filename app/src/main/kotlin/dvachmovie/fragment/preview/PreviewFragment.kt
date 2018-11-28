@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.ViewComponent
@@ -37,30 +38,33 @@ class PreviewFragment : BaseFragment() {
         val viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(PreviewViewModel::class.java)
-        binding.viewmodel = viewModel
-
+        binding.viewModel = viewModel
         binding.moviesList.adapter = adapter
-        subscribeUi(adapter)
 
+        subscribeUi(adapter)
+        configureScrollRecyclerView()
+
+        return binding.root
+    }
+
+    private fun subscribeUi(adapter: PreviewMovieAdapter) {
+        binding.viewModel!!.getUriMovie()
+                .observe(viewLifecycleOwner, Observer { movie ->
+                    if (movie != null) adapter.submitList(movie)
+                })
+    }
+
+    private fun configureScrollRecyclerView() {
         var pos = 0
         if (movieTempRepository.movieLists
                         .contains(movieTempRepository.currentMovie)) {
             pos = movieTempRepository.movieLists.indexOf(movieTempRepository.currentMovie)
         }
 
-        if (pos<70) {
+        if (pos < 70) {
             binding.moviesList.smoothScrollToPosition(pos)
         } else {
             binding.moviesList.scrollToPosition(pos)
         }
-
-        return binding.root
-    }
-
-    private fun subscribeUi(adapter: PreviewMovieAdapter) {
-        binding.viewmodel!!.getUriMovie()
-                .observe(viewLifecycleOwner, Observer { movie ->
-                    if (movie != null) adapter.submitList(movie)
-                })
     }
 }
