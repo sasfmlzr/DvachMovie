@@ -5,38 +5,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
-class PreviewFragment : BaseFragment() {
+class PreviewFragment : BaseFragment<PreviewViewModel,
+        FragmentPreviewMoviesBinding>(PreviewViewModel::class.java) {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
     lateinit var movieTempRepository: MovieTempRepository
     @Inject
     lateinit var adapter: PreviewMovieAdapter
 
-    private lateinit var binding: FragmentPreviewMoviesBinding
-
     override fun inject(component: FragmentComponent) = component.inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         if (arguments?.size() != 0) {
             val movie = PreviewFragmentArgs.fromBundle(arguments).currentMovie
             movieTempRepository.currentMovie = movie
         }
 
         binding = FragmentPreviewMoviesBinding.inflate(inflater, container, false)
-        val viewModel = ViewModelProviders
-                .of(this, viewModelFactory)
-                .get(PreviewViewModel::class.java)
+
         binding.viewModel = viewModel
         binding.moviesList.adapter = adapter
 

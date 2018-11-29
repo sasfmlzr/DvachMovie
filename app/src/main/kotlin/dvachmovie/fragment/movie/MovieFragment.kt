@@ -18,14 +18,11 @@ import dvachmovie.repository.local.Movie
 import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
-class MovieFragment : BaseFragment() {
+class MovieFragment : BaseFragment<MovieViewModel,
+        FragmentMovieBinding>(MovieViewModel::class.java)  {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
     lateinit var movieTempRepository: MovieTempRepository
-
-    private lateinit var binding: FragmentMovieBinding
 
     private lateinit var player: PlayerView
 
@@ -34,15 +31,13 @@ class MovieFragment : BaseFragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         if (arguments?.size() != 0) {
             val movie = MovieFragmentArgs.fromBundle(arguments).currentMovie
             movieTempRepository.currentMovie = movie
         }
 
         binding = FragmentMovieBinding.inflate(inflater, container, false)
-        val viewModel = ViewModelProviders
-                .of(this, viewModelFactory)
-                .get(MovieViewModel::class.java)
         binding.viewModel = viewModel
 
         player = binding.playerView
