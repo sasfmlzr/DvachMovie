@@ -8,12 +8,12 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import dvachmovie.di.core.Injector
-import dvachmovie.di.core.NavigationComponent
+import dvachmovie.di.core.ActivityComponent
 
 abstract class BaseActivity<VM : ViewModel, B : ViewDataBinding>
 protected constructor(private val viewModelClass: Class<VM>) : AppCompatActivity() {
 
-    protected abstract fun inject(component: NavigationComponent)
+    protected abstract fun inject(component: ActivityComponent)
     protected abstract val layoutId: Int
 
     protected lateinit var binding: B

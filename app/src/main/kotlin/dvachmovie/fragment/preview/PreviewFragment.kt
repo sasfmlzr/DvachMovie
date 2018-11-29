@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.RecyclerView
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
-import dvachmovie.di.core.ViewComponent
+import dvachmovie.di.core.FragmentComponent
 import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
@@ -25,7 +24,7 @@ class PreviewFragment : BaseFragment() {
 
     private lateinit var binding: FragmentPreviewMoviesBinding
 
-    override fun inject(component: ViewComponent) = component.inject(this)
+    override fun inject(component: FragmentComponent) = component.inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {

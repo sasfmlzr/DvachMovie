@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import dvachmovie.R
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentBackBinding
-import dvachmovie.di.core.ViewComponent
+import dvachmovie.di.core.FragmentComponent
 import javax.inject.Inject
 
 class BackFragment : BaseFragment() {
@@ -19,7 +19,7 @@ class BackFragment : BaseFragment() {
 
     private lateinit var binding: FragmentBackBinding
 
-    override fun inject(component: ViewComponent) = component.inject(this)
+    override fun inject(component: FragmentComponent) = component.inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 

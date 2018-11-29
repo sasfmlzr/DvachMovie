@@ -1,14 +1,13 @@
 package dvachmovie.di.core
 
 import dagger.Subcomponent
-import dvachmovie.fragment.back.BackFragment
 import dvachmovie.activity.movie.MovieActivity
 import dvachmovie.activity.start.StartActivity
-import dvachmovie.di.base.ViewScope
+import dvachmovie.di.base.FragmentScope
 
-@ViewScope
+@FragmentScope
 @Subcomponent()
-interface NavigationComponent {
+interface ActivityComponent {
     fun inject(activity: MovieActivity)
     fun inject(activity: StartActivity)
 }

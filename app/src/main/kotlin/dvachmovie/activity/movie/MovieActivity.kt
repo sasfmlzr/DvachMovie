@@ -6,7 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import dvachmovie.R
 import dvachmovie.base.BaseActivity
 import dvachmovie.databinding.ActivityMovieBinding
-import dvachmovie.di.core.NavigationComponent
+import dvachmovie.di.core.ActivityComponent
 import dvachmovie.fragment.back.BackFragmentDirections
 import dvachmovie.fragment.movie.MovieFragmentDirections
 import dvachmovie.repository.local.MovieTempRepository
@@ -20,7 +20,7 @@ class MovieActivity : BaseActivity<MovieActivityViewModel,
     @Inject
     lateinit var movieTempRepository: MovieTempRepository
 
-    override fun inject(component: NavigationComponent) = component.inject(this)
+    override fun inject(component: ActivityComponent) = component.inject(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

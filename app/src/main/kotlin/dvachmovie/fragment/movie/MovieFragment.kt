@@ -12,7 +12,7 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentMovieBinding
-import dvachmovie.di.core.ViewComponent
+import dvachmovie.di.core.FragmentComponent
 import dvachmovie.listener.OnSwipeTouchListener
 import dvachmovie.repository.local.Movie
 import dvachmovie.repository.local.MovieTempRepository
@@ -29,7 +29,7 @@ class MovieFragment : BaseFragment() {
 
     private lateinit var player: PlayerView
 
-    override fun inject(component: ViewComponent) = component.inject(this)
+    override fun inject(component: FragmentComponent) = component.inject(this)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

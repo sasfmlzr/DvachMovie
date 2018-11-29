@@ -6,7 +6,7 @@ import dvachmovie.R
 import dvachmovie.activity.movie.MovieActivity
 import dvachmovie.base.BaseActivity
 import dvachmovie.databinding.ActivityStartBinding
-import dvachmovie.di.core.NavigationComponent
+import dvachmovie.di.core.ActivityComponent
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.InitWebm
 import javax.inject.Inject
@@ -20,7 +20,7 @@ class StartActivity : BaseActivity<StartActivityViewModel,
     @Inject
     lateinit var dvachUseCase: DvachUseCase
 
-    override fun inject(component: NavigationComponent) = component.inject(this)
+    override fun inject(component: ActivityComponent) = component.inject(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,11 +5,14 @@ import dvachmovie.di.DataModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [ApplicationModule::class, DataModule::class,
-    ExoModule::class, ExoModule::class, ViewModuleFactoryModule::class])
+@Component(modules = [
+    ApplicationModule::class,
+    DataModule::class,
+    ExoModule::class,
+    ViewModuleFactoryModule::class
+])
 interface ApplicationComponent {
-
-    fun viewComponent(): ViewComponent
-    fun navigationComponent(): NavigationComponent
+    fun viewComponent(): FragmentComponent
+    fun navigationComponent(): ActivityComponent
     fun inject(mainApplication: MainApplication)
 }
