@@ -11,9 +11,8 @@ import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.InitWebm
 import javax.inject.Inject
 
-
-class StartActivity : BaseActivity<StartActivityViewModel,
-        ActivityStartBinding>(StartActivityViewModel::class.java) {
+class StartActivity : BaseActivity<StartActivityVM,
+        ActivityStartBinding>(StartActivityVM::class.java) {
 
     override val layoutId = R.layout.activity_start
 

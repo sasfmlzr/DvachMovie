@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import dvachmovie.activity.movie.MovieActivityViewModel
-import dvachmovie.activity.start.StartActivityViewModel
+import dvachmovie.activity.movie.MovieActivityVM
+import dvachmovie.activity.start.StartActivityVM
 import dvachmovie.di.ViewModelFactory
 import dvachmovie.di.ViewModelKey
-import dvachmovie.fragment.back.BackViewModel
-import dvachmovie.fragment.movie.MovieViewModel
-import dvachmovie.fragment.preview.PreviewViewModel
+import dvachmovie.fragment.back.BackVM
+import dvachmovie.fragment.movie.MovieVM
+import dvachmovie.fragment.preview.PreviewVM
 
 @Module
 abstract class ViewModelFactoryModule {
@@ -21,26 +21,26 @@ abstract class ViewModelFactoryModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MovieViewModel::class)
-    internal abstract fun movieVM(viewModel: MovieViewModel): ViewModel
+    @ViewModelKey(MovieVM::class)
+    internal abstract fun movieVM(VM: MovieVM): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(PreviewViewModel::class)
-    internal abstract fun previewVM(viewModel: PreviewViewModel): ViewModel
+    @ViewModelKey(PreviewVM::class)
+    internal abstract fun previewVM(VM: PreviewVM): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(BackViewModel::class)
-    internal abstract fun backVM(viewModel: BackViewModel): ViewModel
+    @ViewModelKey(BackVM::class)
+    internal abstract fun backVM(VM: BackVM): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(MovieActivityViewModel::class)
-    internal abstract fun movieActivityVM(viewModel: MovieActivityViewModel): ViewModel
+    @ViewModelKey(MovieActivityVM::class)
+    internal abstract fun movieActivityVM(VM: MovieActivityVM): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(StartActivityViewModel::class)
-    internal abstract fun startActivityVM(viewModel: StartActivityViewModel): ViewModel
+    @ViewModelKey(StartActivityVM::class)
+    internal abstract fun startActivityVM(VM: StartActivityVM): ViewModel
 }

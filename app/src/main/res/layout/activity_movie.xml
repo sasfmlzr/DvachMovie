@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="dvachmovie.activity.movie.MovieActivityViewModel" />
+            type="dvachmovie.activity.movie.MovieActivityVM" />
 
         <import type="android.view.View" />
     </data>

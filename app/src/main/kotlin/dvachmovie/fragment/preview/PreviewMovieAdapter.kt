@@ -53,7 +53,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieTempRepository: M
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: String, listener: View.OnClickListener) {
             with(binding) {
-                viewModel = PreviewItemViewModel(movie)
+                viewModel = PreviewItemVM(movie)
                 clickListener = listener
                 executePendingBindings()
             }

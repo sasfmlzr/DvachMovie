@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="dvachmovie.fragment.movie.MovieViewModel" />
+            type="dvachmovie.fragment.movie.MovieVM" />
 
         <import type="android.view.View" />
     </data>

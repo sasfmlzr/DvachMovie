@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="dvachmovie.fragment.preview.PreviewItemViewModel" />
+            type="dvachmovie.fragment.preview.PreviewItemVM" />
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener"/>

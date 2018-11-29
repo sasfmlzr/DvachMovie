@@ -10,8 +10,8 @@ import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentBackBinding
 import dvachmovie.di.core.FragmentComponent
 
-class BackFragment : BaseFragment<BackViewModel,
-        FragmentBackBinding>(BackViewModel::class.java) {
+class BackFragment : BaseFragment<BackVM,
+        FragmentBackBinding>(BackVM::class.java) {
 
     override fun inject(component: FragmentComponent) = component.inject(this)
 

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="dvachmovie.fragment.preview.PreviewViewModel" />
+            type="dvachmovie.fragment.preview.PreviewVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

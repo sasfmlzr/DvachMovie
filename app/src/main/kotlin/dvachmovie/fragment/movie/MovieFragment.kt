@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.base.BaseFragment
@@ -18,8 +16,8 @@ import dvachmovie.repository.local.Movie
 import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
-class MovieFragment : BaseFragment<MovieViewModel,
-        FragmentMovieBinding>(MovieViewModel::class.java)  {
+class MovieFragment : BaseFragment<MovieVM,
+        FragmentMovieBinding>(MovieVM::class.java)  {
 
     @Inject
     lateinit var movieTempRepository: MovieTempRepository

@@ -11,8 +11,8 @@ import dvachmovie.di.core.FragmentComponent
 import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
-class PreviewFragment : BaseFragment<PreviewViewModel,
-        FragmentPreviewMoviesBinding>(PreviewViewModel::class.java) {
+class PreviewFragment : BaseFragment<PreviewVM,
+        FragmentPreviewMoviesBinding>(PreviewVM::class.java) {
 
     @Inject
     lateinit var movieTempRepository: MovieTempRepository

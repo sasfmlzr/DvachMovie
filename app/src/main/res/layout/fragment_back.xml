@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="dvachmovie.fragment.back.BackViewModel" />
+            type="dvachmovie.fragment.back.BackVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
