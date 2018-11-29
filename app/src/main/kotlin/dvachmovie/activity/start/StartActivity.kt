@@ -12,7 +12,9 @@ import dvachmovie.usecase.InitWebm
 import javax.inject.Inject
 
 
-class StartActivity : BaseActivity<StartActivityViewModel, ActivityStartBinding>(StartActivityViewModel::class.java) {
+class StartActivity : BaseActivity<StartActivityViewModel,
+        ActivityStartBinding>(StartActivityViewModel::class.java) {
+
     override val layoutId = R.layout.activity_start
 
     @Inject
@@ -22,9 +24,7 @@ class StartActivity : BaseActivity<StartActivityViewModel, ActivityStartBinding>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding.viewModel = viewModel
-
         dvachUseCase.getNumThreads("b", initWebm())
     }
 
@@ -50,5 +50,4 @@ class StartActivity : BaseActivity<StartActivityViewModel, ActivityStartBinding>
                 MovieActivity::class.java)
         startActivity(intent)
     }
-
 }

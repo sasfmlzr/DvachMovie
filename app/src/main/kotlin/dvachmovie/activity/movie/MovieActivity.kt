@@ -12,7 +12,8 @@ import dvachmovie.fragment.movie.MovieFragmentDirections
 import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
-class MovieActivity : BaseActivity<MovieActivityViewModel, ActivityMovieBinding>(MovieActivityViewModel::class.java) {
+class MovieActivity : BaseActivity<MovieActivityViewModel,
+        ActivityMovieBinding>(MovieActivityViewModel::class.java) {
 
     override val layoutId = R.layout.activity_movie
 
