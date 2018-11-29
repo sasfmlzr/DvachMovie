@@ -23,6 +23,8 @@ class BackFragment : BaseFragment<BackVM,
 
         viewModel.imageView.value = ContextCompat.getDrawable(context!!, R.drawable.kiss)
 
+        binding.imageView.setOnClickListener { activity?.finish() }
+
         return binding.root
     }
 
