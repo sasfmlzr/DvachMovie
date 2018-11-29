@@ -12,9 +12,6 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
         tools:layout="@layout/fragment_movie">
-        <argument
-            android:name="currentMovie"
-            app:argType="dvachmovie.repository.local.Movie" />
         <action
             android:id="@+id/actionShowPreviewFragment"
             app:destination="@id/navPreviewFragment"
@@ -38,9 +35,6 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
         tools:layout="@layout/fragment_preview_movies">
-        <argument
-            android:name="currentMovie"
-            app:argType="dvachmovie.repository.local.Movie" />
         <action
             android:id="@+id/actionShowMovieFragment"
             app:destination="@+id/navMovieFragment"

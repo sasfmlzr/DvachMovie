@@ -17,7 +17,7 @@ import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
-        FragmentMovieBinding>(MovieVM::class.java)  {
+        FragmentMovieBinding>(MovieVM::class.java) {
 
     @Inject
     lateinit var movieTempRepository: MovieTempRepository
@@ -30,10 +30,6 @@ class MovieFragment : BaseFragment<MovieVM,
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        if (arguments?.size() != 0) {
-            val movie = MovieFragmentArgs.fromBundle(arguments).currentMovie
-            movieTempRepository.currentMovie = movie
-        }
 
         binding = FragmentMovieBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
@@ -71,9 +67,9 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
             override fun onSwipeTop() {
-                val movieUri = binding.viewModel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
+               // val movieUri = binding.viewModel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
                 val direction = MovieFragmentDirections
-                        .ActionShowPreviewFragment(findMovieInRepository(movieUri!!))
+                        .ActionShowPreviewFragment()
                 findNavController(this@MovieFragment).navigate(direction)
                 println("onSwipeTop")
             }

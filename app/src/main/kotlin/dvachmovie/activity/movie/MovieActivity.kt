@@ -39,7 +39,7 @@ class MovieActivity : BaseActivity<MovieActivityVM,
                 NavHostFragment.findNavController(supportFragmentManager.primaryNavigationFragment!!).navigate(direction)
             }
             "BackFragment" -> {
-                val direction = BackFragmentDirections.ActionShowMovieFragment(movieTempRepository.currentMovie)
+                val direction = BackFragmentDirections.ActionShowMovieFragment()
                 NavHostFragment.findNavController(supportFragmentManager.primaryNavigationFragment!!).navigate(direction)
             }
             else -> super.onBackPressed()

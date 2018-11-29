@@ -24,10 +24,6 @@ class PreviewFragment : BaseFragment<PreviewVM,
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        if (arguments?.size() != 0) {
-            val movie = PreviewFragmentArgs.fromBundle(arguments).currentMovie
-            movieTempRepository.currentMovie = movie
-        }
 
         binding = FragmentPreviewMoviesBinding.inflate(inflater, container, false)
 

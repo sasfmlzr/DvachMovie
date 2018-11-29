@@ -43,7 +43,8 @@ class PreviewMovieAdapter @Inject constructor(private val movieTempRepository: M
                     movie = currentMovie
                 }
             }
-            val direction = PreviewFragmentDirections.ActionShowMovieFragment(movie)
+            movieTempRepository.currentMovie = movie
+            val direction = PreviewFragmentDirections.ActionShowMovieFragment()
             it.findNavController().navigate(direction)
         }
     }
