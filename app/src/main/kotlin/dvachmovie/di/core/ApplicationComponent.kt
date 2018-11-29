@@ -9,7 +9,7 @@ import javax.inject.Singleton
     ApplicationModule::class,
     DataModule::class,
     ExoModule::class,
-    ViewModuleFactoryModule::class
+    ViewModelFactoryModule::class
 ])
 interface ApplicationComponent {
     fun viewComponent(): FragmentComponent
