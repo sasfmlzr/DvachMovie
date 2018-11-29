@@ -1,17 +1,22 @@
 package dvachmovie.repository.local
 
+import androidx.lifecycle.MutableLiveData
 import javax.inject.Singleton
 
 @Singleton
-data class MovieTempRepository(val movieLists: MutableList<Movie> = mutableListOf(),
-                               var currentMovie: Movie = Movie()) {
+data class MovieTempRepository(val movieList: MutableLiveData<MutableList<Movie>> = MutableLiveData(),
+                               var currentMovie: MutableLiveData<Movie> = MutableLiveData()) {
+
+    init {
+        movieList.value = mutableListOf()
+        currentMovie.value = Movie()
+    }
 
     fun getIndexPosition(): Int {
         var pos = 0
-        if (movieLists.contains(currentMovie)) {
-            pos = movieLists.indexOf(currentMovie)
+        if (movieList.value!!.contains(currentMovie.value)) {
+            pos = movieList.value!!.indexOf(currentMovie.value)
         }
         return pos
     }
-
 }

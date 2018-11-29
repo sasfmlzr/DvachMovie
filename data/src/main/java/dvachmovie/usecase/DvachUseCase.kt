@@ -32,11 +32,11 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
         return object : Callback<DvachCatalogRequest> {
             override fun onResponse(call: Call<DvachCatalogRequest>, response: Response<DvachCatalogRequest>) {
                 val resp = response.body()
-                val numthreads = resp?.threads?.map { it.num }
+                val numThreads = resp?.threads?.map { it.num }
                 println("dvachNum started")
-                numthreads?.map { num -> getLinkFilesFromThreads(board, num) }
+                numThreads?.map { num -> getLinkFilesFromThreads(board, num) }
                 println("dvachNum finished")
-                listMovieSize = numthreads!!.size
+                listMovieSize = numThreads!!.size
                 initWebm.countVideoCalculatedSumm(listMovieSize)
             }
 
@@ -86,7 +86,7 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
     }
 
     private fun initWebm() {
-        movieTempRepository.movieLists.addAll(listMovies)
+        movieTempRepository.movieList.value?.addAll(listMovies)
         initWebm.initWebm()
     }
 }

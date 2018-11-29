@@ -44,7 +44,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        movieTempRepository.currentMovie = movieTempRepository.movieLists[player.player.currentWindowIndex]
+        movieTempRepository.currentMovie.value = movieTempRepository.movieList.value!![player.player.currentWindowIndex]
         player.player.stop()
         super.onStop()
     }
@@ -69,8 +69,8 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
             override fun onSwipeTop() {
-                val movieUri = binding.viewModel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
-                movieTempRepository.currentMovie = findMovieInRepository(movieUri!!)
+                val movieUri = binding.viewModel!!.uriMovie.value?.get(player.player.currentPeriodIndex)
+                movieTempRepository.currentMovie.value = movieUri
                 val direction = MovieFragmentDirections
                         .ActionShowPreviewFragment()
                 findNavController(this@MovieFragment).navigate(direction)
@@ -93,7 +93,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun findMovieInRepository(movieUri: String): Movie {
         var movie = Movie()
-        movieTempRepository.movieLists.map { it ->
+        movieTempRepository.movieList.value?.map { it ->
             if (it.movieUrl == movieUri) {
                 movie = it
             }

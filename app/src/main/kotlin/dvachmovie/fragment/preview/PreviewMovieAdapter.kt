@@ -14,7 +14,7 @@ import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(private val movieTempRepository: MovieTempRepository) :
-        ListAdapter<String, PreviewMovieAdapter.ViewHolder>
+        ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>
         (PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -35,15 +35,9 @@ class PreviewMovieAdapter @Inject constructor(private val movieTempRepository: M
         }
     }
 
-    private fun createOnClickListener(tempUri: String): View.OnClickListener {
+    private fun createOnClickListener(movie: Movie): View.OnClickListener {
         return View.OnClickListener {
-            var movie = Movie()
-            movieTempRepository.movieLists.map { currentMovie ->
-                if (currentMovie.moviePreviewUrl == tempUri) {
-                    movie = currentMovie
-                }
-            }
-            movieTempRepository.currentMovie = movie
+            movieTempRepository.currentMovie.value = movie
             val direction = PreviewFragmentDirections.ActionShowMovieFragment()
             it.findNavController().navigate(direction)
         }
@@ -52,7 +46,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieTempRepository: M
     class ViewHolder(
             private val binding: ItemPreviewMoviesBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: String, listener: View.OnClickListener) {
+        fun bind(movie: Movie, listener: View.OnClickListener) {
             with(binding) {
                 viewModel = PreviewItemVM(movie)
                 clickListener = listener

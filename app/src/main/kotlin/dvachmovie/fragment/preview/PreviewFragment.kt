@@ -45,9 +45,9 @@ class PreviewFragment : BaseFragment<PreviewVM,
 
     private fun configureScrollRecyclerView() {
         var pos = 0
-        if (movieTempRepository.movieLists
-                        .contains(movieTempRepository.currentMovie)) {
-            pos = movieTempRepository.movieLists.indexOf(movieTempRepository.currentMovie)
+        if (movieTempRepository.movieList.value
+                !!.contains(movieTempRepository.currentMovie.value)) {
+            pos = movieTempRepository.movieList.value!!.indexOf(movieTempRepository.currentMovie.value)
         }
 
         if (pos < 70) {
