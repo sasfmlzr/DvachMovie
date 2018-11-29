@@ -16,19 +16,9 @@ class MovieVM @Inject constructor(movieTempRepository: MovieTempRepository) : Vi
     init {
         val movieUrl = movieTempRepository.movieLists.map { it.movieUrl }
         loadUri(movieUrl)
-        var pos = 0
-        if (movieUrl.contains(movieTempRepository.currentMovie.movieUrl)) {
-            pos = movieUrl.indexOf(movieTempRepository.currentMovie.movieUrl)
-        }
-
-        loadCurrentPosition(pos)
     }
 
     private fun loadUri(links: List<String>) {
         uriMovie.value = links
-    }
-
-    private fun loadCurrentPosition(pos: Int) {
-        currentPosition.value = pos
     }
 }

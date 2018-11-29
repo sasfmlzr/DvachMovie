@@ -38,6 +38,8 @@ class MovieFragment : BaseFragment<MovieVM,
 
         player.setOnTouchListener(onGestureListener())
 
+        viewModel.currentPosition.value = movieTempRepository.getIndexPosition()
+
         return binding.root
     }
 
@@ -67,7 +69,8 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
             override fun onSwipeTop() {
-               // val movieUri = binding.viewModel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
+                val movieUri = binding.viewModel?.uriMovie?.value?.get(player.player.currentPeriodIndex)
+                movieTempRepository.currentMovie = findMovieInRepository(movieUri!!)
                 val direction = MovieFragmentDirections
                         .ActionShowPreviewFragment()
                 findNavController(this@MovieFragment).navigate(direction)
