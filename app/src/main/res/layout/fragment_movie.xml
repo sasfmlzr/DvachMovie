@@ -22,15 +22,30 @@
             android:id="@+id/shuffleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
             android:adjustViewBounds="false"
             android:alpha="0.5"
             android:background="@color/backColor"
             android:elevation="4dp"
-            android:src="@drawable/exo_controls_shuffle"
+            android:src="@drawable/outline_shuffle_24"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/downloadButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="40dp"
+            android:adjustViewBounds="false"
+            android:alpha="0.5"
+            android:background="@color/backColor"
+            android:elevation="4dp"
+            android:src="@drawable/outline_cloud_download_24"
+            app:barrierAllowsGoneWidgets="false"
+            app:layout_constraintRight_toLeftOf="@+id/shuffleButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.exoplayer2.ui.PlayerView
