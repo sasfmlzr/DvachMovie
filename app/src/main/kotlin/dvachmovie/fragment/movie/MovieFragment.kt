@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ui.PlayerView
@@ -90,8 +92,10 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun toggleControlsVisibility() {
         if (player.isControllerVisible) {
+            binding.shuffleButton.visibility = INVISIBLE
             player.hideController()
         } else {
+            binding.shuffleButton.visibility = VISIBLE
             player.showController()
         }
     }

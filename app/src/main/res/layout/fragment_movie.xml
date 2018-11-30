@@ -18,18 +18,18 @@
         android:layout_height="match_parent"
         tools:context=".fragment.movie.MovieFragment">
 
-        <Button
+        <ImageButton
             android:id="@+id/shuffleButton"
-            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:backgroundTint="@android:color/transparent"
-            android:padding="0dp"
-            app:icon="@drawable/exo_controls_shuffle"
-            app:iconGravity="textStart"
-            app:iconTintMode="screen"
+            android:adjustViewBounds="false"
+            android:alpha="0.5"
+            android:background="@color/backColor"
+            android:elevation="4dp"
+            android:src="@drawable/exo_controls_shuffle"
+            app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
