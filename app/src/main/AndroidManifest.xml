@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="dvachmovie">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".di.core.MainApplication"
@@ -14,8 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".activity.start.StartActivity">
+        <activity android:name=".activity.start.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,6 +26,11 @@
         <activity
             android:name=".activity.movie.MovieActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+
+        <service
+            android:name=".service.DownloadService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

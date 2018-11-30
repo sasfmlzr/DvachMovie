@@ -1,6 +1,9 @@
 package dvachmovie.fragment.movie
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -8,15 +11,20 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.annotation.NonNull
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ui.PlayerView
+import dvachmovie.Utils.DirectoryHelper
+import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.listener.OnSwipeTouchListener
 import dvachmovie.repository.local.Movie
 import dvachmovie.repository.local.MovieTempRepository
+import dvachmovie.service.DownloadService
 import javax.inject.Inject
+
 
 class MovieFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class.java) {
@@ -47,6 +55,12 @@ class MovieFragment : BaseFragment<MovieVM,
                     .value = movieTempRepository.movieList.value!!.shuffled() as MutableList<Movie>
         }
 
+        binding.downloadButton.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+            }
+        }
+
         return binding.root
     }
 
@@ -67,46 +81,39 @@ class MovieFragment : BaseFragment<MovieVM,
                 return super.onTouch(v, event)
             }
 
-            override fun onSwipeRight() {
-                println("onSwipeRight")
-            }
-
-            override fun onSwipeLeft() {
-                println("onSwipeLeft")
-            }
-
             override fun onSwipeTop() {
                 val movieUri = binding.viewModel!!.getUrlList().value?.get(player.player.currentPeriodIndex)
                 movieTempRepository.currentMovie.value = movieUri
                 val direction = MovieFragmentDirections
                         .ActionShowPreviewFragment()
                 findNavController(this@MovieFragment).navigate(direction)
-                println("onSwipeTop")
             }
+        }
+    }
 
-            override fun onSwipeBottom() {
-                println("onSwipeBottom")
-            }
+    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                DirectoryHelper.createDirectory(context!!)
+            movieTempRepository.currentMovie.value =
+                    movieTempRepository.movieList.value!![player.player.currentWindowIndex]
+            activity?.startService(DownloadService.getDownloadService(
+                    context!!,
+                    movieTempRepository.currentMovie.value!!.movieUrl,
+                    DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
         }
     }
 
     private fun toggleControlsVisibility() {
         if (player.isControllerVisible) {
             binding.shuffleButton.visibility = INVISIBLE
+            binding.downloadButton.visibility = INVISIBLE
             player.hideController()
         } else {
             binding.shuffleButton.visibility = VISIBLE
+            binding.downloadButton.visibility = VISIBLE
             player.showController()
         }
-    }
-
-    private fun findMovieInRepository(movieUri: String): Movie {
-        var movie = Movie()
-        movieTempRepository.movieList.value?.map { it ->
-            if (it.movieUrl == movieUri) {
-                movie = it
-            }
-        }
-        return movie
     }
 }
