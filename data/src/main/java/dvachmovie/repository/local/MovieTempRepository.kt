@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import javax.inject.Singleton
 
 @Singleton
-data class MovieTempRepository(val movieList: MutableLiveData<MutableList<Movie>> = MutableLiveData(),
+data class MovieTempRepository(var movieList: MutableLiveData<MutableList<Movie>> = MutableLiveData(),
                                var currentMovie: MutableLiveData<Movie> = MutableLiveData()) {
 
     init {

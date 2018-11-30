@@ -33,12 +33,17 @@ class MovieFragment : BaseFragment<MovieVM,
 
         binding = FragmentMovieBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
+        binding.setLifecycleOwner(viewLifecycleOwner)
 
         player = binding.playerView
-
         player.setOnTouchListener(onGestureListener())
 
-        viewModel.currentPosition.value = movieTempRepository.getIndexPosition()
+        viewModel.getPosition().value = movieTempRepository.getIndexPosition()
+
+        binding.shuffleButton.setOnClickListener {
+            movieTempRepository.movieList
+                    .value = movieTempRepository.movieList.value!!.shuffled() as MutableList<Movie>
+        }
 
         return binding.root
     }
@@ -69,7 +74,7 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
             override fun onSwipeTop() {
-                val movieUri = binding.viewModel!!.uriMovie.value?.get(player.player.currentPeriodIndex)
+                val movieUri = binding.viewModel!!.getUrlList().value?.get(player.player.currentPeriodIndex)
                 movieTempRepository.currentMovie.value = movieUri
                 val direction = MovieFragmentDirections
                         .ActionShowPreviewFragment()
