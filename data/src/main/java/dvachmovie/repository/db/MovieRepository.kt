@@ -1,13 +1,13 @@
 package dvachmovie.repository.db
 
+import androidx.lifecycle.LiveData
 import dvachmovie.db.data.MovieEntity
-import io.reactivex.Flowable
 
 interface MovieRepository {
 
-    fun getAll(): Flowable<MovieEntity>
-
+    fun getAll(): LiveData<MovieEntity>
+    fun getMoviesFromBoard(boardThread: String): LiveData<MovieEntity>
     fun insert(movieEntity: MovieEntity)
-
+    fun insertAll(moviesEntity: List<MovieEntity>)
     fun deleteAll()
 }
