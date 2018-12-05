@@ -5,7 +5,7 @@ import dvachmovie.db.data.MovieEntity
 
 interface MovieRepository {
 
-    fun getAll(): LiveData<MovieEntity>
+    fun getAll(): LiveData<List<MovieEntity>>
     fun getMoviesFromBoard(boardThread: String): LiveData<MovieEntity>
     fun insert(movieEntity: MovieEntity)
     fun insertAll(moviesEntity: List<MovieEntity>)

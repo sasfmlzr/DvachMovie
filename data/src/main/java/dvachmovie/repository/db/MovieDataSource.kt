@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class MovieDataSource @Inject constructor(private var movieDao: MovieDao) : MovieRepository {
 
-    override fun getAll(): LiveData<MovieEntity> {
+    override fun getAll(): LiveData<List<MovieEntity>> {
         return movieDao.getAll()
     }
 

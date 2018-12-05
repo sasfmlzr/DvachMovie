@@ -9,16 +9,11 @@ import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
 import dvachmovie.fragment.back.BackFragmentDirections
 import dvachmovie.fragment.movie.MovieFragmentDirections
-import dvachmovie.repository.local.MovieTempRepository
-import javax.inject.Inject
 
 class MovieActivity : BaseActivity<MovieActivityVM,
         ActivityMovieBinding>(MovieActivityVM::class.java) {
 
     override val layoutId = R.layout.activity_movie
-
-    @Inject
-    lateinit var movieTempRepository: MovieTempRepository
 
     override fun inject(component: ActivityComponent) = component.inject(this)
 
