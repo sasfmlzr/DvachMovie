@@ -3,4 +3,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="preview_image">Preview image</string>
     <string name="exit_image">Image for exit from app</string>
+    <string name="download">Download</string>
+    <string name="shuffle">Shuffle</string>
 </resources>
