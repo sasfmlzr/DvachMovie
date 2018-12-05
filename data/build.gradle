@@ -33,11 +33,11 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
     // Room components
-    implementation 'androidx.room:room-runtime:2.1.0-alpha02'
-    annotationProcessor 'androidx.room:room-compiler:2.1.0-alpha02'
-    kapt 'androidx.room:room-compiler:2.1.0-alpha02'
-    androidTestImplementation 'androidx.room:room-testing:2.1.0-alpha02'
-    implementation 'androidx.room:room-rxjava2:2.1.0-alpha02'
+    implementation "androidx.room:room-runtime:$roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"

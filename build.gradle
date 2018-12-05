@@ -15,7 +15,7 @@ buildscript {
         placeholderviewVersion = '1.0.3'
         junitVersion = '4.12'
         retrofitVersion = '2.3.0'
-        roomVersion = '1.1.1'
+        roomVersion = '2.1.0-alpha03'
         archLifecycleVersion = '1.1.1'
         glideVersion = '4.8.0'
         navigationVersion = '1.0.0-alpha07'

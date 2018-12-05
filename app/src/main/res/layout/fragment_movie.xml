@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:movie="@{viewModel.getUrlList}"
-            app:movie_position="@{viewModel.getPosition}" />
+            app:movie_position="@{viewModel.currentPos}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

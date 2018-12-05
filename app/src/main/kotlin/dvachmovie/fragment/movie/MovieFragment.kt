@@ -48,7 +48,7 @@ class MovieFragment : BaseFragment<MovieVM,
         player = binding.playerView
         player.setOnTouchListener(onGestureListener())
 
-        viewModel.getPosition().value = movieTempRepository.getIndexPosition()
+        viewModel.currentPos.value = movieTempRepository.getIndexPosition()
 
         binding.shuffleButton.setOnClickListener {
             movieTempRepository.movieList

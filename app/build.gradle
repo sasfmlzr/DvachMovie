@@ -69,9 +69,9 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
 
     // Room components
-    implementation 'androidx.room:room-runtime:2.1.0-alpha02'
-    kapt 'androidx.room:room-compiler:2.1.0-alpha02'
-    androidTestImplementation 'androidx.room:room-testing:2.1.0-alpha02'
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
 
     // Lifecycle components
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
