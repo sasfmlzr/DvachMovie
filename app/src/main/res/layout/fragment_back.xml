@@ -19,7 +19,7 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:imageFromDrawable="@{viewModel.imageView}"
-            android:contentDescription="@string/exit_image" />
+            android:contentDescription="@string/exit_image"
+            app:imageFromDrawable="@{viewModel.imageView}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
