@@ -12,7 +12,7 @@ interface MovieDao {
     fun getAll(): LiveData<List<MovieEntity>>
 
     @Query("SELECT * from movieData where board = :boardThread")
-    fun getMoviesFromBoard(boardThread: String): LiveData<MovieEntity>
+    fun getMoviesFromBoard(boardThread: String): LiveData<List<MovieEntity>>
 
     //@Query("SELECT * FROM movieData WHERE movieLink = :link")
     //fun linkIsExist(link: String): Flowable<User>

@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dvachmovie.R
 import dvachmovie.databinding.ItemPreviewMoviesBinding
-import dvachmovie.repository.local.Movie
+import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieTempRepository
 import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(private val movieTempRepository: MovieTempRepository) :
-        ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>
+        ListAdapter<MovieEntity, PreviewMovieAdapter.ViewHolder>
         (PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -35,7 +35,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieTempRepository: M
         }
     }
 
-    private fun createOnClickListener(movie: Movie): View.OnClickListener {
+    private fun createOnClickListener(movie: MovieEntity): View.OnClickListener {
         return View.OnClickListener {
             movieTempRepository.currentMovie.value = movie
             val direction = PreviewFragmentDirections.ActionShowMovieFragment()
@@ -46,7 +46,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieTempRepository: M
     class ViewHolder(
             private val binding: ItemPreviewMoviesBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: Movie, listener: View.OnClickListener) {
+        fun bind(movie: MovieEntity, listener: View.OnClickListener) {
             with(binding) {
                 viewModel = PreviewItemVM(movie)
                 clickListener = listener

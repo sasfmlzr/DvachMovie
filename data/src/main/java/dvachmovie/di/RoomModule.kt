@@ -11,13 +11,10 @@ import dvachmovie.repository.db.MovieRepository
 import javax.inject.Singleton
 
 @Module
-class RoomModule {
+class RoomModule(application: Application) {
 
-    private lateinit var movieDatabase: MovieDatabase
-
-    fun RoomModule(application: Application) {
-        movieDatabase = Room.databaseBuilder(application, MovieDatabase::class.java, "movieData").build()
-    }
+    private var movieDatabase: MovieDatabase =
+            Room.databaseBuilder(application, MovieDatabase::class.java, "movieData").build()
 
     @Singleton
     @Provides

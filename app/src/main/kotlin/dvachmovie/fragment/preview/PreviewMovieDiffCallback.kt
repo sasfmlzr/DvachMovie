@@ -1,14 +1,14 @@
 package dvachmovie.fragment.preview
 
 import androidx.recyclerview.widget.DiffUtil
-import dvachmovie.repository.local.Movie
+import dvachmovie.db.data.MovieEntity
 
-class PreviewMovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
-    override fun areItemsTheSame(p0: Movie, p1: Movie): Boolean {
+class PreviewMovieDiffCallback : DiffUtil.ItemCallback<MovieEntity>() {
+    override fun areItemsTheSame(p0: MovieEntity, p1: MovieEntity): Boolean {
         return p0 == p1
     }
 
-    override fun areContentsTheSame(p0: Movie, p1: Movie): Boolean {
+    override fun areContentsTheSame(p0: MovieEntity, p1: MovieEntity): Boolean {
         return p0 == p1
     }
 }

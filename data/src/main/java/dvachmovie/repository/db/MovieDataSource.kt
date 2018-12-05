@@ -11,7 +11,7 @@ class MovieDataSource @Inject constructor(private var movieDao: MovieDao) : Movi
         return movieDao.getAll()
     }
 
-    override fun getMoviesFromBoard(boardThread: String): LiveData<MovieEntity> {
+    override fun getMoviesFromBoard(boardThread: String): LiveData<List<MovieEntity>> {
         return movieDao.getMoviesFromBoard(boardThread)
     }
 
