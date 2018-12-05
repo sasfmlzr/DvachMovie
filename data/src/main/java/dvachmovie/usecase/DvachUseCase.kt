@@ -6,15 +6,19 @@ import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
+import dvachmovie.db.MovieDatabaseWorker
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.db.MovieRepository
+import dvachmovie.repository.local.MovieCache
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
-                                       private val movieRepository: MovieRepository) {
+                                       private val movieRepository: MovieRepository,
+                                       private val movieCache: MovieCache,
+                                       private val movieDatabaseWorker: MovieDatabaseWorker) {
 
     private var listFilesItem = mutableListOf<FileItem>()
     private var listMovies = mutableListOf<MovieEntity>()
@@ -88,7 +92,9 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
     }
 
     private fun initWebm() {
-        movieRepository.insertAll(listMovies)
+        movieCache.movieList.value = listMovies
+        movieDatabaseWorker.doWork()
+        //movieRepository.insertAll(listMovies)
         initWebm.initWebm()
     }
 }

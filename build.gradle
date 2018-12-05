@@ -20,6 +20,7 @@ buildscript {
         roomVersion = '2.1.0-alpha03'
         rxandroidVersion = '2.1.0'
         rxkotlinVersion = '2.3.0'
+        workVersion = '1.0.0-alpha09'
     }
     repositories {
         google()
