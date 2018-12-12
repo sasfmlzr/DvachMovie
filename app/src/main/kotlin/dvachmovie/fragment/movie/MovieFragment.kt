@@ -12,7 +12,6 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.NonNull
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.Utils.DirectoryHelper
@@ -22,15 +21,17 @@ import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.listener.OnSwipeTouchListener
-import dvachmovie.repository.local.MovieTempRepository
+import dvachmovie.repository.local.MovieRepository
+import dvachmovie.repository.local.MovieStorage
 import dvachmovie.service.DownloadService
+import java.util.*
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class.java) {
 
     @Inject
-    lateinit var movieRepository: MovieTempRepository
+    lateinit var movieRepository: MovieRepository
 
     private lateinit var player: PlayerView
 
@@ -48,17 +49,10 @@ class MovieFragment : BaseFragment<MovieVM,
         player = binding.playerView
         player.setOnTouchListener(onGestureListener())
 
-        viewModel.currentPos.value = movieRepository.getIndexPosition()
-
-        viewModel.getUrlList().observe(viewLifecycleOwner, Observer {
-            // it = fuckRepository.getAll().value
-            print("fuck")
-        })
-
+        viewModel.currentPos.value = movieRepository.getPos()
 
         binding.shuffleButton.setOnClickListener {
-            movieRepository.movieList
-                    .value = movieRepository.movieList.value!!.shuffled() as MutableList<MovieEntity>
+            movieRepository.getMovies().value!!.shuffle()
         }
 
         binding.downloadButton.setOnClickListener {
@@ -71,14 +65,28 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        if (movieRepository.movieList.value?.size != 0) {
-            movieRepository.currentMovie.value = movieRepository.movieList.value!![player.player.currentWindowIndex]
+        if (movieRepository.getMovies().value?.size != 0) {
+            movieRepository.getCurrent().value = movieRepository.getMovies().
+                    value!![player.player.currentWindowIndex]
         }
         player.player.stop()
 
         super.onStop()
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                DirectoryHelper.createDirectory(context!!)
+            movieRepository.getCurrent().value =
+                    movieRepository.getMovies().value!![player.player.currentWindowIndex]
+            activity?.startService(DownloadService.getDownloadService(
+                    context!!,
+                    movieRepository.getCurrent().value!!.movieUrl,
+                    DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
+        }
+    }
 
     private fun onGestureListener(): OnSwipeTouchListener {
         return object : OnSwipeTouchListener(context!!) {
@@ -93,25 +101,11 @@ class MovieFragment : BaseFragment<MovieVM,
 
             override fun onSwipeTop() {
                 val movieUri = binding.viewModel!!.getUrlList().value?.get(player.player.currentPeriodIndex)
-                movieRepository.currentMovie.value = movieUri
+                movieRepository.getCurrent().value = movieUri
                 val direction = MovieFragmentDirections
                         .ActionShowPreviewFragment()
                 findNavController(this@MovieFragment).navigate(direction)
             }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                DirectoryHelper.createDirectory(context!!)
-            movieRepository.currentMovie.value =
-                    movieRepository.movieList.value!![player.player.currentWindowIndex]
-            activity?.startService(DownloadService.getDownloadService(
-                    context!!,
-                    movieRepository.currentMovie.value!!.movieUrl,
-                    DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
         }
     }
 
