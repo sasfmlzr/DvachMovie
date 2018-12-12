@@ -2,15 +2,15 @@ package dvachmovie.fragment.preview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dvachmovie.repository.local.Movie
-import dvachmovie.repository.local.MovieTempRepository
+import dvachmovie.db.data.MovieEntity
+import dvachmovie.repository.local.MovieRepository
 import javax.inject.Inject
 
-class PreviewVM @Inject constructor(movieTempRepository: MovieTempRepository) : ViewModel() {
-    private val uriMovie = MutableLiveData<List<Movie>>()
+class PreviewVM @Inject constructor(movieRepository: MovieRepository) : ViewModel() {
+    private val uriMovie = MutableLiveData<List<MovieEntity>>()
 
     init {
-        uriMovie.value = movieTempRepository.movieList.value?.map { movie -> movie }
+        uriMovie.value = movieRepository.getMovies().value?.map { movie -> movie }
     }
 
     fun getUriMovie() = uriMovie

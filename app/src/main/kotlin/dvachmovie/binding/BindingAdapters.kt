@@ -5,13 +5,13 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import dvachmovie.repository.local.Movie
+import dvachmovie.db.data.MovieEntity
 
 @BindingAdapter("imageFromUrl")
-fun bindImageFromUrl(view: ImageView, movie: Movie?) {
-    if (!movie!!.moviePreviewUrl.isEmpty()) {
+fun bindImageFromUrl(view: ImageView, movieEntity: MovieEntity?) {
+    if (!movieEntity!!.previewUrl.isEmpty()) {
         Glide.with(view.context)
-                .load(movie.moviePreviewUrl)
+                .load(movieEntity.previewUrl)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(view)
     }

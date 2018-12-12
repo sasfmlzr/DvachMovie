@@ -13,7 +13,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import dvachmovie.repository.local.Movie
+import dvachmovie.db.data.MovieEntity
 
 @BindingMethods(
         BindingMethod(
@@ -26,7 +26,7 @@ class PlayerViewBindingAdapter {
     companion object {
         @BindingAdapter("movie")
         @JvmStatic
-        fun bindMovie(playerView: PlayerView, values: MutableList<Movie>) {
+        fun bindMovie(playerView: PlayerView, values: List<MovieEntity>) {
 
             val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
             val player: SimpleExoPlayer =

@@ -6,25 +6,26 @@ import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
-import dvachmovie.repository.local.Movie
-import dvachmovie.repository.local.MovieTempRepository
+import dvachmovie.db.data.MovieEntity
+import dvachmovie.repository.local.MovieCache
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
-                                       private val movieTempRepository: MovieTempRepository) {
+                                       private val movieCache: MovieCache) {
 
     private var listFilesItem = mutableListOf<FileItem>()
-    private var listMovies = mutableListOf<Movie>()
+    private var listMovies = mutableListOf<MovieEntity>()
     private var listMovieSize = 0
     private var count = 0
-
+    private var board: String = ""
     private lateinit var initWebm: InitWebm
 
     fun getNumThreads(board: String, initWebm: InitWebm) {
         this.initWebm = initWebm
+        this.board = board
         dvachApis.getCatalog(board).enqueue(dvachNumCallback(board))
     }
 
@@ -74,9 +75,10 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
         listFilesItem.map {
             val path = it.path
             if (path.contains(".webm")) {
-                val movie = Movie(Constraints.BASE_URL + path,
-                        Constraints.BASE_URL + it.thumbnail)
-                listMovies.add(movie)
+                val movieEntity = MovieEntity(board = this.board,
+                        movieUrl = Constraints.BASE_URL + path,
+                        previewUrl = Constraints.BASE_URL + it.thumbnail)
+                listMovies.add(movieEntity)
             }
             count--
             if (count == 0) {
@@ -86,7 +88,7 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
     }
 
     private fun initWebm() {
-        movieTempRepository.movieList.value?.addAll(listMovies)
+        movieCache.movieList.value = listMovies
         initWebm.initWebm()
     }
 }

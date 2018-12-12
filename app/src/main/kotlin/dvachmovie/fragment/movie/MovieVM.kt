@@ -1,17 +1,16 @@
 package dvachmovie.fragment.movie
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dvachmovie.repository.local.Movie
-import dvachmovie.repository.local.MovieTempRepository
+import dvachmovie.db.data.MovieEntity
+import dvachmovie.repository.local.MovieRepository
 import javax.inject.Inject
 
-class MovieVM @Inject constructor(movieTempRepository: MovieTempRepository) : ViewModel() {
-    private val uriMovie: MutableLiveData<MutableList<Movie>> = movieTempRepository.movieList
+class MovieVM @Inject constructor(movieRepository: MovieRepository) : ViewModel() {
 
+    private val uriMovies: MediatorLiveData<MutableList<MovieEntity>> = movieRepository.getMovies()
     val currentPos: MutableLiveData<Int> = MutableLiveData()
 
-    fun getUrlList(): MutableLiveData<MutableList<Movie>> {
-        return uriMovie
-    }
+    fun getUrlList() = uriMovies
 }

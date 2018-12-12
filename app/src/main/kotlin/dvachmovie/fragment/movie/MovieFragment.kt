@@ -18,19 +18,18 @@ import dvachmovie.Utils.DirectoryHelper
 import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentMovieBinding
+import dvachmovie.db.data.MovieEntity
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.listener.OnSwipeTouchListener
-import dvachmovie.repository.local.Movie
-import dvachmovie.repository.local.MovieTempRepository
+import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
 import javax.inject.Inject
-
 
 class MovieFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class.java) {
 
     @Inject
-    lateinit var movieTempRepository: MovieTempRepository
+    lateinit var movieRepository: MovieRepository
 
     private lateinit var player: PlayerView
 
@@ -48,11 +47,11 @@ class MovieFragment : BaseFragment<MovieVM,
         player = binding.playerView
         player.setOnTouchListener(onGestureListener())
 
-        viewModel.currentPos.value = movieTempRepository.getIndexPosition()
+        viewModel.currentPos.value = movieRepository.getPos()
 
         binding.shuffleButton.setOnClickListener {
-            movieTempRepository.movieList
-                    .value = movieTempRepository.movieList.value!!.shuffled() as MutableList<Movie>
+            movieRepository.getMovies().value =
+                    movieRepository.getMovies().value!!.shuffled() as MutableList<MovieEntity>
         }
 
         binding.downloadButton.setOnClickListener {
@@ -65,9 +64,26 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        movieTempRepository.currentMovie.value = movieTempRepository.movieList.value!![player.player.currentWindowIndex]
+        if (movieRepository.getMovies().value?.size != 0) {
+            movieRepository.getCurrent().value = movieRepository.getMovies().value!![player.player.currentWindowIndex]
+        }
         player.player.stop()
+
         super.onStop()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                DirectoryHelper.createDirectory(context!!)
+            movieRepository.getCurrent().value =
+                    movieRepository.getMovies().value!![player.player.currentWindowIndex]
+            activity?.startService(DownloadService.getDownloadService(
+                    context!!,
+                    movieRepository.getCurrent().value!!.movieUrl,
+                    DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
+        }
     }
 
     private fun onGestureListener(): OnSwipeTouchListener {
@@ -83,25 +99,11 @@ class MovieFragment : BaseFragment<MovieVM,
 
             override fun onSwipeTop() {
                 val movieUri = binding.viewModel!!.getUrlList().value?.get(player.player.currentPeriodIndex)
-                movieTempRepository.currentMovie.value = movieUri
+                movieRepository.getCurrent().value = movieUri
                 val direction = MovieFragmentDirections
                         .ActionShowPreviewFragment()
                 findNavController(this@MovieFragment).navigate(direction)
             }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                DirectoryHelper.createDirectory(context!!)
-            movieTempRepository.currentMovie.value =
-                    movieTempRepository.movieList.value!![player.player.currentWindowIndex]
-            activity?.startService(DownloadService.getDownloadService(
-                    context!!,
-                    movieTempRepository.currentMovie.value!!.movieUrl,
-                    DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
         }
     }
 

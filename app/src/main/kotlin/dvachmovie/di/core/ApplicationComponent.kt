@@ -14,5 +14,6 @@ import javax.inject.Singleton
 interface ApplicationComponent {
     fun viewComponent(): FragmentComponent
     fun navigationComponent(): ActivityComponent
+    fun workComponent(): WorkerComponent
     fun inject(mainApplication: MainApplication)
 }
