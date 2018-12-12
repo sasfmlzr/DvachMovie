@@ -26,7 +26,7 @@ class PlayerViewBindingAdapter {
     companion object {
         @BindingAdapter("movie")
         @JvmStatic
-        fun bindMovie(playerView: PlayerView, values: MutableList<MovieEntity>) {
+        fun bindMovie(playerView: PlayerView, values: List<MovieEntity>) {
 
             val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
             val player: SimpleExoPlayer =

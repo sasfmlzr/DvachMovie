@@ -2,14 +2,12 @@ package dvachmovie.di
 
 import android.app.Application
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import dagger.Module
 import dagger.Provides
 import dvachmovie.db.MovieDatabase
 import dvachmovie.db.data.MovieDao
+import dvachmovie.repository.db.MovieDBRepository
 import dvachmovie.repository.db.MovieDataSource
-import dvachmovie.repository.db.MovieRepository
 import javax.inject.Singleton
 
 @Module
@@ -17,11 +15,6 @@ class RoomModule(application: Application) {
 
     private var movieDatabase: MovieDatabase =
             Room.databaseBuilder(application, MovieDatabase::class.java, "movieData")
-                    .addCallback(object : RoomDatabase.Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            super.onCreate(db)
-                        }
-                    })
                     .build()
 
     @Singleton
@@ -38,7 +31,7 @@ class RoomModule(application: Application) {
 
     @Singleton
     @Provides
-    fun movieRepository(movieDao: MovieDao): MovieRepository {
+    fun movieRepository(movieDao: MovieDao): MovieDBRepository {
         return MovieDataSource(movieDao)
     }
 }

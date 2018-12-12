@@ -12,6 +12,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.NonNull
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.Utils.DirectoryHelper
@@ -49,6 +50,12 @@ class MovieFragment : BaseFragment<MovieVM,
 
         viewModel.currentPos.value = movieRepository.getIndexPosition()
 
+        viewModel.getUrlList().observe(viewLifecycleOwner, Observer {
+            // it = fuckRepository.getAll().value
+            print("fuck")
+        })
+
+
         binding.shuffleButton.setOnClickListener {
             movieRepository.movieList
                     .value = movieRepository.movieList.value!!.shuffled() as MutableList<MovieEntity>
@@ -64,10 +71,14 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        movieRepository.currentMovie.value = movieRepository.movieList.value!![player.player.currentWindowIndex]
+        if (movieRepository.movieList.value?.size != 0) {
+            movieRepository.currentMovie.value = movieRepository.movieList.value!![player.player.currentWindowIndex]
+        }
         player.player.stop()
+
         super.onStop()
     }
+
 
     private fun onGestureListener(): OnSwipeTouchListener {
         return object : OnSwipeTouchListener(context!!) {

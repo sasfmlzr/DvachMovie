@@ -5,11 +5,10 @@ import dvachmovie.db.data.MovieDao
 import dvachmovie.db.data.MovieEntity
 import javax.inject.Inject
 
-class MovieDataSource @Inject constructor(private var movieDao: MovieDao) : MovieRepository {
+class MovieDataSource @Inject constructor(private var movieDao: MovieDao) : MovieDBRepository {
 
-    override fun getAll(): LiveData<List<MovieEntity>> {
-        return movieDao.getAll()
-    }
+    override fun getAll() = movieDao.getAll()
+
 
     override fun getMoviesFromBoard(boardThread: String): LiveData<List<MovieEntity>> {
         return movieDao.getMoviesFromBoard(boardThread)

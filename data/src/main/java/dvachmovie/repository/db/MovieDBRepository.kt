@@ -3,7 +3,7 @@ package dvachmovie.repository.db
 import androidx.lifecycle.LiveData
 import dvachmovie.db.data.MovieEntity
 
-interface MovieRepository {
+interface MovieDBRepository {
     fun getAll(): LiveData<List<MovieEntity>>
     fun getMoviesFromBoard(boardThread: String): LiveData<List<MovieEntity>>
     fun insert(movieEntity: MovieEntity)
