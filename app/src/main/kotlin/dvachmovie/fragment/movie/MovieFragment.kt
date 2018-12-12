@@ -22,9 +22,7 @@ import dvachmovie.db.data.MovieEntity
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.listener.OnSwipeTouchListener
 import dvachmovie.repository.local.MovieRepository
-import dvachmovie.repository.local.MovieStorage
 import dvachmovie.service.DownloadService
-import java.util.*
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
@@ -52,7 +50,8 @@ class MovieFragment : BaseFragment<MovieVM,
         viewModel.currentPos.value = movieRepository.getPos()
 
         binding.shuffleButton.setOnClickListener {
-            movieRepository.getMovies().value!!.shuffle()
+            movieRepository.getMovies().value =
+                    movieRepository.getMovies().value!!.shuffled() as MutableList<MovieEntity>
         }
 
         binding.downloadButton.setOnClickListener {
@@ -66,8 +65,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
     override fun onStop() {
         if (movieRepository.getMovies().value?.size != 0) {
-            movieRepository.getCurrent().value = movieRepository.getMovies().
-                    value!![player.player.currentWindowIndex]
+            movieRepository.getCurrent().value = movieRepository.getMovies().value!![player.player.currentWindowIndex]
         }
         player.player.stop()
 
