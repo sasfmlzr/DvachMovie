@@ -7,19 +7,24 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.EventLog
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.annotation.NonNull
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.TIMELINE_CHANGE_REASON_RESET
+import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.Utils.DirectoryHelper
 import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
@@ -31,6 +36,8 @@ import dvachmovie.listener.OnSwipeTouchListener
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
 import dvachmovie.worker.WorkerManager
+import dvachmovie.R
+import kotlinx.android.synthetic.main.exo_playback_control_view.view.*
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
@@ -66,6 +73,22 @@ class MovieFragment : BaseFragment<MovieVM,
 
         viewModel.currentPos.value = movieRepository.getPos()
         return binding.root
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val exoNextBtn = view.findViewById<AppCompatImageButton>(R.id.exo_next)
+
+        //code smell
+        exoNextBtn.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                println("fuck this")
+                true
+            }
+            false
+        }
     }
 
     override fun onStop() {
@@ -138,6 +161,8 @@ class MovieFragment : BaseFragment<MovieVM,
                 requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
             }
         }
+
+
     }
 
     private fun onGestureListener(context: Context) = object : OnSwipeTouchListener(context) {
