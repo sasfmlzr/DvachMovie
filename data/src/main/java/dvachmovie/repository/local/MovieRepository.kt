@@ -1,22 +1,17 @@
 package dvachmovie.repository.local
 
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.db.MovieDBRepository
 import javax.inject.Inject
 
 class MovieRepository @Inject constructor(
         private val movieStorage: MovieStorage,
-        movieDBRepository: MovieDBRepository
+        private val movieDBRepository: MovieDBRepository
 ) {
 
     var posPlayer = 0
-
-    init {
-        movieStorage.movieList.addSource(movieDBRepository.getAll()) {
-            movieStorage.movieList.value = it as MutableList<MovieEntity>
-        }
-    }
-
     fun getCurrent() = movieStorage.currentMovie
 
     fun getPos() = movieStorage.getIndexPosition()
@@ -26,4 +21,10 @@ class MovieRepository @Inject constructor(
     }
 
     fun getMovies() = movieStorage.movieList
+
+    fun observe(lifecycleOwner: LifecycleOwner) {
+        movieDBRepository.getAll().observe(lifecycleOwner, Observer {
+            movieStorage.movieList.value = it as MutableList<MovieEntity>
+        })
+    }
 }

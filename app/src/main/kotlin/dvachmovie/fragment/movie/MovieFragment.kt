@@ -62,6 +62,8 @@ class MovieFragment : BaseFragment<MovieVM,
             WorkerManager.insertMovieInDB()
         })
 
+        movieRepository.observe(viewLifecycleOwner)
+
         viewModel.currentPos.value = movieRepository.getPos()
         return binding.root
     }
