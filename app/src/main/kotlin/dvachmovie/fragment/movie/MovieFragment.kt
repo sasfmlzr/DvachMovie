@@ -39,8 +39,6 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private lateinit var player: PlayerView
 
-    private var position = 0
-
     override fun inject(component: FragmentComponent) = component.inject(this)
 
     @SuppressLint("ClickableViewAccessibility")
@@ -121,7 +119,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun configurePlayer() {
-        position = player.player.currentWindowIndex
+        movieRepository.posPlayer = player.player.currentWindowIndex
         player.player.addListener(object : Player.EventListener {
 
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
@@ -139,14 +137,14 @@ class MovieFragment : BaseFragment<MovieVM,
                 if (reason == TIMELINE_CHANGE_REASON_RESET) {
                     println("FUCKING Position is $pos")
 
-                    if (position == pos - 1) {
+                    if (movieRepository.posPlayer == pos - 1) {
                         println("FORWARD POS ---------------------")
-                        position = pos
+                        movieRepository.posPlayer = pos
                     }
 
-                    if (position == pos + 1) {
+                    if (movieRepository.posPlayer == pos + 1) {
                         println("PREW POS ---------------------")
-                        position = pos
+                        movieRepository.posPlayer = pos
                     }
                 }
 

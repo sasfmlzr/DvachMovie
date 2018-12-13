@@ -9,6 +9,8 @@ class MovieRepository @Inject constructor(
         movieDBRepository: MovieDBRepository
 ) {
 
+    var posPlayer = 0
+
     init {
         movieStorage.movieList.addSource(movieDBRepository.getAll()) {
             movieStorage.movieList.value = it as MutableList<MovieEntity>
@@ -19,10 +21,9 @@ class MovieRepository @Inject constructor(
 
     fun getPos() = movieStorage.getIndexPosition()
 
-    fun setCurrent(movieEntity: MovieEntity){
+    fun setCurrent(movieEntity: MovieEntity) {
         movieStorage.currentMovie.value = movieEntity
     }
 
     fun getMovies() = movieStorage.movieList
-
 }
