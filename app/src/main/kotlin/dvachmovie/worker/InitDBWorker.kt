@@ -1,4 +1,4 @@
-package dvachmovie
+package dvachmovie.worker
 
 import android.content.Context
 import androidx.annotation.NonNull
@@ -9,8 +9,8 @@ import dvachmovie.repository.db.MovieDBRepository
 import dvachmovie.repository.local.MovieCache
 import javax.inject.Inject
 
-class MovieDatabaseWorker(@NonNull context: Context,
-                          @NonNull workerParams: WorkerParameters
+class InitDBWorker(@NonNull context: Context,
+                   @NonNull workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
 
     @Inject

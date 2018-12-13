@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import dvachmovie.MovieDatabaseWorker
+import dvachmovie.worker.InitDBWorker
 import dvachmovie.R
 import dvachmovie.activity.movie.MovieActivity
 import dvachmovie.base.BaseActivity
@@ -33,7 +33,7 @@ class StartActivity : BaseActivity<StartActivityVM,
     private fun initWebm(): InitWebm {
         return object : InitWebm {
             override fun initWebm() {
-                val request = OneTimeWorkRequestBuilder<MovieDatabaseWorker>().build()
+                val request = OneTimeWorkRequestBuilder<InitDBWorker>().build()
                 WorkManager.getInstance().enqueue(request)
                 loadingMainActivity()
                 finish()
