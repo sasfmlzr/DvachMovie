@@ -2,6 +2,7 @@ package dvachmovie.fragment.movie
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -51,26 +52,12 @@ class MovieFragment : BaseFragment<MovieVM,
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         player = binding.playerView
-        val simplePlayer: SimpleExoPlayer =
-                ExoPlayerFactory.newSimpleInstance(player.context)
-        player.player = simplePlayer
+        player.player = ExoPlayerFactory.newSimpleInstance(player.context)
+        player.setOnTouchListener(onGestureListener(context!!))
         configurePlayer()
-
-        player.setOnTouchListener(onGestureListener())
+        configureButtons()
 
         viewModel.currentPos.value = movieRepository.getPos()
-
-        binding.shuffleButton.setOnClickListener {
-            movieRepository.getMovies().value =
-                    movieRepository.getMovies().value!!.shuffled() as MutableList<MovieEntity>
-        }
-
-        binding.downloadButton.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
-            }
-        }
-
         return binding.root
     }
 
@@ -94,27 +81,6 @@ class MovieFragment : BaseFragment<MovieVM,
                     context!!,
                     movieRepository.getCurrent().value!!.movieUrl,
                     DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
-        }
-    }
-
-    private fun onGestureListener(): OnSwipeTouchListener {
-        return object : OnSwipeTouchListener(context!!) {
-            @SuppressLint("ClickableViewAccessibility")
-            override fun onTouch(v: View, event: MotionEvent): Boolean {
-
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    toggleControlsVisibility()
-                }
-                return super.onTouch(v, event)
-            }
-
-            override fun onSwipeTop() {
-                val movieUri = binding.viewModel!!.getUrlList().value?.get(player.player.currentPeriodIndex)
-                movieRepository.getCurrent().value = movieUri
-                val direction = MovieFragmentDirections
-                        .ActionShowPreviewFragment()
-                findNavController(this@MovieFragment).navigate(direction)
-            }
         }
     }
 
@@ -152,6 +118,33 @@ class MovieFragment : BaseFragment<MovieVM,
         })
     }
 
+    private fun configureButtons() {
+        binding.shuffleButton.setOnClickListener {
+            movieRepository.getMovies().value =
+                    movieRepository.getMovies().value!!.shuffled() as MutableList<MovieEntity>
+        }
+
+        binding.downloadButton.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+            }
+        }
+    }
+
+    private fun onGestureListener(context: Context) = object : OnSwipeTouchListener(context) {
+        @SuppressLint("ClickableViewAccessibility")
+        override fun onTouch(v: View, event: MotionEvent): Boolean {
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                toggleControlsVisibility()
+            }
+            return super.onTouch(v, event)
+        }
+
+        override fun onSwipeTop() {
+            navigateToPreviewFragment()
+        }
+    }
+
     private fun toggleControlsVisibility() {
         if (player.isControllerVisible) {
             binding.shuffleButton.visibility = INVISIBLE
@@ -162,5 +155,13 @@ class MovieFragment : BaseFragment<MovieVM,
             binding.downloadButton.visibility = VISIBLE
             player.showController()
         }
+    }
+
+    private fun navigateToPreviewFragment() {
+        val movieUri = binding.viewModel!!.getUrlList().value?.get(player.player.currentPeriodIndex)
+        movieRepository.getCurrent().value = movieUri
+        val direction = MovieFragmentDirections
+                .ActionShowPreviewFragment()
+        findNavController(this@MovieFragment).navigate(direction)
     }
 }
