@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -13,6 +14,11 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Player.TIMELINE_CHANGE_REASON_RESET
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.Utils.DirectoryHelper
 import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
@@ -33,6 +39,8 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private lateinit var player: PlayerView
 
+    private var position = 0
+
     override fun inject(component: FragmentComponent) = component.inject(this)
 
     @SuppressLint("ClickableViewAccessibility")
@@ -45,6 +53,11 @@ class MovieFragment : BaseFragment<MovieVM,
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         player = binding.playerView
+        val simplePlayer: SimpleExoPlayer =
+                ExoPlayerFactory.newSimpleInstance(player.context)
+        player.player = simplePlayer
+        configurePlayer()
+
         player.setOnTouchListener(onGestureListener())
 
         viewModel.currentPos.value = movieRepository.getPos()
@@ -105,6 +118,40 @@ class MovieFragment : BaseFragment<MovieVM,
                 findNavController(this@MovieFragment).navigate(direction)
             }
         }
+    }
+
+    private fun configurePlayer() {
+        position = player.player.currentWindowIndex
+        player.player.addListener(object : Player.EventListener {
+
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                if (playbackState == PlaybackStateCompat.STATE_ERROR) {
+                    println("ERROR")
+                }
+            }
+
+            override fun onPlayerError(error: ExoPlaybackException?) {
+                print("onPlayerError")
+            }
+
+            override fun onPositionDiscontinuity(reason: Int) {
+                val pos = player.player.currentWindowIndex
+                if (reason == TIMELINE_CHANGE_REASON_RESET) {
+                    println("FUCKING Position is $pos")
+
+                    if (position == pos - 1) {
+                        println("FORWARD POS ---------------------")
+                        position = pos
+                    }
+
+                    if (position == pos + 1) {
+                        println("PREW POS ---------------------")
+                        position = pos
+                    }
+                }
+
+            }
+        })
     }
 
     private fun toggleControlsVisibility() {

@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -29,9 +28,6 @@ class PlayerViewBindingAdapter {
         fun bindMovie(playerView: PlayerView, values: List<MovieEntity>) {
 
             val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
-            val player: SimpleExoPlayer =
-                    ExoPlayerFactory.newSimpleInstance(playerView.context)
-            playerView.player = player
 
             val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(playerView.context,
                     Util.getUserAgent(playerView.context, "AppName"))
@@ -44,7 +40,8 @@ class PlayerViewBindingAdapter {
             val mediaSources = ConcatenatingMediaSource()
 
             videoSources.map { url -> mediaSources.addMediaSource(url) }
-            player.prepare(mediaSources)
+
+            (playerView.player as SimpleExoPlayer).prepare(mediaSources)
         }
 
         @BindingAdapter("movie_position")
