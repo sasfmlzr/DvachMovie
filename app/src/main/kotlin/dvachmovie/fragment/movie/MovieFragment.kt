@@ -6,25 +6,18 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.media.session.PlaybackStateCompat
-import android.util.EventLog
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.annotation.NonNull
-import androidx.appcompat.widget.AppCompatImageButton
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
-import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.TIMELINE_CHANGE_REASON_RESET
-import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.Utils.DirectoryHelper
 import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
@@ -37,7 +30,6 @@ import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
 import dvachmovie.worker.WorkerManager
 import dvachmovie.R
-import kotlinx.android.synthetic.main.exo_playback_control_view.view.*
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
@@ -66,7 +58,9 @@ class MovieFragment : BaseFragment<MovieVM,
         configureButtons()
 
         movieRepository.getCurrent().observe(viewLifecycleOwner, Observer {
-            WorkerManager.insertMovieInDB()
+            if (it.isPlayed!=0) {
+                WorkerManager.insertMovieInDB()
+            }
         })
 
         movieRepository.observe(viewLifecycleOwner)
@@ -79,7 +73,8 @@ class MovieFragment : BaseFragment<MovieVM,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val exoNextBtn = view.findViewById<AppCompatImageButton>(R.id.exo_next)
+       /*
+       val exoNextBtn = view.findViewById<AppCompatImageButton>(R.id.exo_next)
 
         //code smell
         exoNextBtn.setOnTouchListener { v, event ->
@@ -89,6 +84,7 @@ class MovieFragment : BaseFragment<MovieVM,
             }
             false
         }
+        */
     }
 
     override fun onStop() {
@@ -96,7 +92,6 @@ class MovieFragment : BaseFragment<MovieVM,
             movieRepository.getCurrent().value = movieRepository.getMovies().value!![player.player.currentWindowIndex]
         }
         player.player.stop()
-
         super.onStop()
     }
 
@@ -118,16 +113,6 @@ class MovieFragment : BaseFragment<MovieVM,
         movieRepository.posPlayer = player.player.currentWindowIndex
         player.player.addListener(object : Player.EventListener {
 
-            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                if (playbackState == PlaybackStateCompat.STATE_ERROR) {
-                    println("ERROR")
-                }
-            }
-
-            override fun onPlayerError(error: ExoPlaybackException?) {
-                print("onPlayerError")
-            }
-
             override fun onPositionDiscontinuity(reason: Int) {
                 val pos = player.player.currentWindowIndex
                 if (reason == TIMELINE_CHANGE_REASON_RESET) {
@@ -145,7 +130,6 @@ class MovieFragment : BaseFragment<MovieVM,
                         setUpCurrentMovie(1)
                     }
                 }
-
             }
         })
     }
@@ -153,7 +137,7 @@ class MovieFragment : BaseFragment<MovieVM,
     private fun configureButtons() {
         binding.shuffleButton.setOnClickListener {
             movieRepository.getMovies().value =
-                    movieRepository.getMovies().value!!.shuffled() as MutableList<MovieEntity>
+                    movieRepository.shuffle(movieRepository.getMovies().value!!)
         }
 
         binding.downloadButton.setOnClickListener {
@@ -161,8 +145,6 @@ class MovieFragment : BaseFragment<MovieVM,
                 requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
             }
         }
-
-
     }
 
     private fun onGestureListener(context: Context) = object : OnSwipeTouchListener(context) {
@@ -192,7 +174,6 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun navigateToPreviewFragment() {
-        setUpCurrentMovie(1)
         val direction = MovieFragmentDirections
                 .ActionShowPreviewFragment()
         findNavController(this@MovieFragment).navigate(direction)

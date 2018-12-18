@@ -12,21 +12,18 @@ class MovieRepository @Inject constructor(
 ) {
 
     var posPlayer = 0
+
     fun getCurrent() = movieStorage.currentMovie
 
     fun getPos() = movieStorage.getIndexPosition()
-
-    fun setCurrent(movieEntity: MovieEntity) {
-        movieStorage.currentMovie.value = movieEntity
-    }
 
     fun getMovies() = movieStorage.movieList
 
     fun observe(lifecycleOwner: LifecycleOwner) {
         movieDBRepository.getAll().observe(lifecycleOwner, Observer {
 
-            val list =calculateDiff(movieStorage.movieList.value!!, it as MutableList<MovieEntity>)
-            if (list.size!=0) {
+            val list = calculateDiff(movieStorage.movieList.value!!, it as MutableList<MovieEntity>)
+            if (list.size != 0) {
                 val movieTempList = movieStorage.movieList.value
                 movieTempList!!.addAll(list)
                 movieStorage.movieList.value = movieTempList
@@ -35,30 +32,38 @@ class MovieRepository @Inject constructor(
     }
 
     private fun calculateDiff(localList: MutableList<MovieEntity>,
-                              dbList: MutableList<MovieEntity>) :
+                              dbList: MutableList<MovieEntity>):
             MutableList<MovieEntity> {
-        val movieList = dbList
         val result = mutableListOf<MovieEntity>()
 
         localList.map { movie ->
-            movieList.contains(movie).let {
-                movieList.remove(movie)
+            dbList.contains(movie).let {
+                dbList.remove(movie)
             }
         }
 
-        movieList.map { movie ->
+        dbList.map { movie ->
             var equals = false
             localList.map { localMovie ->
                 if (localMovie.movieUrl == movie.movieUrl) {
                     equals = true
                 }
             }
-            if (!equals) {
+            if (!equals && movie.isPlayed == 0) {
                 result.add(movie)
             }
         }
+
         return result
     }
 
-
+    fun shuffle(localList: MutableList<MovieEntity>): MutableList<MovieEntity> {
+        val result = mutableListOf<MovieEntity>()
+        localList.map {
+            if (it.isPlayed == 0) {
+                result.add(it)
+            }
+        }
+        return result.shuffled() as MutableList<MovieEntity>
+    }
 }
