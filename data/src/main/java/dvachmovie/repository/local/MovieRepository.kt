@@ -12,6 +12,7 @@ class MovieRepository @Inject constructor(
 ) {
 
     var posPlayer = 0
+    var isCalculateDiff = true
 
     fun getCurrent() = movieStorage.currentMovie
 
@@ -21,12 +22,14 @@ class MovieRepository @Inject constructor(
 
     fun observe(lifecycleOwner: LifecycleOwner) {
         movieDBRepository.getAll().observe(lifecycleOwner, Observer {
-
-            val list = calculateDiff(movieStorage.movieList.value!!, it as MutableList<MovieEntity>)
-            if (list.size != 0) {
-                val movieTempList = movieStorage.movieList.value
-                movieTempList!!.addAll(list)
-                movieStorage.movieList.value = movieTempList
+            val list = mutableListOf<MovieEntity>()
+            if (isCalculateDiff) {
+                list.addAll(calculateDiff(movieStorage.movieList.value!!, it as MutableList<MovieEntity>))
+                if (list.size != 0) {
+                    val movieTempList = movieStorage.movieList.value
+                    movieTempList!!.addAll(list)
+                    movieStorage.movieList.value = movieTempList
+                }
             }
         })
     }

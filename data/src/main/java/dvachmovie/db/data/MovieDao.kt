@@ -14,9 +14,6 @@ interface MovieDao {
     @Query("SELECT * from movieData where board = :boardThread")
     fun getMoviesFromBoard(boardThread: String): LiveData<List<MovieEntity>>
 
-    //@Query("SELECT * FROM movieData WHERE movieLink = :link")
-    //fun linkIsExist(link: String): Flowable<User>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(movie: MovieEntity)
 

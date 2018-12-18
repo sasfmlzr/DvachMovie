@@ -69,27 +69,9 @@ class MovieFragment : BaseFragment<MovieVM,
         return binding.root
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-       /*
-       val exoNextBtn = view.findViewById<AppCompatImageButton>(R.id.exo_next)
-
-        //code smell
-        exoNextBtn.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-                println("fuck this")
-                true
-            }
-            false
-        }
-        */
-    }
-
     override fun onStop() {
         if (movieRepository.getMovies().value?.size != 0) {
-            movieRepository.getCurrent().value = movieRepository.getMovies().value!![player.player.currentWindowIndex]
+            setUpCurrentMovie(1)
         }
         player.player.stop()
         super.onStop()
@@ -147,6 +129,16 @@ class MovieFragment : BaseFragment<MovieVM,
         }
     }
 
+    private fun setUpCurrentMovie(isPlayed: Int): MovieEntity {
+        val movieUri = binding.viewModel!!.getUrlList().value!![player.player.currentPeriodIndex]
+        movieUri.isPlayed = isPlayed
+        movieRepository.isCalculateDiff = false
+        movieRepository.getCurrent().value = movieUri
+        return movieUri
+    }
+
+
+    //      ------------GESTURE LISTENER--------------
     private fun onGestureListener(context: Context) = object : OnSwipeTouchListener(context) {
         @SuppressLint("ClickableViewAccessibility")
         override fun onTouch(v: View, event: MotionEvent): Boolean {
@@ -178,11 +170,5 @@ class MovieFragment : BaseFragment<MovieVM,
                 .ActionShowPreviewFragment()
         findNavController(this@MovieFragment).navigate(direction)
     }
-
-    private fun setUpCurrentMovie(isPlayed: Int): MovieEntity {
-        val movieUri = binding.viewModel!!.getUrlList().value?.get(player.player.currentPeriodIndex)!!
-        movieUri.isPlayed = isPlayed
-        movieRepository.getCurrent().value = movieUri
-        return movieUri
-    }
+    //      ------------GESTURE LISTENER--------------
 }
