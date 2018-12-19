@@ -9,15 +9,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Player.TIMELINE_CHANGE_REASON_RESET
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
@@ -59,7 +56,7 @@ class MovieFragment : BaseFragment<MovieVM,
         configureButtons()
 
         movieRepository.getCurrent().observe(viewLifecycleOwner, Observer {
-            if (it.isPlayed!=0) {
+            if (it.isPlayed != 0) {
                 WorkerManager.insertMovieInDB()
             }
         })
@@ -95,46 +92,26 @@ class MovieFragment : BaseFragment<MovieVM,
     private fun configurePlayer() {
         movieRepository.posPlayer = player.player.currentWindowIndex
         player.player.addListener(object : Player.EventListener {
-
-            override fun onPositionDiscontinuity(reason: Int) {
-                val pos = player.player.currentWindowIndex
-                if (reason == TIMELINE_CHANGE_REASON_RESET) {
-                    println("FUCKING Position is $pos")
-
-                    if (movieRepository.posPlayer == pos - 1) {
-                        println("FORWARD POS ---------------------")
-                        movieRepository.posPlayer = pos
-                        setUpCurrentMovie(1)
-                    }
-
-                    if (movieRepository.posPlayer == pos + 1) {
-                        println("PREW POS ---------------------")
-                        movieRepository.posPlayer = pos
-                        setUpCurrentMovie(1)
-                    }
-                    //setUpCurrentMovie(1)
-                }
-            }
-
+            var idAddedToDB = false
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-                val pos = player.player.currentWindowIndex
-
-                    println("FUCKING Position is $pos")
+                if (!idAddedToDB) {
+                    val pos = player.player.currentWindowIndex
 
                     if (movieRepository.posPlayer == pos - 1) {
                         println("FORWARD POS ---------------------")
-                        movieRepository.posPlayer = pos
-                        setUpCurrentMovie(1)
                     }
 
                     if (movieRepository.posPlayer == pos + 1) {
                         println("PREW POS ---------------------")
-                        movieRepository.posPlayer = pos
-                        setUpCurrentMovie(1)
                     }
-                    //setUpCurrentMovie(1)
 
+                    movieRepository.posPlayer = pos
+                    setUpCurrentMovie(1)
+                    idAddedToDB = true
+                } else {
+                    idAddedToDB = false
+                }
             }
         })
     }
@@ -153,9 +130,6 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun setUpCurrentMovie(isPlayed: Int): MovieEntity {
-        if (binding.viewModel!!.getUrlList().value!!.size==0){
-
-        }
         val movieUri = binding.viewModel!!.getUrlList().value!![player.player.currentPeriodIndex]
         movieUri.isPlayed = isPlayed
         movieRepository.isCalculateDiff = false
