@@ -18,6 +18,9 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.TIMELINE_CHANGE_REASON_RESET
+import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.Utils.DirectoryHelper
 import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
@@ -30,6 +33,7 @@ import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
 import dvachmovie.worker.WorkerManager
 import dvachmovie.R
+import dvachmovie.db.data.NullMovieEntity
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
@@ -111,7 +115,29 @@ class MovieFragment : BaseFragment<MovieVM,
                         movieRepository.posPlayer = pos
                         setUpCurrentMovie(1)
                     }
+                    //setUpCurrentMovie(1)
                 }
+            }
+
+
+            override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
+                val pos = player.player.currentWindowIndex
+
+                    println("FUCKING Position is $pos")
+
+                    if (movieRepository.posPlayer == pos - 1) {
+                        println("FORWARD POS ---------------------")
+                        movieRepository.posPlayer = pos
+                        setUpCurrentMovie(1)
+                    }
+
+                    if (movieRepository.posPlayer == pos + 1) {
+                        println("PREW POS ---------------------")
+                        movieRepository.posPlayer = pos
+                        setUpCurrentMovie(1)
+                    }
+                    //setUpCurrentMovie(1)
+
             }
         })
     }
@@ -130,13 +156,15 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun setUpCurrentMovie(isPlayed: Int): MovieEntity {
+        if (binding.viewModel!!.getUrlList().value!!.size==0){
+
+        }
         val movieUri = binding.viewModel!!.getUrlList().value!![player.player.currentPeriodIndex]
         movieUri.isPlayed = isPlayed
         movieRepository.isCalculateDiff = false
         movieRepository.getCurrent().value = movieUri
         return movieUri
     }
-
 
     //      ------------GESTURE LISTENER--------------
     private fun onGestureListener(context: Context) = object : OnSwipeTouchListener(context) {
