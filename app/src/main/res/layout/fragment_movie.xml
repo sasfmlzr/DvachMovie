@@ -30,6 +30,7 @@
             android:contentDescription="@string/shuffle"
             android:elevation="4dp"
             android:src="@drawable/outline_shuffle_24"
+            android:visibility="@{viewModel.isPlayerControlVisibility()? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -46,6 +47,7 @@
             android:contentDescription="@string/download"
             android:elevation="4dp"
             android:src="@drawable/outline_cloud_download_24"
+            android:visibility="@{viewModel.isPlayerControlVisibility()? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintRight_toLeftOf="@+id/shuffleButton"
             app:layout_constraintTop_toTopOf="parent" />

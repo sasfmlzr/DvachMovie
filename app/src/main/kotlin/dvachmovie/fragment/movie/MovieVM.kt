@@ -12,4 +12,10 @@ class MovieVM @Inject constructor(movieRepository: MovieRepository) : ViewModel(
     val currentPos: MutableLiveData<Int> = MutableLiveData()
 
     fun getUrlList() = uriMovies
+
+    val isPlayerControlVisibility: MutableLiveData<Boolean> = MutableLiveData()
+
+    init {
+        isPlayerControlVisibility.value = true
+    }
 }

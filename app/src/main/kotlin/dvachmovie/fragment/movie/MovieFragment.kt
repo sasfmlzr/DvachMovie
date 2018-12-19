@@ -20,7 +20,6 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.TIMELINE_CHANGE_REASON_RESET
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.Utils.DirectoryHelper
 import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
@@ -32,8 +31,6 @@ import dvachmovie.listener.OnSwipeTouchListener
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
 import dvachmovie.worker.WorkerManager
-import dvachmovie.R
-import dvachmovie.db.data.NullMovieEntity
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
@@ -183,12 +180,10 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun toggleControlsVisibility() {
         if (player.isControllerVisible) {
-            binding.shuffleButton.visibility = INVISIBLE
-            binding.downloadButton.visibility = INVISIBLE
+            viewModel.isPlayerControlVisibility.value = false
             player.hideController()
         } else {
-            binding.shuffleButton.visibility = VISIBLE
-            binding.downloadButton.visibility = VISIBLE
+            viewModel.isPlayerControlVisibility.value = true
             player.showController()
         }
     }
