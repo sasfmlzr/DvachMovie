@@ -12,6 +12,7 @@ import dvachmovie.di.ViewModelKey
 import dvachmovie.fragment.back.BackVM
 import dvachmovie.fragment.movie.MovieVM
 import dvachmovie.fragment.preview.PreviewVM
+import dvachmovie.fragment.settings.SettingsVM
 
 @Module
 abstract class ViewModelFactoryModule {
@@ -33,6 +34,11 @@ abstract class ViewModelFactoryModule {
     @IntoMap
     @ViewModelKey(BackVM::class)
     internal abstract fun backVM(VM: BackVM): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsVM::class)
+    internal abstract fun settingsVM(VM: SettingsVM): ViewModel
 
     @Binds
     @IntoMap

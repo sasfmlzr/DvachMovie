@@ -84,4 +84,5 @@ dependencies {
     implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
 
     implementation "android.arch.work:work-runtime-ktx:$workVersion"
-   }
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+}

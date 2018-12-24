@@ -127,6 +127,10 @@ class MovieFragment : BaseFragment<MovieVM,
                 requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
             }
         }
+
+        binding.settingsButton.setOnClickListener {
+            navigateToSettingsFragment()
+        }
     }
 
     private fun setUpCurrentMovie(isPlayed: Int): MovieEntity {
@@ -165,6 +169,12 @@ class MovieFragment : BaseFragment<MovieVM,
     private fun navigateToPreviewFragment() {
         val direction = MovieFragmentDirections
                 .ActionShowPreviewFragment()
+        findNavController(this@MovieFragment).navigate(direction)
+    }
+
+    private fun navigateToSettingsFragment() {
+        val direction = MovieFragmentDirections
+                .ActionShowSettingsFragment()
         findNavController(this@MovieFragment).navigate(direction)
     }
     //      ------------GESTURE LISTENER--------------
