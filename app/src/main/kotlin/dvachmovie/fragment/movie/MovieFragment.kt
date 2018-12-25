@@ -2,17 +2,21 @@ package dvachmovie.fragment.movie
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.NonNull
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.Utils.DirectoryHelper
 import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
@@ -23,6 +27,7 @@ import dvachmovie.di.core.FragmentComponent
 import dvachmovie.listener.OnSwipeTouchListener
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
+import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
@@ -45,30 +50,28 @@ class MovieFragment : BaseFragment<MovieVM,
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         player = binding.playerView
-        player.setOnTouchListener(onGestureListener())
+        player.player = ExoPlayerFactory.newSimpleInstance(player.context)
+        player.setOnTouchListener(onGestureListener(context!!))
+        configurePlayer()
+        configureButtons()
+
+        movieRepository.getCurrent().observe(viewLifecycleOwner, Observer {
+            if (it.isPlayed != 0) {
+                WorkerManager.insertMovieInDB()
+            }
+        })
+
+        movieRepository.observe(viewLifecycleOwner)
 
         viewModel.currentPos.value = movieRepository.getPos()
-
-        binding.shuffleButton.setOnClickListener {
-            movieRepository.getMovies().value =
-                    movieRepository.getMovies().value!!.shuffled() as MutableList<MovieEntity>
-        }
-
-        binding.downloadButton.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
-            }
-        }
-
         return binding.root
     }
 
     override fun onStop() {
         if (movieRepository.getMovies().value?.size != 0) {
-            movieRepository.getCurrent().value = movieRepository.getMovies().value!![player.player.currentWindowIndex]
+            setUpCurrentMovie(1)
         }
         player.player.stop()
-
         super.onStop()
     }
 
@@ -86,36 +89,93 @@ class MovieFragment : BaseFragment<MovieVM,
         }
     }
 
-    private fun onGestureListener(): OnSwipeTouchListener {
-        return object : OnSwipeTouchListener(context!!) {
-            @SuppressLint("ClickableViewAccessibility")
-            override fun onTouch(v: View, event: MotionEvent): Boolean {
+    private fun configurePlayer() {
+        movieRepository.posPlayer = player.player.currentWindowIndex
+        player.player.addListener(object : Player.EventListener {
+            var idAddedToDB = false
 
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    toggleControlsVisibility()
+            override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
+                if (!idAddedToDB) {
+                    val pos = player.player.currentWindowIndex
+
+                    if (movieRepository.posPlayer == pos - 1) {
+                        println("FORWARD POS ---------------------")
+                    }
+
+                    if (movieRepository.posPlayer == pos + 1) {
+                        println("PREW POS ---------------------")
+                    }
+
+                    movieRepository.posPlayer = pos
+                    setUpCurrentMovie(1)
+                    idAddedToDB = true
+                } else {
+                    idAddedToDB = false
                 }
-                return super.onTouch(v, event)
             }
+        })
+    }
 
-            override fun onSwipeTop() {
-                val movieUri = binding.viewModel!!.getUrlList().value?.get(player.player.currentPeriodIndex)
-                movieRepository.getCurrent().value = movieUri
-                val direction = MovieFragmentDirections
-                        .ActionShowPreviewFragment()
-                findNavController(this@MovieFragment).navigate(direction)
+    private fun configureButtons() {
+        binding.shuffleButton.setOnClickListener {
+            movieRepository.getMovies().value =
+                    movieRepository.shuffle(movieRepository.getMovies().value!!)
+        }
+
+        binding.downloadButton.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
             }
+        }
+
+        binding.settingsButton.setOnClickListener {
+            navigateToSettingsFragment()
+        }
+    }
+
+    private fun setUpCurrentMovie(isPlayed: Int): MovieEntity {
+        val movieUri = binding.viewModel!!.getUrlList().value!![player.player.currentPeriodIndex]
+        movieUri.isPlayed = isPlayed
+        movieRepository.isCalculateDiff = false
+        movieRepository.getCurrent().value = movieUri
+        return movieUri
+    }
+
+    //      ------------GESTURE LISTENER--------------
+    private fun onGestureListener(context: Context) = object : OnSwipeTouchListener(context) {
+        @SuppressLint("ClickableViewAccessibility")
+        override fun onTouch(v: View, event: MotionEvent): Boolean {
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                toggleControlsVisibility()
+            }
+            return super.onTouch(v, event)
+        }
+
+        override fun onSwipeTop() {
+            navigateToPreviewFragment()
         }
     }
 
     private fun toggleControlsVisibility() {
         if (player.isControllerVisible) {
-            binding.shuffleButton.visibility = INVISIBLE
-            binding.downloadButton.visibility = INVISIBLE
+            viewModel.isPlayerControlVisibility.value = false
             player.hideController()
         } else {
-            binding.shuffleButton.visibility = VISIBLE
-            binding.downloadButton.visibility = VISIBLE
+            viewModel.isPlayerControlVisibility.value = true
             player.showController()
         }
     }
+
+    private fun navigateToPreviewFragment() {
+        val direction = MovieFragmentDirections
+                .ActionShowPreviewFragment()
+        findNavController(this@MovieFragment).navigate(direction)
+    }
+
+    private fun navigateToSettingsFragment() {
+        val direction = MovieFragmentDirections
+                .ActionShowSettingsFragment()
+        findNavController(this@MovieFragment).navigate(direction)
+    }
+    //      ------------GESTURE LISTENER--------------
 }

@@ -1,13 +1,12 @@
 package dvachmovie.repository.local
 
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import dvachmovie.db.data.MovieEntity
 import javax.inject.Singleton
 
 @Singleton
 data class MovieStorage(
-        var movieList: MediatorLiveData<MutableList<MovieEntity>> = MediatorLiveData(),
+        var movieList: MutableLiveData<MutableList<MovieEntity>> = MutableLiveData(),
         var currentMovie: MutableLiveData<MovieEntity> = MutableLiveData()) {
 
     init {
