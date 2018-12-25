@@ -15,7 +15,7 @@ import dvachmovie.fragment.preview.PreviewVM
 import dvachmovie.fragment.settings.SettingsVM
 
 @Module
-abstract class ViewModelFactoryModule {
+internal abstract class ViewModelFactoryModule {
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

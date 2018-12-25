@@ -1,7 +1,5 @@
 package dvachmovie.di.core
 
-import dvachmovie.di.RoomModule
-
 object Injector {
 
     private lateinit var component: ApplicationComponent

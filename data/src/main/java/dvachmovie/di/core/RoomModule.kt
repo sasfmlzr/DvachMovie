@@ -1,4 +1,4 @@
-package dvachmovie.di
+package dvachmovie.di.core
 
 import android.app.Application
 import androidx.room.Room
