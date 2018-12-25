@@ -2,13 +2,17 @@ package dvachmovie.activity.start
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.Observer
+import dvachmovie.Constraints
 import dvachmovie.R
 import dvachmovie.activity.movie.MovieActivity
 import dvachmovie.base.BaseActivity
 import dvachmovie.databinding.ActivityStartBinding
 import dvachmovie.di.core.ActivityComponent
+import dvachmovie.repository.local.MovieRepository
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.InitWebm
+import dvachmovie.usecase.SettingsUseCase
 import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
@@ -20,12 +24,29 @@ class StartActivity : BaseActivity<StartActivityVM,
     @Inject
     lateinit var dvachUseCase: DvachUseCase
 
+    @Inject
+    lateinit var settingsUseCase: SettingsUseCase
+
+    @Inject
+    lateinit var movieRepository: MovieRepository
+
     override fun inject(component: ActivityComponent) = component.inject(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
-        dvachUseCase.getNumThreads("b", initWebm())
+        prepareData()
+    }
+
+    private fun prepareData() {
+        movieRepository.observe(this, Observer { movies ->
+            if (settingsUseCase.getLoadingParam() == Constraints.LOADING_EVERY_TIME ||
+                    movies.size < 100) {
+                dvachUseCase.getNumThreads("b", initWebm())
+            } else {
+                loadingMainActivity()
+            }
+        })
     }
 
     private fun initWebm(): InitWebm {
@@ -33,7 +54,6 @@ class StartActivity : BaseActivity<StartActivityVM,
             override fun initWebm() {
                 WorkerManager.initDB()
                 loadingMainActivity()
-                finish()
             }
 
             override fun countVideoUpdates(count: Int) {
@@ -50,5 +70,6 @@ class StartActivity : BaseActivity<StartActivityVM,
         val intent = Intent(applicationContext,
                 MovieActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

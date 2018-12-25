@@ -34,6 +34,10 @@ class MovieRepository @Inject constructor(
         })
     }
 
+    fun observe(lifecycleOwner: LifecycleOwner, observer: Observer<List<MovieEntity>>) {
+        movieDBRepository.getAll().observe(lifecycleOwner, observer)
+    }
+
     private fun calculateDiff(localList: MutableList<MovieEntity>,
                               dbList: MutableList<MovieEntity>):
             MutableList<MovieEntity> {

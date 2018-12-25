@@ -1,6 +1,10 @@
 package dvachmovie.di.core
 
+import android.content.Context
+import android.content.SharedPreferences
 import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
 @Module(includes = [
     ApiModule::class,
@@ -8,4 +12,10 @@ import dagger.Module
     StorageModule::class,
     RoomModule::class
 ])
-class RootDataModule
+class RootDataModule {
+    @Provides
+    @Singleton
+    internal fun sharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+    }
+}
