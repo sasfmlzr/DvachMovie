@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
@@ -20,6 +21,11 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         binding.viewModel = viewModel
 
-        return binding.root}
+        val activity = (activity as AppCompatActivity)
+        activity.setSupportActionBar(binding.toolbar)
+        activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        return binding.root
+    }
 
 }
