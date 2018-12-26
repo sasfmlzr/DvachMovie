@@ -1,17 +1,14 @@
 package dvachmovie.fragment.settings
 
-import android.content.DialogInterface
 import android.view.View
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dvachmovie.repository.db.MovieDBRepository
 import dvachmovie.usecase.SettingsUseCase
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
-        private val movieRepository: MovieDBRepository,
         settingsUseCase: SettingsUseCase
 ) : ViewModel() {
 
@@ -26,8 +23,8 @@ class SettingsVM @Inject constructor(
 
     val onPrepareLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
-        prepareLoading.value = isChecked
-    }
+                prepareLoading.value = isChecked
+            }
 
     val onRefreshDatabase =
             View.OnClickListener {
@@ -38,7 +35,7 @@ class SettingsVM @Inject constructor(
                             println("refresh")
                             onRefreshDB.value = true
                         }
-                        .setNegativeButton("Cancel") {_,_ ->}
+                        .setNegativeButton("Cancel") { _, _ -> }
                         .show()
             }
 
