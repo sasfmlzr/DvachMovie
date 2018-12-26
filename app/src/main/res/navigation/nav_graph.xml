@@ -81,6 +81,15 @@
         android:id="@+id/navSettingsFragment"
         android:name="dvachmovie.fragment.settings.SettingsFragment"
         android:label="SettingsFragment" >
+        <action
+            android:id="@+id/actionShowStartFragment"
+            app:destination="@+id/navStartFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@+id/navStartFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

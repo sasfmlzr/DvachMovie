@@ -11,7 +11,6 @@ import dvachmovie.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.fragment.movie.MovieFragmentDirections
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.InitWebm
@@ -37,7 +36,7 @@ class StartFragment : BaseFragment<StartVM,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        binding = dvachmovie.databinding.FragmentStartBinding.inflate(inflater, container, false)
+        binding = FragmentStartBinding.inflate(inflater, container, false)
 
         binding.viewModel = viewModel
         prepareData()
