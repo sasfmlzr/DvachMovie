@@ -9,8 +9,6 @@
         <variable
             name="viewModel"
             type="dvachmovie.activity.movie.MovieActivityVM" />
-
-        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

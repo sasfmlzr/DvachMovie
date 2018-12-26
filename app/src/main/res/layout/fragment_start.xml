@@ -7,8 +7,6 @@
         <variable
             name="viewModel"
             type="dvachmovie.fragment.start.StartVM" />
-
-        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
