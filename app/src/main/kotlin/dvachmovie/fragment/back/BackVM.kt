@@ -6,7 +6,5 @@ import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
 class BackVM @Inject constructor() : ViewModel() {
-    val imageView: MutableLiveData<Drawable> by lazy {
-        MutableLiveData<Drawable>()
-    }
+    val imageView = MutableLiveData<Drawable>()
 }
