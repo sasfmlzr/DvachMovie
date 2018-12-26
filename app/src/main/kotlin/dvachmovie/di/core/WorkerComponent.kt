@@ -9,7 +9,7 @@ import dvachmovie.worker.InsertDBWorker
 @WorkerScope
 @Subcomponent()
 interface WorkerComponent {
-    fun inject(mov: InitDBWorker)
-    fun inject(mov: InsertDBWorker)
-    fun inject(mov: DeleteDBWorker)
+    fun inject(worker: InitDBWorker)
+    fun inject(worker: InsertDBWorker)
+    fun inject(worker: DeleteDBWorker)
 }

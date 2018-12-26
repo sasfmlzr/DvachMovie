@@ -11,9 +11,9 @@ import dvachmovie.fragment.start.StartFragment
 @FragmentScope
 @Subcomponent()
 interface FragmentComponent {
-    fun inject(movieFragment: MovieFragment)
-    fun inject(previewFragment: PreviewFragment)
-    fun inject(backFragment: BackFragment)
-    fun inject(settingsFragment: SettingsFragment)
-    fun inject(startFragment: StartFragment)
+    fun inject(fragment: MovieFragment)
+    fun inject(fragment: PreviewFragment)
+    fun inject(fragment: BackFragment)
+    fun inject(fragment: SettingsFragment)
+    fun inject(fragment: StartFragment)
 }
