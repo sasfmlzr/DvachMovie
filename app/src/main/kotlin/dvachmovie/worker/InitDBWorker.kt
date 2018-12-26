@@ -2,31 +2,25 @@ package dvachmovie.worker
 
 import android.content.Context
 import androidx.annotation.NonNull
-import androidx.work.Worker
 import androidx.work.WorkerParameters
-import dvachmovie.di.core.Injector
+import dvachmovie.di.core.WorkerComponent
 import dvachmovie.repository.db.MovieDBRepository
 import dvachmovie.repository.local.MovieCache
 import javax.inject.Inject
 
 class InitDBWorker(@NonNull context: Context,
                    @NonNull workerParams: WorkerParameters
-) : Worker(context, workerParams) {
+) : BaseDBWorker(context, workerParams) {
 
     @Inject
     lateinit var movieCaches: MovieCache
     @Inject
     lateinit var movieDBRepository: MovieDBRepository
 
-    override fun doWork(): Worker.Result {
+    override fun inject(component: WorkerComponent) = component.inject(this)
 
-        return try {
-            Injector.workComponent().inject(this)
-
-            movieDBRepository.insertAll(movieCaches.movieList.value!!)
-            Worker.Result.SUCCESS
-        } catch (ex: Exception) {
-            Worker.Result.FAILURE
-        }
+    override fun execute() {
+        movieDBRepository.insertAll(movieCaches.movieList.value!!)
     }
+
 }
