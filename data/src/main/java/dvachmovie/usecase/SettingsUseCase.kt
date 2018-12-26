@@ -13,19 +13,19 @@ open class SettingsUseCase @Inject constructor(
 ) {
     private val LOADING_PARAM = "LoadingParam"
 
-    fun getLoadingParam(): Int {
-        if (pref.getInt(LOADING_PARAM) != null) {
-            return pref.getInt(LOADING_PARAM)!!
+    fun getLoadingParam(): Boolean {
+        if (pref.getBoolean(LOADING_PARAM) != null) {
+            return pref.getBoolean(LOADING_PARAM)!!
         }
         return LOADING_NOT_NEEDED
     }
 
-    fun putLoadingParam(value: Int) {
+    fun putLoadingParam(value: Boolean) {
         val job = SupervisorJob()
         val scope = CoroutineScope(Dispatchers.Default + job)
 
         scope.launch {
-            pref.putInt(LOADING_PARAM, value)
+            pref.putBoolean(LOADING_PARAM, value)
         }
     }
 }
