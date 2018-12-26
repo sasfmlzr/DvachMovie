@@ -1,4 +1,4 @@
-package dvachmovie.di
+package dvachmovie.di.core
 
 import dagger.Module
 import dagger.Provides

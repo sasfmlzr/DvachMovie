@@ -5,11 +5,9 @@ import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
 class StartActivityVM @Inject constructor() : ViewModel() {
-    val initText: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
+    val initText = MutableLiveData<String>()
 
     init {
-        initText.value = "Initialization"
+        initText.value = "Splash Screen"
     }
 }
