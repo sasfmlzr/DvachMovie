@@ -1,8 +1,10 @@
 package dvachmovie.worker
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.Operation
 import androidx.work.WorkManager
 
 class WorkerManager {
@@ -17,12 +19,13 @@ class WorkerManager {
             WorkManager.getInstance().enqueue(request)
         }
 
+        @SuppressLint("RestrictedApi")
         fun deleteAllInDB(lifecycleOwner: LifecycleOwner, doOnSuccess: () -> Unit) {
             val request = OneTimeWorkRequestBuilder<DeleteDBWorker>().build()
-            WorkManager.getInstance().enqueue(request)
-            WorkManager.getInstance().getStatusById(request.id).observe(lifecycleOwner,
+            WorkManager.getInstance().enqueue(request).state.observe(
+                    lifecycleOwner,
                     Observer { workStatus ->
-                        if (workStatus != null && workStatus.state.isFinished) {
+                        if (workStatus == Operation.SUCCESS) {
                             doOnSuccess()
                         }
                     }

@@ -20,9 +20,10 @@ abstract class BaseDBWorker(@NonNull context: Context,
             inject(Injector.workComponent())
 
             execute()
-            Worker.Result.SUCCESS
+            Result.success()
+
         } catch (ex: Exception) {
-            Worker.Result.FAILURE
+            Result.failure()
         }
     }
 }
