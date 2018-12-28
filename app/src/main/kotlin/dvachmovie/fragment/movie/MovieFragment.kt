@@ -13,14 +13,17 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.Utils.DirectoryHelper
 import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 import dvachmovie.base.BaseFragment
+import dvachmovie.binding.PlayerViewBindingAdapter
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.di.core.FragmentComponent
@@ -44,7 +47,6 @@ class MovieFragment : BaseFragment<MovieVM,
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-
         binding = FragmentMovieBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.setLifecycleOwner(viewLifecycleOwner)
@@ -63,8 +65,19 @@ class MovieFragment : BaseFragment<MovieVM,
 
         movieRepository.observe(viewLifecycleOwner)
 
-        viewModel.currentPos.value = movieRepository.getPos()
+        viewModel.uriMovies.observe(viewLifecycleOwner, Observer {
+            viewModel.mediaSources.value = viewModel.configureMediaSources(player)
+        })
+
+        viewModel.currentPos.value = Pair(movieRepository.getPos(), 0)
+
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        initializePlayer()
     }
 
     override fun onStop() {
@@ -73,6 +86,8 @@ class MovieFragment : BaseFragment<MovieVM,
         }
         player.player.stop()
         super.onStop()
+
+        releasePlayer()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
@@ -178,4 +193,39 @@ class MovieFragment : BaseFragment<MovieVM,
         findNavController(this@MovieFragment).navigate(direction)
     }
     //      ------------GESTURE LISTENER--------------
+
+
+    private var isPrerare = false
+    private var playbackPosition: Long = 0
+
+    private var shouldAutoPlay: Boolean = true
+
+    private fun initializePlayer() {
+        with(player.player!!) {
+            playWhenReady = shouldAutoPlay
+        }
+
+       // (player.player as SimpleExoPlayer).
+        if (!isPrerare) {
+            PlayerViewBindingAdapter.bindMovie(player, viewModel.mediaSources.value!!)
+            isPrerare = true
+        }
+    }
+
+    private fun releasePlayer() {
+        if (player.player != null) {
+            updateStartPosition()
+            shouldAutoPlay = player.player!!.playWhenReady
+        }
+    }
+
+    private fun updateStartPosition() {
+        with(player.player!!) {
+            playbackPosition = currentPosition
+            movieRepository.posPlayer = currentWindowIndex
+            viewModel.currentPos.value = Pair(currentWindowIndex, playbackPosition)
+            playWhenReady = playWhenReady
+            isPrerare = false
+        }
+    }
 }
