@@ -10,6 +10,7 @@ import dvachmovie.activity.start.StartActivityVM
 import dvachmovie.architecture.ViewModelFactory
 import dvachmovie.architecture.ViewModelKey
 import dvachmovie.fragment.back.BackVM
+import dvachmovie.fragment.contacts.ContactsVM
 import dvachmovie.fragment.movie.MovieVM
 import dvachmovie.fragment.preview.PreviewVM
 import dvachmovie.fragment.settings.SettingsVM
@@ -45,6 +46,11 @@ internal abstract class ViewModelFactoryModule {
     @IntoMap
     @ViewModelKey(StartVM::class)
     internal abstract fun startVM(VM: StartVM): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ContactsVM::class)
+    internal abstract fun contactsVM(VM: ContactsVM): ViewModel
 
     @Binds
     @IntoMap
