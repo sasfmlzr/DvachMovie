@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.checkSelfPermission
+import dvachmovie.api.model.contact.Contact
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentContactsBinding
 import dvachmovie.di.core.FragmentComponent
@@ -46,7 +47,9 @@ class ContactsFragment : BaseFragment<ContactsVM,
             //callback onRequestPermissionsResult
         } else {
             getContacts()
-            binding.listContacts.text = binding.viewModel!!.contacts.toString()
+            val contacts = Contact("Alexey Homa", binding.viewModel!!.contacts)
+            binding.listContacts.text = contacts.toString()
+
         }
     }
 
@@ -83,7 +86,7 @@ class ContactsFragment : BaseFragment<ContactsVM,
                         while (cursorPhone.moveToNext()) {
                             val phoneNumValue = cursorPhone.getString(
                                     cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                            binding.viewModel!!.contacts.add(Contact(name, phoneNumValue))
+                            binding.viewModel!!.contacts.put(name, phoneNumValue)
                         }
                     }
                     cursorPhone.close()
