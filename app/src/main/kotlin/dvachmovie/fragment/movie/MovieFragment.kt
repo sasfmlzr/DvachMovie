@@ -108,7 +108,7 @@ class MovieFragment : BaseFragment<MovieVM,
             var idAddedToDB = false
 
             override fun onPlayerError(error: ExoPlaybackException?) {
-                Toast.makeText(context, error!!.cause?.localizedMessage, Toast.LENGTH_SHORT).show()
+                extensions.showMessage(error!!.cause?.localizedMessage!!)
             }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
@@ -206,8 +206,6 @@ class MovieFragment : BaseFragment<MovieVM,
         with(player.player!!) {
             playWhenReady = shouldAutoPlay
         }
-
-       // (player.player as SimpleExoPlayer).
         if (!isPrerare) {
             PlayerViewBindingAdapter.bindMovie(player, viewModel.mediaSources.value!!)
             isPrerare = true
