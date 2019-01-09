@@ -10,13 +10,11 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
@@ -108,6 +106,10 @@ class MovieFragment : BaseFragment<MovieVM,
         movieRepository.posPlayer = player.player.currentWindowIndex
         player.player.addListener(object : Player.EventListener {
             var idAddedToDB = false
+
+            override fun onPlayerError(error: ExoPlaybackException?) {
+                Toast.makeText(context, error!!.cause?.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
                 if (!idAddedToDB) {
