@@ -1,6 +1,7 @@
 package dvachmovie.fragment.contacts
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.pm.PackageManager
 import android.os.Build
@@ -60,10 +61,11 @@ class ContactsFragment : BaseFragment<ContactsVM,
         }
     }
 
+    @SuppressLint("Recycle")
     private fun getContacts() {
         val resolver: ContentResolver = activity!!.contentResolver
         val cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null,
-                null)
+                null)!!
 
         if (cursor.count > 0) {
             while (cursor.moveToNext()) {
@@ -75,7 +77,7 @@ class ContactsFragment : BaseFragment<ContactsVM,
                 if (phoneNumber > 0) {
                     val cursorPhone = activity!!.contentResolver.query(
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", arrayOf(id), null)
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", arrayOf(id), null)!!
 
                     if (cursorPhone.count > 0) {
                         while (cursorPhone.moveToNext()) {
