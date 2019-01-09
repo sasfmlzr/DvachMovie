@@ -1,4 +1,4 @@
-package dvachmovie.binding
+package dvachmovie.architecture.binding
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView

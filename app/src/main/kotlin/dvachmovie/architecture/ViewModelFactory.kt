@@ -1,4 +1,4 @@
-package dvachmovie.di
+package dvachmovie.architecture
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

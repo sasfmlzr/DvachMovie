@@ -3,6 +3,7 @@ package dvachmovie.worker
 import android.content.Context
 import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
+import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
 import dvachmovie.repository.db.MovieDBRepository
 import dvachmovie.repository.local.MovieCache

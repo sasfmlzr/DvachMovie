@@ -1,4 +1,4 @@
-package dvachmovie.base
+package dvachmovie.architecture.base
 
 import android.os.Bundle
 import androidx.annotation.CallSuper

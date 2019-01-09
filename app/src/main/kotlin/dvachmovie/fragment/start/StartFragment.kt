@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import dvachmovie.Constraints
-import dvachmovie.base.BaseFragment
+import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector

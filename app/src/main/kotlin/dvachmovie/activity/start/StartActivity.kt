@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import dvachmovie.R
 import dvachmovie.activity.movie.MovieActivity
-import dvachmovie.base.BaseActivity
+import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.databinding.ActivityStartBinding
 import dvachmovie.di.core.ActivityComponent
 import kotlinx.coroutines.*

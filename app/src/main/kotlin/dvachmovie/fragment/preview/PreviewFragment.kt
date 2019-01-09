@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import dvachmovie.base.BaseFragment
+import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.repository.local.MovieRepository

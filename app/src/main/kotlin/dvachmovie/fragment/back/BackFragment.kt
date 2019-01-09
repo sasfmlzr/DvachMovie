@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import dvachmovie.R
-import dvachmovie.base.BaseFragment
+import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentBackBinding
 import dvachmovie.di.core.FragmentComponent
 

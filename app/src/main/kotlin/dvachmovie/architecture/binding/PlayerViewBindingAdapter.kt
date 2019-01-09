@@ -1,4 +1,4 @@
-package dvachmovie.binding
+package dvachmovie.architecture.binding
 
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod

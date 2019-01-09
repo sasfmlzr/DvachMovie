@@ -1,4 +1,4 @@
-package dvachmovie.listener
+package dvachmovie.architecture.listener
 
 import android.annotation.SuppressLint
 import android.content.Context

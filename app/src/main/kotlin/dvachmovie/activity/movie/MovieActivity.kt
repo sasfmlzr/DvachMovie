@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import dvachmovie.R
-import dvachmovie.base.BaseActivity
+import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
 import dvachmovie.fragment.back.BackFragmentDirections

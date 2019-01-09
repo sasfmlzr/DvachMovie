@@ -1,4 +1,4 @@
-package dvachmovie.Utils
+package dvachmovie.utils
 
 import android.content.Context
 import android.content.ContextWrapper

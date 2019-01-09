@@ -7,8 +7,8 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import dvachmovie.activity.movie.MovieActivityVM
 import dvachmovie.activity.start.StartActivityVM
-import dvachmovie.di.ViewModelFactory
-import dvachmovie.di.ViewModelKey
+import dvachmovie.architecture.ViewModelFactory
+import dvachmovie.architecture.ViewModelKey
 import dvachmovie.fragment.back.BackVM
 import dvachmovie.fragment.movie.MovieVM
 import dvachmovie.fragment.preview.PreviewVM
