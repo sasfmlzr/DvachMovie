@@ -20,7 +20,7 @@ class PlayerViewBindingAdapter {
         @JvmStatic
         fun bindMovie(playerView: PlayerView, mediaSources: ConcatenatingMediaSource) {
             if (mediaSources.size != 0) {
-                (playerView.player as SimpleExoPlayer).prepare(mediaSources, false, false)
+                (playerView.player as SimpleExoPlayer).prepare(mediaSources, true, false)
             }
         }
 
