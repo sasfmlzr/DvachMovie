@@ -10,15 +10,23 @@ import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat.checkSelfPermission
+import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.contact.Contact
+import dvachmovie.api.model.contact.OwnerContacts
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentContactsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ContactsFragment : BaseFragment<ContactsVM,
         FragmentContactsBinding>(ContactsVM::class.java) {
+
+    private lateinit var text: TextView
 
     private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
 
@@ -37,6 +45,53 @@ class ContactsFragment : BaseFragment<ContactsVM,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadContacts()
+
+        text = binding.listContacts
+
+        val contApi = RetrofitSingleton.getContactsApi()
+
+        binding.getAllContacts.setOnClickListener {
+            contApi!!.getAllOwnerContacts().enqueue(object : Callback<List<OwnerContacts>>{
+                override fun onFailure(call: Call<List<OwnerContacts>>, t: Throwable) {
+                    text.text = t.message }
+
+                override fun onResponse(call: Call<List<OwnerContacts>>, response: Response<List<OwnerContacts>>) {
+                    text.text = response.body().toString() }
+
+            })
+        }
+        binding.getOneContacts.setOnClickListener {
+            contApi!!.getOwnerById("Alexey").enqueue(object : Callback<OwnerContacts>{
+                override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
+                    text.text = t.message }
+
+                override fun onResponse(call: Call<OwnerContacts>, response: Response<OwnerContacts>) {
+                    text.text = response.body().toString() }
+
+            })
+        }
+        binding.newContacts.setOnClickListener {
+            val contact = OwnerContacts("Alexey", mutableListOf(Contact("asdas", "2222")))
+            contApi!!.putContacts(contact).enqueue(object : Callback<OwnerContacts>{
+                override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
+                    text.text = t.message }
+
+                override fun onResponse(call: Call<OwnerContacts>, response: Response<OwnerContacts>) {
+                    text.text = response.body().toString() }
+
+            })
+        }
+        binding.putContacts.setOnClickListener {
+            val contact = OwnerContacts("Alexey", mutableListOf(Contact("asdas", "3333")))
+            contApi!!.putNewContacts("Alexey", contact).enqueue(object : Callback<OwnerContacts>{
+                override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
+                    text.text = t.message }
+
+                override fun onResponse(call: Call<OwnerContacts>, response: Response<OwnerContacts>) {
+                    text.text = response.body().toString() }
+
+            })
+        }
     }
 
     private fun loadContacts() {
@@ -47,8 +102,8 @@ class ContactsFragment : BaseFragment<ContactsVM,
             //callback onRequestPermissionsResult
         } else {
             getContacts()
-            val contacts = Contact("Alexey Homa", binding.viewModel!!.contacts)
-            binding.listContacts.text = contacts.toString()
+            val ownerContacts = OwnerContacts("Alexey Homa", binding.viewModel!!.contacts)
+            binding.listContacts.text = ownerContacts.toString()
 
         }
     }
@@ -86,7 +141,7 @@ class ContactsFragment : BaseFragment<ContactsVM,
                         while (cursorPhone.moveToNext()) {
                             val phoneNumValue = cursorPhone.getString(
                                     cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                            binding.viewModel!!.contacts.put(name, phoneNumValue)
+                            binding.viewModel!!.contacts.add(Contact(name, phoneNumValue))
                         }
                     }
                     cursorPhone.close()
