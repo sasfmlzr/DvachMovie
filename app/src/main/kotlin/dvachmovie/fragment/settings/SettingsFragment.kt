@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
@@ -37,13 +36,13 @@ class SettingsFragment : BaseFragment<SettingsVM,
         viewModel.onRefreshDB.observe(this, Observer {
             if (it) {
                 WorkerManager.deleteAllInDB(this) {
-                    navigateSettingsToStartFragment()
+                    router.navigateSettingsToStartFragment()
                 }
             }
         })
 
         viewModel.getContactClick = {
-            navigateSettingsToContactsFragment()
+            router.navigateSettingsToContactsFragment()
         }
 
         val activity = (activity as AppCompatActivity)
@@ -51,17 +50,5 @@ class SettingsFragment : BaseFragment<SettingsVM,
         activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         return binding.root
-    }
-
-
-    private fun navigateSettingsToStartFragment() {
-        val direction = SettingsFragmentDirections.ActionShowStartFragment()
-        findNavController().navigate(direction)
-    }
-
-    private fun navigateSettingsToContactsFragment() {
-        val direction = SettingsFragmentDirections
-                .ActionShowContactsFragment()
-        findNavController().navigate(direction)
     }
 }
