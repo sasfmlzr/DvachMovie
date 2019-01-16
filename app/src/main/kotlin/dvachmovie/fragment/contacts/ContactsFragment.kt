@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat.checkSelfPermission
+import dvachmovie.PERMISSIONS_REQUEST_READ_CONTACTS
 import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.contact.Contact
 import dvachmovie.api.model.contact.OwnerContacts
@@ -28,7 +29,7 @@ class ContactsFragment : BaseFragment<ContactsVM,
 
     private lateinit var text: TextView
 
-    private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
+    private val nameOwner = "Alexey"
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
@@ -51,45 +52,52 @@ class ContactsFragment : BaseFragment<ContactsVM,
         val contApi = RetrofitSingleton.getContactsApi()
 
         binding.getAllContacts.setOnClickListener {
-            contApi!!.getAllOwnerContacts().enqueue(object : Callback<List<OwnerContacts>>{
+            contApi!!.getAllOwnerContacts().enqueue(object : Callback<List<OwnerContacts>> {
                 override fun onFailure(call: Call<List<OwnerContacts>>, t: Throwable) {
-                    text.text = t.message }
+                    text.text = t.message
+                }
 
                 override fun onResponse(call: Call<List<OwnerContacts>>, response: Response<List<OwnerContacts>>) {
-                    text.text = response.body().toString() }
+                    text.text = response.body().toString()
+                }
 
             })
         }
         binding.getOneContacts.setOnClickListener {
-            contApi!!.getOwnerById("Alexey").enqueue(object : Callback<OwnerContacts>{
+            contApi!!.getOwnerById(nameOwner).enqueue(object : Callback<OwnerContacts> {
                 override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
-                    text.text = t.message }
+                    text.text = t.message
+                }
 
                 override fun onResponse(call: Call<OwnerContacts>, response: Response<OwnerContacts>) {
-                    text.text = response.body().toString() }
+                    text.text = response.body().toString()
+                }
 
             })
         }
         binding.newContacts.setOnClickListener {
-            val contact = OwnerContacts("Alexey", mutableListOf(Contact("asdas", "2222")))
-            contApi!!.putContacts(contact).enqueue(object : Callback<OwnerContacts>{
+            val contact = OwnerContacts(nameOwner, viewModel.contacts)
+            contApi!!.putContacts(contact).enqueue(object : Callback<OwnerContacts> {
                 override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
-                    text.text = t.message }
+                    text.text = t.message
+                }
 
                 override fun onResponse(call: Call<OwnerContacts>, response: Response<OwnerContacts>) {
-                    text.text = response.body().toString() }
+                    text.text = response.body().toString()
+                }
 
             })
         }
         binding.putContacts.setOnClickListener {
-            val contact = OwnerContacts("Alexey", mutableListOf(Contact("asdas", "3333")))
-            contApi!!.putNewContacts("Alexey", contact).enqueue(object : Callback<OwnerContacts>{
+            val contact = OwnerContacts(nameOwner, viewModel.contacts)
+            contApi!!.putNewContacts(contact.id, contact).enqueue(object : Callback<OwnerContacts> {
                 override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
-                    text.text = t.message }
+                    text.text = t.message
+                }
 
                 override fun onResponse(call: Call<OwnerContacts>, response: Response<OwnerContacts>) {
-                    text.text = response.body().toString() }
-
+                    text.text = response.body().toString()
+                }
             })
         }
     }
@@ -102,9 +110,6 @@ class ContactsFragment : BaseFragment<ContactsVM,
             //callback onRequestPermissionsResult
         } else {
             getContacts()
-            val ownerContacts = OwnerContacts("Alexey Homa", binding.viewModel!!.contacts)
-            binding.listContacts.text = ownerContacts.toString()
-
         }
     }
 
@@ -114,7 +119,7 @@ class ContactsFragment : BaseFragment<ContactsVM,
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 loadContacts()
             } else {
-                //  toast("Permission must be granted in order to display contacts information")
+                extensions.showMessage("Permission must be granted")
             }
         }
     }
@@ -148,7 +153,7 @@ class ContactsFragment : BaseFragment<ContactsVM,
                 }
             }
         } else {
-            //   toast("No contacts available!")
+            extensions.showMessage("No contacts available!")
         }
         cursor.close()
     }

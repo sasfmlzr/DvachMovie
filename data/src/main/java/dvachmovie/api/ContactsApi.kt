@@ -1,6 +1,5 @@
 package dvachmovie.api
 
-import dvachmovie.Constraints.Companion.CONTACT_URL
 import dvachmovie.api.model.contact.OwnerContacts
 import retrofit2.Call
 import retrofit2.http.*

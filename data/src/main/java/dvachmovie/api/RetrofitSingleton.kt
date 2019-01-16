@@ -1,11 +1,9 @@
 package dvachmovie.api
 
 import dvachmovie.Constraints.Companion.BASE_URL
-import dvachmovie.Constraints.Companion.CONTACT_URL
 import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitSingleton {
     private var dvachMovieApi: DvachMovieApi? = null
