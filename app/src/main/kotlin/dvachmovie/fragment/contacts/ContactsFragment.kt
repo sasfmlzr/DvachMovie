@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat.checkSelfPermission
 import dvachmovie.PERMISSIONS_REQUEST_READ_CONTACTS
-import dvachmovie.api.RetrofitSingleton
+import dvachmovie.api.ContactsApi
 import dvachmovie.api.model.contact.Contact
 import dvachmovie.api.model.contact.OwnerContacts
 import dvachmovie.architecture.base.BaseFragment
@@ -23,6 +23,7 @@ import dvachmovie.di.core.Injector
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class ContactsFragment : BaseFragment<ContactsVM,
         FragmentContactsBinding>(ContactsVM::class.java) {
@@ -30,6 +31,9 @@ class ContactsFragment : BaseFragment<ContactsVM,
     private lateinit var text: TextView
 
     private val nameOwner = "Alexey"
+
+    @Inject
+    lateinit var contApi: ContactsApi
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
@@ -49,10 +53,8 @@ class ContactsFragment : BaseFragment<ContactsVM,
 
         text = binding.listContacts
 
-        val contApi = RetrofitSingleton.getContactsApi()
-
         binding.getAllContacts.setOnClickListener {
-            contApi!!.getAllOwnerContacts().enqueue(object : Callback<List<OwnerContacts>> {
+            contApi.getAllOwnerContacts().enqueue(object : Callback<List<OwnerContacts>> {
                 override fun onFailure(call: Call<List<OwnerContacts>>, t: Throwable) {
                     text.text = t.message
                 }
@@ -64,7 +66,7 @@ class ContactsFragment : BaseFragment<ContactsVM,
             })
         }
         binding.getOneContacts.setOnClickListener {
-            contApi!!.getOwnerById(nameOwner).enqueue(object : Callback<OwnerContacts> {
+            contApi.getOwnerById(nameOwner).enqueue(object : Callback<OwnerContacts> {
                 override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
                     text.text = t.message
                 }
@@ -77,7 +79,7 @@ class ContactsFragment : BaseFragment<ContactsVM,
         }
         binding.newContacts.setOnClickListener {
             val contact = OwnerContacts(nameOwner, viewModel.contacts)
-            contApi!!.putContacts(contact).enqueue(object : Callback<OwnerContacts> {
+            contApi.putContacts(contact).enqueue(object : Callback<OwnerContacts> {
                 override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
                     text.text = t.message
                 }
@@ -90,7 +92,7 @@ class ContactsFragment : BaseFragment<ContactsVM,
         }
         binding.putContacts.setOnClickListener {
             val contact = OwnerContacts(nameOwner, viewModel.contacts)
-            contApi!!.putNewContacts(contact.id, contact).enqueue(object : Callback<OwnerContacts> {
+            contApi.putNewContacts(contact.id, contact).enqueue(object : Callback<OwnerContacts> {
                 override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
                     text.text = t.message
                 }

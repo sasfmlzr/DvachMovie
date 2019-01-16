@@ -80,8 +80,8 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
             val path = it.path
             if (path.contains(".webm")) {
                 val movieEntity = MovieEntity(board = this.board,
-                        movieUrl = Constants.BASE_URL + path,
-                        previewUrl = Constants.BASE_URL + it.thumbnail)
+                        movieUrl = Constants.DVACH_URL + path,
+                        previewUrl = Constants.DVACH_URL + it.thumbnail)
                 listMovies.add(movieEntity)
             }
             count--
