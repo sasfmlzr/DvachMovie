@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import dvachmovie.Constraints
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
@@ -49,7 +49,7 @@ class StartFragment : BaseFragment<StartVM,
                     movies.size < 100) {
                 dvachUseCase.getNumThreads("b", initWebm())
             } else {
-                navigateToSettingsFragment()
+                navigateStartToMovieFragment()
             }
         })
     }
@@ -58,7 +58,7 @@ class StartFragment : BaseFragment<StartVM,
         return object : InitWebm {
             override fun initWebm() {
                 WorkerManager.initDB()
-                navigateToSettingsFragment()
+                navigateStartToMovieFragment()
             }
 
             override fun countVideoUpdates(count: Int) {
@@ -71,9 +71,9 @@ class StartFragment : BaseFragment<StartVM,
         }
     }
 
-    private fun navigateToSettingsFragment() {
+    private fun navigateStartToMovieFragment() {
         val direction = StartFragmentDirections
                 .ActionShowMovieFragment()
-        NavHostFragment.findNavController(this@StartFragment).navigate(direction)
+        findNavController().navigate(direction)
     }
 }

@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
@@ -148,7 +148,7 @@ class MovieFragment : BaseFragment<MovieVM,
         }
 
         binding.settingsButton.setOnClickListener {
-            navigateToSettingsFragment()
+            navigateMovieToSettingsFragment()
         }
     }
 
@@ -171,7 +171,7 @@ class MovieFragment : BaseFragment<MovieVM,
         }
 
         override fun onSwipeTop() {
-            navigateToPreviewFragment()
+            navigateMovieToPreviewFragment()
         }
     }
 
@@ -185,16 +185,16 @@ class MovieFragment : BaseFragment<MovieVM,
         }
     }
 
-    private fun navigateToPreviewFragment() {
+    private fun navigateMovieToPreviewFragment() {
         val direction = MovieFragmentDirections
                 .ActionShowPreviewFragment()
-        findNavController(this@MovieFragment).navigate(direction)
+        findNavController().navigate(direction)
     }
 
-    private fun navigateToSettingsFragment() {
+    private fun navigateMovieToSettingsFragment() {
         val direction = MovieFragmentDirections
                 .ActionShowSettingsFragment()
-        findNavController(this@MovieFragment).navigate(direction)
+        findNavController().navigate(direction)
     }
     //      ------------GESTURE LISTENER--------------
 
