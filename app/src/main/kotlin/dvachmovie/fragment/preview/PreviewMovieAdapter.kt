@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dvachmovie.R
+import dvachmovie.architecture.Navigator
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieRepository
@@ -38,8 +39,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieRepository: Movie
     private fun createOnClickListener(movie: MovieEntity): View.OnClickListener {
         return View.OnClickListener {
             movieRepository.getCurrent().value = movie
-            val direction = PreviewFragmentDirections.ActionShowMovieFragment()
-            it.findNavController().navigate(direction)
+            Navigator(it.findNavController()).navigatePreviewToMovieFragment()
         }
     }
 

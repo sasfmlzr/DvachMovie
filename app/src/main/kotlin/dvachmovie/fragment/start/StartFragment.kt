@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import dvachmovie.Constraints
+import dvachmovie.Constants
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
@@ -45,11 +44,11 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun prepareData() {
         movieRepository.observe(this, Observer { movies ->
-            if (settingsUseCase.getLoadingParam() == Constraints.LOADING_EVERY_TIME ||
+            if (settingsUseCase.getLoadingParam() == Constants.LOADING_EVERY_TIME ||
                     movies.size < 100) {
                 dvachUseCase.getNumThreads("b", initWebm())
             } else {
-                navigateStartToMovieFragment()
+                router.navigateStartToMovieFragment()
             }
         })
     }
@@ -58,7 +57,7 @@ class StartFragment : BaseFragment<StartVM,
         return object : InitWebm {
             override fun initWebm() {
                 WorkerManager.initDB()
-                navigateStartToMovieFragment()
+                router.navigateStartToMovieFragment()
             }
 
             override fun countVideoUpdates(count: Int) {
@@ -69,11 +68,5 @@ class StartFragment : BaseFragment<StartVM,
                 binding.progressLoadingSource.max = summCount
             }
         }
-    }
-
-    private fun navigateStartToMovieFragment() {
-        val direction = StartFragmentDirections
-                .ActionShowMovieFragment()
-        findNavController().navigate(direction)
     }
 }
