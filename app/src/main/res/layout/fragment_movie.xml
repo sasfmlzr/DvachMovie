@@ -73,7 +73,7 @@
             android:id="@+id/playerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:movie="@{viewModel.mediaSources}"
+            app:movie="@{viewModel.uriMovies}"
             app:movie_position="@{viewModel.currentPos}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

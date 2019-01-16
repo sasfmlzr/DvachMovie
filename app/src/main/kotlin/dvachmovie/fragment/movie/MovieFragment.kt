@@ -63,10 +63,6 @@ class MovieFragment : BaseFragment<MovieVM,
 
         movieRepository.observe(viewLifecycleOwner)
 
-        viewModel.uriMovies.observe(viewLifecycleOwner, Observer {
-            viewModel.mediaSources.value = viewModel.configureMediaSources(player)
-        })
-
         viewModel.currentPos.value = Pair(movieRepository.getPos(), 0)
 
         return binding.root
@@ -196,7 +192,7 @@ class MovieFragment : BaseFragment<MovieVM,
             playWhenReady = shouldAutoPlay
         }
         if (!isPrerare) {
-            PlayerViewBindingAdapter.bindMovie(player, viewModel.mediaSources.value!!)
+            PlayerViewBindingAdapter.bindPlayer(player)
             isPrerare = true
         }
     }
