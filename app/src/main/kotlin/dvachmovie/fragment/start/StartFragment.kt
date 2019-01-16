@@ -49,7 +49,7 @@ class StartFragment : BaseFragment<StartVM,
                     movies.size < 100) {
                 dvachUseCase.getNumThreads("b", initWebm())
             } else {
-                navigateStartToMovieFragment()
+                router.navigateStartToMovieFragment()
             }
         })
     }
@@ -58,7 +58,7 @@ class StartFragment : BaseFragment<StartVM,
         return object : InitWebm {
             override fun initWebm() {
                 WorkerManager.initDB()
-                navigateStartToMovieFragment()
+                router.navigateStartToMovieFragment()
             }
 
             override fun countVideoUpdates(count: Int) {
@@ -69,11 +69,5 @@ class StartFragment : BaseFragment<StartVM,
                 binding.progressLoadingSource.max = summCount
             }
         }
-    }
-
-    private fun navigateStartToMovieFragment() {
-        val direction = StartFragmentDirections
-                .ActionShowMovieFragment()
-        findNavController().navigate(direction)
     }
 }

@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dvachmovie.architecture.Extensions
+import dvachmovie.architecture.Navigator
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import javax.inject.Inject
@@ -29,6 +31,7 @@ protected constructor(private val viewModelClass: Class<VM>) : Fragment() {
     protected lateinit var viewModel: VM
 
     protected lateinit var extensions: Extensions
+    protected lateinit var router: Navigator
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,5 +51,6 @@ protected constructor(private val viewModelClass: Class<VM>) : Fragment() {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         extensions = Extensions(activity as AppCompatActivity)
+        router = Navigator(findNavController())
     }
 }
