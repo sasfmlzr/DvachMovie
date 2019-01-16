@@ -1,6 +1,6 @@
 package dvachmovie
 
-class Constraints {
+class Constants {
 
     companion object {
         const val BASE_URL = "https://2ch.hk"

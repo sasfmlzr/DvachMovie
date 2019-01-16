@@ -1,6 +1,6 @@
 package dvachmovie.usecase
 
-import dvachmovie.Constraints
+import dvachmovie.Constants
 import dvachmovie.api.DvachMovieApi
 import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
@@ -76,8 +76,8 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
             val path = it.path
             if (path.contains(".webm")) {
                 val movieEntity = MovieEntity(board = this.board,
-                        movieUrl = Constraints.BASE_URL + path,
-                        previewUrl = Constraints.BASE_URL + it.thumbnail)
+                        movieUrl = Constants.BASE_URL + path,
+                        previewUrl = Constants.BASE_URL + it.thumbnail)
                 listMovies.add(movieEntity)
             }
             count--

@@ -1,6 +1,6 @@
 package dvachmovie.usecase
 
-import dvachmovie.Constraints.Companion.LOADING_NOT_NEEDED
+import dvachmovie.Constants.Companion.LOADING_NOT_NEEDED
 import dvachmovie.storage.KeyValueStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
