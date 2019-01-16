@@ -4,11 +4,10 @@ import android.os.Bundle
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import dvachmovie.R
+import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
-import dvachmovie.fragment.back.BackFragmentDirections
-import dvachmovie.fragment.movie.MovieFragmentDirections
 
 class MovieActivity : BaseActivity<MovieActivityVM,
         ActivityMovieBinding>(MovieActivityVM::class.java) {
@@ -30,12 +29,12 @@ class MovieActivity : BaseActivity<MovieActivityVM,
 
         when (navController.currentDestination?.label) {
             "MovieFragment" -> {
-                val direction = MovieFragmentDirections.ActionShowBackFragment()
-                NavHostFragment.findNavController(supportFragmentManager.primaryNavigationFragment!!).navigate(direction)
+                Navigator(NavHostFragment.findNavController(supportFragmentManager
+                        .primaryNavigationFragment!!)).navigateMovieToBackFragment()
             }
             "BackFragment" -> {
-                val direction = BackFragmentDirections.ActionShowMovieFragment()
-                NavHostFragment.findNavController(supportFragmentManager.primaryNavigationFragment!!).navigate(direction)
+                Navigator(NavHostFragment.findNavController(supportFragmentManager
+                        .primaryNavigationFragment!!)).navigateBackToMovieFragment()
             }
             else -> super.onBackPressed()
         }

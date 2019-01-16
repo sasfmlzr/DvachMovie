@@ -1,6 +1,7 @@
 package dvachmovie.architecture
 
 import androidx.navigation.NavController
+import dvachmovie.fragment.back.BackFragmentDirections
 import dvachmovie.fragment.movie.MovieFragmentDirections
 import dvachmovie.fragment.preview.PreviewFragmentDirections
 import dvachmovie.fragment.settings.SettingsFragmentDirections
@@ -26,7 +27,8 @@ class Navigator(private val router: NavController) {
     }
 
     fun navigatePreviewToMovieFragment() {
-        val direction = PreviewFragmentDirections.ActionShowMovieFragment()
+        val direction = PreviewFragmentDirections
+                .ActionShowMovieFragment()
         router.navigate(direction)
     }
 
@@ -39,6 +41,18 @@ class Navigator(private val router: NavController) {
     fun navigateMovieToSettingsFragment() {
         val direction = MovieFragmentDirections
                 .ActionShowSettingsFragment()
+        router.navigate(direction)
+    }
+
+    fun navigateMovieToBackFragment() {
+        val direction = MovieFragmentDirections
+                .ActionShowBackFragment()
+        router.navigate(direction)
+    }
+
+    fun navigateBackToMovieFragment() {
+        val direction = BackFragmentDirections
+                .ActionShowMovieFragment()
         router.navigate(direction)
     }
 }
