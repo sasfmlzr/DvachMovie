@@ -169,8 +169,8 @@ class MovieFragment : BaseFragment<MovieVM,
         }
 
         override fun onSwipeTop() {
-            //navigateToPreviewFragment()
-            navigateToContactsFragment()
+            navigateToPreviewFragment()
+            //navigateToContactsFragment()
         }
     }
 
