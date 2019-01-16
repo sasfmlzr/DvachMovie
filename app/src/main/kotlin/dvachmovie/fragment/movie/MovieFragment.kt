@@ -10,24 +10,25 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
-import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
-import dvachmovie.utils.DirectoryHelper
 import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.binding.PlayerViewBindingAdapter
+import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.di.core.FragmentComponent
-import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
+import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
@@ -109,6 +110,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
             override fun onPlayerError(error: ExoPlaybackException?) {
                 extensions.showMessage(error!!.cause?.localizedMessage!!)
+                setUpCurrentMovie(1)
             }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
