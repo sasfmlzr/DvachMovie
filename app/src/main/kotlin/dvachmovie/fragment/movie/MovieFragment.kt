@@ -172,7 +172,6 @@ class MovieFragment : BaseFragment<MovieVM,
 
         override fun onSwipeTop() {
             navigateToPreviewFragment()
-            //navigateToContactsFragment()
         }
     }
 
@@ -195,12 +194,6 @@ class MovieFragment : BaseFragment<MovieVM,
     private fun navigateToSettingsFragment() {
         val direction = MovieFragmentDirections
                 .ActionShowSettingsFragment()
-        findNavController(this@MovieFragment).navigate(direction)
-    }
-
-    private fun navigateToContactsFragment() {
-        val direction = MovieFragmentDirections
-                .ActionShowContactsFragment()
         findNavController(this@MovieFragment).navigate(direction)
     }
     //      ------------GESTURE LISTENER--------------

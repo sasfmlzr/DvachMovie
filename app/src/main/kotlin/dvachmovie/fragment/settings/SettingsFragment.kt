@@ -42,6 +42,11 @@ class SettingsFragment : BaseFragment<SettingsVM,
             }
         })
 
+        //    viewModel.onNavigationToContact().value = navigateToContactsFragment()
+        viewModel.getContactClick = {
+            navigateToContactsFragment()
+        }
+
         val activity = (activity as AppCompatActivity)
         activity.setSupportActionBar(binding.toolbar)
         activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -49,8 +54,15 @@ class SettingsFragment : BaseFragment<SettingsVM,
         return binding.root
     }
 
+
     private fun navigateToStartFragment() {
         val direction = SettingsFragmentDirections.ActionShowStartFragment()
+        NavHostFragment.findNavController(this@SettingsFragment).navigate(direction)
+    }
+
+    private fun navigateToContactsFragment() {
+        val direction = SettingsFragmentDirections
+                .ActionShowContactsFragment()
         NavHostFragment.findNavController(this@SettingsFragment).navigate(direction)
     }
 }

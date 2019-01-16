@@ -2,6 +2,7 @@ package dvachmovie.fragment.settings
 
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,8 @@ class SettingsVM @Inject constructor(
     val prepareLoading = MutableLiveData<Boolean>()
 
     val onRefreshDB = MutableLiveData<Boolean>()
+
+    lateinit var getContactClick: (() -> Unit)
 
     init {
         prepareLoading.value = settingsUseCase.getLoadingParam()
@@ -39,4 +42,19 @@ class SettingsVM @Inject constructor(
                         .show()
             }
 
+    val onGetContact =
+            View.OnClickListener {
+                val editText = EditText(it.context)
+
+                AlertDialog.Builder(it.context)
+                        .setTitle("Confirmation")
+                        .setMessage("Give me your data")
+                        .setView(editText)
+                        .setPositiveButton("Ok") { _, _ ->
+                            println("refresh")
+                            getContactClick()
+                        }
+                        .setNegativeButton("Cancel") { _, _ -> }
+                        .show()
+            }
 }
