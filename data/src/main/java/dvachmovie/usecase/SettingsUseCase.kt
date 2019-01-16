@@ -11,7 +11,10 @@ import javax.inject.Inject
 open class SettingsUseCase @Inject constructor(
         private val pref: KeyValueStorage
 ) {
-    private val LOADING_PARAM = "LoadingParam"
+
+    companion object {
+        private const val LOADING_PARAM = "LoadingParam"
+    }
 
     fun getLoadingParam(): Boolean {
         if (pref.getBoolean(LOADING_PARAM) != null) {

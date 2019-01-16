@@ -1,6 +1,7 @@
 package dvachmovie.api
 
 import dvachmovie.Constants.Companion.BASE_URL
+import dvachmovie.Constants.Companion.CONTACT_URL
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,13 +24,13 @@ object RetrofitSingleton {
 
     fun getContactsApi(): ContactsApi? {
         val httpUrl = HttpUrl.Builder()
-                .host("192.168.1.112")
+                .host(CONTACT_URL)
                 .port(8000)
                 .scheme("http")
                 .build()
         if (contactsApi == null) {
             val retrofit = Retrofit.Builder()
-                   .baseUrl(httpUrl)
+                    .baseUrl(httpUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
             contactsApi = retrofit.create(ContactsApi::class.java)

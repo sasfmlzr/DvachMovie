@@ -2,7 +2,6 @@ package dvachmovie.usecase
 
 import dvachmovie.Constants
 import dvachmovie.api.DvachMovieApi
-import dvachmovie.api.RetrofitSingleton
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
@@ -13,7 +12,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
+class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
                                        private val movieCache: MovieCache) {
 
     private var listFilesItem = mutableListOf<FileItem>()
@@ -26,7 +25,7 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
     fun getNumThreads(board: String, initWebm: InitWebm) {
         this.initWebm = initWebm
         this.board = board
-        dvachApis.getCatalog(board).enqueue(dvachNumCallback(board))
+        dvachApi.getCatalog(board).enqueue(dvachNumCallback(board))
     }
 
     private fun dvachNumCallback(board: String): Callback<DvachCatalogRequest> {
@@ -46,8 +45,7 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
     }
 
     private fun getLinkFilesFromThreads(board: String, numThread: String) {
-        val dvachApi = RetrofitSingleton.getDvachMovieApi()
-        dvachApi?.getThread(board, numThread)?.enqueue(dvachLinkFilesCallback())
+        dvachApi.getThread(board, numThread).enqueue(dvachLinkFilesCallback())
     }
 
     private fun dvachLinkFilesCallback(): Callback<DvachThreadRequest> {
@@ -57,7 +55,13 @@ class DvachUseCase @Inject constructor(private val dvachApis: DvachMovieApi,
 
                 val num = resp?.title
                 println("dvachLinkFiles started for $num")
-                resp?.threads?.map { it.posts?.map { it.files?.forEach { listFilesItem.add(it) } } }
+                resp?.threads?.map { thread ->
+                    thread.posts?.map { post ->
+                        post.files?.forEach { file ->
+                            listFilesItem.add(file)
+                        }
+                    }
+                }
                 count++
                 initWebm.countVideoUpdates(count)
                 println("dvachLinkFiles finished for $num")

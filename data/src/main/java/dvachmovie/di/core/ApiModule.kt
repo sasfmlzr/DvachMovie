@@ -16,7 +16,7 @@ class ApiModule {
     ) = Retrofit.Builder()
             .baseUrl("https://2ch.hk")
             .addConverterFactory(GsonConverterFactory.create())
-            .build()
+            .build()!!
 
     @Provides
     @Singleton
