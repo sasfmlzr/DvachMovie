@@ -30,7 +30,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         binding.viewModel = viewModel
 
         viewModel.prepareLoading.observe(this, Observer {
-            settingsUseCase.putLoadingParam(it)
+            settingsUseCase.putBoolLoadingParam(it)
         })
 
         viewModel.onRefreshDB.observe(this, Observer {

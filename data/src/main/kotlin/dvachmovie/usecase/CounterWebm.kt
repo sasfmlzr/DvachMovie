@@ -1,7 +1,6 @@
 package dvachmovie.usecase
 
-interface InitWebm {
-    fun initWebm()
+interface CounterWebm {
     fun countVideoUpdates(count: Int)
     fun countVideoCalculatedSumm(summCount: Int)
 }

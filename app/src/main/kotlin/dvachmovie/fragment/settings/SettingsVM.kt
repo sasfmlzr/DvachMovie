@@ -20,7 +20,7 @@ class SettingsVM @Inject constructor(
     lateinit var getContactClick: (() -> Unit)
 
     init {
-        prepareLoading.value = settingsUseCase.getLoadingParam()
+        prepareLoading.value = settingsUseCase.getBoolLoadingParam()
         onRefreshDB.value = false
     }
 

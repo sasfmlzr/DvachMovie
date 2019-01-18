@@ -19,12 +19,14 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
     private var listMovies = mutableListOf<MovieEntity>()
     private var listMovieSize = 0
     private var count = 0
-    private var board: String = ""
-    private lateinit var initWebm: InitWebm
+    private lateinit var board: String
+    private lateinit var counterWebm: CounterWebm
+    private lateinit var executorResult: ExecutorResult
 
-    fun getNumThreads(board: String, initWebm: InitWebm) {
-        this.initWebm = initWebm
+    fun execute(board: String, counterWebm: CounterWebm, executorResult: ExecutorResult) {
+        this.counterWebm = counterWebm
         this.board = board
+        this.executorResult = executorResult
         dvachApi.getCatalog(board).enqueue(dvachNumCallback(board))
     }
 
@@ -37,10 +39,12 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
                 numThreads?.map { num -> getLinkFilesFromThreads(board, num) }
                 println("dvachNum finished")
                 listMovieSize = numThreads!!.size
-                initWebm.countVideoCalculatedSumm(listMovieSize)
+                counterWebm.countVideoCalculatedSumm(listMovieSize)
             }
 
-            override fun onFailure(call: Call<DvachCatalogRequest>, t: Throwable) {}
+            override fun onFailure(call: Call<DvachCatalogRequest>, t: Throwable) {
+                executorResult.onFailure(t)
+            }
         }
     }
 
@@ -63,14 +67,16 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
                     }
                 }
                 count++
-                initWebm.countVideoUpdates(count)
+                counterWebm.countVideoUpdates(count)
                 println("dvachLinkFiles finished for $num")
                 if (count == listMovieSize) {
                     setupUriVideos()
                 }
             }
 
-            override fun onFailure(call: Call<DvachThreadRequest>, t: Throwable) {}
+            override fun onFailure(call: Call<DvachThreadRequest>, t: Throwable) {
+                executorResult.onFailure(t)
+            }
         }
     }
 
@@ -93,6 +99,6 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
 
     private fun initWebm() {
         movieCache.movieList.value = listMovies
-        initWebm.initWebm()
+        executorResult.onSuccess()
     }
 }

@@ -11,8 +11,9 @@ import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.repository.local.MovieRepository
+import dvachmovie.usecase.CounterWebm
 import dvachmovie.usecase.DvachUseCase
-import dvachmovie.usecase.InitWebm
+import dvachmovie.usecase.ExecutorResult
 import dvachmovie.usecase.SettingsUseCase
 import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
@@ -44,29 +45,34 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun prepareData() {
         movieRepository.observe(this, Observer { movies ->
-            if (settingsUseCase.getLoadingParam() == Constants.LOADING_EVERY_TIME ||
+            if (settingsUseCase.getBoolLoadingParam() == Constants.LOADING_EVERY_TIME ||
                     movies.size < 100) {
-                dvachUseCase.getNumThreads("b", initWebm())
+                dvachUseCase.execute("b", counterWebm, executorResult)
             } else {
                 router.navigateStartToMovieFragment()
             }
         })
     }
 
-    private fun initWebm(): InitWebm {
-        return object : InitWebm {
-            override fun initWebm() {
-                WorkerManager.initDB()
-                router.navigateStartToMovieFragment()
-            }
+    private val counterWebm = object : CounterWebm {
+        override fun countVideoUpdates(count: Int) {
+            binding.progressLoadingSource.progress = count
+        }
 
-            override fun countVideoUpdates(count: Int) {
-                binding.progressLoadingSource.progress = count
-            }
-
-            override fun countVideoCalculatedSumm(summCount: Int) {
-                binding.progressLoadingSource.max = summCount
-            }
+        override fun countVideoCalculatedSumm(summCount: Int) {
+            binding.progressLoadingSource.max = summCount
         }
     }
+
+    private val executorResult = object : ExecutorResult {
+        override fun onSuccess() {
+            WorkerManager.initDB()
+            router.navigateStartToMovieFragment()
+        }
+
+        override fun onFailure(t: Throwable) {
+            extensions.showMessage(t.message!!)
+        }
+    }
+
 }

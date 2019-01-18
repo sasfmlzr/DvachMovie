@@ -13,17 +13,17 @@ open class SettingsUseCase @Inject constructor(
 ) {
 
     companion object {
-        private const val LOADING_PARAM = "LoadingParam"
+        private const val LOADING_PARAM = "LoadingMoviesOrNot"
     }
 
-    fun getLoadingParam(): Boolean {
+    fun getBoolLoadingParam(): Boolean {
         if (pref.getBoolean(LOADING_PARAM) != null) {
             return pref.getBoolean(LOADING_PARAM)!!
         }
         return LOADING_NOT_NEEDED
     }
 
-    fun putLoadingParam(value: Boolean) {
+    fun putBoolLoadingParam(value: Boolean) {
         val job = SupervisorJob()
         val scope = CoroutineScope(Dispatchers.Default + job)
 

@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @SuppressLint("ApplySharedPref")
 @Singleton
 internal class SharedPreferencesStorage @Inject constructor(
