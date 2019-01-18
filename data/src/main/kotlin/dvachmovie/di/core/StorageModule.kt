@@ -2,8 +2,8 @@ package dvachmovie.di.core
 
 import dagger.Binds
 import dagger.Module
-import dvachmovie.storage.KeyValueStorage
-import dvachmovie.storage.SharedPreferencesStorage
+import dvachmovie.storage.base.KeyValueStorage
+import dvachmovie.storage.base.SharedPreferencesStorage
 import javax.inject.Singleton
 
 @Module

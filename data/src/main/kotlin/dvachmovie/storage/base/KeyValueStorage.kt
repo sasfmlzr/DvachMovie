@@ -1,4 +1,4 @@
-package dvachmovie.storage
+package dvachmovie.storage.base
 
 interface KeyValueStorage {
     fun putString(key: String, value: String)

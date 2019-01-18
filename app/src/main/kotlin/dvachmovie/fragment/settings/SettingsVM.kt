@@ -6,11 +6,11 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dvachmovie.usecase.SettingsUseCase
+import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
-        settingsUseCase: SettingsUseCase
+        settingsStorage: SettingsStorage
 ) : ViewModel() {
 
     val prepareLoading = MutableLiveData<Boolean>()
@@ -20,7 +20,7 @@ class SettingsVM @Inject constructor(
     lateinit var getContactClick: (() -> Unit)
 
     init {
-        prepareLoading.value = settingsUseCase.getBoolLoadingParam()
+        prepareLoading.value = settingsStorage.getBoolLoadingParam()
         onRefreshDB.value = false
     }
 

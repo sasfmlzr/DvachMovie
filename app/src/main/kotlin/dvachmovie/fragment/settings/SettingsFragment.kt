@@ -10,7 +10,7 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.usecase.SettingsUseCase
+import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class.java) {
 
     @Inject
-    lateinit var settingsUseCase: SettingsUseCase
+    lateinit var settingsStorage: SettingsStorage
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +30,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         binding.viewModel = viewModel
 
         viewModel.prepareLoading.observe(this, Observer {
-            settingsUseCase.putBoolLoadingParam(it)
+            settingsStorage.putBoolLoadingParam(it)
         })
 
         viewModel.onRefreshDB.observe(this, Observer {

@@ -14,7 +14,7 @@ import dvachmovie.repository.local.MovieRepository
 import dvachmovie.usecase.CounterWebm
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.ExecutorResult
-import dvachmovie.usecase.SettingsUseCase
+import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
@@ -25,7 +25,7 @@ class StartFragment : BaseFragment<StartVM,
     lateinit var dvachUseCase: DvachUseCase
 
     @Inject
-    lateinit var settingsUseCase: SettingsUseCase
+    lateinit var settingsStorage: SettingsStorage
 
     @Inject
     lateinit var movieRepository: MovieRepository
@@ -45,7 +45,7 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun prepareData() {
         movieRepository.observe(this, Observer { movies ->
-            if (settingsUseCase.getBoolLoadingParam() == Constants.LOADING_EVERY_TIME ||
+            if (settingsStorage.getBoolLoadingParam() == Constants.LOADING_EVERY_TIME ||
                     movies.size < 100) {
                 dvachUseCase.execute("b", counterWebm, executorResult)
             } else {
