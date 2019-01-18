@@ -19,6 +19,7 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
     private var listMovies = mutableListOf<MovieEntity>()
     private var listMovieSize = 0
     private var count = 0
+
     private lateinit var board: String
     private lateinit var counterWebm: CounterWebm
     private lateinit var executorResult: ExecutorResult
@@ -32,12 +33,16 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
 
     private fun dvachNumCallback(board: String): Callback<DvachCatalogRequest> {
         return object : Callback<DvachCatalogRequest> {
-            override fun onResponse(call: Call<DvachCatalogRequest>, response: Response<DvachCatalogRequest>) {
-                val resp = response.body()
-                val numThreads = resp?.threads?.map { it.num }
+            override fun onResponse(call: Call<DvachCatalogRequest>,
+                                    response: Response<DvachCatalogRequest>) {
+                val numThreads = response.body()!!.threads?.map { it.num }
+
                 println("dvachNum started")
-                numThreads?.map { num -> getLinkFilesFromThreads(board, num) }
+                numThreads?.map { num ->
+                    getLinkFilesFromThreads(board, num)
+                }
                 println("dvachNum finished")
+
                 listMovieSize = numThreads!!.size
                 counterWebm.countVideoCalculatedSumm(listMovieSize)
             }
@@ -54,7 +59,8 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
 
     private fun dvachLinkFilesCallback(): Callback<DvachThreadRequest> {
         return object : Callback<DvachThreadRequest> {
-            override fun onResponse(call: Call<DvachThreadRequest>, response: Response<DvachThreadRequest>) {
+            override fun onResponse(call: Call<DvachThreadRequest>,
+                                    response: Response<DvachThreadRequest>) {
                 val resp = response.body()
 
                 val num = resp?.title
@@ -75,6 +81,7 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
             }
 
             override fun onFailure(call: Call<DvachThreadRequest>, t: Throwable) {
+                count++
                 executorResult.onFailure(t)
             }
         }
@@ -82,22 +89,22 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
 
     private fun setupUriVideos() {
         var count = listFilesItem.size
-        listFilesItem.map {
-            val path = it.path
+        listFilesItem.map { fileItem ->
+            val path = fileItem.path
             if (path.contains(".webm")) {
                 val movieEntity = MovieEntity(board = this.board,
                         movieUrl = Constants.DVACH_URL + path,
-                        previewUrl = Constants.DVACH_URL + it.thumbnail)
+                        previewUrl = Constants.DVACH_URL + fileItem.thumbnail)
                 listMovies.add(movieEntity)
             }
             count--
             if (count == 0) {
-                initWebm()
+                finally()
             }
         }
     }
 
-    private fun initWebm() {
+    private fun finally() {
         movieCache.movieList.value = listMovies
         executorResult.onSuccess()
     }
