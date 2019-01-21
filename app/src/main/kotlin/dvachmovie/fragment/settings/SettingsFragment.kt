@@ -10,6 +10,8 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
+import dvachmovie.repository.local.MovieCache
+import dvachmovie.repository.local.MovieRepository
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
@@ -19,6 +21,10 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
     @Inject
     lateinit var settingsStorage: SettingsStorage
+    @Inject
+    lateinit var movieCaches: MovieCache
+    @Inject
+    lateinit var movieRepository: MovieRepository
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +42,8 @@ class SettingsFragment : BaseFragment<SettingsVM,
         viewModel.onRefreshDB.observe(this, Observer {
             if (it) {
                 WorkerManager.deleteAllInDB(this) {
+                    movieCaches.movieList.value = mutableListOf()
+                    movieRepository.getMovies().value = mutableListOf()
                     router.navigateSettingsToStartFragment()
                 }
             }

@@ -23,7 +23,6 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.binding.PlayerViewBindingAdapter
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
-import dvachmovie.db.data.MovieEntity
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
@@ -61,7 +60,7 @@ class MovieFragment : BaseFragment<MovieVM,
             }
         })
 
-        movieRepository.observe(viewLifecycleOwner)
+        movieRepository.observeDB(viewLifecycleOwner)
 
         viewModel.currentPos.value = Pair(movieRepository.getPos(), 0)
 
@@ -147,12 +146,13 @@ class MovieFragment : BaseFragment<MovieVM,
         }
     }
 
-    private fun setUpCurrentMovie(isPlayed: Int): MovieEntity {
-        val movieUri = binding.viewModel!!.getUrlList().value!![player.player.currentPeriodIndex]
-        movieUri.isPlayed = isPlayed
-        movieRepository.isCalculateDiff = false
-        movieRepository.getCurrent().value = movieUri
-        return movieUri
+    private fun setUpCurrentMovie(isPlayed: Int) {
+        if (binding.viewModel!!.getUrlList().value!!.size != 0) {
+            val movieUri = binding.viewModel!!.getUrlList().value!![player.player.currentPeriodIndex]
+            movieUri.isPlayed = isPlayed
+            movieRepository.isCalculateDiff = false
+            movieRepository.getCurrent().value = movieUri
+        }
     }
 
     //      ------------GESTURE LISTENER--------------

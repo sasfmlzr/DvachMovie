@@ -20,7 +20,8 @@ class MovieRepository @Inject constructor(
 
     fun getMovies() = movieStorage.movieList
 
-    fun observe(lifecycleOwner: LifecycleOwner) {
+    fun observeDB(lifecycleOwner: LifecycleOwner) {
+        isCalculateDiff = true
         movieDBRepository.getAll().observe(lifecycleOwner, Observer {
             val list = mutableListOf<MovieEntity>()
             if (isCalculateDiff) {
@@ -34,7 +35,7 @@ class MovieRepository @Inject constructor(
         })
     }
 
-    fun observe(lifecycleOwner: LifecycleOwner, observer: Observer<List<MovieEntity>>) {
+    fun observeDB(lifecycleOwner: LifecycleOwner, observer: Observer<List<MovieEntity>>) {
         movieDBRepository.getAll().observe(lifecycleOwner, observer)
     }
 

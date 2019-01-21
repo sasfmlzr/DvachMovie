@@ -11,12 +11,14 @@ import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.repository.local.MovieRepository
+import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.CounterWebm
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.ExecutorResult
-import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
+import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class StartFragment : BaseFragment<StartVM,
         FragmentStartBinding>(StartVM::class.java) {
@@ -30,6 +32,10 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var movieRepository: MovieRepository
 
+    private val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + Job()
+    private val coroutineScope = CoroutineScope(coroutineContext)
+
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +45,18 @@ class StartFragment : BaseFragment<StartVM,
         binding = FragmentStartBinding.inflate(inflater, container, false)
 
         binding.viewModel = viewModel
-        prepareData()
+
+        coroutineScope.launch {
+            delay(500)
+            withContext(Dispatchers.Main) {
+                prepareData()
+            }
+        }
         return binding.root
     }
 
     private fun prepareData() {
-        movieRepository.observe(this, Observer { movies ->
+        movieRepository.observeDB(viewLifecycleOwner, Observer { movies ->
             if (settingsStorage.getBoolLoadingParam() == Constants.LOADING_EVERY_TIME ||
                     movies.size < 100) {
                 dvachUseCase.execute("b", counterWebm, executorResult)
