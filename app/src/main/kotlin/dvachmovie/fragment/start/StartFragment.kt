@@ -16,9 +16,7 @@ import dvachmovie.usecase.CounterWebm
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.ExecutorResult
 import dvachmovie.worker.WorkerManager
-import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class StartFragment : BaseFragment<StartVM,
         FragmentStartBinding>(StartVM::class.java) {
@@ -32,10 +30,6 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var movieRepository: MovieRepository
 
-    private val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + Job()
-    private val coroutineScope = CoroutineScope(coroutineContext)
-
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -43,15 +37,10 @@ class StartFragment : BaseFragment<StartVM,
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = FragmentStartBinding.inflate(inflater, container, false)
-
         binding.viewModel = viewModel
 
-        coroutineScope.launch {
-            delay(500)
-            withContext(Dispatchers.Main) {
-                prepareData()
-            }
-        }
+        prepareData()
+
         return binding.root
     }
 
