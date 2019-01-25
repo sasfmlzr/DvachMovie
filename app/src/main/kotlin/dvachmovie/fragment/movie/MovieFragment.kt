@@ -22,6 +22,7 @@ import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.binding.PlayerViewBindingAdapter
 import dvachmovie.architecture.listener.OnSwipeTouchListener
+import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.repository.local.MovieRepository
@@ -33,8 +34,15 @@ import javax.inject.Inject
 class MovieFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class.java) {
 
+    companion object {
+        private const val TAG = "MovieFragment"
+    }
+
     @Inject
     lateinit var movieRepository: MovieRepository
+
+    @Inject
+    lateinit var logger: Logger
 
     private lateinit var player: PlayerView
 
@@ -112,11 +120,11 @@ class MovieFragment : BaseFragment<MovieVM,
                     val pos = player.player.currentWindowIndex
 
                     if (movieRepository.posPlayer == pos - 1) {
-                        println("FORWARD POS ---------------------")
+                        logger.d(TAG, "FORWARD POS ---------------------")
                     }
 
                     if (movieRepository.posPlayer == pos + 1) {
-                        println("PREW POS ---------------------")
+                        logger.d(TAG, "PREW POS ---------------------")
                     }
 
                     movieRepository.posPlayer = pos

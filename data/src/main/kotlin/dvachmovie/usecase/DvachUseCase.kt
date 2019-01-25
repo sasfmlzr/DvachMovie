@@ -5,6 +5,7 @@ import dvachmovie.api.DvachMovieApi
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
+import dvachmovie.architecture.logging.Logger
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieCache
 import retrofit2.Call
@@ -13,9 +14,14 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
-                                       private val movieCache: MovieCache) {
+                                       private val movieCache: MovieCache,
+                                       private val logger: Logger) {
 
-    private var listFilesItem = mutableListOf<FileItem>()
+    companion object {
+        private const val TAG = "DvachUseCase"
+    }
+
+    private var listFiles = mutableListOf<FileItem>()
     private var listMovies = mutableListOf<MovieEntity>()
     private var listMovieSize = 0
     private var count = 0
@@ -37,11 +43,11 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
                                     response: Response<DvachCatalogRequest>) {
                 val numThreads = response.body()!!.threads?.map { it.num }
 
-                println("dvachNum started")
+                logger.d(TAG, "connects to 2.hk...")
                 numThreads?.map { num ->
                     getLinkFilesFromThreads(board, num)
                 }
-                println("dvachNum finished")
+                logger.d(TAG, "2.hk connected")
 
                 listMovieSize = numThreads!!.size
                 counterWebm.countVideoCalculatedSumm(listMovieSize)
@@ -64,17 +70,17 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
                 val resp = response.body()
 
                 val num = resp?.title
-                println("dvachLinkFiles started for $num")
+                logger.d(TAG, "parsing started for $num")
                 resp?.threads?.map { thread ->
                     thread.posts?.map { post ->
                         post.files?.forEach { file ->
-                            listFilesItem.add(file)
+                            listFiles.add(file)
                         }
                     }
                 }
                 count++
                 counterWebm.countVideoUpdates(count)
-                println("dvachLinkFiles finished for $num")
+                logger.d(TAG, "parsing finished for $num")
                 if (count == listMovieSize) {
                     setupUriVideos()
                 }
@@ -88,8 +94,8 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
     }
 
     private fun setupUriVideos() {
-        var count = listFilesItem.size
-        listFilesItem.map { fileItem ->
+        var count = listFiles.size
+        listFiles.map { fileItem ->
             val path = fileItem.path
             if (path.contains(".webm")) {
                 val movieEntity = MovieEntity(board = this.board,

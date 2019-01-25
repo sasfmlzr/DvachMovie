@@ -6,12 +6,18 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
-        settingsStorage: SettingsStorage
+        settingsStorage: SettingsStorage,
+        private val logger: Logger
 ) : ViewModel() {
+
+    companion object {
+        private const val TAG = "SettingsVM"
+    }
 
     val prepareLoading = MutableLiveData<Boolean>()
 
@@ -35,7 +41,7 @@ class SettingsVM @Inject constructor(
                         .setTitle("Confirmation")
                         .setMessage("Database will clean")
                         .setPositiveButton("Ok") { _, _ ->
-                            println("refresh")
+                            logger.d(TAG, "refresh database")
                             onRefreshDB.value = true
                         }
                         .setNegativeButton("Cancel") { _, _ -> }
@@ -51,7 +57,6 @@ class SettingsVM @Inject constructor(
                         .setMessage("Give me your data")
                         .setView(editText)
                         .setPositiveButton("Ok") { _, _ ->
-                            println("refresh")
                             getContactClick()
                         }
                         .setNegativeButton("Cancel") { _, _ -> }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import dvachmovie.Constants
 import dvachmovie.architecture.base.BaseFragment
+import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
@@ -21,6 +22,10 @@ import javax.inject.Inject
 class StartFragment : BaseFragment<StartVM,
         FragmentStartBinding>(StartVM::class.java) {
 
+    companion object {
+        private const val TAG = "StartFragment"
+    }
+
     @Inject
     lateinit var dvachUseCase: DvachUseCase
 
@@ -29,6 +34,9 @@ class StartFragment : BaseFragment<StartVM,
 
     @Inject
     lateinit var movieRepository: MovieRepository
+
+    @Inject
+    lateinit var logger: Logger
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
@@ -72,6 +80,7 @@ class StartFragment : BaseFragment<StartVM,
         }
 
         override fun onFailure(t: Throwable) {
+            logger.e(TAG, "dvachUseCase error")
             extensions.showMessage(t.message!!)
         }
     }

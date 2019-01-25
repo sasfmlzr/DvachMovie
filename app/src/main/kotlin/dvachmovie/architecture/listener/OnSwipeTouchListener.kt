@@ -8,6 +8,11 @@ import android.view.View
 
 open class OnSwipeTouchListener(ctx: Context) : View.OnTouchListener {
 
+    companion object {
+        private const val SWIPE_THRESHOLD = 100
+        private const val SWIPE_VELOCITY_THRESHOLD = 100
+    }
+
     private val gestureDetector: GestureDetector
 
     init {
@@ -21,16 +26,13 @@ open class OnSwipeTouchListener(ctx: Context) : View.OnTouchListener {
 
     private inner class GestureListener : android.view.GestureDetector.SimpleOnGestureListener() {
 
-        private val SWIPE_THRESHOLD = 100
-        private val SWIPE_VELOCITY_THRESHOLD = 100
-
         override fun onDown(e: MotionEvent): Boolean {
             return true
         }
 
         override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             var result = false
-            try {
+
                 val diffY = e2.y - e1.y
                 val diffX = e2.x - e1.x
                 if (Math.abs(diffX) > Math.abs(diffY)) {
@@ -50,10 +52,6 @@ open class OnSwipeTouchListener(ctx: Context) : View.OnTouchListener {
                     }
                     result = true
                 }
-            } catch (exception: Exception) {
-                exception.printStackTrace()
-            }
-
             return result
         }
     }
