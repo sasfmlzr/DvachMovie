@@ -11,48 +11,49 @@ class Navigator(private val router: NavController) {
 
     fun navigateStartToMovieFragment() {
         val direction = StartFragmentDirections
-                .ActionShowMovieFragment()
+                .actionShowMovieFragment()
         router.navigate(direction)
     }
 
     fun navigateSettingsToStartFragment() {
-        val direction = SettingsFragmentDirections.ActionShowStartFragment()
+        val direction = SettingsFragmentDirections
+                .actionShowStartFragment()
         router.navigate(direction)
     }
 
     fun navigateSettingsToContactsFragment() {
         val direction = SettingsFragmentDirections
-                .ActionShowContactsFragment()
+                .actionShowContactsFragment()
         router.navigate(direction)
     }
 
     fun navigatePreviewToMovieFragment() {
         val direction = PreviewFragmentDirections
-                .ActionShowMovieFragment()
+                .actionShowMovieFragment()
         router.navigate(direction)
     }
 
     fun navigateMovieToPreviewFragment() {
         val direction = MovieFragmentDirections
-                .ActionShowPreviewFragment()
+                .actionShowPreviewFragment()
         router.navigate(direction)
     }
 
     fun navigateMovieToSettingsFragment() {
         val direction = MovieFragmentDirections
-                .ActionShowSettingsFragment()
+                .actionShowSettingsFragment()
         router.navigate(direction)
     }
 
     fun navigateMovieToBackFragment() {
         val direction = MovieFragmentDirections
-                .ActionShowBackFragment()
+                .actionShowBackFragment()
         router.navigate(direction)
     }
 
     fun navigateBackToMovieFragment() {
         val direction = BackFragmentDirections
-                .ActionShowMovieFragment()
+                .actionShowMovieFragment()
         router.navigate(direction)
     }
 }
