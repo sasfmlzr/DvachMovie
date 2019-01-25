@@ -60,11 +60,10 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
     }
 
     private fun getLinkFilesFromThreads(board: String, numThread: String) {
-        dvachApi.getThread(board, numThread).enqueue(dvachLinkFilesCallback())
+        dvachApi.getThread(board, numThread).enqueue(dvachLinkFilesCallback)
     }
 
-    private fun dvachLinkFilesCallback(): Callback<DvachThreadRequest> {
-        return object : Callback<DvachThreadRequest> {
+    private val dvachLinkFilesCallback =  object : Callback<DvachThreadRequest> {
             override fun onResponse(call: Call<DvachThreadRequest>,
                                     response: Response<DvachThreadRequest>) {
                 val resp = response.body()
@@ -88,10 +87,10 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
 
             override fun onFailure(call: Call<DvachThreadRequest>, t: Throwable) {
                 count++
+                logger.e(TAG, "dvachUseCase error")
                 executorResult.onFailure(t)
             }
         }
-    }
 
     private fun setupUriVideos() {
         var count = listFiles.size

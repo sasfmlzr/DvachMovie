@@ -80,7 +80,6 @@ class StartFragment : BaseFragment<StartVM,
         }
 
         override fun onFailure(t: Throwable) {
-            logger.e(TAG, "dvachUseCase error")
             extensions.showMessage(t.message!!)
         }
     }

@@ -37,7 +37,7 @@ class DirectoryHelper private constructor(context: Context) : ContextWrapper(con
 
     companion object {
 
-        val ROOT_DIRECTORY_NAME = "DownloadManager"
+        const val ROOT_DIRECTORY_NAME = "DownloadManager"
 
         fun createDirectory(context: Context) {
             DirectoryHelper(context)
