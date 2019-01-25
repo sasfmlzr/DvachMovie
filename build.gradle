@@ -2,27 +2,27 @@
 
 buildscript {
     ext {
-        appcompatVersion = '1.0.2'
+        appcompatVersion = '1.1.0-alpha01'
         constraintLayoutVersion = '2.0.0-alpha3'
-        daggerVersion = '2.19'
+        daggerVersion = '2.21'
         exoplayerVersion = '2.9.0'
         glideVersion = '4.8.0'
         gradleVersion = '3.4.0-beta01'
         gsonVersion = '2.8.5'
-        junitVersion = '4.12'
-        kotlinVersion = '1.3.11'
-        lifecycleVersion = '2.0.0'
+        junitVersion = '4.13-beta-1'
+        kotlinVersion = '1.3.20'
+        lifecycleVersion = '2.1.0-alpha01'
         materialVersion = '1.1.0-alpha02'
-        mockitoVersion = '2.23.0'
+        mockitoVersion = '2.23.4'
         navigationVersion = '1.0.0-alpha09'
         placeholderviewVersion = '1.0.3'
-        retrofitVersion = '2.3.0'
+        retrofitVersion = '2.5.0'
         roomVersion = '2.1.0-alpha03'
         rxandroidVersion = '2.1.0'
         rxkotlinVersion = '2.3.0'
         timberVersion = '4.7.1'
         workVersion = '1.0.0-beta02'
-        coroutinesVersion = '1.1.0'
+        coroutinesVersion = '1.1.1'
     }
     repositories {
         google()
