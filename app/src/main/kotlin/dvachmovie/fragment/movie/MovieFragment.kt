@@ -40,9 +40,6 @@ class MovieFragment : BaseFragment<MovieVM,
     @Inject
     lateinit var movieRepository: MovieRepository
 
-    @Inject
-    lateinit var logger: Logger
-
     private lateinit var player: PlayerView
 
     override fun inject(component: FragmentComponent) = component.inject(this)
@@ -141,8 +138,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun configureButtons() {
         binding.shuffleButton.setOnClickListener {
-            movieRepository.getMovies().value =
-                    movieRepository.shuffle(movieRepository.getMovies().value!!)
+            movieRepository.shuffleMovies()
         }
 
         binding.downloadButton.setOnClickListener {

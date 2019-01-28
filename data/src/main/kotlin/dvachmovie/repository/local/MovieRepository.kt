@@ -39,6 +39,16 @@ class MovieRepository @Inject constructor(
         movieDBRepository.getAll().observe(lifecycleOwner, observer)
     }
 
+    fun shuffleMovies() {
+        val result = mutableListOf<MovieEntity>()
+        getMovies().value?.map {
+            if (it.isPlayed == 0) {
+                result.add(it)
+            }
+        }
+        getMovies().value = result.shuffled() as MutableList<MovieEntity>
+    }
+
     private fun calculateDiff(localList: MutableList<MovieEntity>,
                               dbList: MutableList<MovieEntity>):
             MutableList<MovieEntity> {
@@ -61,17 +71,6 @@ class MovieRepository @Inject constructor(
                 result.add(movie)
             }
         }
-
         return result
-    }
-
-    fun shuffle(localList: MutableList<MovieEntity>): MutableList<MovieEntity> {
-        val result = mutableListOf<MovieEntity>()
-        localList.map {
-            if (it.isPlayed == 0) {
-                result.add(it)
-            }
-        }
-        return result.shuffled() as MutableList<MovieEntity>
     }
 }

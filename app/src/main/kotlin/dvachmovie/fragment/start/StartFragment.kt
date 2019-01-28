@@ -22,10 +22,6 @@ import javax.inject.Inject
 class StartFragment : BaseFragment<StartVM,
         FragmentStartBinding>(StartVM::class.java) {
 
-    companion object {
-        private const val TAG = "StartFragment"
-    }
-
     @Inject
     lateinit var dvachUseCase: DvachUseCase
 
@@ -34,9 +30,6 @@ class StartFragment : BaseFragment<StartVM,
 
     @Inject
     lateinit var movieRepository: MovieRepository
-
-    @Inject
-    lateinit var logger: Logger
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 

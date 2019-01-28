@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import dvachmovie.architecture.Extensions
 import dvachmovie.architecture.Navigator
+import dvachmovie.architecture.logging.Logger
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import javax.inject.Inject
@@ -24,6 +24,8 @@ protected constructor(private val viewModelClass: Class<VM>) : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var logger: Logger
 
     protected abstract fun inject(component: FragmentComponent)
 
