@@ -26,9 +26,10 @@ class ApiModule {
     @Provides
     @Singleton
     fun getContactsRetrofitService(): ContactsApi {
+        val port = 8000
         val httpUrl = HttpUrl.Builder()
                 .host(CONTACT_URL)
-                .port(8000)
+                .port(port)
                 .scheme("http")
                 .build()
         val retrofit = Retrofit.Builder()

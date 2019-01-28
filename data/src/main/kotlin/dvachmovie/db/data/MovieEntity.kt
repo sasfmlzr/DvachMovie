@@ -18,10 +18,11 @@ data class MovieEntity(@PrimaryKey @ColumnInfo(name = "movieUrl") override val m
                     && isPlayed == other.isPlayed
 
     override fun hashCode(): Int {
+        val uniqueNumber = 31
         var result = movieUrl.hashCode()
-        result = 31 * result + previewUrl.hashCode()
-        result = 31 * result + board.hashCode()
-        result = 31 * result + isPlayed.hashCode()
+        result = uniqueNumber * result + previewUrl.hashCode()
+        result = uniqueNumber * result + board.hashCode()
+        result = uniqueNumber * result + isPlayed.hashCode()
         return result
     }
 }
