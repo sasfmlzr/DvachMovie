@@ -15,7 +15,9 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
         private const val DOWNLOAD_PATH = "dvachmovie.service_DownloadService_Download_path"
         private const val DESTINATION_PATH = "dvachmovie.service_DownloadService_Destination_path"
 
-        fun getDownloadService(@NonNull callingClassContext: Context, @NonNull downloadPath: String, @NonNull destinationPath: String): Intent {
+        fun getDownloadService(@NonNull callingClassContext: Context,
+                               @NonNull downloadPath: String,
+                               @NonNull destinationPath: String): Intent {
             return Intent(callingClassContext, DownloadService::class.java)
                     .putExtra(DOWNLOAD_PATH, downloadPath)
                     .putExtra(DESTINATION_PATH, destinationPath)
@@ -27,14 +29,17 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
         val destinationPath = intent.getStringExtra(DESTINATION_PATH)
         startDownload(downloadPath, destinationPath)
     }
+
     private fun startDownload(downloadPath: String, destinationPath: String) {
-        val uri = Uri.parse(downloadPath) // Path where you want to download file.
+        val uri = Uri.parse(downloadPath)
         val request = DownloadManager.Request(uri)
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)  // Tell on which network you want to download file.
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)  // This will show notification on top when downloading the file.
-        request.setTitle(uri.pathSegments.last()) // Title for notification.
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or
+                DownloadManager.Request.NETWORK_WIFI)
+        request.setNotificationVisibility(
+                DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setTitle(uri.pathSegments.last())
         request.setVisibleInDownloadsUi(true)
-        request.setDestinationInExternalPublicDir(destinationPath, uri.lastPathSegment)  // Storage directory path
-        (getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).enqueue(request) // This will start downloading
+        request.setDestinationInExternalPublicDir(destinationPath, uri.lastPathSegment)
+        (getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).enqueue(request)
     }
 }
