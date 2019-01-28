@@ -9,5 +9,4 @@ class MainApplication : Application() {
         Injector.prepare(this)
         Injector.applicationComponent().inject(this)
     }
-
 }
