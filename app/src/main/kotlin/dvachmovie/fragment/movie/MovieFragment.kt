@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -48,17 +47,13 @@ class MovieFragment : BaseFragment<MovieVM,
 
     override fun inject(component: FragmentComponent) = component.inject(this)
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentMovieBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
-        player = binding.playerView
-        player.player = ExoPlayerFactory.newSimpleInstance(player.context)
-        player.setOnTouchListener(onGestureListener(context!!))
+        initPlayer()
         configurePlayer()
         configureButtons()
 
@@ -105,6 +100,13 @@ class MovieFragment : BaseFragment<MovieVM,
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initPlayer() {
+        player = binding.playerView
+        player.player = ExoPlayerFactory.newSimpleInstance(player.context)
+        player.setOnTouchListener(onGestureListener(context!!))
+    }
+
     private fun configurePlayer() {
         movieRepository.posPlayer = player.player.currentWindowIndex
         player.player.addListener(object : Player.EventListener {
@@ -144,9 +146,7 @@ class MovieFragment : BaseFragment<MovieVM,
         }
 
         binding.downloadButton.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
-            }
+            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
         }
 
         binding.settingsButton.setOnClickListener {
@@ -165,7 +165,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
     //      ------------GESTURE LISTENER--------------
     private fun onGestureListener(context: Context) = object : OnSwipeTouchListener(context) {
-        override fun onEventTouch(event: MotionEvent){
+        override fun onEventTouch(event: MotionEvent) {
             if (event.action == MotionEvent.ACTION_DOWN) {
                 toggleControlsVisibility()
             }
