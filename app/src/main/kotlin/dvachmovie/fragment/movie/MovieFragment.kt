@@ -54,7 +54,7 @@ class MovieFragment : BaseFragment<MovieVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentMovieBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         player = binding.playerView
         player.player = ExoPlayerFactory.newSimpleInstance(player.context)
@@ -165,12 +165,10 @@ class MovieFragment : BaseFragment<MovieVM,
 
     //      ------------GESTURE LISTENER--------------
     private fun onGestureListener(context: Context) = object : OnSwipeTouchListener(context) {
-        @SuppressLint("ClickableViewAccessibility")
-        override fun onTouch(v: View, event: MotionEvent): Boolean {
+        override fun onEventTouch(event: MotionEvent){
             if (event.action == MotionEvent.ACTION_DOWN) {
                 toggleControlsVisibility()
             }
-            return super.onTouch(v, event)
         }
 
         override fun onSwipeTop() {
@@ -188,7 +186,6 @@ class MovieFragment : BaseFragment<MovieVM,
         }
     }
     //      ------------GESTURE LISTENER--------------
-
 
     private var isPrerare = false
     private var playbackPosition: Long = 0
