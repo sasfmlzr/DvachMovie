@@ -21,7 +21,6 @@ import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.binding.PlayerViewBindingAdapter
 import dvachmovie.architecture.listener.OnSwipeTouchListener
-import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.repository.local.MovieRepository
@@ -55,7 +54,7 @@ class MovieFragment : BaseFragment<MovieVM,
         configureButtons()
 
         movieRepository.getCurrent().observe(viewLifecycleOwner, Observer {
-            if (it.isPlayed != 0) {
+            if (it.isPlayed) {
                 WorkerManager.insertMovieInDB()
             }
         })
@@ -75,7 +74,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
     override fun onStop() {
         if (movieRepository.getMovies().value?.size != 0) {
-            setUpCurrentMovie(1)
+            setUpCurrentMovie(true)
         }
         player.player.stop()
         super.onStop()
@@ -111,7 +110,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
             override fun onPlayerError(error: ExoPlaybackException?) {
                 extensions.showMessage(error!!.cause?.localizedMessage!!)
-                setUpCurrentMovie(1)
+                setUpCurrentMovie(true)
             }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
@@ -127,7 +126,7 @@ class MovieFragment : BaseFragment<MovieVM,
                     }
 
                     movieRepository.posPlayer = pos
-                    setUpCurrentMovie(1)
+                    setUpCurrentMovie(true)
                     idAddedToDB = true
                 } else {
                     idAddedToDB = false
@@ -150,7 +149,7 @@ class MovieFragment : BaseFragment<MovieVM,
         }
     }
 
-    private fun setUpCurrentMovie(isPlayed: Int) {
+    private fun setUpCurrentMovie(isPlayed: Boolean) {
         if (binding.viewModel!!.getUrlList().value!!.size != 0) {
             val movieUri = binding.viewModel!!.getUrlList().value!![player.player.currentPeriodIndex]
             movieUri.isPlayed = isPlayed

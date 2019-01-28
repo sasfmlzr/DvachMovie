@@ -11,7 +11,7 @@
             type="android.view.View.OnClickListener"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{clickListener}">
@@ -20,8 +20,8 @@
             android:id="@+id/previewImage"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:contentDescription="@string/preview_image"
             android:scaleType="centerCrop"
-            app:imageFromUrl="@{viewModel.imageUrl}"
-            android:contentDescription="@string/preview_image" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:imageFromUrl="@{viewModel.imageUrl}" />
+    </FrameLayout>
 </layout>

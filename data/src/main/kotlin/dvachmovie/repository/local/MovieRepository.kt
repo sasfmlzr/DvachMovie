@@ -42,7 +42,7 @@ class MovieRepository @Inject constructor(
     fun shuffleMovies() {
         val result = mutableListOf<MovieEntity>()
         getMovies().value?.map {
-            if (it.isPlayed == 0) {
+            if (!it.isPlayed) {
                 result.add(it)
             }
         }
@@ -67,7 +67,7 @@ class MovieRepository @Inject constructor(
                     equals = true
                 }
             }
-            if (!equals && movie.isPlayed == 0) {
+            if (!equals && !movie.isPlayed) {
                 result.add(movie)
             }
         }

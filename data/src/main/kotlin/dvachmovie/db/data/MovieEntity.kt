@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class MovieEntity(@PrimaryKey @ColumnInfo(name = "movieUrl") override val movieUrl: String,
                        @ColumnInfo(name = "previewUrl") override val previewUrl: String = "",
                        @ColumnInfo(name = "board") override val board: String = "",
-                       @ColumnInfo(name = "isPlayed") override var isPlayed: Int = 0
+                       @ColumnInfo(name = "isPlayed") override var isPlayed: Boolean = false
 ) : Movie {
     override fun equals(other: Any?) =
             other is Movie
@@ -21,7 +21,7 @@ data class MovieEntity(@PrimaryKey @ColumnInfo(name = "movieUrl") override val m
         var result = movieUrl.hashCode()
         result = 31 * result + previewUrl.hashCode()
         result = 31 * result + board.hashCode()
-        result = 31 * result + isPlayed
+        result = 31 * result + isPlayed.hashCode()
         return result
     }
 }
@@ -30,11 +30,5 @@ interface Movie {
      val movieUrl: String
      val previewUrl: String
      val board: String
-     var isPlayed: Int
+     var isPlayed: Boolean
 }
-
-
-class NullMovieEntity(override val movieUrl: String = "",
-                      override val previewUrl: String = "",
-                      override val board: String = "",
-                      override var isPlayed: Int = 0) : Movie
