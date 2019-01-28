@@ -34,5 +34,4 @@ protected constructor(private val viewModelClass: Class<VM>) : AppCompatActivity
                 .of(this, viewModelFactory)
                 .get(viewModelClass)
     }
-
 }
