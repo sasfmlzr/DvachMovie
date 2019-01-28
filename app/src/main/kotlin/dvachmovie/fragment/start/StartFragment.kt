@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import dvachmovie.Constants
 import dvachmovie.architecture.base.BaseFragment
-import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
@@ -21,6 +20,10 @@ import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartVM,
         FragmentStartBinding>(StartVM::class.java) {
+
+    companion object {
+        private const val MINIMUM_COUNT_MOVIES = 100
+    }
 
     @Inject
     lateinit var dvachUseCase: DvachUseCase
@@ -48,7 +51,7 @@ class StartFragment : BaseFragment<StartVM,
     private fun prepareData() {
         movieRepository.observeDB(viewLifecycleOwner, Observer { movies ->
             if (settingsStorage.getBoolLoadingParam() == Constants.LOADING_EVERY_TIME ||
-                    movies.size < 100) {
+                    movies.size < MINIMUM_COUNT_MOVIES) {
                 dvachUseCase.execute("b", counterWebm, executorResult)
             } else {
                 router.navigateStartToMovieFragment()

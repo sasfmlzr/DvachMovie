@@ -14,6 +14,10 @@ import javax.inject.Inject
 class PreviewFragment : BaseFragment<PreviewVM,
         FragmentPreviewMoviesBinding>(PreviewVM::class.java) {
 
+    companion object {
+        private const val SMOOTH_POSITION = 70
+    }
+
     @Inject
     lateinit var movieRepository: MovieRepository
     @Inject
@@ -50,7 +54,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
             pos = movieRepository.getMovies().value!!.indexOf(movieRepository.getCurrent().value)
         }
 
-        if (pos < 70) {
+        if (pos < SMOOTH_POSITION) {
             binding.moviesList.smoothScrollToPosition(pos)
         } else {
             binding.moviesList.scrollToPosition(pos)
