@@ -2,8 +2,8 @@ package dvachmovie.di.core
 
 import dagger.Module
 import dagger.Provides
-import dvachmovie.Constants
-import dvachmovie.Constants.Companion.DVACH_URL
+import dvachmovie.CONTACT_URL
+import dvachmovie.DVACH_URL
 import dvachmovie.api.ContactsApi
 import dvachmovie.api.DvachMovieApi
 import okhttp3.HttpUrl
@@ -27,7 +27,7 @@ class ApiModule {
     @Singleton
     fun getContactsRetrofitService(): ContactsApi {
         val httpUrl = HttpUrl.Builder()
-                .host(Constants.CONTACT_URL)
+                .host(CONTACT_URL)
                 .port(8000)
                 .scheme("http")
                 .build()

@@ -9,5 +9,4 @@ import dvachmovie.db.data.MovieEntity
 abstract class MovieDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao
-
 }

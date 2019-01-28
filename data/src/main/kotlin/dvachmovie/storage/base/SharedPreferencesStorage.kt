@@ -58,5 +58,4 @@ internal class SharedPreferencesStorage @Inject constructor(
 
     override fun getAll(): Map<String, *> =
             prefs.all
-
 }

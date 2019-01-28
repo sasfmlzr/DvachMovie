@@ -1,6 +1,6 @@
 package dvachmovie.storage
 
-import dvachmovie.Constants.Companion.LOADING_NOT_NEEDED
+import dvachmovie.LOADING_NOT_NEEDED
 import dvachmovie.storage.base.KeyValueStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
