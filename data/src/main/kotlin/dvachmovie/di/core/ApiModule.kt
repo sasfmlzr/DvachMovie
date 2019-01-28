@@ -13,6 +13,10 @@ import javax.inject.Singleton
 
 @Module
 class ApiModule {
+    companion object {
+        private const val port = 8000
+    }
+
     @Provides
     @Singleton
     fun dvachRetrofitService(): DvachMovieApi {
@@ -26,7 +30,6 @@ class ApiModule {
     @Provides
     @Singleton
     fun getContactsRetrofitService(): ContactsApi {
-        val port = 8000
         val httpUrl = HttpUrl.Builder()
                 .host(CONTACT_URL)
                 .port(port)

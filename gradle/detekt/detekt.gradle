@@ -1,0 +1,16 @@
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+detekt {
+    toolVersion = detektVersion
+    input = files("$projectDir")
+    filters = ".*/resources/.*,.*/build/.*"
+    config = files(
+            "${rootProject.projectDir.path}${File.separatorChar}gradle${File.separatorChar}detekt${File.separatorChar}detekt-default-rules.yml"
+    )
+    reports {
+        html {
+            enabled = true
+            destination = file("${project.buildDir}${File.separatorChar}reports${File.separatorChar}detekt/report.html")
+        }
+    }
+}

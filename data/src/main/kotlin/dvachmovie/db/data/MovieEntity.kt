@@ -10,6 +10,11 @@ data class MovieEntity(@PrimaryKey @ColumnInfo(name = "movieUrl") override val m
                        @ColumnInfo(name = "board") override val board: String = "",
                        @ColumnInfo(name = "isPlayed") override var isPlayed: Boolean = false
 ) : Movie {
+
+    companion object {
+        private const val uniqueNumber = 31
+    }
+
     override fun equals(other: Any?) =
             other is Movie
                     && movieUrl == other.movieUrl
@@ -18,7 +23,6 @@ data class MovieEntity(@PrimaryKey @ColumnInfo(name = "movieUrl") override val m
                     && isPlayed == other.isPlayed
 
     override fun hashCode(): Int {
-        val uniqueNumber = 31
         var result = movieUrl.hashCode()
         result = uniqueNumber * result + previewUrl.hashCode()
         result = uniqueNumber * result + board.hashCode()
@@ -28,8 +32,8 @@ data class MovieEntity(@PrimaryKey @ColumnInfo(name = "movieUrl") override val m
 }
 
 interface Movie {
-     val movieUrl: String
-     val previewUrl: String
-     val board: String
-     var isPlayed: Boolean
+    val movieUrl: String
+    val previewUrl: String
+    val board: String
+    var isPlayed: Boolean
 }
