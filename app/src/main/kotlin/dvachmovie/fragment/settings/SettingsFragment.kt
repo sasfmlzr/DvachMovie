@@ -53,10 +53,14 @@ class SettingsFragment : BaseFragment<SettingsVM,
             router.navigateSettingsToContactsFragment()
         }
 
+        setUpToolbar()
+
+        return binding.root
+    }
+
+    private fun setUpToolbar() {
         val activity = (activity as AppCompatActivity)
         activity.setSupportActionBar(binding.toolbar)
         activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-        return binding.root
     }
 }

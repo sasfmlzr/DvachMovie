@@ -73,7 +73,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        if (movieRepository.getMovies().value?.size != 0) {
+        if (movieRepository.getMovies().value!!.isNotEmpty()) {
             setUpCurrentMovie(true)
         }
         player.player.stop()
@@ -152,7 +152,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun setUpCurrentMovie(isPlayed: Boolean) {
-        if (binding.viewModel!!.getUrlList().value!!.size != 0) {
+        if (binding.viewModel!!.getUrlList().value!!.isNotEmpty()) {
             val movieUri = binding.viewModel!!.getUrlList().value!![player.player.currentPeriodIndex]
             movieUri.isPlayed = isPlayed
             movieRepository.isCalculateDiff = false

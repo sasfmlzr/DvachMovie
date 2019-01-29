@@ -8,6 +8,15 @@ import java.io.File
 
 class DirectoryHelper private constructor(context: Context) : ContextWrapper(context) {
 
+    companion object {
+
+        const val ROOT_DIRECTORY_NAME = "DownloadManager"
+
+        fun createDirectory(context: Context) {
+            DirectoryHelper(context)
+        }
+    }
+
     private val isExternalStorageAvailable: Boolean
         get() {
             val extStorageState = Environment.getExternalStorageState()
@@ -33,14 +42,5 @@ class DirectoryHelper private constructor(context: Context) : ContextWrapper(con
     private fun isDirectoryExists(directoryName: String): Boolean {
         val file = File(Environment.getExternalStorageDirectory().toString() + "/" + directoryName)
         return file.isDirectory && file.exists()
-    }
-
-    companion object {
-
-        const val ROOT_DIRECTORY_NAME = "DownloadManager"
-
-        fun createDirectory(context: Context) {
-            DirectoryHelper(context)
-        }
     }
 }
