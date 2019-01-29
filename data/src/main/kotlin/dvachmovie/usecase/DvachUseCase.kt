@@ -21,10 +21,8 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
         private const val TAG = "DvachUseCase"
     }
 
-    private var listFiles = mutableListOf<FileItem>()
     private var listMovies = mutableListOf<MovieEntity>()
     private var listMovieSize = 0
-    private var count = 0
 
     private lateinit var board: String
     private lateinit var counterWebm: CounterWebm
@@ -63,17 +61,20 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
         dvachApi.getThread(board, numThread).enqueue(dvachLinkFilesCallback)
     }
 
+    private var count = 0
     private val dvachLinkFilesCallback =  object : Callback<DvachThreadRequest> {
             override fun onResponse(call: Call<DvachThreadRequest>,
                                     response: Response<DvachThreadRequest>) {
                 val resp = response.body()
 
                 val num = resp?.title
+                val fileItems = mutableListOf<FileItem>()
                 logger.d(TAG, "parsing started for $num")
+
                 resp?.threads?.map { thread ->
                     thread.posts?.map { post ->
                         post.files?.forEach { file ->
-                            listFiles.add(file)
+                            fileItems.add(file)
                         }
                     }
                 }
@@ -81,24 +82,23 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
                 counterWebm.countVideoUpdates(count)
                 logger.d(TAG, "parsing finished for $num")
                 if (count == listMovieSize) {
-                    setupUriVideos()
+                    setupUriVideos(fileItems)
                 }
             }
 
             override fun onFailure(call: Call<DvachThreadRequest>, t: Throwable) {
                 count++
-                logger.e(TAG, "dvachUseCase error")
+                logger.e(TAG, "error")
                 executorResult.onFailure(t)
             }
         }
 
-    private fun setupUriVideos() {
-        var count = listFiles.size
-        listFiles.map { fileItem ->
-            val path = fileItem.path
-            if (path.contains(".webm")) {
+    private fun setupUriVideos(fileItems : MutableList<FileItem>) {
+        var count = fileItems.size
+        fileItems.map { fileItem ->
+            if (fileItem.path.contains(".webm")) {
                 val movieEntity = MovieEntity(board = this.board,
-                        movieUrl = DVACH_URL + path,
+                        movieUrl = DVACH_URL + fileItem.path,
                         previewUrl = DVACH_URL + fileItem.thumbnail)
                 listMovies.add(movieEntity)
             }
