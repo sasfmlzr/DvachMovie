@@ -2,6 +2,10 @@
 
 buildscript {
     ext {
+        compileSdkVersion = 28
+        minSdkVersion = 23
+        targetSdkVersion = 28
+
         appcompatVersion = '1.1.0-alpha01'
         constraintLayoutVersion = '2.0.0-alpha3'
         daggerVersion = '2.21'
@@ -19,8 +23,6 @@ buildscript {
         placeholderviewVersion = '1.0.3'
         retrofitVersion = '2.5.0'
         roomVersion = '2.1.0-alpha03'
-        rxandroidVersion = '2.1.0'
-        rxkotlinVersion = '2.3.0'
         timberVersion = '4.7.1'
         workVersion = '1.0.0-beta02'
         coroutinesVersion = '1.1.1'
