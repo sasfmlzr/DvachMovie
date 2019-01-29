@@ -20,7 +20,6 @@ buildscript {
         materialVersion = '1.1.0-alpha02'
         mockitoVersion = '2.23.4'
         navigationVersion = '1.0.0-alpha11'
-        placeholderviewVersion = '1.0.3'
         retrofitVersion = '2.5.0'
         roomVersion = '2.1.0-alpha03'
         timberVersion = '4.7.1'

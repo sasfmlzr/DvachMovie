@@ -48,15 +48,9 @@ dependencies {
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
 
-    implementation "com.google.code.gson:gson:$gsonVersion"
-
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     implementation "com.google.dagger:dagger:$daggerVersion"
     implementation "com.google.dagger:dagger-android:$daggerVersion"
-
-    implementation "com.mindorks.android:placeholderview:$placeholderviewVersion"
-    kapt "com.mindorks.android:placeholderview-compiler:$placeholderviewVersion"
 
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
@@ -67,7 +61,6 @@ dependencies {
     // Room components
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
-    androidTestImplementation "androidx.room:room-testing:$roomVersion"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
@@ -80,7 +73,6 @@ dependencies {
     implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
 
     implementation "android.arch.work:work-runtime-ktx:$workVersion"
-    implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
