@@ -1,7 +1,6 @@
 package dvachmovie.storage
 
 import dvachmovie.LOADING_NOT_NEEDED
-import dvachmovie.storage.base.KeyValueStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

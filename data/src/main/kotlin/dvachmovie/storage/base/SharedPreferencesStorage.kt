@@ -2,6 +2,7 @@ package dvachmovie.storage.base
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import dvachmovie.storage.KeyValueStorage
 import javax.inject.Inject
 import javax.inject.Singleton
 
