@@ -48,7 +48,7 @@ class MovieFragment : BaseFragment<MovieVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentMovieBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding.setLifecycleOwner(viewLifecycleOwner)
         initPlayer()
         configurePlayer()
         configureButtons()
