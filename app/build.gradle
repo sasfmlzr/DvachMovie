@@ -30,6 +30,24 @@ android {
     androidExtensions {
         experimental = true
     }
+
+    buildTypes {
+        debug {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
+        }
+
+        release {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+        }
+    }
+
 }
 
 dependencies {
