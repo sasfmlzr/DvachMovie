@@ -31,8 +31,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
 
     // Room components
@@ -43,7 +41,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$roomVersion"
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
     // Rx components
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
@@ -60,6 +58,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+    implementation(project(':domain'))
 
     // Tests
     testImplementation "junit:junit:$junitVersion"
