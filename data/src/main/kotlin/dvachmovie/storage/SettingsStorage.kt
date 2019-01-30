@@ -1,6 +1,5 @@
 package dvachmovie.storage
 
-import dvachmovie.LOADING_NOT_NEEDED
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -15,15 +14,14 @@ open class SettingsStorage @Inject constructor(
         private const val LOADING_PARAM = "LoadingMoviesOrNot"
     }
 
-    //TODO: LoadingNotNeeded to false
-    fun getBoolLoadingParam(): Boolean {
+    fun isLoadingEveryTime(): Boolean {
         if (pref.getBoolean(LOADING_PARAM) != null) {
             return pref.getBoolean(LOADING_PARAM)!!
         }
-        return LOADING_NOT_NEEDED
+        return false
     }
 
-    fun putBoolLoadingParam(value: Boolean) {
+    fun putLoadingEveryTime(value: Boolean) {
         val job = SupervisorJob()
         val scope = CoroutineScope(Dispatchers.Default + job)
 

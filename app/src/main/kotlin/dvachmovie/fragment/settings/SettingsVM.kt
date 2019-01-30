@@ -26,7 +26,7 @@ class SettingsVM @Inject constructor(
     lateinit var getContactClick: (() -> Unit)
 
     init {
-        prepareLoading.value = settingsStorage.getBoolLoadingParam()
+        prepareLoading.value = settingsStorage.isLoadingEveryTime()
         onRefreshDB.value = false
     }
 

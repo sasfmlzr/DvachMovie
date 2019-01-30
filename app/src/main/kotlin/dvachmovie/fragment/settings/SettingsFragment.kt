@@ -36,7 +36,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         binding.viewModel = viewModel
 
         viewModel.prepareLoading.observe(this, Observer {
-            settingsStorage.putBoolLoadingParam(it)
+            settingsStorage.putLoadingEveryTime(it)
         })
 
         viewModel.onRefreshDB.observe(this, Observer {

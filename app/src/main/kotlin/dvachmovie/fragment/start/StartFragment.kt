@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import dvachmovie.LOADING_EVERY_TIME
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
@@ -50,8 +49,7 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun prepareData() {
         movieRepository.observeDB(viewLifecycleOwner, Observer { movies ->
-            if (settingsStorage.getBoolLoadingParam() == LOADING_EVERY_TIME ||
-                    movies.size < MINIMUM_COUNT_MOVIES) {
+            if (settingsStorage.isLoadingEveryTime() || movies.size < MINIMUM_COUNT_MOVIES) {
                 dvachUseCase.execute("b", counterWebm, executorResult)
             } else {
                 router.navigateStartToMovieFragment()
