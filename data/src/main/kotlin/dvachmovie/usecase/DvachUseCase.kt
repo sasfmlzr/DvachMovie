@@ -1,11 +1,11 @@
 package dvachmovie.usecase
 
-import dvachmovie.DVACH_URL
 import dvachmovie.api.DvachMovieApi
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.api.model.thread.DvachThreadRequest
 import dvachmovie.api.model.thread.FileItem
 import dvachmovie.architecture.logging.Logger
+import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieCache
 import retrofit2.Call
@@ -63,43 +63,43 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
 
     private var listFiles = mutableListOf<FileItem>()
     private var count = 0
-    private val dvachLinkFilesCallback =  object : Callback<DvachThreadRequest> {
-            override fun onResponse(call: Call<DvachThreadRequest>,
-                                    response: Response<DvachThreadRequest>) {
-                val resp = response.body()
+    private val dvachLinkFilesCallback = object : Callback<DvachThreadRequest> {
+        override fun onResponse(call: Call<DvachThreadRequest>,
+                                response: Response<DvachThreadRequest>) {
+            val resp = response.body()
 
-                val num = resp?.title
-                logger.d(TAG, "parsing started for $num")
+            val num = resp?.title
+            logger.d(TAG, "parsing started for $num")
 
-                resp?.threads?.map { thread ->
-                    thread.posts?.map { post ->
-                        post.files?.forEach { file ->
-                            listFiles.add(file)
-                        }
+            resp?.threads?.map { thread ->
+                thread.posts?.map { post ->
+                    post.files?.forEach { file ->
+                        listFiles.add(file)
                     }
                 }
-                count++
-                counterWebm.countVideoUpdates(count)
-                logger.d(TAG, "parsing finished for $num")
-                if (count == listMovieSize) {
-                    setupUriVideos(listFiles)
-                }
             }
-
-            override fun onFailure(call: Call<DvachThreadRequest>, t: Throwable) {
-                count++
-                logger.e(TAG, "error")
-                executorResult.onFailure(t)
+            count++
+            counterWebm.countVideoUpdates(count)
+            logger.d(TAG, "parsing finished for $num")
+            if (count == listMovieSize) {
+                setupUriVideos(listFiles)
             }
         }
 
-    private fun setupUriVideos(fileItems : MutableList<FileItem>) {
+        override fun onFailure(call: Call<DvachThreadRequest>, t: Throwable) {
+            count++
+            logger.e(TAG, "error")
+            executorResult.onFailure(t)
+        }
+    }
+
+    private fun setupUriVideos(fileItems: MutableList<FileItem>) {
         var count = fileItems.size
         fileItems.map { fileItem ->
             if (fileItem.path.contains(".webm")) {
                 val movieEntity = MovieEntity(board = this.board,
-                        movieUrl = DVACH_URL + fileItem.path,
-                        previewUrl = DVACH_URL + fileItem.thumbnail)
+                        movieUrl = BuildConfig.DVACH_URL + fileItem.path,
+                        previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail)
                 listMovies.add(movieEntity)
             }
             count--

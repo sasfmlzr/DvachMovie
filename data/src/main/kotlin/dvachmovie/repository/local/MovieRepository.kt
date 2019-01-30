@@ -26,7 +26,7 @@ class MovieRepository @Inject constructor(
             val list = mutableListOf<MovieEntity>()
             if (isCalculateDiff) {
                 list.addAll(calculateDiff(movieStorage.movieList.value!!, it as MutableList<MovieEntity>))
-                if (list.size != 0) {
+                if (list.isNotEmpty()) {
                     val movieTempList = movieStorage.movieList.value
                     movieTempList!!.addAll(list)
                     movieStorage.movieList.value = movieTempList
