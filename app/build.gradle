@@ -47,9 +47,8 @@ android {
             shrinkResources true
         }
     }
-
+    testOptions.unitTests.includeAndroidResources = true
 }
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
@@ -93,4 +92,7 @@ dependencies {
     // Tests
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+
+
+    testImplementation 'org.robolectric:robolectric:4.1'
 }
