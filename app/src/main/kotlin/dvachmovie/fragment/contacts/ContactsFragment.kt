@@ -111,6 +111,10 @@ class ContactsFragment : BaseFragment<ContactsVM,
                     PERMISSIONS_REQUEST_READ_CONTACTS)
             //callback onRequestPermissionsResult
         } else {
+            ContactUtils.getContacts(activity!!.contentResolver
+            ) {
+                extensions.showMessage("No contacts available")
+            }
             getContacts()
         }
     }
