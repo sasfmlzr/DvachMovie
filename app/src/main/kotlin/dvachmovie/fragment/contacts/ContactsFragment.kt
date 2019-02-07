@@ -1,12 +1,9 @@
 package dvachmovie.fragment.contacts
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.content.ContentResolver
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +11,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.checkSelfPermission
 import dvachmovie.PERMISSIONS_REQUEST_READ_CONTACTS
 import dvachmovie.api.ContactsApi
-import dvachmovie.api.model.contact.Contact
 import dvachmovie.api.model.contact.OwnerContacts
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentContactsBinding
@@ -111,11 +107,10 @@ class ContactsFragment : BaseFragment<ContactsVM,
                     PERMISSIONS_REQUEST_READ_CONTACTS)
             //callback onRequestPermissionsResult
         } else {
-            ContactUtils.getContacts(activity!!.contentResolver
-            ) {
+            ContactUtils.getContacts(activity!!.contentResolver)
+            {
                 extensions.showMessage("No contacts available")
             }
-            getContacts()
         }
     }
 
@@ -128,39 +123,5 @@ class ContactsFragment : BaseFragment<ContactsVM,
                 extensions.showMessage("Permission must be granted")
             }
         }
-    }
-
-    @SuppressLint("Recycle")
-    private fun getContacts() {
-        val resolver: ContentResolver = activity!!.contentResolver
-        val cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null,
-                null)!!
-
-        if (cursor.count > 0) {
-            while (cursor.moveToNext()) {
-                val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
-                val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                val phoneNumber = (cursor.getString(
-                        cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))).toInt()
-
-                if (phoneNumber > 0) {
-                    val cursorPhone = activity!!.contentResolver.query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", arrayOf(id), null)!!
-
-                    if (cursorPhone.count > 0) {
-                        while (cursorPhone.moveToNext()) {
-                            val phoneNumValue = cursorPhone.getString(
-                                    cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                            binding.viewModel!!.contacts.add(Contact(name, phoneNumValue))
-                        }
-                    }
-                    cursorPhone.close()
-                }
-            }
-        } else {
-            extensions.showMessage("No contacts available!")
-        }
-        cursor.close()
     }
 }
