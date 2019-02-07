@@ -12,7 +12,7 @@ import dvachmovie.repository.local.MovieRepository
 import javax.inject.Inject
 
 class PreviewFragment : BaseFragment<PreviewVM,
-        FragmentPreviewMoviesBinding>(PreviewVM::class.java) {
+        FragmentPreviewMoviesBinding>(PreviewVM::class) {
 
     companion object {
         private const val SMOOTH_POSITION = 70

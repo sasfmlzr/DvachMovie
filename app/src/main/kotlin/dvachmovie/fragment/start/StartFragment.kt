@@ -18,7 +18,7 @@ import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartVM,
-        FragmentStartBinding>(StartVM::class.java) {
+        FragmentStartBinding>(StartVM::class) {
 
     companion object {
         private const val MINIMUM_COUNT_MOVIES = 100

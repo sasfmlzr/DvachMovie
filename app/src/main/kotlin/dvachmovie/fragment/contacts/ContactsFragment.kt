@@ -22,7 +22,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class ContactsFragment : BaseFragment<ContactsVM,
-        FragmentContactsBinding>(ContactsVM::class.java) {
+        FragmentContactsBinding>(ContactsVM::class) {
 
     private lateinit var text: TextView
 

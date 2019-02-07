@@ -10,7 +10,7 @@ import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
 
 class MovieActivity : BaseActivity<MovieActivityVM,
-        ActivityMovieBinding>(MovieActivityVM::class.java) {
+        ActivityMovieBinding>(MovieActivityVM::class) {
 
     override val layoutId = R.layout.activity_movie
 

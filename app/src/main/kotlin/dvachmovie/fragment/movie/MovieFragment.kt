@@ -30,7 +30,7 @@ import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
-        FragmentMovieBinding>(MovieVM::class.java) {
+        FragmentMovieBinding>(MovieVM::class) {
 
     companion object {
         private const val TAG = "MovieFragment"

@@ -17,7 +17,7 @@ import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
-        FragmentSettingsBinding>(SettingsVM::class.java) {
+        FragmentSettingsBinding>(SettingsVM::class) {
 
     @Inject
     lateinit var settingsStorage: SettingsStorage

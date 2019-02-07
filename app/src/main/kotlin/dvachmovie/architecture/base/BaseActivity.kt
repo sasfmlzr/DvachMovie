@@ -8,12 +8,13 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import dvachmovie.di.core.Injector
 import dvachmovie.di.core.ActivityComponent
+import dvachmovie.di.core.Injector
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
 abstract class BaseActivity<VM : ViewModel, B : ViewDataBinding>
-protected constructor(private val viewModelClass: Class<VM>) : AppCompatActivity() {
+protected constructor(private val viewModelClass: KClass<VM>) : AppCompatActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -32,6 +33,6 @@ protected constructor(private val viewModelClass: Class<VM>) : AppCompatActivity
 
         viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
-                .get(viewModelClass)
+                .get(viewModelClass.java)
     }
 }

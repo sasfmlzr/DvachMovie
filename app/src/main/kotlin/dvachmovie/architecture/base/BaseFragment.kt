@@ -18,9 +18,10 @@ import dvachmovie.architecture.logging.Logger
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
 abstract class BaseFragment<VM : ViewModel, B : ViewDataBinding>
-protected constructor(private val viewModelClass: Class<VM>) : Fragment() {
+protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -46,7 +47,7 @@ protected constructor(private val viewModelClass: Class<VM>) : Fragment() {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
-                .get(viewModelClass)
+                .get(viewModelClass.java)
         return view
     }
 

@@ -11,7 +11,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class StartActivity : BaseActivity<StartActivityVM,
-        ActivityStartBinding>(StartActivityVM::class.java) {
+        ActivityStartBinding>(StartActivityVM::class) {
 
     companion object {
         const val MIN_SHOW_TIME: Long = 2000
