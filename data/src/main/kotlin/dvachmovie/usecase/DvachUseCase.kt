@@ -71,8 +71,8 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
             val num = resp?.title
             logger.d(TAG, "parsing started for $num")
 
-            resp?.threads?.map { thread ->
-                thread.posts?.map { post ->
+            resp?.threads?.forEach { thread ->
+                thread.posts?.forEach { post ->
                     post.files?.forEach { file ->
                         listFiles.add(file)
                     }
@@ -95,7 +95,7 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
 
     private fun setupUriVideos(fileItems: MutableList<FileItem>) {
         var count = fileItems.size
-        fileItems.map { fileItem ->
+        fileItems.forEach { fileItem ->
             if (fileItem.path.contains(".webm")) {
                 val movieEntity = MovieEntity(board = this.board,
                         movieUrl = BuildConfig.DVACH_URL + fileItem.path,
