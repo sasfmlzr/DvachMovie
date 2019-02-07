@@ -1,4 +1,3 @@
-apply from: "${rootProject.projectDir.path}${File.separatorChar}gradle${File.separatorChar}detekt${File.separatorChar}detekt.gradle"
 apply plugin: 'kotlin'
 
 sourceCompatibility = 1.8

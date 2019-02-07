@@ -1,4 +1,4 @@
-package dvachmovie.worker
+package other
 
 import android.net.Uri
 import org.junit.Before
