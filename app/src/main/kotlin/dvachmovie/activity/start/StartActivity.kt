@@ -32,9 +32,10 @@ class StartActivity : BaseActivity<StartActivityVM,
     }
 
     private fun initializeApp() {
+        if (viewModel.isInit) {
         coroutineScope.launch {
+            viewModel.isInit = false
             delay(MIN_SHOW_TIME)
-            withContext(Dispatchers.Main) {
                 loadingMainActivity()
             }
         }
