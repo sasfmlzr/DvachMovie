@@ -28,16 +28,15 @@ class StartActivity : BaseActivity<StartActivityVM,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
-        initializeApp()
+        if (savedInstanceState == null) {
+            initializeApp()
+        }
     }
 
     private fun initializeApp() {
-        if (viewModel.isInit) {
         coroutineScope.launch {
-            viewModel.isInit = false
             delay(MIN_SHOW_TIME)
-                loadingMainActivity()
-            }
+            loadingMainActivity()
         }
     }
 
