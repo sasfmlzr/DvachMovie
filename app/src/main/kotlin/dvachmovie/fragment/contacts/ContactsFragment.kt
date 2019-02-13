@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.checkSelfPermission
 import dvachmovie.PERMISSIONS_REQUEST_READ_CONTACTS
 import dvachmovie.api.ContactsApi
+import dvachmovie.api.model.contact.Contact
 import dvachmovie.api.model.contact.OwnerContacts
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentContactsBinding
@@ -107,10 +108,10 @@ class ContactsFragment : BaseFragment<ContactsVM,
                     PERMISSIONS_REQUEST_READ_CONTACTS)
             //callback onRequestPermissionsResult
         } else {
-            ContactUtils.getContacts(activity!!.contentResolver)
+            viewModel.contacts = ContactUtils.getContacts(activity!!.contentResolver)
             {
                 extensions.showMessage("No contacts available")
-            }
+            } as MutableList<Contact>
         }
     }
 
