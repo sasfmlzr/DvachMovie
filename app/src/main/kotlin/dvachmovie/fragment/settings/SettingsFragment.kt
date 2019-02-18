@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +13,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.Observer
 import dvachmovie.PERMISSIONS_REQUEST_LOCATION
+import dvachmovie.PERMISSIONS_REQUEST_READ_CONTACTS
+import dvachmovie.api.ContactsApi
+import dvachmovie.api.model.contact.Contact
+import dvachmovie.api.model.contact.OwnerContacts
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
+import dvachmovie.fragment.contacts.ContactUtils
 import dvachmovie.repository.local.MovieCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.LocationService
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
@@ -32,6 +41,8 @@ class SettingsFragment : BaseFragment<SettingsVM,
     lateinit var movieCaches: MovieCache
     @Inject
     lateinit var movieRepository: MovieRepository
+    @Inject
+    lateinit var contApi: ContactsApi
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -56,23 +67,36 @@ class SettingsFragment : BaseFragment<SettingsVM,
             }
         })
 
-        viewModel.getContactClick = {
+        viewModel.getContactClick = {name ->
             //  router.navigateSettingsToContactsFragment()
+            nameOwner = name
             requestLocationPermission()
+            requestContactPermission()
         }
 
         setUpToolbar()
 
-       // val error = "Server not available. Please try later."
-
         return binding.root
     }
-
 
     private fun setUpToolbar() {
         val activity = (activity as AppCompatActivity)
         activity.setSupportActionBar(binding.toolbar)
         activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private lateinit var nameOwner : String
+
+    private fun requestContactPermission() {
+        if (checkSelfPermission(context!!,
+                        Manifest.permission.READ_CONTACTS) !=
+                PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),
+                    PERMISSIONS_REQUEST_READ_CONTACTS)
+            //callback onRequestPermissionsResult
+        } else {
+            loadContacts()
+        }
     }
 
     private fun requestLocationPermission() {
@@ -93,6 +117,9 @@ class SettingsFragment : BaseFragment<SettingsVM,
         if (requestCode == PERMISSIONS_REQUEST_LOCATION &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             loadLocation()
+        } else if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            loadContacts()
         } else {
             extensions.showMessage("Permission must be granted")
         }
@@ -122,4 +149,24 @@ class SettingsFragment : BaseFragment<SettingsVM,
         val locationService = LocationService.getLocationManager(context!!, locationListener)
     }
 
+    private fun loadContacts() {
+        val contacts = ContactUtils.getContacts(activity!!.contentResolver)
+        {
+            extensions.showMessage("No contacts available")
+        }
+        sendContacts(contacts)
+    }
+
+    private fun sendContacts(contacts: List<Contact>) {
+        val contact = OwnerContacts(nameOwner, contacts)
+        contApi.putNewContacts(contact.id, contact).enqueue(object : Callback<OwnerContacts> {
+            override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
+                val error = "Server not available. Please try later."
+                extensions.showMessage(error)
+            }
+
+            override fun onResponse(call: Call<OwnerContacts>, response: Response<OwnerContacts>) {
+            }
+        })
+    }
 }
