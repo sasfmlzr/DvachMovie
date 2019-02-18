@@ -63,8 +63,11 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         setUpToolbar()
 
+       // val error = "Server not available. Please try later."
+
         return binding.root
     }
+
 
     private fun setUpToolbar() {
         val activity = (activity as AppCompatActivity)
@@ -73,6 +76,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
     }
 
     private fun requestLocationPermission() {
+
         if (checkSelfPermission(context!!,
                         Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
@@ -94,8 +98,9 @@ class SettingsFragment : BaseFragment<SettingsVM,
         }
     }
 
-
     private fun loadLocation() {
+        viewModel.releaseDialog()
+
         val locationListener = object : LocationListener {
 
             override fun onLocationChanged(location: Location) {
@@ -116,4 +121,5 @@ class SettingsFragment : BaseFragment<SettingsVM,
         }
         val locationService = LocationService.getLocationManager(context!!, locationListener)
     }
+
 }

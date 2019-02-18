@@ -1,14 +1,17 @@
 package dvachmovie.fragment.settings
 
+import android.content.DialogInterface
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
+
 
 class SettingsVM @Inject constructor(
         settingsStorage: SettingsStorage,
@@ -23,7 +26,11 @@ class SettingsVM @Inject constructor(
 
     val onRefreshDB = MutableLiveData<Boolean>()
 
-    lateinit var getContactClick: (() -> Unit)
+    /**
+     * @return {@code true} if the listener has success,
+     *         {@code false} otherwise
+     *         */
+    lateinit var getContactClick: ((contactName: String) -> Unit)
 
     init {
         prepareLoading.value = settingsStorage.isLoadingEveryTime()
@@ -50,16 +57,33 @@ class SettingsVM @Inject constructor(
 
     val onGetContact =
             View.OnClickListener {
+                val login = LinearLayout(it.context)
+
                 val editText = EditText(it.context)
 
-                AlertDialog.Builder(it.context)
+                login.orientation = LinearLayout.VERTICAL
+
+
+                login.addView(editText)
+                val dialog = AlertDialog.Builder(it.context)
                         .setTitle("Confirmation")
                         .setMessage("Give me your data")
-                        .setView(editText)
-                        .setPositiveButton("Ok") { _, _ ->
-                            getContactClick()
-                        }
+                        .setView(login)
+                        .setPositiveButton("Ok", null)
                         .setNegativeButton("Cancel") { _, _ -> }
                         .show()
+
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                    (getContactClick(editText.text.toString()))
+                }
+                this.dialog = dialog
             }
+
+    private var dialog: AlertDialog? = null
+
+    fun releaseDialog (){
+        dialog?.dismiss()
+        dialog = null
+    }
+
 }
