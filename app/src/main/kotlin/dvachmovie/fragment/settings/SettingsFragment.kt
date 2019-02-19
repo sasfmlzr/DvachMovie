@@ -2,9 +2,6 @@ package dvachmovie.fragment.settings
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,23 +11,18 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.Observer
 import dvachmovie.PERMISSIONS_REQUEST_LOCATION
 import dvachmovie.PERMISSIONS_REQUEST_READ_CONTACTS
-import dvachmovie.api.ContactsApi
-import dvachmovie.api.model.contact.Contact
-import dvachmovie.api.model.contact.OwnerContacts
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.fragment.contacts.ContactUtils
 import dvachmovie.repository.local.MovieCache
 import dvachmovie.repository.local.MovieRepository
-import dvachmovie.service.LocationService
+import dvachmovie.storage.KeyValueStorage
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.android.synthetic.main.fragment_settings.*
 import javax.inject.Inject
+
 
 class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class) {
@@ -42,7 +34,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
     @Inject
     lateinit var movieRepository: MovieRepository
     @Inject
-    lateinit var contApi: ContactsApi
+    lateinit var keyValueStorage: KeyValueStorage
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +45,14 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         binding.viewModel = viewModel
 
+        setUpToolbar()
+
+        configureVM()
+
+        return binding.root
+    }
+
+    private fun configureVM() {
         viewModel.prepareLoading.observe(this, Observer {
             settingsStorage.putLoadingEveryTime(it)
         })
@@ -67,16 +67,26 @@ class SettingsFragment : BaseFragment<SettingsVM,
             }
         })
 
-        viewModel.getContactClick = {name ->
+        viewModel.getContactClick = { name ->
             //  router.navigateSettingsToContactsFragment()
-            nameOwner = name
-            requestLocationPermission()
-            requestContactPermission()
+            if (isUniqueName(name)) {
+                keyValueStorage.putString("nameOwner", name)
+                viewModel.releaseDialog()
+                configureButton()
+            } else {
+                extensions.showMessage("Choose another name")
+            }
         }
+    }
 
-        setUpToolbar()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        configureButton()
+    }
 
-        return binding.root
+    private fun isUniqueName(nameOwner: String): Boolean {
+        // it's mock. server send me unique name owner or not
+        return nameOwner.length >= 4
     }
 
     private fun setUpToolbar() {
@@ -85,88 +95,61 @@ class SettingsFragment : BaseFragment<SettingsVM,
         activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
-    private lateinit var nameOwner : String
+    private fun configureButton() {
+        buttonRequestContactPermission.setOnClickListener {
+            requestContactPermission()
+        }
+        buttonRequestLocationPermission.setOnClickListener {
+            requestLocationPermission()
+        }
 
-    private fun requestContactPermission() {
+        var step1 = false
+        if (keyValueStorage.getString("nameOwner") != null) {
+            buttonSendName.visibility = View.GONE
+            textStep1.visibility = View.GONE
+            step1 = true
+        }
+        var step2 = false
         if (checkSelfPermission(context!!,
-                        Manifest.permission.READ_CONTACTS) !=
+                        Manifest.permission.READ_CONTACTS) ==
                 PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),
-                    PERMISSIONS_REQUEST_READ_CONTACTS)
-            //callback onRequestPermissionsResult
-        } else {
-            loadContacts()
+            buttonRequestContactPermission.visibility = View.GONE
+            textStep2.visibility = View.GONE
+            step2 = true
+        }
+        var step3 = false
+        if (checkSelfPermission(context!!,
+                        Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            buttonRequestLocationPermission.visibility = View.GONE
+            textStep3.visibility = View.GONE
+            step3 = true
+        }
+        if (step1 && step2 && step3) {
+            textStepsOverview.text = "Full version Unlocked!"
         }
     }
 
-    private fun requestLocationPermission() {
+    private fun requestContactPermission() {
+        requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),
+                PERMISSIONS_REQUEST_READ_CONTACTS)
+    }
 
-        if (checkSelfPermission(context!!,
-                        Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    PERMISSIONS_REQUEST_LOCATION)
-            //callback onRequestPermissionsResult
-        } else {
-            loadLocation()
-        }
+    private fun requestLocationPermission() {
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSIONS_REQUEST_LOCATION)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
         if (requestCode == PERMISSIONS_REQUEST_LOCATION &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            loadLocation()
+            configureButton()
         } else if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            loadContacts()
+            configureButton()
         } else {
             extensions.showMessage("Permission must be granted")
         }
-    }
-
-    private fun loadLocation() {
-        viewModel.releaseDialog()
-
-        val locationListener = object : LocationListener {
-
-            override fun onLocationChanged(location: Location) {
-                // Called when a new location is found by the network location provider.
-                //   makeUseOfNewLocation(location)
-                print("asdasd")
-
-            }
-
-            override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
-            }
-
-            override fun onProviderEnabled(provider: String) {
-            }
-
-            override fun onProviderDisabled(provider: String) {
-            }
-        }
-        val locationService = LocationService.getLocationManager(context!!, locationListener)
-    }
-
-    private fun loadContacts() {
-        val contacts = ContactUtils.getContacts(activity!!.contentResolver)
-        {
-            extensions.showMessage("No contacts available")
-        }
-        sendContacts(contacts)
-    }
-
-    private fun sendContacts(contacts: List<Contact>) {
-        val contact = OwnerContacts(nameOwner, contacts)
-        contApi.putNewContacts(contact.id, contact).enqueue(object : Callback<OwnerContacts> {
-            override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
-                val error = "Server not available. Please try later."
-                extensions.showMessage(error)
-            }
-
-            override fun onResponse(call: Call<OwnerContacts>, response: Response<OwnerContacts>) {
-            }
-        })
     }
 }

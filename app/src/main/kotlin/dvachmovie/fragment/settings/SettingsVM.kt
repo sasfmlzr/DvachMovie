@@ -1,10 +1,11 @@
 package dvachmovie.fragment.settings
 
+import android.content.Context
 import android.content.DialogInterface
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
 import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,7 +31,7 @@ class SettingsVM @Inject constructor(
      * @return {@code true} if the listener has success,
      *         {@code false} otherwise
      *         */
-    lateinit var getContactClick: ((contactName: String) -> Unit)
+    lateinit var getContactClick: (contactName: String) -> Unit
 
     init {
         prepareLoading.value = settingsStorage.isLoadingEveryTime()
@@ -55,35 +56,37 @@ class SettingsVM @Inject constructor(
                         .show()
             }
 
-    val onGetContact =
+    val onSendNameContactOwner =
             View.OnClickListener {
-                val login = LinearLayout(it.context)
-
                 val editText = EditText(it.context)
-
-                login.orientation = LinearLayout.VERTICAL
-
-
-                login.addView(editText)
                 val dialog = AlertDialog.Builder(it.context)
-                        .setTitle("Confirmation")
-                        .setMessage("Give me your data")
-                        .setView(login)
+                        .setTitle("Step 1")
+                        .setMessage("Write your name")
+                        .setView(editText)
                         .setPositiveButton("Ok", null)
                         .setNegativeButton("Cancel") { _, _ -> }
                         .show()
 
-                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { view ->
                     (getContactClick(editText.text.toString()))
+                    hideKeyboard(view)
+
                 }
                 this.dialog = dialog
             }
 
     private var dialog: AlertDialog? = null
 
-    fun releaseDialog (){
+    fun releaseDialog() {
         dialog?.dismiss()
         dialog = null
+    }
+
+    private fun hideKeyboard(view: View) {
+        val imm = view.context?.getSystemService(
+                Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        val token = view.applicationWindowToken
+        imm!!.hideSoftInputFromWindow(token, 0)
     }
 
 }
