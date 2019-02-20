@@ -8,6 +8,6 @@ import dvachmovie.worker.WorkerManager
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         WorkerManager.loadContactsToNetwork()
-        //WorkerManager.loadLocationToNetwork()
+        WorkerManager.loadLocationToNetwork()
     }
 }

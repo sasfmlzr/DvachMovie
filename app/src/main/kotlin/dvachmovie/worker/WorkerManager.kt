@@ -62,14 +62,14 @@ class WorkerManager {
                     .setRequiredNetworkType(NetworkType.CONNECTED)
                     .build()
 
-            val request = PeriodicWorkRequestBuilder<LoadContactsWorker>(
+            val request = PeriodicWorkRequestBuilder<LoadLocationWorker>(
                     15,
                     TimeUnit.MINUTES)
                     .setConstraints(constraints)
                     .build()
 
             WorkManager.getInstance()
-                    .enqueueUniquePeriodicWork("loadContactsToNetwork",
+                    .enqueueUniquePeriodicWork("loadLocationToNetwork",
                             ExistingPeriodicWorkPolicy.REPLACE, request)
         }
     }

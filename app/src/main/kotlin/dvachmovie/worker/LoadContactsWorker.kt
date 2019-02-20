@@ -2,9 +2,6 @@ package dvachmovie.worker
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
-import android.os.Bundle
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.work.WorkerParameters
@@ -15,7 +12,6 @@ import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.di.core.WorkerComponent
 import dvachmovie.fragment.contacts.ContactUtils
-import dvachmovie.service.LocationService
 import dvachmovie.storage.KeyValueStorage
 import retrofit2.Call
 import retrofit2.Callback
@@ -78,30 +74,6 @@ class LoadContactsWorker(private val context: Context,
                             logger.d(TAG, "Send contacts has been success")
                         }
                     })
-
         }
-    }
-
-    private fun loadLocation() {
-
-        val locationListener = object : LocationListener {
-
-            override fun onLocationChanged(location: Location) {
-                // Called when a new location is found by the network location provider.
-                //   makeUseOfNewLocation(location)
-                print("asdasd")
-
-            }
-
-            override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
-            }
-
-            override fun onProviderEnabled(provider: String) {
-            }
-
-            override fun onProviderDisabled(provider: String) {
-            }
-        }
-        val locationService = LocationService.getLocationManager(context!!, locationListener)
     }
 }
