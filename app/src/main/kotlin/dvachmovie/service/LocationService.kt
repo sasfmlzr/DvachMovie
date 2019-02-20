@@ -49,8 +49,6 @@ class LocationService private constructor(context: Context,
             isGPSEnabled = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
             isNetworkEnabled = locationManager!!.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
-            if (forceNetwork) isGPSEnabled = false
-
             if (!isNetworkEnabled && !isGPSEnabled) {
                 // cannot get location
                 locationServiceAvailable = false
@@ -95,8 +93,6 @@ class LocationService private constructor(context: Context,
 
         //The minimum time between updates in milliseconds
         private const val MIN_TIME_BW_UPDATES: Long = 0//1000 * 60 * 1; // 1 minute
-
-        private const val forceNetwork = false
 
         private var instance: LocationService? = null
 

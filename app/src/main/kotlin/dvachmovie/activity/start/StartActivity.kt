@@ -1,6 +1,5 @@
 package dvachmovie.activity.start
 
-import android.content.BroadcastReceiver
 import android.content.Intent
 import android.os.Bundle
 import dvachmovie.R
@@ -8,7 +7,6 @@ import dvachmovie.activity.movie.MovieActivity
 import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.databinding.ActivityStartBinding
 import dvachmovie.di.core.ActivityComponent
-import dvachmovie.worker.WorkerManager
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -33,11 +31,6 @@ class StartActivity : BaseActivity<StartActivityVM,
         if (savedInstanceState == null) {
             initializeApp()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        WorkerManager.loadContactsToNetwork()
     }
 
     private fun initializeApp() {
