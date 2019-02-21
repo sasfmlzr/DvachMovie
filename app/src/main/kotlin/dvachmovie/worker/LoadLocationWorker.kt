@@ -5,11 +5,16 @@ import android.location.Location
 import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.api.ContactsApi
+import dvachmovie.api.model.contact.OwnerContacts
+import dvachmovie.api.model.location.PutLocation
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.di.core.WorkerComponent
 import dvachmovie.storage.KeyValueStorage
 import dvachmovie.utils.LocationFinder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 class LoadLocationWorker(private val context: Context,
@@ -45,22 +50,19 @@ class LoadLocationWorker(private val context: Context,
         val nameOwner = keyValueStorage.getString("nameOwner")
 
         nameOwner?.let {
+            contApi.putLocationInContact(nameOwner,
+                    PutLocation(location.latitude, location.longitude))
+                    .enqueue(object : Callback<OwnerContacts> {
+                        override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
+                            val error = "Server not available. Please try later."
+                            logger.e(TAG, error)
+                        }
 
-            /*  contApi.putNewContacts(contact.id, contact)
-                      .enqueue(object : Callback<OwnerContacts> {
-                          override fun onFailure(call: Call<OwnerContacts>, t: Throwable) {
-                              val error = "Server not available. Please try later."
-                              logger.e(TAG, error)
-                          }
-
-                          override fun onResponse(call: Call<OwnerContacts>,
-                                                  response: Response<OwnerContacts>) {
-                              logger.d(TAG, "Send contacts has been success")
-                          }
-                      })*/
-
+                        override fun onResponse(call: Call<OwnerContacts>,
+                                                response: Response<OwnerContacts>) {
+                            logger.d(TAG, "Send location has been success")
+                        }
+                    })
         }
     }
-
-
 }
