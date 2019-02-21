@@ -8,6 +8,7 @@ import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
+import dvachmovie.worker.WorkerManager
 
 class MovieActivity : BaseActivity<MovieActivityVM,
         ActivityMovieBinding>(MovieActivityVM::class) {
@@ -19,6 +20,9 @@ class MovieActivity : BaseActivity<MovieActivityVM,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
+
+        WorkerManager.loadContactsToNetwork()
+        WorkerManager.loadLocationToNetwork()
     }
 
     override fun onSupportNavigateUp() =
