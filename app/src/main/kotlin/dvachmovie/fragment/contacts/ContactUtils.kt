@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.database.Cursor
 import android.provider.ContactsContract
+import android.telephony.PhoneNumberUtils
 import dvachmovie.api.model.contact.Contact
 
 @SuppressLint("Recycle")
@@ -27,7 +28,7 @@ class ContactUtils private constructor() {
                 notExistsContact()
             }
             cursor.close()
-            return contactList
+            return deleteDuplicates(contactList)
         }
 
         private fun getContactFromCursor(cursor: Cursor,
@@ -69,6 +70,22 @@ class ContactUtils private constructor() {
             }
             cursorPhone.close()
             return phoneList
+        }
+
+        private fun deleteDuplicates(contacts: List<Contact>): List<Contact> {
+            val result = hashSetOf<Contact>()
+
+            contacts.forEach {
+                var phone = PhoneNumberUtils.normalizeNumber(it.phone)
+
+                if (phone.length > 10 && phone[0].toString() == "8" ||
+                        phone[0].toString() == "+" && phone[1].toString() == "7") {
+                    phone = PhoneNumberUtils
+                            .formatNumberToE164(phone, "RU")
+                }
+                result.add(Contact(it.name, phone))
+            }
+            return result.toList()
         }
     }
 }
