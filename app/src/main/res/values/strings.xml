@@ -5,4 +5,5 @@
     <string name="exit_image">Image for exit from app</string>
     <string name="download">Download</string>
     <string name="shuffle">Shuffle</string>
+    <string name="unlocked">Full version Unlocked!</string>
 </resources>

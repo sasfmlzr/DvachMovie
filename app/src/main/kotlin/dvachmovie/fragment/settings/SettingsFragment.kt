@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.Observer
 import dvachmovie.PERMISSIONS_REQUEST_LOCATION
 import dvachmovie.PERMISSIONS_REQUEST_READ_CONTACTS
+import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
@@ -126,7 +127,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
             step3 = true
         }
         if (step1 && step2 && step3) {
-            textStepsOverview.text = "Full version Unlocked!"
+            textStepsOverview.text = getString(R.string.unlocked)
         }
     }
 
