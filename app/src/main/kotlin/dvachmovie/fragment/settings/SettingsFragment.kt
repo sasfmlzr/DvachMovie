@@ -12,6 +12,8 @@ import androidx.lifecycle.Observer
 import dvachmovie.PERMISSIONS_REQUEST_LOCATION
 import dvachmovie.PERMISSIONS_REQUEST_READ_CONTACTS
 import dvachmovie.R
+import dvachmovie.api.ContactsApi
+import dvachmovie.api.model.TypicalResponseItem
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
@@ -22,6 +24,10 @@ import dvachmovie.storage.KeyValueStorage
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_settings.*
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -36,6 +42,8 @@ class SettingsFragment : BaseFragment<SettingsVM,
     lateinit var movieRepository: MovieRepository
     @Inject
     lateinit var keyValueStorage: KeyValueStorage
+    @Inject
+    lateinit var contApi: ContactsApi
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -69,14 +77,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         })
 
         viewModel.getContactClick = { name ->
-            //  router.navigateSettingsToContactsFragment()
-            if (isUniqueName(name)) {
-                keyValueStorage.putString("nameOwner", name)
-                viewModel.releaseDialog()
-                configureButton()
-            } else {
-                extensions.showMessage("Choose another name")
-            }
+            checkUniqueName(name)
         }
     }
 
@@ -85,9 +86,30 @@ class SettingsFragment : BaseFragment<SettingsVM,
         configureButton()
     }
 
-    private fun isUniqueName(nameOwner: String): Boolean {
-        // it's mock. server send me unique name owner or not
-        return nameOwner.length >= 4
+    private fun checkUniqueName(nameOwner: String) {
+        if (nameOwner.length >= 4) {
+            contApi.checkUniqueContacts(nameOwner).enqueue(object : Callback<TypicalResponseItem> {
+                override fun onFailure(call: Call<TypicalResponseItem>, t: Throwable) {
+                    extensions.showMessage(t.message!!)
+                }
+
+                override fun onResponse(call: Call<TypicalResponseItem>,
+                                        response: Response<TypicalResponseItem>) {
+                    if(response.isSuccessful) {
+                        keyValueStorage.putString("nameOwner", nameOwner)
+                        viewModel.releaseDialog()
+                        configureButton()
+                        return
+                    } else {
+                        extensions.showMessage(JSONObject(response.
+                                errorBody()?.string())
+                                .getString("message"))
+                    }
+                }
+            })
+        } else {
+            extensions.showMessage("Choose another name")
+        }
     }
 
     private fun setUpToolbar() {
