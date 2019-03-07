@@ -1,5 +1,6 @@
 package dvachmovie.architecture.base
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,10 @@ import kotlin.reflect.KClass
 
 abstract class BaseFragment<VM : ViewModel, B : ViewDataBinding>
 protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
+
+    companion object {
+        private const val permissionRequestCode = 100
+    }
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -55,5 +60,38 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         extensions = Extensions(activity as AppCompatActivity)
         router = Navigator(findNavController())
+    }
+
+    val runtimePermissions = object : RuntimePermissions {
+        override fun request(permission: String) {
+            request(listOf(permission))
+        }
+
+        override fun request(permissions: List<String>) {
+            requestPermissions(permissions.toTypedArray(), permissionRequestCode)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode != permissionRequestCode) {
+            return
+        }
+
+        val grantedPermissions: MutableList<String> = mutableListOf()
+
+        if (permissions.isNotEmpty() && grantResults.isNotEmpty()) {
+            for ((index, value) in grantResults.withIndex()) {
+                if (value == PackageManager.PERMISSION_GRANTED) {
+                    grantedPermissions.add(permissions[index])
+                } else {
+                    extensions.showMessage("Permission must be granted")
+                }
+            }
+        }
+
+        (this as? PermissionsCallback)?.onPermissionsGranted(grantedPermissions)
     }
 }

@@ -9,12 +9,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.Observer
-import dvachmovie.PERMISSIONS_REQUEST_LOCATION
-import dvachmovie.PERMISSIONS_REQUEST_READ_CONTACTS
 import dvachmovie.R
 import dvachmovie.api.ContactsApi
 import dvachmovie.api.model.TypicalResponseItem
 import dvachmovie.architecture.base.BaseFragment
+import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
@@ -30,9 +29,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-
 class SettingsFragment : BaseFragment<SettingsVM,
-        FragmentSettingsBinding>(SettingsVM::class) {
+        FragmentSettingsBinding>(SettingsVM::class), PermissionsCallback {
 
     @Inject
     lateinit var settingsStorage: SettingsStorage
@@ -46,19 +44,24 @@ class SettingsFragment : BaseFragment<SettingsVM,
     lateinit var contApi: ContactsApi
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
-
         binding.viewModel = viewModel
 
         setUpToolbar()
-
         configureVM()
 
         return binding.root
+    }
+
+    private fun setUpToolbar() {
+        val activity = (activity as AppCompatActivity)
+        activity.setSupportActionBar(binding.toolbar)
+        activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun configureVM() {
@@ -81,11 +84,6 @@ class SettingsFragment : BaseFragment<SettingsVM,
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        configureButton()
-    }
-
     private fun checkUniqueName(nameOwner: String) {
         if (nameOwner.length >= 4) {
             contApi.checkUniqueContacts(nameOwner).enqueue(object : Callback<TypicalResponseItem> {
@@ -95,14 +93,13 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
                 override fun onResponse(call: Call<TypicalResponseItem>,
                                         response: Response<TypicalResponseItem>) {
-                    if(response.isSuccessful) {
+                    if (response.isSuccessful) {
                         keyValueStorage.putString("nameOwner", nameOwner)
                         viewModel.releaseDialog()
                         configureButton()
                         return
                     } else {
-                        extensions.showMessage(JSONObject(response.
-                                errorBody()?.string())
+                        extensions.showMessage(JSONObject(response.errorBody()?.string())
                                 .getString("message"))
                     }
                 }
@@ -112,18 +109,17 @@ class SettingsFragment : BaseFragment<SettingsVM,
         }
     }
 
-    private fun setUpToolbar() {
-        val activity = (activity as AppCompatActivity)
-        activity.setSupportActionBar(binding.toolbar)
-        activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        configureButton()
     }
 
     private fun configureButton() {
         buttonRequestContactPermission.setOnClickListener {
-            requestContactPermission()
+            runtimePermissions.request(Manifest.permission.READ_CONTACTS)
         }
         buttonRequestLocationPermission.setOnClickListener {
-            requestLocationPermission()
+            runtimePermissions.request(Manifest.permission.ACCESS_FINE_LOCATION)
         }
 
         var step1 = false
@@ -155,26 +151,12 @@ class SettingsFragment : BaseFragment<SettingsVM,
         }
     }
 
-    private fun requestContactPermission() {
-        requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),
-                PERMISSIONS_REQUEST_READ_CONTACTS)
-    }
-
-    private fun requestLocationPermission() {
-        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSIONS_REQUEST_LOCATION)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                            grantResults: IntArray) {
-        if (requestCode == PERMISSIONS_REQUEST_LOCATION &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            configureButton()
-        } else if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            configureButton()
-        } else {
-            extensions.showMessage("Permission must be granted")
+    override fun onPermissionsGranted(permissions: List<String>) {
+        permissions.forEach {
+            when (it) {
+                Manifest.permission.READ_CONTACTS -> configureButton()
+                Manifest.permission.ACCESS_FINE_LOCATION -> configureButton()
+            }
         }
     }
 }

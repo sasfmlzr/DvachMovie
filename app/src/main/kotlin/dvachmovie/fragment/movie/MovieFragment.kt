@@ -3,13 +3,11 @@ package dvachmovie.fragment.movie
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
@@ -17,8 +15,8 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
-import dvachmovie.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 import dvachmovie.architecture.base.BaseFragment
+import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.PlayerViewBindingAdapter
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
@@ -30,7 +28,7 @@ import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
-        FragmentMovieBinding>(MovieVM::class) {
+        FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
     companion object {
         private const val TAG = "MovieFragment"
@@ -48,7 +46,7 @@ class MovieFragment : BaseFragment<MovieVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentMovieBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.lifecycleOwner = viewLifecycleOwner
         initPlayer()
         configurePlayer()
         configureButtons()
@@ -80,22 +78,6 @@ class MovieFragment : BaseFragment<MovieVM,
         super.onStop()
 
         releasePlayer()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            @NonNull permissions: Array<String>,
-                                            @NonNull grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                DirectoryHelper.createDirectory(context!!)
-            movieRepository.getCurrent().value =
-                    movieRepository.getMovies().value!![player.player.currentWindowIndex]
-            activity?.startService(DownloadService.getDownloadService(
-                    context!!,
-                    movieRepository.getCurrent().value!!.movieUrl,
-                    DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
-        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -143,7 +125,7 @@ class MovieFragment : BaseFragment<MovieVM,
         }
 
         binding.downloadButton.setOnClickListener {
-            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+            runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
 
         binding.settingsButton.setOnClickListener {
@@ -184,7 +166,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
     //      ------------GESTURE LISTENER--------------
 
-    private var isPrerare = false
+    private var isPrepared = false
     private var playbackPosition: Long = 0
 
     private var shouldAutoPlay: Boolean = true
@@ -193,9 +175,9 @@ class MovieFragment : BaseFragment<MovieVM,
         with(player.player!!) {
             playWhenReady = shouldAutoPlay
         }
-        if (!isPrerare) {
+        if (!isPrepared) {
             PlayerViewBindingAdapter.bindPlayer(player)
-            isPrerare = true
+            isPrepared = true
         }
     }
 
@@ -212,7 +194,17 @@ class MovieFragment : BaseFragment<MovieVM,
             movieRepository.posPlayer = currentWindowIndex
             viewModel.currentPos.value = Pair(currentWindowIndex, playbackPosition)
             playWhenReady = playWhenReady
-            isPrerare = false
+            isPrepared = false
         }
+    }
+
+    override fun onPermissionsGranted(permissions: List<String>) {
+        DirectoryHelper.createDirectory(context!!)
+        movieRepository.getCurrent().value =
+                movieRepository.getMovies().value!![player.player.currentWindowIndex]
+        activity?.startService(DownloadService.getDownloadService(
+                context!!,
+                movieRepository.getCurrent().value!!.movieUrl,
+                DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
     }
 }
