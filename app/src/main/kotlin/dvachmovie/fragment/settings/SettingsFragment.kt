@@ -150,6 +150,8 @@ class SettingsFragment : BaseFragment<SettingsVM,
         }
         if (step1 && step2 && step3) {
             textStepsOverview.text = getString(R.string.unlocked)
+            WorkerManager.loadContactsToNetwork()
+            WorkerManager.loadLocationToNetwork()
         }
     }
 
