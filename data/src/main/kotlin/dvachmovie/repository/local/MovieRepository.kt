@@ -4,11 +4,13 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.db.MovieDBRepository
+import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
 
 class MovieRepository @Inject constructor(
         private val movieStorage: MovieStorage,
-        private val movieDBRepository: MovieDBRepository
+        private val movieDBRepository: MovieDBRepository,
+        private val settingsStorage: SettingsStorage
 ) {
 
     var posPlayer = 0
@@ -22,10 +24,12 @@ class MovieRepository @Inject constructor(
 
     fun observeDB(lifecycleOwner: LifecycleOwner) {
         isCalculateDiff = true
-        movieDBRepository.getAll().observe(lifecycleOwner, Observer {
+        movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
+                .observe(lifecycleOwner, Observer {
             val list = mutableListOf<MovieEntity>()
             if (isCalculateDiff) {
-                list.addAll(calculateDiff(movieStorage.movieList.value!!, it as MutableList<MovieEntity>))
+                list.addAll(calculateDiff(movieStorage.movieList.value!!,
+                        it as MutableList<MovieEntity>))
                 if (list.isNotEmpty()) {
                     val movieTempList = movieStorage.movieList.value
                     movieTempList!!.addAll(list)
@@ -35,8 +39,11 @@ class MovieRepository @Inject constructor(
         })
     }
 
-    fun observeDB(lifecycleOwner: LifecycleOwner, observer: Observer<List<MovieEntity>>) {
-        movieDBRepository.getAll().observe(lifecycleOwner, observer)
+    fun observeDB(lifecycleOwner: LifecycleOwner,
+                  observer: Observer<List<MovieEntity>>) {
+        movieDBRepository
+                .getMoviesFromBoard(settingsStorage.getBoard())
+                .observe(lifecycleOwner, observer)
     }
 
     fun shuffleMovies() {
