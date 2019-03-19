@@ -50,7 +50,7 @@ class StartFragment : BaseFragment<StartVM,
     private fun prepareData() {
         movieRepository.observeDB(viewLifecycleOwner, Observer { movies ->
             if (settingsStorage.isLoadingEveryTime() || movies.size < MINIMUM_COUNT_MOVIES) {
-                dvachUseCase.execute("b", counterWebm, executorResult)
+                dvachUseCase.execute(settingsStorage.getBoard(), counterWebm, executorResult)
             } else {
                 router.navigateStartToMovieFragment()
             }

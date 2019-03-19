@@ -12,6 +12,7 @@ open class SettingsStorage @Inject constructor(
 
     companion object {
         private const val LOADING_PARAM = "LoadingMoviesOrNot"
+        private const val BOARD = "board"
     }
 
     fun isLoadingEveryTime(): Boolean {
@@ -29,4 +30,16 @@ open class SettingsStorage @Inject constructor(
             pref.putBoolean(LOADING_PARAM, value)
         }
     }
+
+    fun putBoard(board: String) {
+        val job = SupervisorJob()
+        val scope = CoroutineScope(Dispatchers.Default + job)
+
+        scope.launch {
+            pref.putString(BOARD, board)
+        }
+    }
+
+    fun getBoard() = pref.getString(BOARD) ?: "b"
+
 }
