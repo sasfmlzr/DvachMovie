@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 
 class SettingsVM @Inject constructor(
-        settingsStorage: SettingsStorage,
+        private val settingsStorage: SettingsStorage,
         private val logger: Logger
 ) : ViewModel() {
 
@@ -25,8 +25,9 @@ class SettingsVM @Inject constructor(
 
     val prepareLoading = MutableLiveData<Boolean>()
 
-    val onRefreshDB = MutableLiveData<Boolean>()
+    val onCleanDB = MutableLiveData<Boolean>()
 
+    val onChangeBoard = MutableLiveData<Boolean>()
     /**
      * @return {@code true} if the listener has success,
      *         {@code false} otherwise
@@ -35,7 +36,8 @@ class SettingsVM @Inject constructor(
 
     init {
         prepareLoading.value = settingsStorage.isLoadingEveryTime()
-        onRefreshDB.value = false
+        onCleanDB.value = false
+        onChangeBoard.value = false
     }
 
     val onPrepareLoadingClicked =
@@ -50,7 +52,7 @@ class SettingsVM @Inject constructor(
                         .setMessage("Database will clean")
                         .setPositiveButton("Ok") { _, _ ->
                             logger.d(TAG, "refresh database")
-                            onRefreshDB.value = true
+                            onCleanDB.value = true
                         }
                         .setNegativeButton("Cancel") { _, _ -> }
                         .show()
@@ -81,6 +83,35 @@ class SettingsVM @Inject constructor(
         dialog?.dismiss()
         dialog = null
     }
+
+    val onSetBoard =
+            View.OnClickListener {
+
+                val boardMap = hashMapOf<String, String>()
+                boardMap["b"] = "Бред"
+                boardMap["mov"] = "Фильмы"
+                boardMap["c"] = "Комиксы"
+                boardMap["sci"] = "Наука"
+                boardMap["sf"] = "Научная фантастика"
+
+                var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
+                AlertDialog.Builder(it.context)
+                        .setTitle("Set board")
+                        .setSingleChoiceItems(
+                                boardMap.values.toTypedArray(),
+                                checkedItem
+                        ) { _, which ->
+                            checkedItem = which
+                        }
+                        .setPositiveButton("Ok") { _, _ ->
+                            if(checkedItem!=-1){
+                                settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
+                                onChangeBoard.value = true
+                            }
+                        }
+                        .setNegativeButton("Cancel") { _, _ -> }
+                        .show()
+            }
 
     private fun hideKeyboard(view: View) {
         val imm = view.context?.getSystemService(

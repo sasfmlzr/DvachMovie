@@ -69,13 +69,21 @@ class SettingsFragment : BaseFragment<SettingsVM,
             settingsStorage.putLoadingEveryTime(it)
         })
 
-        viewModel.onRefreshDB.observe(this, Observer {
+        viewModel.onCleanDB.observe(this, Observer {
             if (it) {
                 WorkerManager.deleteAllInDB(this) {
                     movieCaches.movieList.value = mutableListOf()
                     movieRepository.getMovies().value = mutableListOf()
                     router.navigateSettingsToStartFragment()
                 }
+            }
+        })
+
+        viewModel.onChangeBoard.observe(this, Observer {
+            if (it) {
+                movieCaches.movieList.value = mutableListOf()
+                movieRepository.getMovies().value = mutableListOf()
+                router.navigateSettingsToStartFragment()
             }
         })
 
