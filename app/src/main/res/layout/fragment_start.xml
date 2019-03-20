@@ -7,6 +7,10 @@
         <variable
             name="viewModel"
             type="dvachmovie.fragment.start.StartVM" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,6 +27,28 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonChangeDefaultBoard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change to default board"
+            android:visibility="@{viewModel.viewRetryBtn ? view.VISIBLE : view.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/buttonRetry"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/buttonRetry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retry"
+            android:visibility="@{viewModel.viewRetryBtn ? view.VISIBLE : view.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/progressLoadingSource"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ProgressBar
             android:id="@+id/progressLoadingSource"

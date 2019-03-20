@@ -15,6 +15,7 @@ import dvachmovie.usecase.CounterWebm
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.ExecutorResult
 import dvachmovie.worker.WorkerManager
+import kotlinx.android.synthetic.main.fragment_start.*
 import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartVM,
@@ -41,10 +42,23 @@ class StartFragment : BaseFragment<StartVM,
 
         binding = FragmentStartBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-
+        binding.lifecycleOwner = viewLifecycleOwner
         prepareData()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        buttonChangeDefaultBoard.setOnClickListener {
+            settingsStorage.putBoard("b")
+            activity?.recreate()
+        }
+        buttonRetry.setOnClickListener {
+            viewModel.viewRetryBtn.value = false
+            progressLoadingSource.progress = 0
+            dvachUseCase.execute(settingsStorage.getBoard(), counterWebm, executorResult)
+        }
     }
 
     private fun prepareData() {
@@ -75,7 +89,7 @@ class StartFragment : BaseFragment<StartVM,
 
         override fun onFailure(t: Throwable) {
             extensions.showMessage(t.message!!)
+            viewModel.viewRetryBtn.value = true
         }
     }
-
 }

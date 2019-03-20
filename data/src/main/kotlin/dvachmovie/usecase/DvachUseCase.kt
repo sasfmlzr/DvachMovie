@@ -29,6 +29,8 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
     private lateinit var executorResult: ExecutorResult
 
     fun execute(board: String, counterWebm: CounterWebm, executorResult: ExecutorResult) {
+        count = 0
+        listFiles = mutableListOf()
         this.counterWebm = counterWebm
         this.board = board
         this.executorResult = executorResult
@@ -81,8 +83,13 @@ class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
             count++
             counterWebm.countVideoUpdates(count)
             logger.d(TAG, "parsing finished for $num")
+
             if (count == listMovieSize) {
-                setupUriVideos(listFiles)
+                if(listFiles.isEmpty()){
+                    executorResult.onFailure(RuntimeException("This is a private board"))
+                } else {
+                    setupUriVideos(listFiles)
+                }
             }
         }
 

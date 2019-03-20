@@ -1,6 +1,7 @@
 package dvachmovie.architecture.binding
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide

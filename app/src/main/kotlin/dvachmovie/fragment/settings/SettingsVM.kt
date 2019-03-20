@@ -93,6 +93,7 @@ class SettingsVM @Inject constructor(
                 boardMap["c"] = "Комиксы"
                 boardMap["sci"] = "Наука"
                 boardMap["sf"] = "Научная фантастика"
+                boardMap["h"] = "Хентай"
 
                 var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
                 AlertDialog.Builder(it.context)
