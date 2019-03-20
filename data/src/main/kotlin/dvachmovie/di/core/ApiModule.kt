@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dvachmovie.api.ContactsApi
 import dvachmovie.api.DvachMovieApi
+import dvachmovie.api.getOwnerContactConverterFactory
 import dvachmovie.data.BuildConfig
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
@@ -21,7 +22,7 @@ class ApiModule {
     fun dvachRetrofitService(): DvachMovieApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(BuildConfig.DVACH_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(getOwnerContactConverterFactory())
                 .build()
         return retrofit.create(DvachMovieApi::class.java)
     }
