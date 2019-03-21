@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlaybackException.*
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -21,6 +22,7 @@ import dvachmovie.architecture.binding.PlayerViewBindingAdapter
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
+import dvachmovie.repository.local.MovieCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
 import dvachmovie.utils.DirectoryHelper
@@ -36,6 +38,8 @@ class MovieFragment : BaseFragment<MovieVM,
 
     @Inject
     lateinit var movieRepository: MovieRepository
+    @Inject
+    lateinit var movieCaches: MovieCache
 
     private lateinit var player: PlayerView
 
@@ -93,8 +97,21 @@ class MovieFragment : BaseFragment<MovieVM,
             var idAddedToDB = false
 
             override fun onPlayerError(error: ExoPlaybackException?) {
-                extensions.showMessage(error!!.cause?.localizedMessage!!)
+                var errorMessage = String()
+                when (error?.type) {
+                    TYPE_SOURCE -> errorMessage = "Source error"
+                    TYPE_RENDERER -> errorMessage = "Render error"
+                    TYPE_UNEXPECTED -> errorMessage = "Unexpected error"
+                }
+                if (error?.cause?.localizedMessage != null) {
+                    errorMessage = "$errorMessage - ${error.cause?.localizedMessage}"
+                }
+                extensions.showMessage(errorMessage)
                 setUpCurrentMovie(true)
+
+                movieCaches.movieList.value = mutableListOf()
+                movieRepository.getMovies().value = mutableListOf()
+                activity?.recreate()
             }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
