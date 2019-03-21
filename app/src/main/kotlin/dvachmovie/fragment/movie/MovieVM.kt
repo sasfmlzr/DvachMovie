@@ -18,13 +18,12 @@ class MovieVM @Inject constructor(movieRepository: MovieRepository,
 
     val currentPos = MutableLiveData<Pair<Int, Long>>()
 
-    var value = "92ea293bf47456479e25b11ba67bb17a"
-    val myCookie = MutableLiveData<String>("")
+    val cookie = MutableLiveData<String>("")
 
     private val function = Function<MutableList<MovieEntity>, LiveData<List<Uri>>> { values ->
         val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
         if (urlVideo.isNotEmpty())
-            myCookie.value = cookieManager.getCookie()
+            cookie.value = cookieManager.cookie.toString()
         MutableLiveData<List<Uri>>(urlVideo)
     }
 

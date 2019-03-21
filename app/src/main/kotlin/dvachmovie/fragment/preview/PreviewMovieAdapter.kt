@@ -8,13 +8,15 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dvachmovie.R
+import dvachmovie.api.CookieManager
 import dvachmovie.architecture.Navigator
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieRepository
 import javax.inject.Inject
 
-class PreviewMovieAdapter @Inject constructor(private val movieRepository: MovieRepository) :
+class PreviewMovieAdapter @Inject constructor(private val movieRepository: MovieRepository,
+                                              private val cookieManager: CookieManager) :
         ListAdapter<MovieEntity, PreviewMovieAdapter.ViewHolder>
         (PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,7 +32,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieRepository: Movie
         getItem(position).let { movie ->
             with(holder) {
                 itemView.tag = movie
-                bind(movie, createOnClickListener(movie))
+                bind(movie, cookieManager.cookie, createOnClickListener(movie))
             }
 
         }
@@ -46,9 +48,9 @@ class PreviewMovieAdapter @Inject constructor(private val movieRepository: Movie
     class ViewHolder(
             private val binding: ItemPreviewMoviesBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: MovieEntity, listener: View.OnClickListener) {
+        fun bind(movie: MovieEntity, cookie: CookieManager.Cookie, listener: View.OnClickListener) {
             with(binding) {
-                viewModel = PreviewItemVM(movie)
+                viewModel = PreviewItemVM(movie, cookie)
                 clickListener = listener
                 executePendingBindings()
             }

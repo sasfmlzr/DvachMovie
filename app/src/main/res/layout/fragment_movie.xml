@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:movie="@{viewModel.uriMovies}"
-            app:cookie="@{viewModel.myCookie}"
+            app:cookie="@{viewModel.cookie}"
             app:movie_position="@{viewModel.currentPos}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

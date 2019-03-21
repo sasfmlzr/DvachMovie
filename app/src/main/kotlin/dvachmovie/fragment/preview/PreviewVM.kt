@@ -10,7 +10,9 @@ class PreviewVM @Inject constructor(movieRepository: MovieRepository) : ViewMode
     private val uriMovie = MutableLiveData<List<MovieEntity>>()
 
     init {
-        uriMovie.value = movieRepository.getMovies().value?.map { movie -> movie }
+        uriMovie.value = movieRepository.getMovies().value?.map { movie ->
+            movie
+        }
     }
 
     fun getUriMovie() = uriMovie

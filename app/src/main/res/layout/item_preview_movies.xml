@@ -22,6 +22,7 @@
             android:layout_height="100dp"
             android:contentDescription="@string/preview_image"
             android:scaleType="centerCrop"
-            app:imageFromUrl="@{viewModel.imageUrl}" />
+            app:imageFromUrl="@{viewModel.imageUrl}"
+            app:cookie = "@{viewModel.cookie}"/>
     </FrameLayout>
 </layout>
