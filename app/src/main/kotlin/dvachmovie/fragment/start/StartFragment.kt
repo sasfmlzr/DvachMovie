@@ -43,6 +43,10 @@ class StartFragment : BaseFragment<StartVM,
         binding = FragmentStartBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        val value = "92ea293bf47456479e25b11ba67bb17a"
+        settingsStorage.putCookie(value)
+
         prepareData()
 
         return binding.root
@@ -51,8 +55,6 @@ class StartFragment : BaseFragment<StartVM,
     //TODO: cookie factory for full version
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val value = "92ea293bf47456479e25b11ba67bb17a"
-        settingsStorage.putCookie(value)
 
         buttonChangeDefaultBoard.setOnClickListener {
             settingsStorage.putBoard("b")

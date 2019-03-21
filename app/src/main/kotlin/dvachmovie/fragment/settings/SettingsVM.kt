@@ -86,14 +86,15 @@ class SettingsVM @Inject constructor(
 
     val onSetBoard =
             View.OnClickListener {
-
                 val boardMap = hashMapOf<String, String>()
                 boardMap["b"] = "Бред"
                 boardMap["mov"] = "Фильмы"
                 boardMap["c"] = "Комиксы"
                 boardMap["sci"] = "Наука"
                 boardMap["sf"] = "Научная фантастика"
-                boardMap["h"] = "Хентай"
+                boardMap["h"] = "Для Лены"
+                boardMap["e"] = "Для Витька"
+                boardMap["ga"] = "Для Ярика"
 
                 var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
                 AlertDialog.Builder(it.context)
@@ -105,7 +106,7 @@ class SettingsVM @Inject constructor(
                             checkedItem = which
                         }
                         .setPositiveButton("Ok") { _, _ ->
-                            if(checkedItem!=-1){
+                            if (checkedItem != -1) {
                                 settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
                                 onChangeBoard.value = true
                             }

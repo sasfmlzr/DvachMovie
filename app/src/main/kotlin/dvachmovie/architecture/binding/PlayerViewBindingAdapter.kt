@@ -12,16 +12,19 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
+object BindingCache{
+    var media = ConcatenatingMediaSource()
+    var cookie = String()
+}
 
 class PlayerViewBindingAdapter {
     companion object {
-        private var media = ConcatenatingMediaSource()
-        var cookie: String? = null
-
         @JvmStatic
         @BindingAdapter("cookie")
         fun PlayerView.bindCookie(cookies: String) {
-            cookie = cookies
+            BindingCache.cookie = cookies
+                bindPlayer(this)
+
         }
 
         @JvmStatic
@@ -32,7 +35,7 @@ class PlayerViewBindingAdapter {
                 val agent = Util.getUserAgent(this.context, "AppName")
 
                 val defaultHttpDataSource = DefaultHttpDataSourceFactory(agent, null)
-                defaultHttpDataSource.defaultRequestProperties.set("Cookie", cookie ?: "")
+                defaultHttpDataSource.defaultRequestProperties.set("Cookie", BindingCache.cookie ?: "")
 
                 val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(this.context,
                         null, defaultHttpDataSource)
@@ -47,7 +50,7 @@ class PlayerViewBindingAdapter {
                 val mediaSources = ConcatenatingMediaSource()
 
                 videoSources.map { url -> mediaSources.addMediaSource(url) }
-                media = mediaSources
+                BindingCache.media = mediaSources
                 bindPlayer(this)
             }
         }
@@ -64,7 +67,7 @@ class PlayerViewBindingAdapter {
         }
 
         fun bindPlayer(playerView: PlayerView) {
-            (playerView.player as SimpleExoPlayer).prepare(media, true, false)
+            (playerView.player as SimpleExoPlayer).prepare(BindingCache.media, true, false)
         }
     }
 }
