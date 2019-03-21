@@ -9,21 +9,28 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import dvachmovie.db.data.MovieEntity
+
 
 class PlayerViewBindingAdapter {
     companion object {
         private var media = ConcatenatingMediaSource()
 
         @JvmStatic
-        @BindingAdapter("movie")
-        fun PlayerView.bindMovie(values: List<MovieEntity>) {
-            if (values.isNotEmpty()) {
-                val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
+        @BindingAdapter("movie", "cookie")
+        fun PlayerView.bindMovie(urlVideo: List<Uri>, cookie: String) {
+            if (urlVideo.isNotEmpty()) {
+
+                val agent = Util.getUserAgent(this.context, "AppName")
+
+                val defaultHttpDataSource = DefaultHttpDataSourceFactory(agent, null)
+                defaultHttpDataSource.defaultRequestProperties.set("Cookie", cookie)
 
                 val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(this.context,
-                        Util.getUserAgent(this.context, "AppName"))
+                        null, defaultHttpDataSource)
+
+                dataSourceFactory.createDataSource().responseHeaders
 
                 val videoSources = urlVideo.map { url ->
                     ExtractorMediaSource.Factory(dataSourceFactory)

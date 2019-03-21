@@ -12,5 +12,5 @@ interface DvachMovieApi {
 
     @GET("https://2ch.hk/{board}/res/{numThread}.json")
     fun getThread(@Path("board") board: String,
-                   @Path("numThread") numThread: String): Call<DvachThreadRequest>
+                  @Path("numThread") numThread: String): Call<DvachThreadRequest>
 }

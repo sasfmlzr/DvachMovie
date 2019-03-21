@@ -10,7 +10,6 @@ fun getOwnerContactConverterFactory(): GsonConverterFactory {
             .registerTypeAdapter(DvachCatalogRequest::class.java,
                     JsonDeserializer<DvachCatalogRequest> { json, _, _ ->
                         val jComment = json.asJsonObject
-                        //val owner = jComment.add()
                         GsonBuilder().create().fromJson(jComment, DvachCatalogRequest::class.java)
                     })
             .create()

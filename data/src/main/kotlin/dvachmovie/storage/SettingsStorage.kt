@@ -13,6 +13,7 @@ open class SettingsStorage @Inject constructor(
     companion object {
         private const val LOADING_PARAM = "LoadingMoviesOrNot"
         private const val BOARD = "board"
+        private const val COOKIE = "cookie"
     }
 
     fun isLoadingEveryTime(): Boolean {
@@ -42,4 +43,8 @@ open class SettingsStorage @Inject constructor(
 
     fun getBoard() = pref.getString(BOARD) ?: "b"
 
+
+    fun getCookie() = pref.getString(COOKIE)?:""
+
+    fun putCookie(cookie: String) = pref.putString(COOKIE, cookie)
 }

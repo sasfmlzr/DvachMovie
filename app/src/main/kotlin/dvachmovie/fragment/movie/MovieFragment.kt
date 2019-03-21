@@ -134,8 +134,8 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun setUpCurrentMovie(isPlayed: Boolean) {
-        if (binding.viewModel!!.getUrlList().value!!.isNotEmpty()) {
-            val movieUri = binding.viewModel!!.getUrlList().value!![player.player.currentPeriodIndex]
+        if (binding.viewModel!!.getMoviesList().value!!.isNotEmpty()) {
+            val movieUri = binding.viewModel!!.getMoviesList().value!![player.player.currentPeriodIndex]
             movieUri.isPlayed = isPlayed
             movieRepository.isCalculateDiff = false
             movieRepository.getCurrent().value = movieUri
