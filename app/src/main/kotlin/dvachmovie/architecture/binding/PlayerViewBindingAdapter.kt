@@ -16,16 +16,23 @@ import com.google.android.exoplayer2.util.Util
 class PlayerViewBindingAdapter {
     companion object {
         private var media = ConcatenatingMediaSource()
+        var cookie: String? = null
 
         @JvmStatic
-        @BindingAdapter("movie", "cookie")
-        fun PlayerView.bindMovie(urlVideo: List<Uri>, cookie: String) {
+        @BindingAdapter("cookie")
+        fun PlayerView.bindCookie(cookies: String) {
+            cookie = cookies
+        }
+
+        @JvmStatic
+        @BindingAdapter("movie")
+        fun PlayerView.bindMovie(urlVideo: List<Uri>) {
             if (urlVideo.isNotEmpty()) {
 
                 val agent = Util.getUserAgent(this.context, "AppName")
 
                 val defaultHttpDataSource = DefaultHttpDataSourceFactory(agent, null)
-                defaultHttpDataSource.defaultRequestProperties.set("Cookie", cookie)
+                defaultHttpDataSource.defaultRequestProperties.set("Cookie", cookie ?: "")
 
                 val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(this.context,
                         null, defaultHttpDataSource)
