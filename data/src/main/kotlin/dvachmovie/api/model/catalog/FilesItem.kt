@@ -9,7 +9,7 @@ data class FilesItem(@SerializedName("tn_height")
                      @SerializedName("nsfw")
                      val nsfw: Int = 0,
                      @SerializedName("type")
-                     val type: Int = 0,
+                     val type: Long = 0,
                      @SerializedName("path")
                      val path: String = "",
                      @SerializedName("tn_width")
