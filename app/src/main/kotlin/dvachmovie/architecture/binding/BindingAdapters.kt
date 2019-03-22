@@ -33,3 +33,13 @@ fun bindImageFromDrawable(view: ImageView, image: Drawable?) {
                 .into(view)
     }
 }
+
+@BindingAdapter("imageFromGif")
+fun bindImageFromGif(view: ImageView, image: Drawable?) {
+    if (image != null) {
+        Glide.with(view.context)
+                .load(image)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(view)
+    }
+}

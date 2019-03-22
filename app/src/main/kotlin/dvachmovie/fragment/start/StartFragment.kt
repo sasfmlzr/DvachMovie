@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
@@ -46,7 +47,7 @@ class StartFragment : BaseFragment<StartVM,
 
         val value = "92ea293bf47456479e25b11ba67bb17a"
         settingsStorage.putCookie(value)
-
+        viewModel.initGif.value = resources.getDrawable(R.drawable.cybermilosgif, activity?.theme)
         prepareData()
 
         return binding.root
