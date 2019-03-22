@@ -10,7 +10,7 @@ import dvachmovie.fragment.settings.SettingsFragment
 import dvachmovie.fragment.start.StartFragment
 
 @FragmentScope
-@Subcomponent()
+@Subcomponent
 interface FragmentComponent {
     fun inject(fragment: MovieFragment)
     fun inject(fragment: PreviewFragment)

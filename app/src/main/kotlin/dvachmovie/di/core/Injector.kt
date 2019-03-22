@@ -15,4 +15,5 @@ object Injector {
     fun navigationComponent() = component.navigationComponent()
     fun workComponent() = component.workComponent()
     fun viewComponent() = component.viewComponent()
+    fun serviceComponent() = component.serviceComponent()
 }

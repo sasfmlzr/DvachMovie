@@ -14,5 +14,6 @@ interface ApplicationComponent {
     fun viewComponent(): FragmentComponent
     fun navigationComponent(): ActivityComponent
     fun workComponent(): WorkerComponent
+    fun serviceComponent(): ServiceComponent
     fun inject(mainApplication: MainApplication)
 }
