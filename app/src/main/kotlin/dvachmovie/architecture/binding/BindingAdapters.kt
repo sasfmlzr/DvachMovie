@@ -4,9 +4,11 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import dvachmovie.api.CookieManager
 import dvachmovie.db.data.MovieEntity
 
@@ -35,11 +37,11 @@ fun bindImageFromDrawable(view: ImageView, image: Drawable?) {
 }
 
 @BindingAdapter("imageFromGif")
-fun bindImageFromGif(view: ImageView, image: Drawable?) {
-    if (image != null) {
+fun bindImageFromGif(view: ImageView, localLink: Int?) {
+    if (localLink != null) {
         Glide.with(view.context)
-                .load(image)
-                .transition(DrawableTransitionOptions.withCrossFade())
+                .load(localLink)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                 .into(view)
     }
 }
