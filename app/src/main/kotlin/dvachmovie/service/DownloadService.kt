@@ -7,9 +7,14 @@ import android.content.Intent
 import android.net.Uri
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-
+import dvachmovie.api.CookieManager
+import dvachmovie.di.core.Injector
+import javax.inject.Inject
 
 class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
+
+    @Inject
+    lateinit var cookieManager: CookieManager
 
     companion object {
         private const val DOWNLOAD_PATH = "dvachmovie.service_DownloadService_Download_path"
@@ -24,6 +29,11 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
         }
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        Injector.serviceComponent().inject(this)
+    }
+
     override fun onHandleIntent(@Nullable intent: Intent?) {
         val downloadPath = intent!!.getStringExtra(DOWNLOAD_PATH)
         val destinationPath = intent.getStringExtra(DESTINATION_PATH)
@@ -33,6 +43,7 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
     private fun startDownload(downloadPath: String, destinationPath: String) {
         val uri = Uri.parse(downloadPath)
         val request = DownloadManager.Request(uri)
+        request.addRequestHeader("Cookie", cookieManager.cookie.toString())
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or
                 DownloadManager.Request.NETWORK_WIFI)
         request.setNotificationVisibility(
