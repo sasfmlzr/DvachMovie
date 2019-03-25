@@ -9,7 +9,7 @@ data class FileItem(@SerializedName("tn_height")
                     @SerializedName("sticker")
                     val sticker: String = "",
                     @SerializedName("type")
-                    val type: Int = 0,
+                    val type: Long = 0,
                     @SerializedName("pack")
                     val pack: String = "",
                     @SerializedName("path")
