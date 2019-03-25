@@ -10,13 +10,10 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
+import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.CounterWebm
-import dvachmovie.usecase.DvachUseCase
-import dvachmovie.usecase.ExecutorResult
-import dvachmovie.usecase.UseCaseModel
-import dvachmovie.worker.WorkerManager
+import dvachmovie.usecase.*
 import kotlinx.android.synthetic.main.fragment_start.*
 import javax.inject.Inject
 
@@ -35,6 +32,9 @@ class StartFragment : BaseFragment<StartVM,
 
     @Inject
     lateinit var movieRepository: MovieRepository
+
+    @Inject
+    lateinit var movieDBCache: MovieDBCache
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
@@ -92,7 +92,8 @@ class StartFragment : BaseFragment<StartVM,
 
     private val executorResult = object : ExecutorResult {
         override fun onSuccess(useCaseModel: UseCaseModel) {
-            WorkerManager.initDB()
+            useCaseModel as DvachModel
+            movieDBCache.movieList.value = useCaseModel.movies
             router.navigateStartToMovieFragment()
         }
 

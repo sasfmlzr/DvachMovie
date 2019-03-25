@@ -22,7 +22,7 @@ import dvachmovie.architecture.binding.PlayerViewBindingAdapter
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
-import dvachmovie.repository.local.MovieCache
+import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.service.DownloadService
 import dvachmovie.utils.DirectoryHelper
@@ -39,7 +39,7 @@ class MovieFragment : BaseFragment<MovieVM,
     @Inject
     lateinit var movieRepository: MovieRepository
     @Inject
-    lateinit var movieCaches: MovieCache
+    lateinit var movieCaches: MovieDBCache
 
     private lateinit var player: PlayerView
 

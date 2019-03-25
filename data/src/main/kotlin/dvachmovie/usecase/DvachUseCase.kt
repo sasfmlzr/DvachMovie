@@ -3,12 +3,11 @@ package dvachmovie.usecase
 import dvachmovie.api.model.thread.FileItem
 import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.MovieEntity
-import dvachmovie.repository.local.MovieCache
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromDvachUseCase,
-                                       private val getLinkFilesFromThreadsUseCase: GetLinkFilesFromThreadsUseCase,
-                                       private val movieCache: MovieCache) : UseCase {
+                                       private val getLinkFilesFromThreadsUseCase:
+                                       GetLinkFilesFromThreadsUseCase) : UseCase {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
@@ -87,8 +86,7 @@ class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromD
         finally(listMovies)
     }
 
-    private fun finally(listMovies: MutableList<MovieEntity>){
-        movieCache.movieList.value = listMovies
-        executorResult.onSuccess(EmptyUseCaseModel())
+    private fun finally(listMovies: MutableList<MovieEntity>) {
+        executorResult.onSuccess(DvachModel(listMovies))
     }
 }

@@ -1,6 +1,7 @@
 package dvachmovie.activity.movie
 
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import dvachmovie.R
@@ -8,10 +9,15 @@ import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
+import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.worker.WorkerManager
+import javax.inject.Inject
 
 class MovieActivity : BaseActivity<MovieActivityVM,
         ActivityMovieBinding>(MovieActivityVM::class) {
+
+    @Inject
+    lateinit var movieDBCache: MovieDBCache
 
     override val layoutId = R.layout.activity_movie
 
@@ -23,6 +29,10 @@ class MovieActivity : BaseActivity<MovieActivityVM,
 
         WorkerManager.loadContactsToNetwork()
         WorkerManager.loadLocationToNetwork()
+
+        movieDBCache.movieList.observe(this, Observer {
+            WorkerManager.initDB()
+        })
     }
 
     override fun onSupportNavigateUp() =

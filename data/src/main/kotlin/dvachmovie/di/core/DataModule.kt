@@ -3,7 +3,7 @@ package dvachmovie.di.core
 import dagger.Module
 import dagger.Provides
 import dvachmovie.repository.db.MovieDBRepository
-import dvachmovie.repository.local.MovieCache
+import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.repository.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
@@ -17,7 +17,7 @@ class DataModule {
 
     @Singleton
     @Provides
-    internal fun movieCache() = MovieCache()
+    internal fun movieDBCache() = MovieDBCache()
 
     @Singleton
     @Provides
