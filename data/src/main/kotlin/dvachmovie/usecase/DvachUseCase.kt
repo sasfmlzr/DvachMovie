@@ -1,13 +1,22 @@
 package dvachmovie.usecase
 
+import dvachmovie.api.model.thread.FileItem
+import dvachmovie.data.BuildConfig
+import dvachmovie.db.data.MovieEntity
+import dvachmovie.repository.local.MovieCache
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromDvachUseCase,
-                                       private val getLinkFilesFromThreadsUseCase: GetLinkFilesFromThreadsUseCase) : UseCase {
+                                       private val getLinkFilesFromThreadsUseCase: GetLinkFilesFromThreadsUseCase,
+                                       private val movieCache: MovieCache) : UseCase {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
     private lateinit var counterWebm: CounterWebm
+
+    private var listThreadSize = 0
+    private var count = 0
+    private var fileItems = mutableListOf<FileItem>()
 
     fun addParams(board: String,
                   counterWebm: CounterWebm,
@@ -15,6 +24,8 @@ class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromD
         this.board = board
         this.counterWebm = counterWebm
         this.executorResult = executorResult
+        count = 0
+        fileItems = mutableListOf()
         return this
     }
 
@@ -25,11 +36,12 @@ class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromD
     private val dvachUseCaseExecutorResult = object : ExecutorResult {
         override fun onSuccess(useCaseModel: UseCaseModel) {
             useCaseModel as GetThreadsFromDvachModel
-            counterWebm.updateCountVideos(useCaseModel.listThreads.size)
+            listThreadSize = useCaseModel.listThreads.size
+            counterWebm.updateCountVideos(listThreadSize)
 
             useCaseModel.listThreads.forEach { num ->
                 getLinkFilesFromThreadsUseCase
-                        .addParams(board, num, useCaseModel.listThreads.size, counterWebm, executorResult)
+                        .addParams(board, num, getLinkFilesFromThreadsUseCaseResult)
                         .execute()
             }
         }
@@ -37,5 +49,46 @@ class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromD
         override fun onFailure(t: Throwable) {
             executorResult.onFailure(t)
         }
+    }
+
+    private val getLinkFilesFromThreadsUseCaseResult = object : ExecutorResult {
+        override fun onSuccess(useCaseModel: UseCaseModel) {
+            useCaseModel as GetLinkFilesFromThreadsModel
+
+            count++
+            counterWebm.updateCurrentCountVideos(count)
+            fileItems.addAll(useCaseModel.fileItems)
+
+            if (count == listThreadSize) {
+                if (fileItems.isEmpty()) {
+                    executorResult.onFailure(RuntimeException("This is a private board"))
+                } else {
+                    convertFileItemToMovieEntity(fileItems)
+                }
+            }
+        }
+
+        override fun onFailure(t: Throwable) {
+            count++
+            executorResult.onFailure(t)
+        }
+    }
+
+    private fun convertFileItemToMovieEntity(fileItems: MutableList<FileItem>) {
+        val listMovies = mutableListOf<MovieEntity>()
+        fileItems.forEach { fileItem ->
+            if (fileItem.path.contains(".webm")) {
+                val movieEntity = MovieEntity(board = this.board,
+                        movieUrl = BuildConfig.DVACH_URL + fileItem.path,
+                        previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail)
+                listMovies.add(movieEntity)
+            }
+        }
+        finally(listMovies)
+    }
+
+    private fun finally(listMovies: MutableList<MovieEntity>){
+        movieCache.movieList.value = listMovies
+        executorResult.onSuccess(EmptyUseCaseModel())
     }
 }

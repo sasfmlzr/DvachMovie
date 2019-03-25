@@ -37,13 +37,9 @@ class GetThreadsFromDvachUseCase @Inject constructor(private val dvachApi: Dvach
         return object : Callback<DvachCatalogRequest> {
             override fun onResponse(call: Call<DvachCatalogRequest>,
                                     response: Response<DvachCatalogRequest>) {
-                val numThreads = response.body()?.threads?.map { it.num }?: listOf()
-
+                val numThreads = response.body()?.threads?.map { it.num } ?: listOf()
                 executorResult.onSuccess(GetThreadsFromDvachModel(numThreads))
-
                 logger.d(TAG, "2.hk connected")
-
-
             }
 
             override fun onFailure(call: Call<DvachCatalogRequest>, t: Throwable) {
