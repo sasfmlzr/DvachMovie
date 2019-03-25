@@ -64,14 +64,15 @@ class StartFragment : BaseFragment<StartVM,
         buttonRetry.setOnClickListener {
             viewModel.viewRetryBtn.value = false
             progressLoadingSource.progress = 0
-            dvachUseCase.execute(settingsStorage.getBoard(), counterWebm, executorResult)
+            dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
+
         }
     }
 
     private fun prepareData() {
         movieRepository.observeDB(viewLifecycleOwner, Observer { movies ->
             if (settingsStorage.isLoadingEveryTime() || movies.size < MINIMUM_COUNT_MOVIES) {
-                dvachUseCase.execute(settingsStorage.getBoard(), counterWebm, executorResult)
+                dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
             } else {
                 router.navigateStartToMovieFragment()
             }
@@ -79,11 +80,11 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     private val counterWebm = object : CounterWebm {
-        override fun countVideoUpdates(count: Int) {
+        override fun updateCurrentCountVideos(count: Int) {
             binding.progressLoadingSource.progress = count
         }
 
-        override fun countVideoCalculatedSumm(summCount: Int) {
+        override fun updateCountVideos(summCount: Int) {
             binding.progressLoadingSource.max = summCount
         }
     }

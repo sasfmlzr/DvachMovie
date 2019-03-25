@@ -1,6 +1,6 @@
 package dvachmovie.usecase
 
 interface CounterWebm {
-    fun countVideoUpdates(count: Int)
-    fun countVideoCalculatedSumm(summCount: Int)
+    fun updateCurrentCountVideos(count: Int)
+    fun updateCountVideos(count: Int)
 }
