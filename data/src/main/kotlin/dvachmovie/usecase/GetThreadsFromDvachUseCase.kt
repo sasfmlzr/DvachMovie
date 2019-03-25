@@ -30,10 +30,10 @@ class GetThreadsFromDvachUseCase @Inject constructor(private val dvachApi: Dvach
 
     override fun execute() {
         logger.d(TAG, "connects to 2.hk...")
-        dvachApi.getCatalog(board).enqueue(dvachNumCallback(board))
+        dvachApi.getCatalog(board).enqueue(dvachNumCallback())
     }
 
-    private fun dvachNumCallback(board: String): Callback<DvachCatalogRequest> {
+    private fun dvachNumCallback(): Callback<DvachCatalogRequest> {
         return object : Callback<DvachCatalogRequest> {
             override fun onResponse(call: Call<DvachCatalogRequest>,
                                     response: Response<DvachCatalogRequest>) {
