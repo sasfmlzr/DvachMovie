@@ -1,6 +1,6 @@
 package dvachmovie.usecase
 
 interface ExecutorResult {
-    fun onSuccess()
+    fun onSuccess(useCaseModel: UseCaseModel)
     fun onFailure(t: Throwable)
 }

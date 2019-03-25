@@ -15,6 +15,7 @@ import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.CounterWebm
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.ExecutorResult
+import dvachmovie.usecase.UseCaseModel
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_start.*
 import javax.inject.Inject
@@ -84,13 +85,13 @@ class StartFragment : BaseFragment<StartVM,
             binding.progressLoadingSource.progress = count
         }
 
-        override fun updateCountVideos(summCount: Int) {
-            binding.progressLoadingSource.max = summCount
+        override fun updateCountVideos(count: Int) {
+            binding.progressLoadingSource.max = count
         }
     }
 
     private val executorResult = object : ExecutorResult {
-        override fun onSuccess() {
+        override fun onSuccess(useCaseModel: UseCaseModel) {
             WorkerManager.initDB()
             router.navigateStartToMovieFragment()
         }

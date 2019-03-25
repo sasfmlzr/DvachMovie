@@ -62,7 +62,6 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachApi: D
 
             val num = resp?.title
             logger.d(TAG, "parsing started for $num")
-
             resp?.threads?.forEach { thread ->
                 thread.posts?.forEach { post ->
                     post.files?.forEach { file ->
@@ -70,10 +69,9 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachApi: D
                     }
                 }
             }
-            count++
-            counterWebm.updateCurrentCountVideos(count)
             logger.d(TAG, "parsing finished for $num")
 
+            onComplete()
             if (count == countThread) {
                 if (listFiles.isEmpty()) {
                     executorResult.onFailure(RuntimeException("This is a private board"))
@@ -84,10 +82,15 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachApi: D
         }
 
         override fun onFailure(call: Call<DvachThreadRequest>, t: Throwable) {
-            count++
-            logger.e(TAG, "error")
+            onComplete()
+            logger.e(TAG, t.message?:"Something network error")
             executorResult.onFailure(t)
         }
+    }
+
+    fun onComplete(){
+        count++
+        counterWebm.updateCurrentCountVideos(count)
     }
 
     private fun setupUriVideos(fileItems: MutableList<FileItem>) {
@@ -108,6 +111,6 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachApi: D
 
     private fun finally() {
         movieCache.movieList.value = listMovies
-        executorResult.onSuccess()
+        executorResult.onSuccess(GetLinkFilesFromThreadsUseCaseModel(""))
     }
 }

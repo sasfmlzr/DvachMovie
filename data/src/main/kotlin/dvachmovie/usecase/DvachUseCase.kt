@@ -1,58 +1,41 @@
 package dvachmovie.usecase
 
-import dvachmovie.api.DvachMovieApi
-import dvachmovie.api.model.catalog.DvachCatalogRequest
-import dvachmovie.architecture.logging.Logger
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
-class DvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
-                                       private val logger: Logger,
+class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromDvachUseCase,
                                        private val getLinkFilesFromThreadsUseCase: GetLinkFilesFromThreadsUseCase) : UseCase {
 
-    companion object {
-        private const val TAG = "DvachUseCase"
-    }
-
     private lateinit var board: String
-    private lateinit var counterWebm: CounterWebm
     private lateinit var executorResult: ExecutorResult
+    private lateinit var counterWebm: CounterWebm
 
-    fun addParams(board: String, counterWebm: CounterWebm, executorResult: ExecutorResult): DvachUseCase {
-        this.counterWebm = counterWebm
+    fun addParams(board: String,
+                  counterWebm: CounterWebm,
+                  executorResult: ExecutorResult): DvachUseCase {
         this.board = board
+        this.counterWebm = counterWebm
         this.executorResult = executorResult
         return this
     }
 
     override fun execute() {
-        dvachApi.getCatalog(board).enqueue(dvachNumCallback(board))
+        dvachUseCase.addParams(board, counterWebm, dvachUseCaseExecutorResult).execute()
     }
 
-    private fun dvachNumCallback(board: String): Callback<DvachCatalogRequest> {
-        return object : Callback<DvachCatalogRequest> {
-            override fun onResponse(call: Call<DvachCatalogRequest>,
-                                    response: Response<DvachCatalogRequest>) {
-                val numThreads = response.body()?.threads?.map { it.num }
+    private val dvachUseCaseExecutorResult = object : ExecutorResult {
+        override fun onSuccess(useCaseModel: UseCaseModel) {
+            useCaseModel as GetThreadsFromDvachModel
+            counterWebm.updateCountVideos(useCaseModel.listThreads.size)
 
-                logger.d(TAG, "connects to 2.hk...")
-
-                numThreads?.forEach { num ->
-                    getLinkFilesFromThreadsUseCase
-                            .addParams(board, num, numThreads.size, counterWebm, executorResult)
-                            .execute()
-                }
-
-                logger.d(TAG, "2.hk connected")
-
-                counterWebm.updateCountVideos(numThreads?.size ?: 0)
+            useCaseModel.listThreads.forEach { num ->
+                getLinkFilesFromThreadsUseCase
+                        .addParams(board, num, useCaseModel.listThreads.size, counterWebm, executorResult)
+                        .execute()
             }
+        }
 
-            override fun onFailure(call: Call<DvachCatalogRequest>, t: Throwable) {
-                executorResult.onFailure(t)
-            }
+        override fun onFailure(t: Throwable) {
+            executorResult.onFailure(t)
         }
     }
 }
