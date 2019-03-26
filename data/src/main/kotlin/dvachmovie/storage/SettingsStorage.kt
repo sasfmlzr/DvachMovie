@@ -16,12 +16,7 @@ open class SettingsStorage @Inject constructor(
         private const val COOKIE = "cookie"
     }
 
-    fun isLoadingEveryTime(): Boolean {
-        if (pref.getBoolean(LOADING_PARAM) != null) {
-            return pref.getBoolean(LOADING_PARAM)!!
-        }
-        return false
-    }
+    fun isLoadingEveryTime() = pref.getBoolean(LOADING_PARAM) ?: false
 
     fun putLoadingEveryTime(value: Boolean) {
         val job = SupervisorJob()
@@ -43,7 +38,7 @@ open class SettingsStorage @Inject constructor(
 
     fun getBoard() = pref.getString(BOARD) ?: "b"
 
-    fun getCookie() = pref.getString(COOKIE)?:""
+    fun getCookie() = pref.getString(COOKIE) ?: ""
 
     fun putCookie(cookie: String) = pref.putString(COOKIE, cookie)
 }

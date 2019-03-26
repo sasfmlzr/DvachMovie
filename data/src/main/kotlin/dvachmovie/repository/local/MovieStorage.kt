@@ -6,19 +6,19 @@ import javax.inject.Singleton
 
 @Singleton
 data class MovieStorage(
-        var movieList: MutableLiveData<MutableList<MovieEntity>> = MutableLiveData(),
+        var movieList: MutableLiveData<List<MovieEntity>> = MutableLiveData(),
         var currentMovie: MutableLiveData<MovieEntity> = MutableLiveData()) {
 
     init {
-        movieList.value = mutableListOf()
+        movieList.value = listOf()
         currentMovie.value = MovieEntity("")
     }
 
     fun getIndexPosition(): Int {
-        var pos = 0
-        if (movieList.value!!.contains(currentMovie.value)) {
-            pos = movieList.value!!.indexOf(currentMovie.value)
+        val value = movieList.value ?: listOf()
+        if (value.contains(currentMovie.value)) {
+            return value.indexOf(currentMovie.value)
         }
-        return pos
+        return 0
     }
 }

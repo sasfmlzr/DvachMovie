@@ -16,13 +16,13 @@ class MovieRepository @Inject constructor(
     fun observeDB(lifecycleOwner: LifecycleOwner) {
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, Observer { dbMovies ->
+                    val movieList = movieStorage.movieList.value ?: listOf()
                     val diffList = MovieUtils
-                            .calculateDiff(movieStorage.movieList.value ?: listOf(),
+                            .calculateDiff(movieList,
                                     dbMovies) as MutableList
 
                     if (diffList.isNotEmpty()) {
-                        diffList.addAll(movieStorage.movieList.value ?: listOf())
-                        movieStorage.movieList.value = diffList
+                        movieStorage.movieList.value = diffList + movieList
                     }
                 })
     }
