@@ -9,7 +9,6 @@ import javax.inject.Inject
 open class SettingsStorage @Inject constructor(
         private val pref: KeyValueStorage
 ) {
-
     companion object {
         private const val LOADING_PARAM = "LoadingMoviesOrNot"
         private const val BOARD = "board"

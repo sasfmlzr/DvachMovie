@@ -5,7 +5,7 @@ import com.google.gson.JsonDeserializer
 import dvachmovie.api.model.catalog.DvachCatalogRequest
 import retrofit2.converter.gson.GsonConverterFactory
 
-fun getOwnerContactConverterFactory(): GsonConverterFactory {
+internal fun getOwnerContactConverterFactory(): GsonConverterFactory {
     val ownerContactsParser = GsonBuilder()
             .registerTypeAdapter(DvachCatalogRequest::class.java,
                     JsonDeserializer<DvachCatalogRequest> { json, _, _ ->

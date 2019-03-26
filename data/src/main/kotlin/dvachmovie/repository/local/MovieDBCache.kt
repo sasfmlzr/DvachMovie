@@ -5,4 +5,5 @@ import dvachmovie.db.data.MovieEntity
 import javax.inject.Singleton
 
 @Singleton
-data class MovieDBCache(var movieList: MutableLiveData<MutableList<MovieEntity>> = MutableLiveData())
+data class MovieDBCache(
+        var movieList: MutableLiveData<MutableList<MovieEntity>> = MutableLiveData())

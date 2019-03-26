@@ -23,11 +23,9 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun dvachRetrofitService(cookieJar: CookieJar): DvachMovieApi {
-
         val httpClient = OkHttpClient.Builder()
                 .cookieJar(cookieJar)
                 .build()
-
         val retrofit = Retrofit.Builder()
                 .baseUrl(BuildConfig.DVACH_URL)
                 .client(httpClient)
@@ -38,12 +36,12 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun getCookieJar(cookieManager: CookieManager) =
+    fun cookieJar(cookieManager: CookieManager) =
             cookieManager.getCookieJar()
 
     @Provides
     @Singleton
-    fun getContactsRetrofitService(): ContactsApi {
+    fun contactsRetrofitService(): ContactsApi {
         val httpUrl = HttpUrl.Builder()
                 .host(BuildConfig.CONTACT_URL)
                 .port(port)

@@ -12,7 +12,6 @@ class MovieRepository @Inject constructor(
         private val movieDBRepository: MovieDBRepository,
         private val settingsStorage: SettingsStorage
 ) {
-
     fun observeDB(lifecycleOwner: LifecycleOwner) {
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, Observer { dbMovies ->

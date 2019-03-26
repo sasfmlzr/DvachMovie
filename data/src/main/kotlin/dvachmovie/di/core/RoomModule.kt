@@ -6,32 +6,26 @@ import dagger.Module
 import dagger.Provides
 import dvachmovie.db.MovieDatabase
 import dvachmovie.db.data.MovieDao
+import dvachmovie.repository.db.LocalMovieDBRepository
 import dvachmovie.repository.db.MovieDBRepository
-import dvachmovie.repository.db.MovieDataSource
 import javax.inject.Singleton
 
 @Module
-class RoomModule(application: Application) {
+class RoomModule(private val application: Application) {
 
-    private var movieDatabase: MovieDatabase =
+    @Singleton
+    @Provides
+    internal fun providesMovieDatabase(): MovieDatabase =
             Room.databaseBuilder(application, MovieDatabase::class.java, "movieData")
-                    .build()
+            .build()
 
     @Singleton
     @Provides
-    fun providesMovieDatabase(): MovieDatabase {
-        return movieDatabase
-    }
+    internal fun providesMovieDao(movieDatabase: MovieDatabase): MovieDao =
+            movieDatabase.movieDao()
 
     @Singleton
     @Provides
-    fun providesMovieDao(movieDatabase: MovieDatabase): MovieDao {
-        return movieDatabase.movieDao()
-    }
-
-    @Singleton
-    @Provides
-    fun movieRepository(movieDao: MovieDao): MovieDBRepository {
-        return MovieDataSource(movieDao)
-    }
+    internal fun movieRepository(movieDao: MovieDao): MovieDBRepository =
+            LocalMovieDBRepository(movieDao)
 }

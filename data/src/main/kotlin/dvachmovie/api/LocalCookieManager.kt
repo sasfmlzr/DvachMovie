@@ -5,7 +5,7 @@ import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import javax.inject.Inject
 
-class LocalCookieManager @Inject constructor(
+internal class LocalCookieManager @Inject constructor(
         private val settingsStorage: SettingsStorage) : CookieManager {
 
     companion object {

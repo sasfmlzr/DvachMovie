@@ -6,7 +6,7 @@ import dvachmovie.db.data.MovieEntity
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromDvachUseCase,
-                                       private val getLinkFilesFromThreadsUseCase:
+                                       getLinkFilesFromThreadsUseCase:
                                        GetLinkFilesFromThreadsUseCase) : UseCase {
 
     private lateinit var board: String

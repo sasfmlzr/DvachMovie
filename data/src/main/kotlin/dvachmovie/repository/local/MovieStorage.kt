@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import dvachmovie.db.data.MovieEntity
 import javax.inject.Singleton
 
-@Singleton
 data class MovieStorage(
         var movieList: MutableLiveData<List<MovieEntity>> = MutableLiveData(),
         var currentMovie: MutableLiveData<MovieEntity> = MutableLiveData()) {
