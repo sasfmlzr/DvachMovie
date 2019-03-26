@@ -20,6 +20,8 @@ class MovieVM @Inject constructor(movieStorage: MovieStorage,
         MutableLiveData<String>(cookieManager.getCookie().toString())
     }
 
+    val isPlayerControlVisibility = MutableLiveData<Boolean>(true)
+
     private val function = Function<List<MovieEntity>, LiveData<List<Uri>>> { values ->
         val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
         if (urlVideo.isNotEmpty()) {
@@ -29,11 +31,6 @@ class MovieVM @Inject constructor(movieStorage: MovieStorage,
     }
 
     val uriMovies: MutableLiveData<List<Uri>> =
-            Transformations.switchMap(movieStorage.movieList, function) as MutableLiveData<List<Uri>>
-
-    val isPlayerControlVisibility: MutableLiveData<Boolean> = MutableLiveData()
-
-    init {
-        isPlayerControlVisibility.value = true
-    }
+            Transformations.switchMap(movieStorage.movieList, function)
+                    as MutableLiveData<List<Uri>>
 }

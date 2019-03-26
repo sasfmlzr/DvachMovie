@@ -41,17 +41,20 @@ class PreviewFragment : BaseFragment<PreviewVM,
     }
 
     private fun subscribeUi(adapter: PreviewMovieAdapter) {
-        binding.viewModel!!.getUriMovie()
-                .observe(viewLifecycleOwner, Observer { movie ->
-                    if (movie != null) adapter.submitList(movie)
+        binding.viewModel?.getUriMovie()
+                ?.observe(viewLifecycleOwner, Observer { movies ->
+                    if (movies!=null){
+                        adapter.submitList(movies)
+                    }
                 })
     }
 
     private fun configureScrollRecyclerView() {
+        val movieList = movieStorage.movieList.value ?: listOf()
+        val currentMovie = movieStorage.currentMovie.value
         var pos = 0
-        if (movieStorage.movieList.value
-                !!.contains(movieStorage.currentMovie.value)) {
-            pos = movieStorage.movieList.value!!.indexOf(movieStorage.currentMovie.value)
+        if (movieList.contains(currentMovie)) {
+            pos = movieList.indexOf(currentMovie)
         }
 
         if (pos < SMOOTH_POSITION) {

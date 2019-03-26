@@ -1,7 +1,6 @@
 package dvachmovie.fragment.back
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,5 +29,4 @@ class BackFragment : BaseFragment<BackVM,
 
         return binding.root
     }
-
 }

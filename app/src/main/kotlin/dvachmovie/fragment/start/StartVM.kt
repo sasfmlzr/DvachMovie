@@ -5,15 +5,9 @@ import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
 class StartVM @Inject constructor() : ViewModel() {
-
-    val initText = MutableLiveData<String>()
-    val viewRetryBtn = MutableLiveData<Boolean>()
-    val initGif: MutableLiveData<Int> by lazy {
+    val initText = MutableLiveData<String>("Initialization")
+    val viewRetryBtn = MutableLiveData<Boolean>(false)
+    val initGif by lazy {
         MutableLiveData<Int>()
-    }
-
-    init {
-        initText.value = "Initialization"
-        viewRetryBtn.value = false
     }
 }

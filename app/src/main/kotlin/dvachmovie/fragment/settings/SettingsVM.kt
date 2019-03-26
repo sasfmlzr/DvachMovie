@@ -23,22 +23,13 @@ class SettingsVM @Inject constructor(
         private const val TAG = "SettingsVM"
     }
 
-    val prepareLoading = MutableLiveData<Boolean>()
+    val prepareLoading = MutableLiveData<Boolean>(settingsStorage.isLoadingEveryTime())
 
-    val onCleanDB = MutableLiveData<Boolean>()
+    val onCleanDB = MutableLiveData<Boolean>(false)
 
-    val onChangeBoard = MutableLiveData<Boolean>()
-    /**
-     * @return {@code true} if the listener has success,
-     *         {@code false} otherwise
-     *         */
+    val onChangeBoard = MutableLiveData<Boolean>(false)
+
     lateinit var getContactClick: (contactName: String) -> Unit
-
-    init {
-        prepareLoading.value = settingsStorage.isLoadingEveryTime()
-        onCleanDB.value = false
-        onChangeBoard.value = false
-    }
 
     val onPrepareLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -121,5 +112,4 @@ class SettingsVM @Inject constructor(
         val token = view.applicationWindowToken
         imm!!.hideSoftInputFromWindow(token, 0)
     }
-
 }
