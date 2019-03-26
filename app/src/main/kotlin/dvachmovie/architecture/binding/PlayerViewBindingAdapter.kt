@@ -35,7 +35,7 @@ class PlayerViewBindingAdapter {
                 val agent = Util.getUserAgent(this.context, "AppName")
 
                 val defaultHttpDataSource = DefaultHttpDataSourceFactory(agent, null)
-                defaultHttpDataSource.defaultRequestProperties.set("Cookie", BindingCache.cookie ?: "")
+                defaultHttpDataSource.defaultRequestProperties.set("Cookie", BindingCache.cookie)
 
                 val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(this.context,
                         null, defaultHttpDataSource)

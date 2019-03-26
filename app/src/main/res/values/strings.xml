@@ -18,4 +18,5 @@
     <string name="prepare_each_times">Prepare each times</string>
     <string name="change_to_default_board">Change to default board</string>
     <string name="retry">Retry</string>
+    <string name="loading_image">Loading image</string>
 </resources>
