@@ -12,11 +12,7 @@ class MovieRepository @Inject constructor(
         private val movieDBRepository: MovieDBRepository,
         private val settingsStorage: SettingsStorage
 ) {
-
-    var posPlayer = 0
     var isCalculateDiff = true
-
-    fun getPos() = movieStorage.getIndexPosition()
 
     fun observeDB(lifecycleOwner: LifecycleOwner) {
         isCalculateDiff = true

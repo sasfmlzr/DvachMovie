@@ -33,10 +33,6 @@ import javax.inject.Inject
 class MovieFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
-    companion object {
-        private const val TAG = "MovieFragment"
-    }
-
     @Inject
     lateinit var movieRepository: MovieRepository
     @Inject
@@ -66,7 +62,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
         movieRepository.observeDB(viewLifecycleOwner)
 
-        viewModel.currentPos.value = Pair(movieRepository.getPos(), 0)
+        viewModel.currentPos.value = Pair(movieStorage.getIndexPosition(), 0)
 
         return binding.root
     }
@@ -95,7 +91,6 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun configurePlayer() {
-        movieRepository.posPlayer = player.player.currentWindowIndex
         player.player.addListener(object : Player.EventListener {
             var idAddedToDB = false
 
@@ -118,22 +113,11 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-                if (!idAddedToDB) {
-                    val pos = player.player.currentWindowIndex
-
-                    if (movieRepository.posPlayer == pos - 1) {
-                        logger.d(TAG, "FORWARD POS ---------------------")
-                    }
-
-                    if (movieRepository.posPlayer == pos + 1) {
-                        logger.d(TAG, "PREW POS ---------------------")
-                    }
-
-                    movieRepository.posPlayer = pos
+                idAddedToDB = if (!idAddedToDB) {
                     setUpCurrentMovie(true)
-                    idAddedToDB = true
+                    true
                 } else {
-                    idAddedToDB = false
+                    false
                 }
             }
         })
@@ -211,7 +195,6 @@ class MovieFragment : BaseFragment<MovieVM,
     private fun updateStartPosition() {
         with(player.player!!) {
             playbackPosition = currentPosition
-            movieRepository.posPlayer = currentWindowIndex
             viewModel.currentPos.value = Pair(currentWindowIndex, playbackPosition)
             playWhenReady = playWhenReady
             isPrepared = false
