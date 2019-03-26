@@ -17,7 +17,7 @@ import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.repository.local.MovieRepository
+import dvachmovie.repository.local.MovieStorage
 import dvachmovie.storage.KeyValueStorage
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
@@ -38,7 +38,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
     @Inject
     lateinit var settingsStorage: SettingsStorage
     @Inject
-    lateinit var movieRepository: MovieRepository
+    lateinit var movieStorage: MovieStorage
     @Inject
     lateinit var keyValueStorage: KeyValueStorage
     @Inject
@@ -73,7 +73,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         viewModel.onCleanDB.observe(this, Observer {
             if (it) {
                 WorkerManager.deleteAllInDB(this) {
-                    movieRepository.getMovies().value = mutableListOf()
+                    movieStorage.movieList.value = mutableListOf()
                     router.navigateSettingsToStartFragment()
                 }
             }
@@ -81,7 +81,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.onChangeBoard.observe(this, Observer {
             if (it) {
-                movieRepository.getMovies().value = mutableListOf()
+                movieStorage.movieList.value = mutableListOf()
                 router.navigateSettingsToStartFragment()
             }
         })

@@ -24,6 +24,7 @@ import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.repository.local.MovieRepository
+import dvachmovie.repository.local.MovieStorage
 import dvachmovie.service.DownloadService
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
@@ -38,6 +39,8 @@ class MovieFragment : BaseFragment<MovieVM,
 
     @Inject
     lateinit var movieRepository: MovieRepository
+    @Inject
+    lateinit var movieStorage: MovieStorage
     @Inject
     lateinit var movieCaches: MovieDBCache
 
@@ -75,7 +78,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        if (movieRepository.getMovies().value!!.isNotEmpty()) {
+        if (movieStorage.movieList.value!!.isNotEmpty()) {
             setUpCurrentMovie(true)
         }
         player.player.stop()
@@ -110,7 +113,7 @@ class MovieFragment : BaseFragment<MovieVM,
                 setUpCurrentMovie(true)
 
                 movieCaches.movieList.value = mutableListOf()
-                movieRepository.getMovies().value = mutableListOf()
+                movieStorage.movieList.value = mutableListOf()
                 activity?.recreate()
             }
 
@@ -151,8 +154,8 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun setUpCurrentMovie(isPlayed: Boolean) {
-        if (binding.viewModel!!.getMoviesList().value!!.isNotEmpty()) {
-            val movieUri = binding.viewModel!!.getMoviesList().value!![player.player.currentPeriodIndex]
+        if (movieStorage.movieList.value!!.isNotEmpty()) {
+            val movieUri = movieStorage.movieList.value!![player.player.currentPeriodIndex]
             movieUri.isPlayed = isPlayed
             movieRepository.isCalculateDiff = false
             movieRepository.getCurrent().value = movieUri
@@ -218,7 +221,7 @@ class MovieFragment : BaseFragment<MovieVM,
     override fun onPermissionsGranted(permissions: List<String>) {
         DirectoryHelper.createDirectory(context!!)
         movieRepository.getCurrent().value =
-                movieRepository.getMovies().value!![player.player.currentWindowIndex]
+                movieStorage.movieList.value!![player.player.currentWindowIndex]
         activity?.startService(DownloadService.getDownloadService(
                 context!!,
                 movieRepository.getCurrent().value!!.movieUrl,

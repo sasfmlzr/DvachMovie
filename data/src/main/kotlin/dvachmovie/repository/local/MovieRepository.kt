@@ -20,20 +20,17 @@ class MovieRepository @Inject constructor(
 
     fun getPos() = movieStorage.getIndexPosition()
 
-    fun getMovies() = movieStorage.movieList
-
     fun observeDB(lifecycleOwner: LifecycleOwner) {
         isCalculateDiff = true
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
-                .observe(lifecycleOwner, Observer {
+                .observe(lifecycleOwner, Observer {dbMovies ->
 
                     if (isCalculateDiff) {
 
                         val diffList = MovieUtils
-                                .calculateDiff(movieStorage.movieList.value ?: mutableListOf(),
-                                        it) as MutableList
-
-                        diffList.addAll(movieStorage.movieList.value?: listOf())
+                                .calculateDiff(movieStorage.movieList.value!!,
+                                        dbMovies) as MutableList
+                        diffList.addAll(movieStorage.movieList.value!!)
 
                         movieStorage.movieList.value = diffList
                     }
@@ -48,7 +45,7 @@ class MovieRepository @Inject constructor(
     }
 
     fun shuffleMovies() {
-        getMovies().value = MovieUtils.shuffleMovies(getMovies().value ?: listOf())
+        movieStorage.movieList.value = MovieUtils.shuffleMovies(movieStorage.movieList.value ?: listOf())
                 as MutableList<MovieEntity>
     }
 }

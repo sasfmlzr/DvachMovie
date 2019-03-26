@@ -8,13 +8,11 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dvachmovie.api.CookieManager
 import dvachmovie.db.data.MovieEntity
-import dvachmovie.repository.local.MovieRepository
+import dvachmovie.repository.local.MovieStorage
 import javax.inject.Inject
 
-class MovieVM @Inject constructor(movieRepository: MovieRepository,
+class MovieVM @Inject constructor(movieStorage: MovieStorage,
                                   private val cookieManager: CookieManager) : ViewModel() {
-
-    private val movies: MutableLiveData<MutableList<MovieEntity>> = movieRepository.getMovies()
 
     val currentPos = MutableLiveData<Pair<Int, Long>>()
 
@@ -30,9 +28,7 @@ class MovieVM @Inject constructor(movieRepository: MovieRepository,
     }
 
     val uriMovies: MutableLiveData<List<Uri>> =
-            Transformations.switchMap(movies, function) as MutableLiveData<List<Uri>>
-
-    fun getMoviesList() = movies
+            Transformations.switchMap(movieStorage.movieList, function) as MutableLiveData<List<Uri>>
 
     val isPlayerControlVisibility: MutableLiveData<Boolean> = MutableLiveData()
 
