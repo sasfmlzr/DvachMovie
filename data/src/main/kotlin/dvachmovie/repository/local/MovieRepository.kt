@@ -26,17 +26,18 @@ class MovieRepository @Inject constructor(
         isCalculateDiff = true
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, Observer {
-            val list = mutableListOf<MovieEntity>()
-            if (isCalculateDiff) {
-                list.addAll(calculateDiff(movieStorage.movieList.value!!,
-                        it as MutableList<MovieEntity>))
-                if (list.isNotEmpty()) {
-                    val movieTempList = movieStorage.movieList.value
-                    movieTempList!!.addAll(list)
-                    movieStorage.movieList.value = movieTempList
-                }
-            }
-        })
+
+                    if (isCalculateDiff) {
+
+                        val diffList = MovieUtils
+                                .calculateDiff(movieStorage.movieList.value ?: mutableListOf(),
+                                        it) as MutableList
+
+                        diffList.addAll(movieStorage.movieList.value?: listOf())
+
+                        movieStorage.movieList.value = diffList
+                    }
+                })
     }
 
     fun observeDB(lifecycleOwner: LifecycleOwner,
@@ -47,37 +48,7 @@ class MovieRepository @Inject constructor(
     }
 
     fun shuffleMovies() {
-        val result = mutableListOf<MovieEntity>()
-        getMovies().value?.map {
-            if (!it.isPlayed) {
-                result.add(it)
-            }
-        }
-        getMovies().value = result.shuffled() as MutableList<MovieEntity>
-    }
-
-    private fun calculateDiff(localList: MutableList<MovieEntity>,
-                              dbList: MutableList<MovieEntity>):
-            MutableList<MovieEntity> {
-        val result = mutableListOf<MovieEntity>()
-
-        localList.map { movie ->
-            dbList.contains(movie).let {
-                dbList.remove(movie)
-            }
-        }
-
-        dbList.map { movie ->
-            var equals = false
-            localList.map { localMovie ->
-                if (localMovie.movieUrl == movie.movieUrl) {
-                    equals = true
-                }
-            }
-            if (!equals && !movie.isPlayed) {
-                result.add(movie)
-            }
-        }
-        return result
+        getMovies().value = MovieUtils.shuffleMovies(getMovies().value ?: listOf())
+                as MutableList<MovieEntity>
     }
 }

@@ -10,7 +10,6 @@ data class MovieStorage(
         var currentMovie: MutableLiveData<MovieEntity> = MutableLiveData()) {
 
     init {
-        movieList.value = mutableListOf()
         currentMovie.value = MovieEntity("")
     }
 
