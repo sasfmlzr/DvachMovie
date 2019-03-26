@@ -186,7 +186,6 @@ exceptions:
      - IllegalMonitorStateException
      - NullPointerException
      - IndexOutOfBoundsException
-     - RuntimeException
      - Throwable
   TooGenericExceptionThrown:
     active: true
@@ -194,7 +193,6 @@ exceptions:
      - Error
      - Exception
      - Throwable
-     - RuntimeException
 
 formatting:
   active: true

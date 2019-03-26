@@ -29,7 +29,8 @@ class MovieVM @Inject constructor(movieRepository: MovieRepository,
         MutableLiveData<List<Uri>>(urlVideo)
     }
 
-    val uriMovies: MutableLiveData<List<Uri>> = Transformations.switchMap(movies, function) as MutableLiveData<List<Uri>>
+    val uriMovies: MutableLiveData<List<Uri>> =
+            Transformations.switchMap(movies, function) as MutableLiveData<List<Uri>>
 
     fun getMoviesList() = movies
 

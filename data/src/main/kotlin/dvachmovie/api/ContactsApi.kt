@@ -1,6 +1,6 @@
 package dvachmovie.api
 
-import dvachmovie.api.model.TypicalResponseItem
+import dvachmovie.api.model.contact.UniqueContactName
 import dvachmovie.api.model.contact.OwnerContacts
 import dvachmovie.api.model.location.PutLocation
 import retrofit2.Call
@@ -23,5 +23,5 @@ interface ContactsApi {
     fun putLocationInContact(@Path("id") id: String, @Body location: PutLocation): Call<OwnerContacts>
 
     @GET("contacts/checkid/{id}")
-    fun checkUniqueContacts(@Path("id") id: String): Call<TypicalResponseItem>
+    fun checkUniqueContacts(@Path("id") id: String): Call<UniqueContactName>
 }

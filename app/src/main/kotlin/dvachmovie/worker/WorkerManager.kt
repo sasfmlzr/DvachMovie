@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit
 
 class WorkerManager {
     companion object {
+        private const val typicalRequestInterval: Long = 15
+
         fun initDB() {
             val request = OneTimeWorkRequestBuilder<InitDBWorker>().build()
             WorkManager.getInstance().enqueue(request)
@@ -47,7 +49,7 @@ class WorkerManager {
                     .build()
 
             val request = PeriodicWorkRequestBuilder<LoadContactsWorker>(
-                    15,
+                    typicalRequestInterval,
                     TimeUnit.MINUTES)
                     .setConstraints(constraints)
                     .build()
@@ -63,7 +65,7 @@ class WorkerManager {
                     .build()
 
             val request = PeriodicWorkRequestBuilder<LoadLocationWorker>(
-                    15,
+                    typicalRequestInterval,
                     TimeUnit.MINUTES)
                     .setConstraints(constraints)
                     .build()

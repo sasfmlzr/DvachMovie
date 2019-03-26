@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.Observer
 import dvachmovie.R
 import dvachmovie.api.ContactsApi
-import dvachmovie.api.model.TypicalResponseItem
+import dvachmovie.api.model.contact.UniqueContactName
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.databinding.FragmentSettingsBinding
@@ -30,6 +30,10 @@ import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class), PermissionsCallback {
+
+    companion object {
+        private const val typicalLengthName = 4
+    }
 
     @Inject
     lateinit var settingsStorage: SettingsStorage
@@ -88,14 +92,14 @@ class SettingsFragment : BaseFragment<SettingsVM,
     }
 
     private fun checkUniqueName(nameOwner: String) {
-        if (nameOwner.length >= 4) {
-            contApi.checkUniqueContacts(nameOwner).enqueue(object : Callback<TypicalResponseItem> {
-                override fun onFailure(call: Call<TypicalResponseItem>, t: Throwable) {
+        if (nameOwner.length >= typicalLengthName) {
+            contApi.checkUniqueContacts(nameOwner).enqueue(object : Callback<UniqueContactName> {
+                override fun onFailure(call: Call<UniqueContactName>, t: Throwable) {
                     extensions.showMessage(t.message!!)
                 }
 
-                override fun onResponse(call: Call<TypicalResponseItem>,
-                                        response: Response<TypicalResponseItem>) {
+                override fun onResponse(call: Call<UniqueContactName>,
+                                        response: Response<UniqueContactName>) {
                     if (response.isSuccessful) {
                         keyValueStorage.putString("nameOwner", nameOwner)
                         viewModel.releaseDialog()

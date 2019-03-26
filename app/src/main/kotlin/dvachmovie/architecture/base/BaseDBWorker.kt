@@ -20,7 +20,7 @@ abstract class BaseDBWorker(@NonNull context: Context,
 
             execute()
             Result.success()
-        } catch (ex: Exception) {
+        } catch (ex: RuntimeException) {
             Result.failure()
         }
     }

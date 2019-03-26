@@ -43,7 +43,6 @@ open class SettingsStorage @Inject constructor(
 
     fun getBoard() = pref.getString(BOARD) ?: "b"
 
-
     fun getCookie() = pref.getString(COOKIE)?:""
 
     fun putCookie(cookie: String) = pref.putString(COOKIE, cookie)

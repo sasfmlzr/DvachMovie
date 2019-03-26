@@ -90,18 +90,6 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@+id/navStartFragment"
             app:popUpToInclusive="true" />
-
-        <action
-            android:id="@+id/actionShowContactsFragment"
-            app:destination="@id/navContactsFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
     </fragment>
-    <fragment
-        android:id="@+id/navContactsFragment"
-        android:name="dvachmovie.fragment.contacts.ContactsFragment"
-        android:label="ContactsFragment" />
 
 </navigation>

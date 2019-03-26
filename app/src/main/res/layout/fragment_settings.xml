@@ -31,7 +31,7 @@
             android:layout_marginEnd="20dp"
             android:checked="@{safeUnbox(viewModel.prepareLoading)}"
             android:onCheckedChanged="@{viewModel.onPrepareLoadingClicked}"
-            android:text="Prepare each times"
+            android:text="@string/prepare_each_times"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -43,7 +43,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:onClick="@{viewModel.onRefreshDatabase}"
-            android:text="Clean movies"
+            android:text="@string/clean_movies"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loading_switch" />
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:gravity="center"
-            android:text="Please follow the steps to remove ads."
+            android:text="@string/please_follow_the_steps_to_remove_ads"
             app:layout_constraintBottom_toTopOf="@+id/textStep1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Step 1"
+            android:text="@string/step_1"
             app:layout_constraintBottom_toTopOf="@+id/buttonSendName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -78,7 +78,7 @@
             android:onClick="@{viewModel.onSendNameContactOwner}"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
-            android:text="Write your name"
+            android:text="@string/write_your_name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Step 2"
+            android:text="@string/step_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonSendName" />
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Request contact permission"
+            android:text="@string/request_contact_permission"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textStep2" />
@@ -114,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Step 3"
+            android:text="@string/step_3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonRequestContactPermission" />
@@ -125,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Request location permission"
+            android:text="@string/request_location_permission"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textStep3" />
@@ -136,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Set board"
+            android:text="@string/set_board"
             android:onClick="@{viewModel.onSetBoard}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
