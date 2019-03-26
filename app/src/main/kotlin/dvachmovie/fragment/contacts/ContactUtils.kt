@@ -11,6 +11,8 @@ import dvachmovie.api.model.contact.Contact
 class ContactUtils private constructor() {
 
     companion object {
+        private const val typicalLengthPhone = 10
+
         fun getContacts(resolver: ContentResolver,
                         notExistsContact: (() -> Unit)): List<Contact> {
             val contactList = mutableListOf<Contact>()
@@ -78,8 +80,10 @@ class ContactUtils private constructor() {
             contacts.forEach {
                 var phone = PhoneNumberUtils.normalizeNumber(it.phone)
 
-                if (phone.length > 10 && phone[0].toString() == "8" ||
-                        phone[0].toString() == "+" && phone[1].toString() == "7") {
+                if (phone.length > typicalLengthPhone &&
+                        phone[0].toString() == "8" ||
+                        phone[0].toString() == "+" &&
+                        phone[1].toString() == "7") {
                     phone = PhoneNumberUtils
                             .formatNumberToE164(phone, "RU")
                 }

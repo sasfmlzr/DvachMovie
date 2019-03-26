@@ -21,12 +21,6 @@ class Navigator(private val router: NavController) {
         router.navigate(direction)
     }
 
-    fun navigateSettingsToContactsFragment() {
-        val direction = SettingsFragmentDirections
-                .actionShowContactsFragment()
-        router.navigate(direction)
-    }
-
     fun navigatePreviewToMovieFragment() {
         val direction = PreviewFragmentDirections
                 .actionShowMovieFragment()
