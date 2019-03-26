@@ -16,8 +16,6 @@ class MovieRepository @Inject constructor(
     var posPlayer = 0
     var isCalculateDiff = true
 
-    fun getCurrent() = movieStorage.currentMovie
-
     fun getPos() = movieStorage.getIndexPosition()
 
     fun observeDB(lifecycleOwner: LifecycleOwner) {

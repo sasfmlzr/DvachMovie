@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
-import dvachmovie.repository.local.MovieRepository
 import dvachmovie.repository.local.MovieStorage
 import javax.inject.Inject
 
@@ -19,8 +18,6 @@ class PreviewFragment : BaseFragment<PreviewVM,
         private const val SMOOTH_POSITION = 70
     }
 
-    @Inject
-    lateinit var movieRepository: MovieRepository
     @Inject
     lateinit var movieStorage: MovieStorage
     @Inject
@@ -53,8 +50,8 @@ class PreviewFragment : BaseFragment<PreviewVM,
     private fun configureScrollRecyclerView() {
         var pos = 0
         if (movieStorage.movieList.value
-                !!.contains(movieRepository.getCurrent().value)) {
-            pos = movieStorage.movieList.value!!.indexOf(movieRepository.getCurrent().value)
+                !!.contains(movieStorage.currentMovie.value)) {
+            pos = movieStorage.movieList.value!!.indexOf(movieStorage.currentMovie.value)
         }
 
         if (pos < SMOOTH_POSITION) {

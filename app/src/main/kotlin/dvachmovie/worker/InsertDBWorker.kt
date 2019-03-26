@@ -6,7 +6,7 @@ import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
 import dvachmovie.repository.db.MovieDBRepository
-import dvachmovie.repository.local.MovieRepository
+import dvachmovie.repository.local.MovieStorage
 import javax.inject.Inject
 
 class InsertDBWorker(@NonNull context: Context,
@@ -14,13 +14,13 @@ class InsertDBWorker(@NonNull context: Context,
 ) : BaseDBWorker(context, workerParams) {
 
     @Inject
-    lateinit var movieRepository: MovieRepository
+    lateinit var movieStorage: MovieStorage
     @Inject
     lateinit var movieDBRepository: MovieDBRepository
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
     override fun execute() {
-        movieDBRepository.insert(movieRepository.getCurrent().value!!)
+        movieDBRepository.insert(movieStorage.currentMovie.value!!)
     }
 }

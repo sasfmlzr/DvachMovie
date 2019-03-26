@@ -58,7 +58,7 @@ class MovieFragment : BaseFragment<MovieVM,
         configurePlayer()
         configureButtons()
 
-        movieRepository.getCurrent().observe(viewLifecycleOwner, Observer {
+        movieStorage.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it.isPlayed) {
                 WorkerManager.insertMovieInDB()
             }
@@ -158,7 +158,7 @@ class MovieFragment : BaseFragment<MovieVM,
             val movieUri = movieStorage.movieList.value!![player.player.currentPeriodIndex]
             movieUri.isPlayed = isPlayed
             movieRepository.isCalculateDiff = false
-            movieRepository.getCurrent().value = movieUri
+            movieStorage.currentMovie.value = movieUri
         }
     }
 
@@ -220,11 +220,11 @@ class MovieFragment : BaseFragment<MovieVM,
 
     override fun onPermissionsGranted(permissions: List<String>) {
         DirectoryHelper.createDirectory(context!!)
-        movieRepository.getCurrent().value =
+        movieStorage.currentMovie.value =
                 movieStorage.movieList.value!![player.player.currentWindowIndex]
         activity?.startService(DownloadService.getDownloadService(
                 context!!,
-                movieRepository.getCurrent().value!!.movieUrl,
+                movieStorage.currentMovie.value!!.movieUrl,
                 DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
     }
 }

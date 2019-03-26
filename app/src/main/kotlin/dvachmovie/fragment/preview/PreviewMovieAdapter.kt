@@ -12,10 +12,10 @@ import dvachmovie.api.CookieManager
 import dvachmovie.architecture.Navigator
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.MovieEntity
-import dvachmovie.repository.local.MovieRepository
+import dvachmovie.repository.local.MovieStorage
 import javax.inject.Inject
 
-class PreviewMovieAdapter @Inject constructor(private val movieRepository: MovieRepository,
+class PreviewMovieAdapter @Inject constructor(private val movieStorage: MovieStorage,
                                               private val cookieManager: CookieManager) :
         ListAdapter<MovieEntity, PreviewMovieAdapter.ViewHolder>
         (PreviewMovieDiffCallback()) {
@@ -40,7 +40,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieRepository: Movie
 
     private fun createOnClickListener(movie: MovieEntity): View.OnClickListener {
         return View.OnClickListener {
-            movieRepository.getCurrent().value = movie
+            movieStorage.currentMovie.value = movie
             Navigator(it.findNavController()).navigatePreviewToMovieFragment()
         }
     }
