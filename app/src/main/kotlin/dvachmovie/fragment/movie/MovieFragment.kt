@@ -18,7 +18,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
-import dvachmovie.architecture.binding.PlayerViewBindingAdapter
+import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
@@ -179,7 +179,7 @@ class MovieFragment : BaseFragment<MovieVM,
             playWhenReady = shouldAutoPlay
         }
         if (!isPrepared) {
-            PlayerViewBindingAdapter.bindPlayer(player)
+            bindPlayer(player)
             isPrepared = true
         }
     }
