@@ -11,41 +11,36 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import dvachmovie.architecture.binding.BindingCache.pos
 
 object BindingCache {
     var media = ConcatenatingMediaSource()
     var cookie = String()
+    var pos = Pair<Int, Long>(0, 0)
 }
 
 @BindingAdapter("cookie")
 fun PlayerView.bindCookie(cookies: String) {
     BindingCache.cookie = cookies
     bindPlayer(this)
-
 }
 
 @BindingAdapter("movie")
 fun PlayerView.bindMovie(urlVideo: List<Uri>) {
     if (urlVideo.isNotEmpty()) {
-
         val agent = Util.getUserAgent(this.context, "AppName")
-
         val defaultHttpDataSource = DefaultHttpDataSourceFactory(agent, null)
         defaultHttpDataSource.defaultRequestProperties.set("Cookie", BindingCache.cookie)
 
         val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(this.context,
                 null, defaultHttpDataSource)
 
-        dataSourceFactory.createDataSource().responseHeaders
-
-        val videoSources = urlVideo.map { url ->
+        val mediaSources = ConcatenatingMediaSource()
+        mediaSources.addMediaSources(urlVideo.map { url ->
             ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(url) as MediaSource
-        } as MutableList<MediaSource>
+        })
 
-        val mediaSources = ConcatenatingMediaSource()
-
-        videoSources.map { url -> mediaSources.addMediaSource(url) }
         BindingCache.media = mediaSources
         bindPlayer(this)
     }
@@ -53,14 +48,18 @@ fun PlayerView.bindMovie(urlVideo: List<Uri>) {
 
 @BindingAdapter("movie_position")
 fun PlayerView.bindCurrentPosition(value: Pair<Int, Long>) {
+    pos = value
     val default = 0.toLong()
-    if (value.second == default) {
-        this.player.seekToDefaultPosition(value.first)
+    if (pos.second == default) {
+        this.player.seekToDefaultPosition(pos.first)
     } else {
-        this.player.seekTo(value.first, value.second)
+        this.player.seekTo(pos.first, pos.second)
     }
 }
 
 fun bindPlayer(playerView: PlayerView) {
-    (playerView.player as SimpleExoPlayer).prepare(BindingCache.media, true, false)
+    (playerView.player as SimpleExoPlayer)
+            .prepare(BindingCache.media,
+                    true,
+                    false)
 }
