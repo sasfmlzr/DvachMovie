@@ -24,15 +24,15 @@ class MovieRepository @Inject constructor(
         isCalculateDiff = true
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, Observer {dbMovies ->
-
                     if (isCalculateDiff) {
-
                         val diffList = MovieUtils
                                 .calculateDiff(movieStorage.movieList.value!!,
                                         dbMovies) as MutableList
-                        diffList.addAll(movieStorage.movieList.value!!)
 
-                        movieStorage.movieList.value = diffList
+                        if(diffList.isNotEmpty()){
+                            diffList.addAll(movieStorage.movieList.value!!)
+                            movieStorage.movieList.value = diffList
+                        }
                     }
                 })
     }
