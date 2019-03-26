@@ -138,10 +138,9 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun setUpCurrentMovie(isPlayed: Boolean) {
-        if (movieStorage.movieList.value!!.isNotEmpty()) {
+        if (movieStorage.movieList.value?.isNotEmpty() == true) {
             val movieUri = movieStorage.movieList.value!![player.player.currentPeriodIndex]
             movieUri.isPlayed = isPlayed
-            movieRepository.isCalculateDiff = false
             movieStorage.currentMovie.value = movieUri
         }
     }
