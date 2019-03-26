@@ -74,7 +74,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        if (movieStorage.movieList.value!!.isNotEmpty()) {
+        if (movieStorage.movieList.value?.isNotEmpty() == true) {
             setUpCurrentMovie(true)
         }
         player.player.stop()
@@ -92,8 +92,6 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun configurePlayer() {
         player.player.addListener(object : Player.EventListener {
-            var idAddedToDB = false
-
             override fun onPlayerError(error: ExoPlaybackException?) {
                 var errorMessage = String()
                 when (error?.type) {
@@ -112,13 +110,9 @@ class MovieFragment : BaseFragment<MovieVM,
                 activity?.recreate()
             }
 
-            override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-                idAddedToDB = if (!idAddedToDB) {
-                    setUpCurrentMovie(true)
-                    true
-                } else {
-                    false
-                }
+            override fun onTracksChanged(trackGroups: TrackGroupArray?,
+                                         trackSelections: TrackSelectionArray?) {
+                setUpCurrentMovie(true)
             }
         })
     }
@@ -139,8 +133,9 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun setUpCurrentMovie(isPlayed: Boolean) {
         if (movieStorage.movieList.value?.isNotEmpty() == true) {
-            val movieUri = movieStorage.movieList.value!![player.player.currentPeriodIndex]
-            movieUri.isPlayed = isPlayed
+            val movieUri =
+                    movieStorage.movieList.value?.get(player.player.currentPeriodIndex)
+            movieUri?.isPlayed = isPlayed
             movieStorage.currentMovie.value = movieUri
         }
     }
@@ -175,7 +170,7 @@ class MovieFragment : BaseFragment<MovieVM,
     private var shouldAutoPlay: Boolean = true
 
     private fun initializePlayer() {
-        with(player.player!!) {
+        with(player.player) {
             playWhenReady = shouldAutoPlay
         }
         if (!isPrepared) {
@@ -185,14 +180,14 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun releasePlayer() {
-        if (player.player != null) {
-            updateStartPosition()
-            shouldAutoPlay = player.player!!.playWhenReady
+        with(player.player) {
+            updateStartPosition(this)
+            shouldAutoPlay = this.playWhenReady
         }
     }
 
-    private fun updateStartPosition() {
-        with(player.player!!) {
+    private fun updateStartPosition(player: Player) {
+        with(player) {
             playbackPosition = currentPosition
             viewModel.currentPos.value = Pair(currentWindowIndex, playbackPosition)
             playWhenReady = playWhenReady
@@ -203,10 +198,10 @@ class MovieFragment : BaseFragment<MovieVM,
     override fun onPermissionsGranted(permissions: List<String>) {
         DirectoryHelper.createDirectory(context!!)
         movieStorage.currentMovie.value =
-                movieStorage.movieList.value!![player.player.currentWindowIndex]
+                movieStorage.movieList.value?.get(player.player.currentWindowIndex)
         activity?.startService(DownloadService.getDownloadService(
                 context!!,
-                movieStorage.currentMovie.value!!.movieUrl,
+                movieStorage.currentMovie.value?.movieUrl ?: "",
                 DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
     }
 }
