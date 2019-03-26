@@ -43,7 +43,7 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
     private fun startDownload(downloadPath: String, destinationPath: String) {
         val uri = Uri.parse(downloadPath)
         val request = DownloadManager.Request(uri)
-        request.addRequestHeader("Cookie", cookieManager.cookie.toString())
+        request.addRequestHeader("Cookie", cookieManager.getCookie().toString())
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or
                 DownloadManager.Request.NETWORK_WIFI)
         request.setNotificationVisibility(

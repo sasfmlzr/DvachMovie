@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 
 class SettingsVM @Inject constructor(
-        private val settingsStorage: SettingsStorage,
-        private val logger: Logger
+        settingsStorage: SettingsStorage,
+        logger: Logger
 ) : ViewModel() {
 
     companion object {

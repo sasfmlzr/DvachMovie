@@ -2,14 +2,14 @@ package dvachmovie.fragment.preview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dvachmovie.api.CookieManager
+import dvachmovie.api.Cookie
 import dvachmovie.db.data.MovieEntity
 import javax.inject.Inject
 
 class PreviewItemVM @Inject constructor(movie: MovieEntity,
-                                        cookie: CookieManager.Cookie) : ViewModel() {
+                                        cookie: Cookie) : ViewModel() {
     var imageUrl = MutableLiveData<MovieEntity>(movie)
-    var cookie = MutableLiveData<CookieManager.Cookie>()
+    var cookie = MutableLiveData<Cookie>()
 
     init {
         this.cookie.value = cookie

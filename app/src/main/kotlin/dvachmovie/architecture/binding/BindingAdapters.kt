@@ -9,11 +9,11 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import dvachmovie.api.CookieManager
+import dvachmovie.api.Cookie
 import dvachmovie.db.data.MovieEntity
 
 @BindingAdapter("imageFromUrl", "cookie")
-fun ImageView.bindImageFromUrl(movieEntity: MovieEntity, cookie: CookieManager.Cookie) {
+fun ImageView.bindImageFromUrl(movieEntity: MovieEntity, cookie: Cookie) {
     if (!movieEntity.previewUrl.isEmpty()) {
         val builder = LazyHeaders.Builder().addHeader("Cookie", cookie.toString())
 

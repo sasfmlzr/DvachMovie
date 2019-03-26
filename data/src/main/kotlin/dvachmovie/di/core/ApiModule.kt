@@ -7,7 +7,6 @@ import dvachmovie.api.CookieManager
 import dvachmovie.api.DvachMovieApi
 import dvachmovie.api.getOwnerContactConverterFactory
 import dvachmovie.data.BuildConfig
-import dvachmovie.storage.SettingsStorage
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
@@ -33,7 +32,6 @@ internal class ApiModule {
                 .baseUrl(BuildConfig.DVACH_URL)
                 .client(httpClient)
                 .addConverterFactory(getOwnerContactConverterFactory())
-
                 .build()
         return retrofit.create(DvachMovieApi::class.java)
     }
@@ -41,12 +39,7 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun getCookieJar(cookieManager: CookieManager) =
-            cookieManager.cookieJar
-
-    @Provides
-    @Singleton
-    fun getCookieManager(settingsStorage: SettingsStorage) =
-            CookieManager(settingsStorage)
+            cookieManager.getCookieJar()
 
     @Provides
     @Singleton

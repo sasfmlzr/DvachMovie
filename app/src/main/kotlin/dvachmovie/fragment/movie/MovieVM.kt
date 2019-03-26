@@ -12,18 +12,18 @@ import dvachmovie.repository.local.MovieStorage
 import javax.inject.Inject
 
 class MovieVM @Inject constructor(movieStorage: MovieStorage,
-                                  private val cookieManager: CookieManager) : ViewModel() {
+                                  cookieManager: CookieManager) : ViewModel() {
 
     val currentPos = MutableLiveData<Pair<Int, Long>>()
 
     val cookie: MutableLiveData<String> by lazy {
-        MutableLiveData<String>(cookieManager.cookie.toString())
+        MutableLiveData<String>(cookieManager.getCookie().toString())
     }
 
     private val function = Function<List<MovieEntity>, LiveData<List<Uri>>> { values ->
         val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
         if (urlVideo.isNotEmpty()) {
-            cookie.value = cookieManager.cookie.toString()
+            cookie.value = cookieManager.getCookie().toString()
         }
         MutableLiveData<List<Uri>>(urlVideo)
     }
