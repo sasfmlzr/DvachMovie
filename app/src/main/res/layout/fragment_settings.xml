@@ -18,9 +18,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
+            app:layout_constraintTop_toTopOf="@+id/root"
             app:theme="@style/MyToolBarStyle" />
 
         <Switch
@@ -32,36 +32,148 @@
             android:checked="@{safeUnbox(viewModel.prepareLoading)}"
             android:onCheckedChanged="@{viewModel.onPrepareLoadingClicked}"
             android:text="@string/prepare_each_times"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
 
         <Button
             android:id="@+id/buttonRefreshDatabase"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:onClick="@{viewModel.onRefreshDatabase}"
             android:text="@string/clean_movies"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
             app:layout_constraintTop_toBottomOf="@+id/loading_switch" />
 
-
         <Button
-            android:id="@+id/buttonBoard"
-            android:layout_width="0dp"
+            android:id="@+id/buttonThemeBoard"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="100dp"
-            android:onClick="@{viewModel.onSetBoard}"
-            android:text="@string/set_board"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetThemeBoard}"
+            android:text="@string/set_theme_board"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
             app:layout_constraintTop_toBottomOf="@+id/buttonRefreshDatabase" />
+
+        <Button
+            android:id="@+id/buttonGamesBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetGamesBoard}"
+            android:text="@string/set_games_board"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
+            app:layout_constraintTop_toBottomOf="@+id/buttonThemeBoard" />
+
+        <Button
+            android:id="@+id/buttonOtherAdultBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetAdultOtherBoard}"
+            android:text="@string/set_adult_otherboard"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
+            app:layout_constraintTop_toBottomOf="@+id/buttonGamesBoard" />
+
+        <Button
+            android:id="@+id/buttonAdultBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetAdultBoard}"
+            android:text="@string/set_adult_board"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
+            app:layout_constraintTop_toBottomOf="@+id/buttonOtherAdultBoard" />
+
+        <Button
+            android:id="@+id/buttonPopularBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetPopularBoard}"
+            android:text="@string/set_popular_board"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAdultBoard" />
+
+        <Button
+            android:id="@+id/buttonTechSoftBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetTechSoftBoard}"
+            android:text="@string/set_tech_and_soft_board"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPopularBoard" />
+
+        <Button
+            android:id="@+id/buttonPolNewsBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetPolNewsBoard}"
+            android:text="@string/set_politics_and_news_board"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
+            app:layout_constraintTop_toBottomOf="@+id/buttonTechSoftBoard" />
+
+        <Button
+            android:id="@+id/buttonCreationBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetCreationBoard}"
+            android:text="@string/set_creation_board"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPolNewsBoard" />
+
+        <Button
+            android:id="@+id/buttonJapanBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetJapanBoard}"
+            android:text="@string/set_japan_board"
+            app:layout_constraintEnd_toEndOf="@+id/root"
+            app:layout_constraintStart_toStartOf="@+id/root"
+            app:layout_constraintTop_toBottomOf="@+id/buttonCreationBoard" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

@@ -59,14 +59,13 @@ class StartFragment : BaseFragment<StartVM,
         super.onViewCreated(view, savedInstanceState)
 
         buttonChangeDefaultBoard.setOnClickListener {
-            settingsStorage.putBoard("b")
+            settingsStorage.putBoard("vg")
             activity?.recreate()
         }
         buttonRetry.setOnClickListener {
             viewModel.viewRetryBtn.value = false
             progressLoadingSource.progress = 0
             dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
-
         }
     }
 

@@ -1,5 +1,6 @@
 package dvachmovie.fragment.settings
 
+import android.content.Context
 import android.view.View
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
@@ -10,7 +11,7 @@ import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
-        settingsStorage: SettingsStorage,
+        private val settingsStorage: SettingsStorage,
         logger: Logger
 ) : ViewModel() {
 
@@ -42,31 +43,73 @@ class SettingsVM @Inject constructor(
                         .show()
             }
 
-    val onSetBoard =
+    val onSetPopularBoard =
             View.OnClickListener {
-                val boardMap = Boards.themeMap
-
-                var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
-                AlertDialog.Builder(it.context)
-                        .setTitle("Set board")
-                        .setSingleChoiceItems(
-                                boardMap.values.toTypedArray(),
-                                checkedItem
-                        ) { _, which ->
-                            checkedItem = which
-                        }
-                        .setPositiveButton("Ok") { _, _ ->
-                            if (checkedItem != -1) {
-                                settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
-                                onChangeBoard.value = true
-                            }
-                        }
-                        .setNegativeButton("Cancel") { _, _ -> }
-                        .show()
+                showChangeBoardDialog(it.context, Boards.popularMap)
             }
 
-    object Boards{
-        val boardMap = hashMapOf<String, String>()
+    val onSetThemeBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.themeMap)
+            }
+
+    val onSetCreationBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.creationMap)
+            }
+
+    val onSetPolNewsBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.politycsAndNewsMap)
+            }
+
+    val onSetTechSoftBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.techniqueAndSoftwareMap)
+            }
+
+    val onSetGamesBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.gamesMap)
+            }
+
+    val onSetJapanBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.japanCultureMap)
+            }
+
+    val onSetAdultOtherBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.adultOtherMap)
+            }
+
+    val onSetAdultBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.adultMap)
+            }
+
+    private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
+        var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
+        AlertDialog.Builder(context)
+                .setTitle("Set board")
+                .setSingleChoiceItems(
+                        boardMap.values.toTypedArray(),
+                        checkedItem
+                ) { _, which ->
+                    checkedItem = which
+                }
+                .setPositiveButton("Ok") { _, _ ->
+                    if (checkedItem != -1) {
+                        settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
+                        onChangeBoard.value = true
+                    }
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
+    }
+
+    object Boards {
+        val popularMap = hashMapOf<String, String>()
 
         val themeMap = hashMapOf<String, String>() // Тематика
 
@@ -83,14 +126,15 @@ class SettingsVM @Inject constructor(
         val adultOtherMap = hashMapOf<String, String>() // Разное 18+
 
         val adultMap = hashMapOf<String, String>() // Взрослым 18+
+
         init {
-            boardMap["vg"] = "Video Games General"
-            boardMap["mov"] = "Фильмы"
-            boardMap["po"] = "Политика"
-            boardMap["v"] = "Video Games"
-            boardMap["soc"] = "Общение"
-            boardMap["mu"] = "Музыка"
-            boardMap["mus"] = "Музыканты"
+            popularMap["vg"] = "Video Games General"
+            popularMap["mov"] = "Фильмы"
+            popularMap["po"] = "Политика"
+            popularMap["v"] = "Video Games"
+            popularMap["soc"] = "Общение"
+            popularMap["mu"] = "Музыка"
+            popularMap["mus"] = "Музыканты"
 
             themeMap["au"] = "Автомобили"
             themeMap["bi"] = "Велосипеды"
@@ -189,7 +233,6 @@ class SettingsVM @Inject constructor(
             adultMap["sex"] = "Секс и отношения"
             adultMap["fag"] = "Фагготрия"
         }
-
 
     }
 }

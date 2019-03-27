@@ -19,4 +19,13 @@
     <string name="change_to_default_board">Change to default board</string>
     <string name="retry">Retry</string>
     <string name="loading_image">Loading image</string>
+    <string name="set_adult_board">Set adult board</string>
+    <string name="set_adult_otherboard">Set adult otherboard</string>
+    <string name="set_japan_board">Set japan board</string>
+    <string name="set_games_board">Set games board</string>
+    <string name="set_tech_and_soft_board">Set tech and soft board</string>
+    <string name="set_politics_and_news_board">Set politics and news board</string>
+    <string name="set_creation_board">Set creation board</string>
+    <string name="set_theme_board">Set theme board</string>
+    <string name="set_popular_board">Set popular board</string>
 </resources>

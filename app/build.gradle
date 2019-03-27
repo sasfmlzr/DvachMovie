@@ -93,4 +93,5 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }

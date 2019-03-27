@@ -35,7 +35,7 @@ open class SettingsStorage @Inject constructor(
         }
     }
 
-    fun getBoard() = pref.getString(BOARD) ?: "b"
+    fun getBoard() = pref.getString(BOARD) ?: "vg"
 
     fun getCookie() = pref.getString(COOKIE) ?: ""
 
