@@ -44,15 +44,7 @@ class SettingsVM @Inject constructor(
 
     val onSetBoard =
             View.OnClickListener {
-                val boardMap = hashMapOf<String, String>()
-                boardMap["b"] = "Бред"
-                boardMap["vg"] = "Video Games General"
-                boardMap["mov"] = "Фильмы"
-                boardMap["po"] = "Политика"
-                boardMap["v"] = "Video Games"
-                boardMap["soc"] = "Общение"
-                boardMap["mu"] = "Музыка"
-                boardMap["mus"] = "Музыканты"
+                val boardMap = Boards.themeMap
 
                 var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
                 AlertDialog.Builder(it.context)
@@ -72,4 +64,61 @@ class SettingsVM @Inject constructor(
                         .setNegativeButton("Cancel") { _, _ -> }
                         .show()
             }
+
+    object Boards{
+        val boardMap = hashMapOf<String, String>()
+
+        val themeMap = hashMapOf<String, String>() // Тематика
+
+        val creationMap = hashMapOf<String, String>() // Творчество
+
+
+        init {
+            boardMap["b"] = "Бред"
+            boardMap["vg"] = "Video Games General"
+            boardMap["mov"] = "Фильмы"
+            boardMap["po"] = "Политика"
+            boardMap["v"] = "Video Games"
+            boardMap["soc"] = "Общение"
+            boardMap["mu"] = "Музыка"
+            boardMap["mus"] = "Музыканты"
+
+            themeMap["au"] = "Автомобили"
+            themeMap["bi"] = "Велосипеды"
+            themeMap["biz"] = "Бизнес"
+            themeMap["c"] = "Комиксы"
+            themeMap["cc"] = "Криптовалюты"
+            themeMap["em"] = "Другие страны"
+            themeMap["fa"] = "Мода и стиль"
+            themeMap["fiz"] = "Физкультура"
+            themeMap["fl"] = "Ин. языки"
+            themeMap["ftb"] = "Футбол"
+            themeMap["hi"] = "Ин. языки"
+            themeMap["me"] = "Медицина"
+            themeMap["mg"] = "Магия"
+            themeMap["mlp"] = "Пони"
+            themeMap["mo"] = "Мотоциклы"
+            themeMap["mov"] = "Фильмы"
+            themeMap["mu"] = "Музыка"
+            themeMap["ne"] = "Животные"
+            themeMap["psy"] = "Психология"
+            themeMap["re"] = "Религия"
+            themeMap["sci"] = "Наука"
+            themeMap["sf"] = "Научная фантастика"
+
+            themeMap["sn"] = "Паранормальное"
+            themeMap["sp"] = "Спорт"
+            themeMap["spc"] = "Космос"
+            themeMap["tv"] = "Сериалы"
+            themeMap["un"] = "Образование"
+            themeMap["w"] = "Оружие"
+            themeMap["wh"] = "Warhammer"
+            themeMap["wm"] = "Военная техника"
+            themeMap["wp"] = "Обои и хайрез"
+            themeMap["zog"] = "Теории заговора"
+            
+        }
+
+
+    }
 }
