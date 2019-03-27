@@ -126,6 +126,11 @@ class SettingsVM @Inject constructor(
             creationMap["pa"] = "Живопись"
             creationMap["p"] = "Фотография"
             creationMap["wrk"] = "Работа"
+
+            politycsAndNewsMap["po"] = "Политика"
+            politycsAndNewsMap["news"] = "Новости"
+            politycsAndNewsMap["int"] = "International"
+            politycsAndNewsMap["hry"] = "Х Р Ю"
         }
 
 
