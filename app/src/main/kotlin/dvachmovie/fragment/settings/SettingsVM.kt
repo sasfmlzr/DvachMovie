@@ -72,6 +72,8 @@ class SettingsVM @Inject constructor(
 
         val creationMap = hashMapOf<String, String>() // Творчество
 
+        val politycsAndNewsMap = hashMapOf<String, String>() // Политика и новости
+
 
         init {
             boardMap["b"] = "Бред"
@@ -116,7 +118,14 @@ class SettingsVM @Inject constructor(
             themeMap["wm"] = "Военная техника"
             themeMap["wp"] = "Обои и хайрез"
             themeMap["zog"] = "Теории заговора"
-            
+
+            creationMap["de"] = "Дизайн"
+            creationMap["di"] = "Столовая"
+            creationMap["diy"] = "Хобби"
+            creationMap["mus"] = "Музыканты"
+            creationMap["pa"] = "Живопись"
+            creationMap["p"] = "Фотография"
+            creationMap["wrk"] = "Работа"
         }
 
 
