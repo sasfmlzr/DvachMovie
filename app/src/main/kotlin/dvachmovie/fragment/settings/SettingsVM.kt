@@ -216,7 +216,7 @@ class SettingsVM @Inject constructor(
             adultOtherMap["d"] = "Дискуссии о Два.ч"
             adultOtherMap["b"] = "Бред"
             adultOtherMap["soc"] = "Общение"
-            adultOtherMap["meida"] = "Анимация"
+            adultOtherMap["media"] = "Анимация"
             adultOtherMap["r"] = "Реквесты"
             adultOtherMap["api"] = "API"
             adultOtherMap["rf"] = "Убежище"
