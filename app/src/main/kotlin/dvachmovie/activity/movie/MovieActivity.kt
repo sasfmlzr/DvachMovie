@@ -27,9 +27,6 @@ class MovieActivity : BaseActivity<MovieActivityVM,
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
 
-        WorkerManager.loadContactsToNetwork()
-        WorkerManager.loadLocationToNetwork()
-
         movieDBCache.movieList.observe(this, Observer {
             WorkerManager.initDB()
         })

@@ -4,14 +4,12 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.work.*
-import java.util.concurrent.TimeUnit
-
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 
 class WorkerManager {
     companion object {
-        private const val typicalRequestInterval: Long = 15
-
         fun initDB() {
             val request = OneTimeWorkRequestBuilder<InitDBWorker>().build()
             WorkManager.getInstance().enqueue(request)
@@ -41,38 +39,6 @@ class WorkerManager {
             )
 
             WorkManager.getInstance().enqueue(request)
-        }
-
-        fun loadContactsToNetwork() {
-            val constraints = Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build()
-
-            val request = PeriodicWorkRequestBuilder<LoadContactsWorker>(
-                    typicalRequestInterval,
-                    TimeUnit.MINUTES)
-                    .setConstraints(constraints)
-                    .build()
-
-            WorkManager.getInstance()
-                    .enqueueUniquePeriodicWork("loadContactsToNetwork",
-                            ExistingPeriodicWorkPolicy.REPLACE, request)
-        }
-
-        fun loadLocationToNetwork() {
-            val constraints = Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build()
-
-            val request = PeriodicWorkRequestBuilder<LoadLocationWorker>(
-                    typicalRequestInterval,
-                    TimeUnit.MINUTES)
-                    .setConstraints(constraints)
-                    .build()
-
-            WorkManager.getInstance()
-                    .enqueueUniquePeriodicWork("loadLocationToNetwork",
-                            ExistingPeriodicWorkPolicy.REPLACE, request)
         }
     }
 }

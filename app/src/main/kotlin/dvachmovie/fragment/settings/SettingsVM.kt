@@ -1,18 +1,13 @@
 package dvachmovie.fragment.settings
 
-import android.content.Context
-import android.content.DialogInterface
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
-
 
 class SettingsVM @Inject constructor(
         settingsStorage: SettingsStorage,
@@ -28,8 +23,6 @@ class SettingsVM @Inject constructor(
     val onCleanDB = MutableLiveData<Boolean>(false)
 
     val onChangeBoard = MutableLiveData<Boolean>(false)
-
-    lateinit var getContactClick: (contactName: String) -> Unit
 
     val onPrepareLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -49,43 +42,17 @@ class SettingsVM @Inject constructor(
                         .show()
             }
 
-    val onSendNameContactOwner =
-            View.OnClickListener {
-                val editText = EditText(it.context)
-                val dialog = AlertDialog.Builder(it.context)
-                        .setTitle("Step 1")
-                        .setMessage("Write your name")
-                        .setView(editText)
-                        .setPositiveButton("Ok", null)
-                        .setNegativeButton("Cancel") { _, _ -> }
-                        .show()
-
-                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { view ->
-                    (getContactClick(editText.text.toString()))
-                    hideKeyboard(view)
-
-                }
-                this.dialog = dialog
-            }
-
-    private var dialog: AlertDialog? = null
-
-    fun releaseDialog() {
-        dialog?.dismiss()
-        dialog = null
-    }
-
     val onSetBoard =
             View.OnClickListener {
                 val boardMap = hashMapOf<String, String>()
                 boardMap["b"] = "Бред"
+                boardMap["vg"] = "Video Games General"
                 boardMap["mov"] = "Фильмы"
-                boardMap["c"] = "Комиксы"
-                boardMap["sci"] = "Наука"
-                boardMap["sf"] = "Научная фантастика"
-                boardMap["h"] = "Для Лены"
-                boardMap["e"] = "Для Витька"
-                boardMap["ga"] = "Для Ярика"
+                boardMap["po"] = "Политика"
+                boardMap["v"] = "Video Games"
+                boardMap["soc"] = "Общение"
+                boardMap["mu"] = "Музыка"
+                boardMap["mus"] = "Музыканты"
 
                 var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
                 AlertDialog.Builder(it.context)
@@ -105,11 +72,4 @@ class SettingsVM @Inject constructor(
                         .setNegativeButton("Cancel") { _, _ -> }
                         .show()
             }
-
-    private fun hideKeyboard(view: View) {
-        val imm = view.context?.getSystemService(
-                Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        val token = view.applicationWindowToken
-        imm!!.hideSoftInputFromWindow(token, 0)
-    }
 }
