@@ -28,4 +28,4 @@ class RoomModule(private val application: Application) {
     @Provides
     internal fun movieRepository(movieDao: MovieDao): MovieDBRepository =
             LocalMovieDBRepository(movieDao)
-}
+} 
