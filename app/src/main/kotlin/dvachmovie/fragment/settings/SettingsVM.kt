@@ -173,6 +173,8 @@ class SettingsVM @Inject constructor(
             themeMap["wp"] = "Обои и хайрез"
             themeMap["zog"] = "Теории заговора"
 
+            themeMap["kpop"] = "K-pop"
+
             creationMap["de"] = "Дизайн"
             creationMap["di"] = "Столовая"
             creationMap["diy"] = "Хобби"
@@ -206,7 +208,7 @@ class SettingsVM @Inject constructor(
             gamesMap["wr"] = "Текстовые РПГ"
 
             japanCultureMap["a"] = "Аниме"
-            japanCultureMap["fd"] = "Фэедом"
+            japanCultureMap["fd"] = "Фэндом"
             japanCultureMap["ja"] = "Японская культура"
             japanCultureMap["ma"] = "Манга"
             japanCultureMap["vn"] = "Визуальные новеллы"
