@@ -51,7 +51,6 @@ class MovieFragment : BaseFragment<MovieVM,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
         initPlayer()
         configurePlayer()
         configureButtons()

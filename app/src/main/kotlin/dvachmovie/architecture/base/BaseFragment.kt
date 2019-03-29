@@ -56,7 +56,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-
+        binding.lifecycleOwner = this
         viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(viewModelClass.java)

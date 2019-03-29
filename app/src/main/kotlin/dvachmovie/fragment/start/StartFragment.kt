@@ -44,7 +44,6 @@ class StartFragment : BaseFragment<StartVM,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
 
         val value = "92ea293bf47456479e25b11ba67bb17a"
         settingsStorage.putCookie(value)
