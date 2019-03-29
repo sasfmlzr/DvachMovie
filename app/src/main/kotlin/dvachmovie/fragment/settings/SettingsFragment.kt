@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
@@ -23,13 +24,13 @@ class SettingsFragment : BaseFragment<SettingsVM,
     @Inject
     lateinit var movieStorage: MovieStorage
 
+    override var layoutId = R.layout.fragment_settings
+
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-
-        binding = FragmentSettingsBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
         setUpToolbar()

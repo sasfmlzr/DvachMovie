@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
@@ -23,13 +24,13 @@ class PreviewFragment : BaseFragment<PreviewVM,
     @Inject
     lateinit var adapter: PreviewMovieAdapter
 
+    override var layoutId = R.layout.fragment_preview_movies
+
     override fun inject(component: FragmentComponent) = component.inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-
-        binding = FragmentPreviewMoviesBinding.inflate(inflater, container, false)
 
         binding.viewModel = viewModel
         binding.moviesList.adapter = adapter

@@ -36,13 +36,13 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var movieDBCache: MovieDBCache
 
+    override var layoutId = R.layout.fragment_start
+
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-
-        binding = FragmentStartBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 

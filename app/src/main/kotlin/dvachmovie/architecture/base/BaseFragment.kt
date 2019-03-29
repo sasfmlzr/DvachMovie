@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,8 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
 
     protected abstract fun inject(component: FragmentComponent)
 
+    protected abstract var layoutId: Int
+
     protected lateinit var binding: B
     protected lateinit var viewModel: VM
 
@@ -48,8 +51,12 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     }
 
     @CallSuper
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
+        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+
         viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(viewModelClass.java)

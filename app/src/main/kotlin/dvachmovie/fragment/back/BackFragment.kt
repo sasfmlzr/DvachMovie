@@ -14,13 +14,13 @@ import dvachmovie.di.core.FragmentComponent
 class BackFragment : BaseFragment<BackVM,
         FragmentBackBinding>(BackVM::class) {
 
+    override var layoutId = R.layout.fragment_back
+
     override fun inject(component: FragmentComponent) = component.inject(this)
 
     @SuppressLint("ResourceType")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentBackBinding.inflate(inflater, container, false)
-
         binding.viewModel = viewModel
 
         viewModel.imageView.value = ContextCompat.getDrawable(context!!, R.raw.kiss)
