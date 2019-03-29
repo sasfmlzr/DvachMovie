@@ -1,11 +1,9 @@
 <resources>
     <string name="app_name">DvachMovie</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="preview_image">Preview image</string>
     <string name="exit_image">Image for exit from app</string>
     <string name="download">Download</string>
     <string name="shuffle">Shuffle</string>
-    <string name="set_board">Set board</string>
     <string name="clean_movies">Clean movies</string>
     <string name="prepare_each_times">Prepare each times</string>
     <string name="change_to_default_board">Change to default board</string>

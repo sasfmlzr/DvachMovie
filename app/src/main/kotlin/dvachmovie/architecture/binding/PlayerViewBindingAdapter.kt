@@ -13,12 +13,6 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import dvachmovie.architecture.binding.BindingCache.pos
 
-object BindingCache {
-    var media = ConcatenatingMediaSource()
-    var cookie = String()
-    var pos = Pair<Int, Long>(0, 0)
-}
-
 @BindingAdapter("cookie")
 fun PlayerView.bindCookie(cookies: String) {
     BindingCache.cookie = cookies
