@@ -5,14 +5,6 @@
     <string name="exit_image">Image for exit from app</string>
     <string name="download">Download</string>
     <string name="shuffle">Shuffle</string>
-    <string name="unlocked">Full version Unlocked!</string>
-    <string name="please_follow_the_steps_to_remove_ads">Please follow the steps to remove ads.</string>
-    <string name="step_1">Step 1</string>
-    <string name="write_your_name">Write your name</string>
-    <string name="step_2">Step 2</string>
-    <string name="request_contact_permission">Request contact permission</string>
-    <string name="step_3">Step 3</string>
-    <string name="request_location_permission">Request location permission</string>
     <string name="set_board">Set board</string>
     <string name="clean_movies">Clean movies</string>
     <string name="prepare_each_times">Prepare each times</string>
