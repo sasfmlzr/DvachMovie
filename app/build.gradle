@@ -59,14 +59,7 @@ dependencies {
     implementation "com.google.dagger:dagger-android:$daggerVersion"
 
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion"
-
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-
-    // Room components
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
@@ -86,6 +79,8 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+
     implementation project(':data')
     implementation project(':domain')
 
@@ -93,5 +88,4 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
