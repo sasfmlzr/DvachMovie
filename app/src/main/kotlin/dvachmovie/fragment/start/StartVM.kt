@@ -7,7 +7,7 @@ import javax.inject.Inject
 class StartVM @Inject constructor() : ViewModel() {
     val initText = MutableLiveData<String>("Initialization")
     val viewRetryBtn = MutableLiveData<Boolean>(false)
-    val initGif by lazy {
+    val imageId by lazy {
         MutableLiveData<Int>()
     }
 }

@@ -47,7 +47,7 @@ class StartFragment : BaseFragment<StartVM,
 
         val value = "92ea293bf47456479e25b11ba67bb17a"
         settingsStorage.putCookie(value)
-        viewModel.initGif.value = R.raw.cybermilosgif
+        viewModel.imageId.value = R.raw.cybermilosgif
         prepareData()
 
         return binding.root

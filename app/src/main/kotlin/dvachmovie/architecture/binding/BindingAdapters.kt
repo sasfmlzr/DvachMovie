@@ -1,6 +1,5 @@
 package dvachmovie.architecture.binding
 
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -26,22 +25,11 @@ fun ImageView.bindImageFromUrl(movieEntity: MovieEntity, cookie: Cookie) {
     }
 }
 
-@BindingAdapter("imageFromDrawable")
-fun bindImageFromDrawable(view: ImageView, image: Drawable?) {
-    if (image != null) {
+@BindingAdapter("imageFromResource")
+fun bindImageFromGif(view: ImageView, resourceId: Int) {
         Glide.with(view.context)
-                .load(image)
+                .load(resourceId)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(view)
-    }
-}
-
-@BindingAdapter("imageFromGif")
-fun bindImageFromGif(view: ImageView, localLink: Int?) {
-    if (localLink != null) {
-        Glide.with(view.context)
-                .load(localLink)
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                .into(view)
-    }
 }
