@@ -3,6 +3,14 @@ Player for videos from 2ch.hk
 
 It has never been so easy to play movies from 2сh!
 This app is based on MVVM architecture.
+You'll watch only new webm from different boards. 
+Also you can download videos. 
+
+Screenshots
+-----------
+![Player](screenshots/DvachMovie1.jpeg "DvachMovie player")
+![List movies](screenshots/DvachMovie2.jpeg "List movies")
+![Settings](screenshots/DvachMovie3.jpeg "Settings")
 
 Libraries Used
 --------------
@@ -11,6 +19,7 @@ Libraries Used
   * [AndroidX][1] - AndroidX is the open-source project that the Android team uses to develop, 
   test, package, version and release libraries within Jetpack.
   * [AppCompat][2] - Degrade gracefully on older versions of Android.
+  * [Android KTX][3] - Write more concise, idiomatic Kotlin code.
 * Architecture - A collection of libraries that help you design robust, testable, and
   maintainable apps. Start with classes for managing your UI component lifecycle and handling data
   persistence.
@@ -35,8 +44,9 @@ Libraries Used
   layouts with a flat view hierarchy (no nested view groups).
   * [ExoPlayer][25] - It provides an alternative to Android’s MediaPlayer API for 
   playing audio and video both locally and over the Internet.
+  * [Animations & Transitions][26] - Move widgets and transition between screens.
 * Third party
-  * [Detekt][32] - Static code analysis for Kotlin.
+  * [Detekt][31] - Static code analysis for Kotlin.
   * [Glide][32] - For image loading and for glide transformations.
   * [Glide Transformations][33] - An Android transformation library providing 
   a variety of image transformations for Glide.
@@ -47,6 +57,7 @@ Libraries Used
   
 [1]: https://developer.android.com/jetpack/androidx/
 [2]: https://developer.android.com/topic/libraries/support-library/packages#v7-appcompat/
+[3]: https://developer.android.com/kotlin/ktx
 
 [101]: https://developer.android.com/topic/libraries/data-binding/
 [102]: https://developer.android.com/topic/libraries/architecture/viewmodel/
@@ -64,6 +75,7 @@ Libraries Used
 [23]: https://developer.android.com/guide/topics/ui/look-and-feel/
 [24]: https://developer.android.com/training/constraint-layout/
 [25]: https://developer.android.com/guide/topics/media/exoplayer/
+[26]: https://developer.android.com/training/animation/
 
 [31]: https://github.com/arturbosch/detekt
 [32]: https://bumptech.github.io/glide/
