@@ -38,4 +38,13 @@ class MovieRepository @Inject constructor(
                 ?: listOf())
                 as MutableList<MovieEntity>
     }
+
+
+    fun markCurrentMovieAsPlayed(isPlayed: Boolean, indexPosition : Int) {
+        movieStorage.currentMovie.value =
+                movieStorage.movieList.value?.getOrNull(indexPosition).apply {
+            this?.isPlayed = isPlayed
+        }
+    }
+
 }

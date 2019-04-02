@@ -2,7 +2,6 @@ package dvachmovie.fragment.movie
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.ExoPlaybackException.*
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -29,6 +27,7 @@ import dvachmovie.repository.local.MovieStorage
 import dvachmovie.service.DownloadService
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
+import kotlinx.android.synthetic.main.fragment_movie.*
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
@@ -41,8 +40,6 @@ class MovieFragment : BaseFragment<MovieVM,
     @Inject
     lateinit var movieCaches: MovieDBCache
 
-    private lateinit var player: PlayerView
-
     override var layoutId = R.layout.fragment_movie
 
     override fun inject(component: FragmentComponent) = component.inject(this)
@@ -51,9 +48,6 @@ class MovieFragment : BaseFragment<MovieVM,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
-        initPlayer()
-        configurePlayer()
-        configureButtons()
 
         movieStorage.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it.isPlayed) {
@@ -68,43 +62,36 @@ class MovieFragment : BaseFragment<MovieVM,
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initPlayer(playerView)
+        configureButtons()
+    }
+
     override fun onStart() {
         super.onStart()
-
         initializePlayer()
     }
 
     override fun onStop() {
         if (movieStorage.movieList.value?.isNotEmpty() == true) {
-            setUpCurrentMovie(true)
+            movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
         }
-        player.player.stop()
+        playerView.player.stop()
         super.onStop()
 
         releasePlayer()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun initPlayer() {
-        player = binding.playerView
-        player.player = ExoPlayerFactory.newSimpleInstance(player.context)
-        player.setOnTouchListener(onGestureListener(context!!))
-    }
 
-    private fun configurePlayer() {
-        player.player.addListener(object : Player.EventListener {
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initPlayer(playerView: PlayerView) {
+        playerView.player = ExoPlayerFactory.newSimpleInstance(playerView.context)
+        playerView.setOnTouchListener(gestureListener)
+
+        playerView.player.addListener(object : Player.EventListener {
             override fun onPlayerError(error: ExoPlaybackException?) {
-                var errorMessage = String()
-                when (error?.type) {
-                    TYPE_SOURCE -> errorMessage = "Source error"
-                    TYPE_RENDERER -> errorMessage = "Render error"
-                    TYPE_UNEXPECTED -> errorMessage = "Unexpected error"
-                }
-                if (error?.cause?.localizedMessage != null) {
-                    errorMessage = "$errorMessage - ${error.cause?.localizedMessage}"
-                }
-                extensions.showMessage(errorMessage)
-                setUpCurrentMovie(true)
+                movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
 
                 movieCaches.movieList.value = mutableListOf()
                 movieStorage.movieList.value = mutableListOf()
@@ -113,57 +100,48 @@ class MovieFragment : BaseFragment<MovieVM,
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?,
                                          trackSelections: TrackSelectionArray?) {
-                setUpCurrentMovie(true)
+                movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
             }
         })
     }
 
     private fun configureButtons() {
-        binding.shuffleButton.setOnClickListener {
+        shuffleButton.setOnClickListener {
             movieRepository.shuffleMovies()
         }
 
-        binding.downloadButton.setOnClickListener {
+        downloadButton.setOnClickListener {
             runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
 
-        binding.settingsButton.setOnClickListener {
+        settingsButton.setOnClickListener {
             router.navigateMovieToSettingsFragment()
         }
     }
 
-    private fun setUpCurrentMovie(isPlayed: Boolean) {
-        if (movieStorage.movieList.value?.isNotEmpty() == true) {
-            val movieUri =
-                    movieStorage.movieList.value?.get(player.player.currentPeriodIndex)
-            movieUri?.isPlayed = isPlayed
-            movieStorage.currentMovie.value = movieUri
-        }
-    }
-
-    //      ------------GESTURE LISTENER--------------
-    private fun onGestureListener(context: Context) = object : OnSwipeTouchListener(context) {
-        override fun onEventTouch(event: MotionEvent) {
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                toggleControlsVisibility()
+    private val gestureListener by lazy {
+        object : OnSwipeTouchListener(context!!) {
+            override fun onEventTouch(event: MotionEvent) {
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    toggleControlsVisibility()
+                }
             }
-        }
 
-        override fun onSwipeTop() {
-            router.navigateMovieToPreviewFragment()
+            override fun onSwipeTop() {
+                router.navigateMovieToPreviewFragment()
+            }
         }
     }
 
     private fun toggleControlsVisibility() {
-        if (player.isControllerVisible) {
+        if (playerView.isControllerVisible) {
             viewModel.isPlayerControlVisibility.value = false
-            player.hideController()
+            playerView.hideController()
         } else {
             viewModel.isPlayerControlVisibility.value = true
-            player.showController()
+            playerView.showController()
         }
     }
-    //      ------------GESTURE LISTENER--------------
 
     private var isPrepared = false
     private var playbackPosition: Long = 0
@@ -171,35 +149,28 @@ class MovieFragment : BaseFragment<MovieVM,
     private var shouldAutoPlay: Boolean = true
 
     private fun initializePlayer() {
-        with(player.player) {
-            playWhenReady = shouldAutoPlay
-        }
+        playerView.player.playWhenReady = shouldAutoPlay
         if (!isPrepared) {
-            bindPlayer(player)
+            bindPlayer(playerView)
             isPrepared = true
         }
     }
 
     private fun releasePlayer() {
-        with(player.player) {
-            updateStartPosition(this)
-            shouldAutoPlay = this.playWhenReady
-        }
+        updateStartPosition()
+        shouldAutoPlay = playerView.player.playWhenReady
     }
 
-    private fun updateStartPosition(player: Player) {
-        with(player) {
-            playbackPosition = currentPosition
-            viewModel.currentPos.value = Pair(currentWindowIndex, playbackPosition)
-            playWhenReady = playWhenReady
-            isPrepared = false
-        }
+    private fun updateStartPosition() {
+        playbackPosition = playerView.player.currentPosition
+        viewModel.currentPos.value = Pair(playerView.player.currentWindowIndex, playbackPosition)
+        isPrepared = false
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
         DirectoryHelper.createDirectory(context!!)
         movieStorage.currentMovie.value =
-                movieStorage.movieList.value?.get(player.player.currentWindowIndex)
+                movieStorage.movieList.value?.get(playerView.player.currentWindowIndex)
         activity?.startService(DownloadService.getDownloadService(
                 context!!,
                 movieStorage.currentMovie.value?.movieUrl ?: "",
