@@ -16,12 +16,21 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="@+id/root"
-            app:layout_constraintStart_toStartOf="@+id/root"
-            app:layout_constraintTop_toTopOf="@+id/root"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:theme="@style/MyToolBarStyle" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/well"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -50,7 +59,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:onClick="@{viewModel.onRefreshDatabase}"
-                        android:text="@string/clean_movies"/>
+                        android:text="@string/clean_movies" />
 
                     <Button
                         android:id="@+id/buttonThemeBoard"
@@ -61,7 +70,8 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetThemeBoard}"
-                        android:text="@string/set_theme_board"/>
+                        android:text="@string/set_theme_board"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/buttonGamesBoard"
@@ -72,7 +82,8 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetGamesBoard}"
-                        android:text="@string/set_games_board"/>
+                        android:text="@string/set_games_board"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/buttonOtherAdultBoard"
@@ -83,7 +94,8 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetAdultOtherBoard}"
-                        android:text="@string/set_adult_otherboard" />
+                        android:text="@string/set_adult_otherboard"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/buttonAdultBoard"
@@ -94,7 +106,8 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetAdultBoard}"
-                        android:text="@string/set_adult_board" />
+                        android:text="@string/set_adult_board"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/buttonPopularBoard"
@@ -105,7 +118,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetPopularBoard}"
-                        android:text="@string/set_popular_board"/>
+                        android:text="@string/set_popular_board" />
 
                     <Button
                         android:id="@+id/buttonTechSoftBoard"
@@ -116,7 +129,8 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetTechSoftBoard}"
-                        android:text="@string/set_tech_and_soft_board"/>
+                        android:text="@string/set_tech_and_soft_board"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/buttonPolNewsBoard"
@@ -127,7 +141,8 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetPolNewsBoard}"
-                        android:text="@string/set_politics_and_news_board" />
+                        android:text="@string/set_politics_and_news_board"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/buttonCreationBoard"
@@ -138,7 +153,8 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetCreationBoard}"
-                        android:text="@string/set_creation_board" />
+                        android:text="@string/set_creation_board"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/buttonJapanBoard"
@@ -149,9 +165,11 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetJapanBoard}"
-                        android:text="@string/set_japan_board"/>
+                        android:text="@string/set_japan_board"
+                        android:visibility="gone" />
                 </LinearLayout>
             </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

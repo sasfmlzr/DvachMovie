@@ -47,6 +47,21 @@ android {
         }
     }
     testOptions.unitTests.includeAndroidResources = true
+
+    flavorDimensions "environment"
+
+    productFlavors{
+        demo {
+            dimension "environment"
+            applicationId "com.dvachmovie.android.demo"
+            buildConfigField "boolean", "FULL_VERSION", "false"
+        }
+        pro {
+            dimension "environment"
+            applicationId "com.dvachmovie.android.pro"
+            buildConfigField "boolean", "FULL_VERSION", "true"
+        }
+    }
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
