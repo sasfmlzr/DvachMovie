@@ -36,8 +36,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
 
     protected abstract fun inject(component: FragmentComponent)
 
-    protected abstract var layoutId: Int
-
+    protected abstract fun getLayoutId(): Int
     protected lateinit var binding: B
     protected lateinit var viewModel: VM
 
@@ -55,7 +54,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
         binding.lifecycleOwner = this
         viewModel = ViewModelProviders
                 .of(this, viewModelFactory)

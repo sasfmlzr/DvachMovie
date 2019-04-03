@@ -1,14 +1,22 @@
 package dvachmovie.di.core
 
+import dvachmovie.BuildConfig
+
 object Injector {
 
-    private lateinit var component: ApplicationComponent
+    private lateinit var component: DemoApplicationComponent
 
     fun prepare(application: MainApplication) {
-        component = DaggerApplicationComponent.builder()
-                .applicationModule(ApplicationModule(application))
-                .roomModule(RoomModule(application))
-                .build()
+        when (BuildConfig.FULL_VERSION) {
+            true -> component = DaggerFullApplicationComponent.builder()
+                    .applicationModule(ApplicationModule(application))
+                    .roomModule(RoomModule(application))
+                    .build()
+            false -> component = DaggerDemoApplicationComponent.builder()
+                    .applicationModule(ApplicationModule(application))
+                    .roomModule(RoomModule(application))
+                    .build()
+        }
     }
 
     fun applicationComponent() = component

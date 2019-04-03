@@ -8,9 +8,10 @@ import javax.inject.Singleton
     ApplicationModule::class,
     ExoModule::class,
     ViewModelFactoryModule::class,
-    RootDataModule::class
+    RootDataModule::class,
+    DemoViewModule::class
 ])
-interface ApplicationComponent {
+interface DemoApplicationComponent {
     fun viewComponent(): FragmentComponent
     fun navigationComponent(): ActivityComponent
     fun workComponent(): WorkerComponent

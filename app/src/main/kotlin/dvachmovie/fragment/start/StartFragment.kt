@@ -13,7 +13,11 @@ import dvachmovie.di.core.Injector
 import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.*
+import dvachmovie.usecase.CounterWebm
+import dvachmovie.usecase.DvachModel
+import dvachmovie.usecase.DvachUseCase
+import dvachmovie.usecase.ExecutorResult
+import dvachmovie.usecase.UseCaseModel
 import kotlinx.android.synthetic.main.fragment_start.*
 import javax.inject.Inject
 
@@ -36,7 +40,7 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var movieDBCache: MovieDBCache
 
-    override var layoutId = R.layout.fragment_start
+    override fun getLayoutId() = R.layout.fragment_start
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 

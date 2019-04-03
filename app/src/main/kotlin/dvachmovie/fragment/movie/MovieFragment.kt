@@ -40,7 +40,7 @@ class MovieFragment : BaseFragment<MovieVM,
     @Inject
     lateinit var movieCaches: MovieDBCache
 
-    override var layoutId = R.layout.fragment_movie
+    override fun getLayoutId() = R.layout.fragment_movie
 
     override fun inject(component: FragmentComponent) = component.inject(this)
 

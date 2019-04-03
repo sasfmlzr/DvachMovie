@@ -6,27 +6,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import dvachmovie.BuildConfig
-import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
+import dvachmovie.databinding.FragmentSettingsFullBindingImpl
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.repository.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
-import kotlinx.android.synthetic.main.fragment_settings.*
 import javax.inject.Inject
+import javax.inject.Named
 
 class SettingsFragment : BaseFragment<SettingsVM,
-        FragmentSettingsBinding>(SettingsVM::class) {
+        dvachmovie.databinding.FragmentSettingsFullBinding>(SettingsVM::class) {
 
     @Inject
     lateinit var settingsStorage: SettingsStorage
     @Inject
     lateinit var movieStorage: MovieStorage
 
-    override var layoutId = R.layout.fragment_settings
+    @Inject
+    @field:Named("settingsLayout")
+    lateinit var settingsLayout: String
+
+    override fun getLayoutId() = Integer.parseInt(settingsLayout)
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
@@ -39,11 +42,6 @@ class SettingsFragment : BaseFragment<SettingsVM,
         configureVM()
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        configureButton()
     }
 
     private fun setUpToolbar() {
@@ -72,18 +70,5 @@ class SettingsFragment : BaseFragment<SettingsVM,
                 router.navigateSettingsToStartFragment()
             }
         })
-    }
-
-    private fun configureButton() {
-        if (BuildConfig.FULL_VERSION) {
-            buttonAdultBoard.visibility = View.VISIBLE
-            buttonCreationBoard.visibility = View.VISIBLE
-            buttonGamesBoard.visibility = View.VISIBLE
-            buttonJapanBoard.visibility = View.VISIBLE
-            buttonPolNewsBoard.visibility = View.VISIBLE
-            buttonOtherAdultBoard.visibility = View.VISIBLE
-            buttonThemeBoard.visibility = View.VISIBLE
-            buttonTechSoftBoard.visibility = View.VISIBLE
-        }
     }
 }

@@ -24,7 +24,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
     @Inject
     lateinit var adapter: PreviewMovieAdapter
 
-    override var layoutId = R.layout.fragment_preview_movies
+    override fun getLayoutId() = R.layout.fragment_preview_movies
 
     override fun inject(component: FragmentComponent) = component.inject(this)
 
@@ -44,7 +44,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
     private fun subscribeUi(adapter: PreviewMovieAdapter) {
         binding.viewModel?.getUriMovie()
                 ?.observe(viewLifecycleOwner, Observer { movies ->
-                    if (movies!=null){
+                    if (movies != null) {
                         adapter.submitList(movies)
                     }
                 })

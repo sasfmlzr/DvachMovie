@@ -13,7 +13,7 @@ import dvachmovie.di.core.FragmentComponent
 class BackFragment : BaseFragment<BackVM,
         FragmentBackBinding>(BackVM::class) {
 
-    override var layoutId = R.layout.fragment_back
+    override fun getLayoutId() = R.layout.fragment_back
 
     override fun inject(component: FragmentComponent) = component.inject(this)
 
