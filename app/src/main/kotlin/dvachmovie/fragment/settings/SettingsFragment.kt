@@ -6,30 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
-import dvachmovie.databinding.FragmentSettingsFullBindingImpl
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.repository.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
-import javax.inject.Named
 
 class SettingsFragment : BaseFragment<SettingsVM,
-        dvachmovie.databinding.FragmentSettingsFullBinding>(SettingsVM::class) {
+        FragmentSettingsBinding>(SettingsVM::class) {
 
     @Inject
     lateinit var settingsStorage: SettingsStorage
     @Inject
     lateinit var movieStorage: MovieStorage
 
-    @Inject
-    @field:Named("settingsLayout")
-    lateinit var settingsLayout: String
-
-    override fun getLayoutId() = Integer.parseInt(settingsLayout)
+    override fun getLayoutId() = R.layout.fragment_settings
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 

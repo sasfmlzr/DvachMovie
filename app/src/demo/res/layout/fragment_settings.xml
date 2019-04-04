@@ -51,7 +51,6 @@
                         android:onCheckedChanged="@{viewModel.onPrepareLoadingClicked}"
                         android:text="@string/prepare_each_times" />
 
-
                     <Button
                         android:id="@+id/buttonRefreshDatabase"
                         android:layout_width="match_parent"
@@ -60,6 +59,17 @@
                         android:layout_marginEnd="16dp"
                         android:onClick="@{viewModel.onRefreshDatabase}"
                         android:text="@string/clean_movies" />
+
+                    <Button
+                        android:id="@+id/buttonPopularBoard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:onClick="@{viewModel.onSetPopularBoard}"
+                        android:text="@string/set_popular_board" />
 
                     <Button
                         android:id="@+id/buttonThemeBoard"
@@ -108,17 +118,6 @@
                         android:onClick="@{viewModel.onSetAdultBoard}"
                         android:text="@string/set_adult_board"
                         android:visibility="gone" />
-
-                    <Button
-                        android:id="@+id/buttonPopularBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetPopularBoard}"
-                        android:text="@string/set_popular_board" />
 
                     <Button
                         android:id="@+id/buttonTechSoftBoard"
