@@ -14,7 +14,9 @@ import javax.inject.Inject
 class MovieVM @Inject constructor(movieStorage: MovieStorage,
                                   cookieManager: CookieManager) : ViewModel() {
 
-    val currentPos = MutableLiveData<Pair<Int, Long>>()
+    val currentPos: MutableLiveData<Pair<Int, Long>> by lazy {
+        MutableLiveData<Pair<Int, Long>>(Pair(0, 0L))
+    }
 
     val cookie: MutableLiveData<String> by lazy {
         MutableLiveData<String>(cookieManager.getCookie().toString())

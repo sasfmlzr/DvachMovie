@@ -57,7 +57,9 @@ class MovieFragment : BaseFragment<MovieVM,
 
         movieRepository.observeDB(viewLifecycleOwner)
 
-        viewModel.currentPos.value = Pair(movieStorage.getIndexPosition(), 0)
+        if (viewModel.currentPos.value == Pair(0, 0L)) {
+            viewModel.currentPos.value = Pair(movieStorage.getIndexPosition(), 0)
+        }
 
         return binding.root
     }
@@ -82,7 +84,6 @@ class MovieFragment : BaseFragment<MovieVM,
 
         releasePlayer()
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initPlayer(playerView: PlayerView) {
@@ -143,28 +144,23 @@ class MovieFragment : BaseFragment<MovieVM,
         }
     }
 
-    private var isPrepared = false
-    private var playbackPosition: Long = 0
-
-    private var shouldAutoPlay: Boolean = true
-
     private fun initializePlayer() {
-        playerView.player.playWhenReady = shouldAutoPlay
-        if (!isPrepared) {
+        playerView.player.playWhenReady = PlayerCache.shouldAutoPlay
+        if (!PlayerCache.isPrepared) {
             bindPlayer(playerView)
-            isPrepared = true
+            PlayerCache.isPrepared = true
         }
     }
 
     private fun releasePlayer() {
         updateStartPosition()
-        shouldAutoPlay = playerView.player.playWhenReady
+        PlayerCache.shouldAutoPlay = playerView.player.playWhenReady
     }
 
     private fun updateStartPosition() {
-        playbackPosition = playerView.player.currentPosition
-        viewModel.currentPos.value = Pair(playerView.player.currentWindowIndex, playbackPosition)
-        isPrepared = false
+        PlayerCache.playbackPosition = playerView.player.currentPosition
+        viewModel.currentPos.value = Pair(playerView.player.currentWindowIndex, PlayerCache.playbackPosition)
+        PlayerCache.isPrepared = false
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
