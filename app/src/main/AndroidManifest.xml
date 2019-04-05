@@ -31,6 +31,10 @@
             android:name=".service.DownloadService"
             android:enabled="true"
             android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3074235676525198~3986251123"/>
     </application>
 
 </manifest>
