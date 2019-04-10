@@ -6,6 +6,7 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dvachmovie.BuildConfig
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
@@ -24,6 +25,8 @@ class SettingsVM @Inject constructor(
     val onCleanDB = MutableLiveData<Boolean>(false)
 
     val onChangeBoard = MutableLiveData<Boolean>(false)
+
+    val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
 
     val onPrepareLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->

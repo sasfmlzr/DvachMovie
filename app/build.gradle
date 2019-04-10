@@ -16,8 +16,8 @@ android {
         applicationId 'com.sasfmlzr.dvachmovie.android'
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode Integer.parseInt(project["versionCode"])
+        versionName project["versionName"]
     }
     dataBinding {
         enabled = true
