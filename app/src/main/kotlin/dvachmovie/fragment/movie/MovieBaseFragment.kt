@@ -68,9 +68,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         }
 
         MobileAds.initialize(context,
-                "ca-app-pub-3940256099942544~3347511713")
+                "ca-app-pub-3074235676525198~3986251123")
         ads = InterstitialAd(context)
-        ads.adUnitId = "ca-app-pub-3940256099942544/1033173712"
+        ads.adUnitId = "ca-app-pub-3074235676525198/2334198033"
 
         ads.adListener = object : AdListener() {
             override fun onAdLoaded() {
@@ -123,7 +123,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
                 if (containsAds) {
                     countPlayed += 1
-                    if (countPlayed % 40 == 0) {
+                    if (countPlayed % 10 == 0) {
                         showAd()
                     }
                 }
