@@ -12,4 +12,6 @@ class PreviewVM @Inject constructor(movieStorage: MovieStorage) : ViewModel() {
     }
 
     fun getUriMovie() = uriMovie
+
+    val sdkKey = MutableLiveData("ca-app-pub-3074235676525198~3986251123")
 }
