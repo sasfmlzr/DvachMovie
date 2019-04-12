@@ -14,13 +14,17 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
-import dvachmovie.di.core.FragmentComponent
+import dvachmovie.fragment.movie.PlayerCache.countPlayed
 import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.repository.local.MovieStorage
@@ -30,7 +34,7 @@ import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
 import javax.inject.Inject
 
-class MovieFragment : BaseFragment<MovieVM,
+abstract class MovieBaseFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
     @Inject
@@ -40,9 +44,11 @@ class MovieFragment : BaseFragment<MovieVM,
     @Inject
     lateinit var movieCaches: MovieDBCache
 
-    override fun getLayoutId() = R.layout.fragment_movie
+    private lateinit var ads: InterstitialAd
 
-    override fun inject(component: FragmentComponent) = component.inject(this)
+    protected abstract val containsAds: Boolean
+
+    override fun getLayoutId() = R.layout.fragment_movie
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -59,6 +65,18 @@ class MovieFragment : BaseFragment<MovieVM,
 
         if (viewModel.currentPos.value == Pair(0, 0L)) {
             viewModel.currentPos.value = Pair(movieStorage.getIndexPosition(), 0)
+        }
+
+        MobileAds.initialize(context,
+                "ca-app-pub-3940256099942544~3347511713")
+        ads = InterstitialAd(context)
+        ads.adUnitId = "ca-app-pub-3940256099942544/1033173712"
+
+        ads.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                ads.show()
+            }
         }
 
         return binding.root
@@ -102,6 +120,13 @@ class MovieFragment : BaseFragment<MovieVM,
             override fun onTracksChanged(trackGroups: TrackGroupArray?,
                                          trackSelections: TrackSelectionArray?) {
                 movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+
+                if (containsAds) {
+                    countPlayed += 1
+                    if (countPlayed % 40 == 0) {
+                        showAd()
+                    }
+                }
             }
         })
     }
@@ -171,5 +196,9 @@ class MovieFragment : BaseFragment<MovieVM,
                 context!!,
                 movieStorage.currentMovie.value?.movieUrl ?: "",
                 DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
+    }
+
+    private fun showAd() {
+        ads.loadAd(AdRequest.Builder().build())
     }
 }
