@@ -8,6 +8,9 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import dvachmovie.api.Cookie
 import dvachmovie.db.data.MovieEntity
 
@@ -27,9 +30,20 @@ fun ImageView.bindImageFromUrl(movieEntity: MovieEntity, cookie: Cookie) {
 
 @BindingAdapter("imageFromResource")
 fun bindImageFromGif(view: ImageView, resourceId: Int) {
-        Glide.with(view.context)
-                .load(resourceId)
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(view)
+    Glide.with(view.context)
+            .load(resourceId)
+            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(view)
+}
+
+@BindingAdapter("showBanner")
+fun AdView.showBanner(sdkKey: String) {
+    MobileAds.initialize(this.context, sdkKey)
+
+    val request = AdRequest.Builder()
+            .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+            .addTestDevice("8F3FC8DD5008F6A17A373A2B3DC259FB")
+            .build()
+    this.loadAd(request)
 }
