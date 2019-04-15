@@ -13,6 +13,7 @@ data class MovieStorage(
         currentMovie.value = MovieEntity("")
     }
 
+    /** return 0 if element not contained */
     fun getIndexPosition(): Int {
         val value = movieList.value ?: listOf()
         if (value.contains(currentMovie.value)) {

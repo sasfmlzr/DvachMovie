@@ -51,12 +51,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
     }
 
     private fun configureScrollRecyclerView() {
-        val movieList = movieStorage.movieList.value ?: listOf()
-        val currentMovie = movieStorage.currentMovie.value
-        var pos = 0
-        if (movieList.contains(currentMovie)) {
-            pos = movieList.indexOf(currentMovie)
-        }
+        val pos = movieStorage.getIndexPosition()
 
         if (pos < SMOOTH_POSITION) {
             binding.moviesList.smoothScrollToPosition(pos)
