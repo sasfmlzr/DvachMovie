@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +13,7 @@ import dvachmovie.R
 import dvachmovie.api.Cookie
 import dvachmovie.api.CookieManager
 import dvachmovie.architecture.Navigator
+import dvachmovie.architecture.ViewModelFactory
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieStorage

@@ -86,7 +86,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
             return
         }
 
-        val grantedPermissions: MutableList<String> = mutableListOf()
+        val grantedPermissions = mutableListOf<String>()
 
         if (permissions.isNotEmpty() && grantResults.isNotEmpty()) {
             for ((index, value) in grantResults.withIndex()) {

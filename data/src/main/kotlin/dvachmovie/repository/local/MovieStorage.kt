@@ -2,11 +2,10 @@ package dvachmovie.repository.local
 
 import androidx.lifecycle.MutableLiveData
 import dvachmovie.db.data.MovieEntity
-import javax.inject.Singleton
 
 data class MovieStorage(
-        var movieList: MutableLiveData<List<MovieEntity>> = MutableLiveData(),
-        var currentMovie: MutableLiveData<MovieEntity> = MutableLiveData()) {
+        val movieList: MutableLiveData<List<MovieEntity>> = MutableLiveData(),
+        val currentMovie: MutableLiveData<MovieEntity> = MutableLiveData()) {
 
     init {
         movieList.value = listOf()
@@ -14,11 +13,11 @@ data class MovieStorage(
     }
 
     /** return 0 if element not contained */
-    fun getIndexPosition(): Int {
-        val value = movieList.value ?: listOf()
-        if (value.contains(currentMovie.value)) {
-            return value.indexOf(currentMovie.value)
-        }
-        return 0
-    }
+    fun getIndexPosition(): Int =
+            (movieList.value ?: listOf()).let { list ->
+                if (list.contains(currentMovie.value)) {
+                    return list.indexOf(currentMovie.value)
+                }
+                return 0
+            }
 }

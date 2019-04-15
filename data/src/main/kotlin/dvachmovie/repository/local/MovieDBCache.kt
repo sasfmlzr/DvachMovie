@@ -6,4 +6,4 @@ import javax.inject.Singleton
 
 @Singleton
 data class MovieDBCache(
-        var movieList: MutableLiveData<MutableList<MovieEntity>> = MutableLiveData())
+        val movieList: MutableLiveData<List<MovieEntity>> = MutableLiveData())

@@ -27,6 +27,7 @@ import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.repository.local.MovieStorage
+import dvachmovie.repository.local.MovieUtils
 import dvachmovie.service.DownloadService
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
@@ -70,7 +71,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         return binding.root
     }
 
-    private fun initAds(){
+    private fun initAds() {
         MobileAds.initialize(context,
                 "ca-app-pub-3074235676525198~3986251123")
         ads = InterstitialAd(context)
@@ -104,32 +105,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     private fun initPlayer(playerView: PlayerView) {
         playerView.player = ExoPlayerFactory.newSimpleInstance(playerView.context)
         playerView.setOnTouchListener(gestureListener)
-
-        playerView.player.addListener(object : Player.EventListener {
-            override fun onPlayerError(error: ExoPlaybackException?) {
-                movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
-
-                movieCaches.movieList.value = mutableListOf()
-                movieStorage.movieList.value = mutableListOf()
-                activity?.recreate()
-            }
-
-            override fun onTracksChanged(trackGroups: TrackGroupArray?,
-                                         trackSelections: TrackSelectionArray?) {
-                movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
-
-                if (containsAds) {
-                    PlayerCache.countPlayed += 1
-                    if (PlayerCache.countPlayed % 10 == 0) {
-                        showAd()
-                    }
-                }
-            }
-        })
-    }
-
-    private fun showAd() {
-        ads.loadAd(AdRequest.Builder().build())
+        playerView.player.addListener(playerListener)
     }
 
     private val gestureListener by lazy {
@@ -147,31 +123,46 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     }
 
     private fun toggleControlsVisibility() =
-        if (playerView.isControllerVisible) {
-            playerView.hideController()
-            false
-        } else {
-            playerView.showController()
-            true
-    }
+            if (playerView.isControllerVisible) {
+                playerView.hideController()
+                false
+            } else {
+                playerView.showController()
+                true
+            }
 
-    override fun onStart() {
-        super.onStart()
-        initializePlayer()
-    }
+    private val playerListener by lazy {
+        object : Player.EventListener {
+            override fun onPlayerError(error: ExoPlaybackException?) {
+                movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
 
-    override fun onStop() {
-        if (movieStorage.movieList.value?.isNotEmpty() == true) {
-            movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+                movieCaches.movieList.value = listOf()
+                movieStorage.movieList.value = listOf()
+                activity?.recreate()
+            }
+
+            override fun onTracksChanged(trackGroups: TrackGroupArray?,
+                                         trackSelections: TrackSelectionArray?) {
+                movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+                if (containsAds) {
+                    showAds()
+                }
+            }
         }
-        super.onStop()
+    }
 
-        releasePlayer()
+    private fun showAds() {
+        PlayerCache.countPlayed += 1
+        if (PlayerCache.countPlayed % 10 == 0) {
+            ads.loadAd(AdRequest.Builder().build())
+        }
     }
 
     private fun configureButtons() {
         shuffleButton.setOnClickListener {
-            movieRepository.shuffleMovies()
+            movieStorage.movieList.value =
+                    MovieUtils.shuffleMovies(movieStorage.movieList.value
+                            ?: listOf())
         }
 
         downloadButton.setOnClickListener {
@@ -183,12 +174,23 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        initializePlayer()
+    }
+
     private fun initializePlayer() {
         playerView.player.playWhenReady = PlayerCache.shouldAutoPlay
         if (!PlayerCache.isPrepared) {
             bindPlayer(playerView)
             PlayerCache.isPrepared = true
         }
+    }
+
+    override fun onStop() {
+        movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+        super.onStop()
+        releasePlayer()
     }
 
     private fun releasePlayer() {

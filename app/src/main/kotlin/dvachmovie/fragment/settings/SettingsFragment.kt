@@ -53,7 +53,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         viewModel.onCleanDB.observe(this, Observer {
             if (it) {
                 WorkerManager.deleteAllInDB(this) {
-                    movieStorage.movieList.value = mutableListOf()
+                    movieStorage.movieList.value = listOf()
                     router.navigateSettingsToStartFragment()
                 }
             }
@@ -61,7 +61,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.onChangeBoard.observe(this, Observer {
             if (it) {
-                movieStorage.movieList.value = mutableListOf()
+                movieStorage.movieList.value = listOf()
                 router.navigateSettingsToStartFragment()
             }
         })

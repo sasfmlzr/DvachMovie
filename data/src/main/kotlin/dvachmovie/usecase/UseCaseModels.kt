@@ -7,4 +7,4 @@ data class GetThreadsFromDvachModel(val listThreads: List<String>) : UseCaseMode
 
 data class GetLinkFilesFromThreadsModel(val fileItems: List<FileItem>) : UseCaseModel
 
-data class DvachModel(val movies: MutableList<MovieEntity>): UseCaseModel
+data class DvachModel(val movies: List<MovieEntity>): UseCaseModel

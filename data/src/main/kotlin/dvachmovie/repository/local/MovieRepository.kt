@@ -18,7 +18,7 @@ class MovieRepository @Inject constructor(
                     val movieList = movieStorage.movieList.value ?: listOf()
                     val diffList = MovieUtils
                             .calculateDiff(movieList,
-                                    dbMovies) as MutableList
+                                    dbMovies)
 
                     if (diffList.isNotEmpty()) {
                         movieStorage.movieList.value = diffList + movieList
@@ -33,18 +33,10 @@ class MovieRepository @Inject constructor(
                 .observe(lifecycleOwner, observer)
     }
 
-    fun shuffleMovies() {
-        movieStorage.movieList.value = MovieUtils.shuffleMovies(movieStorage.movieList.value
-                ?: listOf())
-                as MutableList<MovieEntity>
-    }
-
-
-    fun markCurrentMovieAsPlayed(isPlayed: Boolean, indexPosition : Int) {
+    fun markCurrentMovieAsPlayed(isPlayed: Boolean, indexPosition: Int) {
         movieStorage.currentMovie.value =
                 movieStorage.movieList.value?.getOrNull(indexPosition).apply {
-            this?.isPlayed = isPlayed
-        }
+                    this?.isPlayed = isPlayed
+                }
     }
-
 }

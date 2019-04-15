@@ -43,11 +43,10 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachApi: D
             logger.d(TAG, "parsing started for $num")
             resp?.threads?.forEach { thread ->
                 thread.posts?.forEach { post ->
-                    post.files?.forEach { file ->
-                        listFiles.add(file)
-                    }
+                    listFiles.addAll(post.files ?: listOf())
                 }
             }
+
             logger.d(TAG, "parsing finished for $num")
 
             executorResult.onSuccess(GetLinkFilesFromThreadsModel(listFiles))

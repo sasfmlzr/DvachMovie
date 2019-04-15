@@ -11,8 +11,7 @@ class MovieUtils {
                 movies.filter { !it.isPlayed }
 
         fun calculateDiff(localList: List<MovieEntity>,
-                             dbList: List<MovieEntity>):
-                List<MovieEntity> = dbList
-                .filter { !localList.contains(it) && !it.isPlayed }
+                          dbList: List<MovieEntity>): List<MovieEntity> =
+                dbList.filter { !localList.contains(it) && !it.isPlayed }
     }
 }
