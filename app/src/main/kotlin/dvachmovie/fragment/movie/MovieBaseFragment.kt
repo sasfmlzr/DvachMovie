@@ -24,7 +24,6 @@ import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
-import dvachmovie.fragment.movie.PlayerCache.countPlayed
 import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.repository.local.MovieStorage
@@ -66,41 +65,39 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         if (viewModel.currentPos.value == Pair(0, 0L)) {
             viewModel.currentPos.value = Pair(movieStorage.getIndexPosition(), 0)
         }
+        initAds()
 
+        return binding.root
+    }
+
+    private fun initAds(){
         MobileAds.initialize(context,
                 "ca-app-pub-3074235676525198~3986251123")
         ads = InterstitialAd(context)
         ads.adUnitId = "ca-app-pub-3074235676525198/2334198033"
 
         ads.adListener = object : AdListener() {
+            override fun onAdOpened() {
+                super.onAdOpened()
+                playerView.player.playWhenReady = false
+            }
+
+            override fun onAdClosed() {
+                super.onAdClosed()
+                playerView.player.playWhenReady = true
+            }
+
             override fun onAdLoaded() {
                 super.onAdLoaded()
                 ads.show()
             }
         }
-
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initPlayer(playerView)
         configureButtons()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        initializePlayer()
-    }
-
-    override fun onStop() {
-        if (movieStorage.movieList.value?.isNotEmpty() == true) {
-            movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
-        }
-        playerView.player.stop()
-        super.onStop()
-
-        releasePlayer()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -122,13 +119,54 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
 
                 if (containsAds) {
-                    countPlayed += 1
-                    if (countPlayed % 10 == 0) {
+                    PlayerCache.countPlayed += 1
+                    if (PlayerCache.countPlayed % 10 == 0) {
                         showAd()
                     }
                 }
             }
         })
+    }
+
+    private fun showAd() {
+        ads.loadAd(AdRequest.Builder().build())
+    }
+
+    private val gestureListener by lazy {
+        object : OnSwipeTouchListener(context!!) {
+            override fun onEventTouch(event: MotionEvent) {
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    viewModel.isPlayerControlVisibility.value = toggleControlsVisibility()
+                }
+            }
+
+            override fun onSwipeTop() {
+                router.navigateMovieToPreviewFragment()
+            }
+        }
+    }
+
+    private fun toggleControlsVisibility() =
+        if (playerView.isControllerVisible) {
+            playerView.hideController()
+            false
+        } else {
+            playerView.showController()
+            true
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initializePlayer()
+    }
+
+    override fun onStop() {
+        if (movieStorage.movieList.value?.isNotEmpty() == true) {
+            movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+        }
+        super.onStop()
+
+        releasePlayer()
     }
 
     private fun configureButtons() {
@@ -145,30 +183,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         }
     }
 
-    private val gestureListener by lazy {
-        object : OnSwipeTouchListener(context!!) {
-            override fun onEventTouch(event: MotionEvent) {
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    toggleControlsVisibility()
-                }
-            }
-
-            override fun onSwipeTop() {
-                router.navigateMovieToPreviewFragment()
-            }
-        }
-    }
-
-    private fun toggleControlsVisibility() {
-        if (playerView.isControllerVisible) {
-            viewModel.isPlayerControlVisibility.value = false
-            playerView.hideController()
-        } else {
-            viewModel.isPlayerControlVisibility.value = true
-            playerView.showController()
-        }
-    }
-
     private fun initializePlayer() {
         playerView.player.playWhenReady = PlayerCache.shouldAutoPlay
         if (!PlayerCache.isPrepared) {
@@ -178,13 +192,13 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     }
 
     private fun releasePlayer() {
+        playerView.player.stop()
         updateStartPosition()
         PlayerCache.shouldAutoPlay = playerView.player.playWhenReady
     }
 
     private fun updateStartPosition() {
-        PlayerCache.playbackPosition = playerView.player.currentPosition
-        viewModel.currentPos.value = Pair(playerView.player.currentWindowIndex, PlayerCache.playbackPosition)
+        viewModel.currentPos.value = Pair(playerView.player.currentWindowIndex, playerView.player.currentPosition)
         PlayerCache.isPrepared = false
     }
 
@@ -196,9 +210,5 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 context!!,
                 movieStorage.currentMovie.value?.movieUrl ?: "",
                 DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
-    }
-
-    private fun showAd() {
-        ads.loadAd(AdRequest.Builder().build())
     }
 }
