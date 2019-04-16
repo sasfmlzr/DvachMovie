@@ -2,6 +2,9 @@ package dvachmovie.fragment.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -32,7 +35,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
-
+        setHasOptionsMenu(true)
         setUpToolbar()
         configureVM()
 
@@ -64,5 +67,20 @@ class SettingsFragment : BaseFragment<SettingsVM,
                 router.navigateSettingsToStartFragment()
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.action_promote) {
+            // navigation to payment
+            extensions.showMessage("Whew")
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
     }
 }
