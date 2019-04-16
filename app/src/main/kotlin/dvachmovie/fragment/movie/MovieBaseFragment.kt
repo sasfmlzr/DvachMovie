@@ -56,9 +56,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         binding.viewModel = viewModel
 
         movieStorage.currentMovie.observe(viewLifecycleOwner, Observer {
-            if (it.isPlayed) {
-                WorkerManager.insertMovieInDB()
-            }
+                if (it?.isPlayed==true) {
+                    WorkerManager.insertMovieInDB()
+                }
         })
 
         movieRepository.observeDB(viewLifecycleOwner)
