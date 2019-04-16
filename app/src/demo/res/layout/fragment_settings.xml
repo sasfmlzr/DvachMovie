@@ -18,11 +18,14 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:theme="@style/MyToolBarStyle" />
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:theme="@style/MyToolBarStyle"
+            app:title="Settings" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/scrollContainer"
@@ -45,9 +48,11 @@
                     <Switch
                         android:id="@+id/loading_switch"
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="20dp"
                         android:checked="@{safeUnbox(viewModel.prepareLoading)}"
                         android:onCheckedChanged="@{viewModel.onPrepareLoadingClicked}"
                         android:text="@string/prepare_each_times" />
@@ -66,9 +71,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
                         android:onClick="@{viewModel.onSetPopularBoard}"
                         android:text="@string/set_popular_board" />
 
@@ -77,9 +81,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
                         android:onClick="@{viewModel.onSetThemeBoard}"
                         android:text="@string/set_theme_board" />
                 </LinearLayout>
@@ -91,7 +94,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:onClick="@{viewModel.onGetProVersion}"
@@ -99,13 +101,13 @@
             app:layout_constraintBottom_toTopOf="@+id/versionText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollContainer"/>
+            app:layout_constraintTop_toBottomOf="@+id/scrollContainer" />
 
         <TextView
             android:id="@+id/versionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="20dp"
             android:text="@={viewModel.version}"
             app:layout_constraintBottom_toTopOf="@+id/adView"
             app:layout_constraintEnd_toEndOf="parent"

@@ -13,6 +13,7 @@ import javax.inject.Inject
 import androidx.core.content.ContextCompat.startActivity
 import android.content.Intent
 import android.net.Uri
+import dvachmovie.R
 
 
 class SettingsVM @Inject constructor(
@@ -39,7 +40,7 @@ class SettingsVM @Inject constructor(
 
     val onRefreshDatabase =
             View.OnClickListener {
-                AlertDialog.Builder(it.context)
+                AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
                         .setTitle("Confirmation")
                         .setMessage("Database will clean")
                         .setPositiveButton("Ok") { _, _ ->
@@ -104,7 +105,7 @@ class SettingsVM @Inject constructor(
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
-        AlertDialog.Builder(context)
+        AlertDialog.Builder(context, R.style.AlertDialogStyle)
                 .setTitle("Set board")
                 .setSingleChoiceItems(
                         boardMap.values.toTypedArray(),

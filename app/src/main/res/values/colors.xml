@@ -3,4 +3,10 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#363636</color>
     <color name="colorAccent">#D81B60</color>
+
+
+    <color name="colorPrimaryOne">#90868B</color>
+    <color name="colorPrimaryDarkOne">#080609</color>
+    <color name="backgroundOne">#382C51</color>
+    <color name="backgroundOsne">#90868B</color>
 </resources>

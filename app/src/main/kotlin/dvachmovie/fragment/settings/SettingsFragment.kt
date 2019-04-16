@@ -42,7 +42,6 @@ class SettingsFragment : BaseFragment<SettingsVM,
     private fun setUpToolbar() {
         val activity = (activity as AppCompatActivity)
         activity.setSupportActionBar(binding.toolbar)
-        activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun configureVM() {

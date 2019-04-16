@@ -10,12 +10,33 @@
         <item name="windowActionBar">false</item>
     </style>
 
-    <style name="MyToolBarStyle" parent="Base.V14.Theme.MaterialComponents">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">false</item>
+    <style name="MyToolBarStyle" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:title">false</item>
     </style>
 
+    <style name="BlackTheme" parent="Base.V14.Theme.MaterialComponents">
+        <!-- Customize your theme here. -->
+
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkOne</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="alertDialogStyle">@style/AlertDialogStyle</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">?attr/colorBackgroundFloating</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="AlertDialogStyle" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:background">?attr/colorBackgroundFloating</item>
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 </resources>
