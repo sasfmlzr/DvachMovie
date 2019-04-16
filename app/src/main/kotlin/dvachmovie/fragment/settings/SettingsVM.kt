@@ -10,6 +10,10 @@ import dvachmovie.BuildConfig
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
+import androidx.core.content.ContextCompat.startActivity
+import android.content.Intent
+import android.net.Uri
+
 
 class SettingsVM @Inject constructor(
         private val settingsStorage: SettingsStorage,
@@ -89,6 +93,13 @@ class SettingsVM @Inject constructor(
     val onSetAdultBoard =
             View.OnClickListener {
                 showChangeBoardDialog(it.context, Boards.adultMap)
+            }
+
+    val onGetProVersion =
+            View.OnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse("market://details?id=com.dvachmovie.android.pro")
+                startActivity(it.context, intent, null)
             }
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {

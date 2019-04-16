@@ -18,4 +18,5 @@
     <string name="set_creation_board">Set creation board</string>
     <string name="set_theme_board">Set theme board</string>
     <string name="set_popular_board">Set popular board</string>
+    <string name="get_pro_version">Get pro version</string>
 </resources>
