@@ -24,6 +24,7 @@ android {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionName project["versionName"]
+        versionCode project["versionCode"].toInteger()
         signingConfig signingConfigs.releaseConfig
     }
     dataBinding {

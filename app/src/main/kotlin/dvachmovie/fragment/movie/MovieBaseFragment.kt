@@ -153,7 +153,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     private fun showAds() {
         PlayerCache.countPlayed += 1
-        if (PlayerCache.countPlayed % 10 == 0) {
+        if (PlayerCache.countPlayed % 30 == 0) {
             ads.loadAd(AdRequest.Builder().build())
         }
     }
