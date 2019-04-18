@@ -13,6 +13,7 @@ open class SettingsStorage @Inject constructor(
         private const val LOADING_PARAM = "LoadingMoviesOrNot"
         private const val BOARD = "board"
         private const val COOKIE = "cookie"
+        private const val ALLOWUNMODERATEDCONTENT = "isAllowUnmoderatedContent"
     }
 
     fun isLoadingEveryTime() = pref.getBoolean(LOADING_PARAM) ?: false
@@ -40,4 +41,15 @@ open class SettingsStorage @Inject constructor(
     fun getCookie() = pref.getString(COOKIE) ?: ""
 
     fun putCookie(cookie: String) = pref.putString(COOKIE, cookie)
+
+    fun isAllowUnmoderatedContent() = pref.getBoolean(ALLOWUNMODERATEDCONTENT) ?: false
+
+    fun putIsAllowUnmoderatedContent(value: Boolean) {
+        val job = SupervisorJob()
+        val scope = CoroutineScope(Dispatchers.Default + job)
+
+        scope.launch {
+            pref.putBoolean(ALLOWUNMODERATEDCONTENT, value)
+        }
+    }
 }

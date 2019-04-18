@@ -19,4 +19,6 @@
     <string name="set_theme_board">Set theme board</string>
     <string name="set_popular_board">Set popular board</string>
     <string name="get_pro_version">Get pro version</string>
+    <string name="allow_unmoderated_content">Allow unmoderated content</string>
+    <string name="unmoderated_content_warning">By unlocking unmoderated boards, you agree that you are over 18 years old. The developer is not responsible for the content provided by users - these are only links to the boards received from 2ch.hk.</string>
 </resources>

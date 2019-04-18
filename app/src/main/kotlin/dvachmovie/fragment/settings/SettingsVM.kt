@@ -13,6 +13,7 @@ import javax.inject.Inject
 import androidx.core.content.ContextCompat.startActivity
 import android.content.Intent
 import android.net.Uri
+import android.widget.TextView
 import dvachmovie.R
 
 
@@ -102,6 +103,24 @@ class SettingsVM @Inject constructor(
                 intent.data = Uri.parse("market://details?id=com.dvachmovie.android.pro")
                 startActivity(it.context, intent, null)
             }
+
+    val isAllowUnmoderatedContent = MutableLiveData<Boolean>(settingsStorage.isAllowUnmoderatedContent())
+
+    val allowUnmoderatedContent =  View.OnClickListener {
+        val textView = TextView(it.context).apply {
+            text = context.getString(R.string.unmoderated_content_warning)
+        }
+
+        AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
+                .setTitle("Allow unmoderated content")
+                .setView(textView)
+                .setPositiveButton("Ok") { _, _ ->
+                    settingsStorage.putIsAllowUnmoderatedContent(true)
+                    isAllowUnmoderatedContent.value = true
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
+    }
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
