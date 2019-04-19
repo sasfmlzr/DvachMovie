@@ -143,7 +143,11 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?,
                                          trackSelections: TrackSelectionArray?) {
-                movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+                var currentIndex = 0
+                if (playerView!=null) {
+                    currentIndex = playerView.player.currentPeriodIndex
+                }
+                movieRepository.markCurrentMovieAsPlayed(true, currentIndex)
                 if (containsAds) {
                     showAds()
                 }
