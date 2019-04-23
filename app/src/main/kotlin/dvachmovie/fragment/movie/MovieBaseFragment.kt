@@ -2,6 +2,9 @@ package dvachmovie.fragment.movie
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -34,6 +37,7 @@ import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
 import javax.inject.Inject
 
+
 abstract class MovieBaseFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
@@ -56,9 +60,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         binding.viewModel = viewModel
 
         movieStorage.currentMovie.observe(viewLifecycleOwner, Observer {
-                if (it?.isPlayed==true) {
-                    WorkerManager.insertMovieInDB()
-                }
+            if (it?.isPlayed == true) {
+                WorkerManager.insertMovieInDB()
+            }
         })
 
         movieRepository.observeDB(viewLifecycleOwner)
@@ -144,7 +148,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             override fun onTracksChanged(trackGroups: TrackGroupArray?,
                                          trackSelections: TrackSelectionArray?) {
                 var currentIndex = 0
-                if (playerView!=null) {
+                if (playerView != null) {
                     currentIndex = playerView.player.currentPeriodIndex
                 }
                 movieRepository.markCurrentMovieAsPlayed(true, currentIndex)
@@ -175,6 +179,15 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
         settingsButton.setOnClickListener {
             router.navigateMovieToSettingsFragment()
+        }
+
+        copyURLButton.setOnClickListener {
+            val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE)
+                    as ClipboardManager
+            val clip = ClipData
+                    .newPlainText("Copied Text", movieStorage.currentMovie.value?.movieUrl)
+            clipboard.primaryClip = clip
+            extensions.showMessage("URL video copied")
         }
     }
 
