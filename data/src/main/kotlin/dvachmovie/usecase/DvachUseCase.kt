@@ -5,7 +5,6 @@ import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.MovieEntity
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromDvachUseCase,
@@ -84,8 +83,7 @@ class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromD
                         LocalDateTime.parse(fileItem.date,
                                 DateTimeFormat.forPattern
                                 ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
-                localDateTime.plusYears(2000)
-
+                                .plusYears(2000)
 
                 val movieEntity = MovieEntity(board = this.board,
                         movieUrl = BuildConfig.DVACH_URL + fileItem.path,
