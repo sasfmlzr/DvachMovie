@@ -43,7 +43,9 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachApi: D
             logger.d(TAG, "parsing started for $num")
             resp?.threads?.forEach { thread ->
                 thread.posts?.forEach { post ->
-                    listFiles.addAll(post.files ?: listOf())
+                    listFiles.addAll(post.files?.map {
+                        it.copy(date = post.date)
+                    } ?: listOf())
                 }
             }
 

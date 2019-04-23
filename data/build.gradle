@@ -36,6 +36,9 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    
+    implementation "joda-time:joda-time:$jodaTimeVersion"
+
     implementation project(':domain')
     // Tests
     testImplementation "junit:junit:$junitVersion"

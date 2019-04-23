@@ -3,12 +3,17 @@ package dvachmovie.db.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import org.joda.time.LocalDateTime
 
 @Entity(tableName = "movieData")
+@TypeConverters(Converters::class)
 data class MovieEntity(@PrimaryKey @ColumnInfo(name = "movieUrl") override val movieUrl: String,
                        @ColumnInfo(name = "previewUrl") override val previewUrl: String = "",
                        @ColumnInfo(name = "board") override val board: String = "",
-                       @ColumnInfo(name = "isPlayed") override var isPlayed: Boolean = false
+                       @ColumnInfo(name = "isPlayed") override var isPlayed: Boolean = false,
+                       @ColumnInfo(name = "date") override var date: LocalDateTime = LocalDateTime(),
+                       @ColumnInfo(name = "md5") override val md5: String = ""
 ) : Movie {
 
     companion object {
@@ -35,4 +40,6 @@ interface Movie {
     val previewUrl: String
     val board: String
     var isPlayed: Boolean
+    var date: LocalDateTime
+    val md5: String
 }
