@@ -189,6 +189,10 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             clipboard.primaryClip = clip
             extensions.showMessage("URL video copied")
         }
+
+        listVideosButton.setOnClickListener {
+            router.navigateMovieToPreviewFragment()
+        }
     }
 
     override fun onStart() {

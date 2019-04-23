@@ -23,4 +23,5 @@
     <string name="unmoderated_content_warning">By unlocking unmoderated boards, you agree that you are over 18 years old. The developer is not responsible for the content provided by users - these are only links to the boards received from 2ch.hk.</string>
     <string name="settings_button">Settings</string>
     <string name="copy_url_button">Copy url</string>
+    <string name="list_videos">List videos</string>
 </resources>

@@ -41,9 +41,9 @@
             android:id="@+id/downloadButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
             android:alpha="1"
             android:background="@null"
-            android:layout_marginEnd="15dp"
             android:contentDescription="@string/download"
             android:elevation="1dp"
             android:padding="15dp"
@@ -60,7 +60,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
-            android:adjustViewBounds="false"
             android:alpha="1"
             android:background="@null"
             android:contentDescription="@string/settings_button"
@@ -79,7 +78,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
-            android:adjustViewBounds="false"
             android:alpha="1"
             android:background="@null"
             android:contentDescription="@string/copy_url_button"
@@ -91,6 +89,24 @@
             android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toStartOf="@+id/settingsButton"
+            app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
+
+        <ImageButton
+            android:id="@+id/listVideosButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:alpha="1"
+            android:background="@null"
+            android:contentDescription="@string/list_videos"
+            android:elevation="1dp"
+            android:padding="15dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/outline_list_24"
+            android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
+            app:barrierAllowsGoneWidgets="false"
+            app:layout_constraintEnd_toStartOf="@+id/copyURLButton"
             app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
         <com.google.android.exoplayer2.ui.PlayerView
