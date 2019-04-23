@@ -123,6 +123,15 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             override fun onSwipeTop() {
                 router.navigateMovieToPreviewFragment()
             }
+
+            override fun onSwipeRight() {
+                previous(playerView.player)
+
+            }
+
+            override fun onSwipeLeft() {
+                next(playerView.player)
+            }
         }
     }
 
