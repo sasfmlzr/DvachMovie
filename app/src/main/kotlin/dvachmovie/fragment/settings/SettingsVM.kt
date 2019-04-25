@@ -39,6 +39,13 @@ class SettingsVM @Inject constructor(
                 prepareLoading.value = isChecked
             }
 
+    val isGestureEnabled = MutableLiveData<Boolean>(settingsStorage.isAllowGesture())
+
+    val onGestureLoadingClicked =
+            CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                isGestureEnabled.value = isChecked
+            }
+
     val onRefreshDatabase =
             View.OnClickListener {
                 AlertDialog.Builder(it.context, R.style.AlertDialogStyle)

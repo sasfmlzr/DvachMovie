@@ -57,6 +57,18 @@
                         android:onCheckedChanged="@{viewModel.onPrepareLoadingClicked}"
                         android:text="@string/prepare_each_times" />
 
+                    <Switch
+                        android:id="@+id/gesture_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:checked="@{safeUnbox(viewModel.isGestureEnabled)}"
+                        android:onCheckedChanged="@{viewModel.onGestureLoadingClicked}"
+                        android:text="@string/gesture" />
+
                     <Button
                         android:id="@+id/buttonRefreshDatabase"
                         android:layout_width="match_parent"
@@ -71,8 +83,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
                         android:onClick="@{viewModel.onSetPopularBoard}"
                         android:text="@string/set_popular_board" />
 
@@ -81,8 +93,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
                         android:onClick="@{viewModel.onSetThemeBoard}"
                         android:text="@string/set_theme_board" />
                 </LinearLayout>

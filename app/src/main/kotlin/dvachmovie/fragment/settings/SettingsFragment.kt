@@ -67,6 +67,10 @@ class SettingsFragment : BaseFragment<SettingsVM,
                 router.navigateSettingsToStartFragment()
             }
         })
+
+        viewModel.isGestureEnabled.observe(this, Observer {
+            settingsStorage.putIsAllowGesture(it)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

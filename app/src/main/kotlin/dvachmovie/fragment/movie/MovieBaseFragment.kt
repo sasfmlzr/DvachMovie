@@ -32,6 +32,7 @@ import dvachmovie.repository.local.MovieRepository
 import dvachmovie.repository.local.MovieStorage
 import dvachmovie.repository.local.MovieUtils
 import dvachmovie.service.DownloadService
+import dvachmovie.storage.SettingsStorage
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
@@ -47,6 +48,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     lateinit var movieStorage: MovieStorage
     @Inject
     lateinit var movieCaches: MovieDBCache
+    @Inject
+    lateinit var settingsStorage: SettingsStorage
 
     private lateinit var ads: InterstitialAd
 
@@ -101,6 +104,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.isGestureEnabled.value = settingsStorage.isAllowGesture()
         initPlayer(playerView)
         configureButtons()
     }
@@ -108,11 +112,17 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     @SuppressLint("ClickableViewAccessibility")
     private fun initPlayer(playerView: PlayerView) {
         playerView.player = ExoPlayerFactory.newSimpleInstance(playerView.context)
-        playerView.setOnTouchListener(gestureListener)
+        viewModel.isGestureEnabled.observe(viewLifecycleOwner, Observer { isAllowGesture ->
+            if (isAllowGesture) {
+                playerView.setOnTouchListener(specificGestureListener)
+            } else {
+                playerView.setOnTouchListener(defaultGestureListener)
+            }
+        })
         playerView.player.addListener(playerListener)
     }
 
-    private val gestureListener by lazy {
+    private val specificGestureListener by lazy {
         object : OnSwipeTouchListener(context!!) {
             override fun onEventTouch(event: MotionEvent) {
                 if (event.action == MotionEvent.ACTION_DOWN) {
@@ -131,6 +141,16 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
             override fun onSwipeLeft() {
                 next(playerView.player)
+            }
+        }
+    }
+
+    private val defaultGestureListener by lazy {
+        object : OnSwipeTouchListener(context!!) {
+            override fun onEventTouch(event: MotionEvent) {
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    viewModel.isPlayerControlVisibility.value = toggleControlsVisibility()
+                }
             }
         }
     }

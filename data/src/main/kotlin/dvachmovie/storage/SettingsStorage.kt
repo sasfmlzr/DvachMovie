@@ -14,6 +14,7 @@ open class SettingsStorage @Inject constructor(
         private const val BOARD = "board"
         private const val COOKIE = "cookie"
         private const val ALLOWUNMODERATEDCONTENT = "isAllowUnmoderatedContent"
+        private const val GESTURE = "gesture"
     }
 
     fun isLoadingEveryTime() = pref.getBoolean(LOADING_PARAM) ?: false
@@ -50,6 +51,17 @@ open class SettingsStorage @Inject constructor(
 
         scope.launch {
             pref.putBoolean(ALLOWUNMODERATEDCONTENT, value)
+        }
+    }
+
+    fun isAllowGesture() = pref.getBoolean(GESTURE) ?: true
+
+    fun putIsAllowGesture(value: Boolean) {
+        val job = SupervisorJob()
+        val scope = CoroutineScope(Dispatchers.Default + job)
+
+        scope.launch {
+            pref.putBoolean(GESTURE, value)
         }
     }
 }
