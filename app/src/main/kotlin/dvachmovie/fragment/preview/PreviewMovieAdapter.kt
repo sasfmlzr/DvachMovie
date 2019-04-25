@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,14 +11,15 @@ import dvachmovie.R
 import dvachmovie.api.Cookie
 import dvachmovie.api.CookieManager
 import dvachmovie.architecture.Navigator
-import dvachmovie.architecture.ViewModelFactory
+import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieStorage
 import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(private val movieStorage: MovieStorage,
-                                              private val cookieManager: CookieManager) :
+                                              private val cookieManager: CookieManager,
+                                              private val logger: Logger) :
         ListAdapter<MovieEntity, PreviewMovieAdapter.ViewHolder>
         (PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,7 +43,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieStorage: MovieSto
     private fun createOnClickListener(movie: MovieEntity): View.OnClickListener {
         return View.OnClickListener {
             movieStorage.currentMovie.value = movie
-            Navigator(it.findNavController()).navigatePreviewToMovieFragment()
+            Navigator(it.findNavController(), logger).navigatePreviewToMovieFragment()
         }
     }
 

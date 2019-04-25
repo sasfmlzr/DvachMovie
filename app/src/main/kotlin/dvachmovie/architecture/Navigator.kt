@@ -1,18 +1,24 @@
 package dvachmovie.architecture
 
 import androidx.navigation.NavController
+import dvachmovie.architecture.logging.Logger
 import dvachmovie.fragment.back.BackFragmentDirections
 import dvachmovie.fragment.movie.MovieFragmentDirections
 import dvachmovie.fragment.preview.PreviewFragmentDirections
 import dvachmovie.fragment.settings.SettingsFragmentDirections
 import dvachmovie.fragment.start.StartFragmentDirections
 
-class Navigator(private val router: NavController) {
+class Navigator(private val router: NavController,
+                private val logger: Logger) {
 
     fun navigateStartToMovieFragment() {
         val direction = StartFragmentDirections
                 .actionShowMovieFragment()
-        router.navigate(direction)
+        try {
+            router.navigate(direction)
+        } catch (e: Exception) {
+            logger.e("Already attached")
+        }
     }
 
     fun navigateSettingsToStartFragment() {

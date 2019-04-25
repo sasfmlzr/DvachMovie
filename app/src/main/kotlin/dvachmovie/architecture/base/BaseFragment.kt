@@ -65,7 +65,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         extensions = Extensions(activity as AppCompatActivity)
-        router = Navigator(findNavController())
+        router = Navigator(findNavController(), logger)
     }
 
     val runtimePermissions = object : RuntimePermissions {

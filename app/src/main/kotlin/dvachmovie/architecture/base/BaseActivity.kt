@@ -30,7 +30,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : AppCompatActivit
         super.onCreate(savedInstanceState)
         inject(Injector.navigationComponent())
         binding = DataBindingUtil.setContentView(this, layoutId)
-
+        binding.lifecycleOwner = this
         viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(viewModelClass.java)

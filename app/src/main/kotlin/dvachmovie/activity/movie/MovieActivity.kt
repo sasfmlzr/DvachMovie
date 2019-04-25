@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import dvachmovie.R
 import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.base.BaseActivity
+import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
 import dvachmovie.repository.local.MovieDBCache
@@ -19,6 +20,9 @@ class MovieActivity : BaseActivity<MovieActivityVM,
     @Inject
     lateinit var movieDBCache: MovieDBCache
 
+    @Inject
+    lateinit var logger: Logger
+
     override val layoutId = R.layout.activity_movie
 
     override fun inject(component: ActivityComponent) = component.inject(this)
@@ -28,9 +32,11 @@ class MovieActivity : BaseActivity<MovieActivityVM,
 
         binding.viewModel = viewModel
 
-        movieDBCache.movieList.observe(this, Observer {
-            WorkerManager.initDB()
-        })
+        if (!movieDBCache.movieList.hasActiveObservers()) {
+            movieDBCache.movieList.observe(this, Observer {
+                WorkerManager.initDB()
+            })
+        }
     }
 
     override fun onSupportNavigateUp() =
@@ -42,11 +48,14 @@ class MovieActivity : BaseActivity<MovieActivityVM,
         when (navController.currentDestination?.label) {
             "MovieFragment" -> {
                 Navigator(NavHostFragment.findNavController(supportFragmentManager
-                        .primaryNavigationFragment!!)).navigateMovieToBackFragment()
+                        .primaryNavigationFragment!!), logger).navigateMovieToBackFragment()
             }
             "BackFragment" -> {
                 Navigator(NavHostFragment.findNavController(supportFragmentManager
-                        .primaryNavigationFragment!!)).navigateBackToMovieFragment()
+                        .primaryNavigationFragment!!), logger).navigateBackToMovieFragment()
+            }
+            "StartFragment" -> {
+                finish()
             }
             else -> super.onBackPressed()
         }
