@@ -31,9 +31,9 @@ class RoomModule(private val application: Application) {
 
         val MIGRATION_1_3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE movieData ADD COLUMN thread LONG DEFAULT '' NOT NULL")
+                database.execSQL("ALTER TABLE movieData ADD COLUMN thread INTEGER DEFAULT '0' NOT NULL")
 
-                database.execSQL("ALTER TABLE movieData ADD COLUMN post LONG DEFAULT '' NOT NULL")
+                database.execSQL("ALTER TABLE movieData ADD COLUMN post INTEGER DEFAULT '0' NOT NULL")
             }
         }
 
