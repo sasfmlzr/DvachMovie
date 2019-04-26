@@ -1,6 +1,7 @@
 package dvachmovie.architecture
 
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.fragment.back.BackFragmentDirections
 import dvachmovie.fragment.movie.MovieFragmentDirections
@@ -14,46 +15,50 @@ class Navigator(private val router: NavController,
     fun navigateStartToMovieFragment() {
         val direction = StartFragmentDirections
                 .actionShowMovieFragment()
-        try {
-            router.navigate(direction)
-        } catch (e: Exception) {
-            logger.e("Already attached")
-        }
+        navigate(direction)
     }
 
     fun navigateSettingsToStartFragment() {
         val direction = SettingsFragmentDirections
                 .actionShowStartFragment()
-        router.navigate(direction)
+        navigate(direction)
     }
 
     fun navigatePreviewToMovieFragment() {
         val direction = PreviewFragmentDirections
                 .actionShowMovieFragment()
-        router.navigate(direction)
+        navigate(direction)
     }
 
     fun navigateMovieToPreviewFragment() {
         val direction = MovieFragmentDirections
                 .actionShowPreviewFragment()
-        router.navigate(direction)
+        navigate(direction)
     }
 
     fun navigateMovieToSettingsFragment() {
         val direction = MovieFragmentDirections
                 .actionShowSettingsFragment()
-        router.navigate(direction)
+        navigate(direction)
     }
 
     fun navigateMovieToBackFragment() {
         val direction = MovieFragmentDirections
                 .actionShowBackFragment()
-        router.navigate(direction)
+        navigate(direction)
     }
 
     fun navigateBackToMovieFragment() {
         val direction = BackFragmentDirections
                 .actionShowMovieFragment()
-        router.navigate(direction)
+        navigate(direction)
+    }
+    
+    private fun navigate(direction: NavDirections) {
+        try {
+            router.navigate(direction)
+        } catch (e: Exception) {
+            logger.e("Already attached")
+        }
     }
 }
