@@ -58,7 +58,8 @@
                         android:layout_marginBottom="20dp"
                         android:checked="@{safeUnbox(viewModel.prepareLoading)}"
                         android:onCheckedChanged="@{viewModel.onPrepareLoadingClicked}"
-                        android:text="@string/prepare_each_times" />
+                        android:text="@string/prepare_each_times"
+                        android:visibility="gone" />
 
                     <Switch
                         android:id="@+id/gesture_switch"
@@ -159,42 +160,6 @@
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetJapanBoard}"
                         android:text="@string/set_japan_board" />
-
-                    <Button
-                        android:id="@+id/buttonAllowUnmoderatedContent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.allowUnmoderatedContent}"
-                        android:text="@string/allow_unmoderated_content"
-                        android:visibility="@{safeUnbox(viewModel.isAllowUnmoderatedContent) ? view.GONE : view.VISIBLE}" />
-
-                    <Button
-                        android:id="@+id/buttonAdultBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetAdultBoard}"
-                        android:text="@string/set_adult_board"
-                        android:visibility="@{safeUnbox(viewModel.isAllowUnmoderatedContent) ? view.VISIBLE : view.GONE}" />
-
-                    <Button
-                        android:id="@+id/buttonOtherAdultBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetAdultOtherBoard}"
-                        android:text="@string/set_adult_otherboard"
-                        android:visibility="@{safeUnbox(viewModel.isAllowUnmoderatedContent) ? view.VISIBLE : view.GONE}" />
                 </LinearLayout>
             </ScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -211,5 +176,4 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scrollContainer" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

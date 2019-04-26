@@ -43,17 +43,6 @@ open class SettingsStorage @Inject constructor(
 
     fun putCookie(cookie: String) = pref.putString(COOKIE, cookie)
 
-    fun isAllowUnmoderatedContent() = pref.getBoolean(ALLOWUNMODERATEDCONTENT) ?: false
-
-    fun putIsAllowUnmoderatedContent(value: Boolean) {
-        val job = SupervisorJob()
-        val scope = CoroutineScope(Dispatchers.Default + job)
-
-        scope.launch {
-            pref.putBoolean(ALLOWUNMODERATEDCONTENT, value)
-        }
-    }
-
     fun isAllowGesture() = pref.getBoolean(GESTURE) ?: true
 
     fun putIsAllowGesture(value: Boolean) {

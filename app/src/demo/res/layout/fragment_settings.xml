@@ -55,7 +55,8 @@
                         android:layout_marginBottom="20dp"
                         android:checked="@{safeUnbox(viewModel.prepareLoading)}"
                         android:onCheckedChanged="@{viewModel.onPrepareLoadingClicked}"
-                        android:text="@string/prepare_each_times" />
+                        android:text="@string/prepare_each_times"
+                        android:visibility="gone" />
 
                     <Switch
                         android:id="@+id/gesture_switch"

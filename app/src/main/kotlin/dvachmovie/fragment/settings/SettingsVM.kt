@@ -1,20 +1,19 @@
 package dvachmovie.fragment.settings
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.View
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvachmovie.BuildConfig
+import dvachmovie.R
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
-import androidx.core.content.ContextCompat.startActivity
-import android.content.Intent
-import android.net.Uri
-import android.widget.TextView
-import dvachmovie.R
 
 
 class SettingsVM @Inject constructor(
@@ -94,40 +93,12 @@ class SettingsVM @Inject constructor(
                 showChangeBoardDialog(it.context, Boards.japanCultureMap)
             }
 
-    val onSetAdultOtherBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.adultOtherMap)
-            }
-
-    val onSetAdultBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.adultMap)
-            }
-
     val onGetProVersion =
             View.OnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse("market://details?id=com.dvachmovie.android.pro")
                 startActivity(it.context, intent, null)
             }
-
-    val isAllowUnmoderatedContent = MutableLiveData<Boolean>(settingsStorage.isAllowUnmoderatedContent())
-
-    val allowUnmoderatedContent =  View.OnClickListener {
-        val textView = TextView(it.context).apply {
-            text = context.getString(R.string.unmoderated_content_warning)
-        }
-
-        AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
-                .setTitle("Allow unmoderated content")
-                .setView(textView)
-                .setPositiveButton("Ok") { _, _ ->
-                    settingsStorage.putIsAllowUnmoderatedContent(true)
-                    isAllowUnmoderatedContent.value = true
-                }
-                .setNegativeButton("Cancel") { _, _ -> }
-                .show()
-    }
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
