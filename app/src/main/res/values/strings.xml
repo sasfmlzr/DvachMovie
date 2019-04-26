@@ -25,4 +25,6 @@
     <string name="copy_url_button">Copy url</string>
     <string name="list_videos">List videos</string>
     <string name="gesture">Gesture</string>
+    <string name="report">Report</string>
+    <string name="promote">Promote</string>
 </resources>

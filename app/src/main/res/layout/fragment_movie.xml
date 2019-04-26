@@ -109,6 +109,24 @@
             app:layout_constraintEnd_toStartOf="@+id/copyURLButton"
             app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
+        <ImageButton
+            android:id="@+id/reportButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:alpha="1"
+            android:background="@null"
+            android:contentDescription="@string/report"
+            android:elevation="1dp"
+            android:padding="15dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/outline_report_problem_24"
+            android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
+            app:barrierAllowsGoneWidgets="false"
+            app:layout_constraintEnd_toStartOf="@+id/copyURLButton"
+            app:layout_constraintTop_toBottomOf="@+id/shuffleButton" />
+
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/playerView"
             android:layout_width="match_parent"

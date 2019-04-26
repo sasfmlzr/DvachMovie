@@ -222,6 +222,10 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         listVideosButton.setOnClickListener {
             router.navigateMovieToPreviewFragment()
         }
+
+        reportButton.setOnClickListener {
+            extensions.showMessage("Report")
+        }
     }
 
     override fun onStart() {
