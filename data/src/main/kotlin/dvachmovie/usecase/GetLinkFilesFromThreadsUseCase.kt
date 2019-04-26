@@ -43,11 +43,11 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachApi: D
             logger.d(TAG, "parsing started for $num")
             resp?.threads?.forEach { thread ->
                 thread.posts?.forEach { post ->
-                    if (post.banned==0){
+                    if (post.banned == 0) {
                         listFiles.addAll(post.files?.map {
-                            it.copy(thread = resp.currentThread.toLong())
-                            it.copy(num = post.num.toLong())
-                            it.copy(date = post.date)
+                            it.copy(thread = resp.currentThread.toLong(),
+                                    num = post.num.toLong(),
+                                    date = post.date)
                         } ?: listOf())
                     }
                 }
