@@ -33,6 +33,10 @@ import dvachmovie.repository.local.MovieStorage
 import dvachmovie.repository.local.MovieUtils
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.SettingsStorage
+import dvachmovie.usecase.DvachReportModel
+import dvachmovie.usecase.ExecutorResult
+import dvachmovie.usecase.ReportUseCase
+import dvachmovie.usecase.UseCaseModel
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
@@ -50,6 +54,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     lateinit var movieCaches: MovieDBCache
     @Inject
     lateinit var settingsStorage: SettingsStorage
+    @Inject
+    lateinit var reportUseCase: ReportUseCase
 
     private lateinit var ads: InterstitialAd
 
@@ -224,7 +230,19 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         }
 
         reportButton.setOnClickListener {
-            extensions.showMessage("Report")
+            val executorResult = object : ExecutorResult {
+                override fun onSuccess(useCaseModel: UseCaseModel) {
+                    extensions.showMessage((useCaseModel as DvachReportModel).message)
+                }
+
+                override fun onFailure(t: Throwable) {
+                    extensions.showMessage("Something went wrong. Please try again")
+                }
+            }
+            reportUseCase.addParams(movieStorage.currentMovie.value?.board!!,
+                    movieStorage.currentMovie.value?.thread!!,
+                    movieStorage.currentMovie.value?.post!!,
+                    executorResult).execute()
         }
     }
 
