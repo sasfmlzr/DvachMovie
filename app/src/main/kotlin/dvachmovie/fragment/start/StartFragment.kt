@@ -62,7 +62,7 @@ class StartFragment : BaseFragment<StartVM,
         super.onViewCreated(view, savedInstanceState)
 
         buttonChangeDefaultBoard.setOnClickListener {
-            settingsStorage.putBoard("vg")
+            settingsStorage.putBoard("mu")
             activity?.recreate()
         }
         buttonRetry.setOnClickListener {

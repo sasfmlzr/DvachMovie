@@ -24,7 +24,6 @@ object Boards {
         popularMap["mov"] = "Фильмы"
         popularMap["po"] = "Политика"
         popularMap["v"] = "Video Games"
-        popularMap["soc"] = "Общение"
         popularMap["mu"] = "Музыка"
         popularMap["mus"] = "Музыканты"
 

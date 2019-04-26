@@ -5,5 +5,6 @@
         android:id="@+id/action_promote"
         android:orderInCategory="100"
         android:title="Promote"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:visible="false"/>
 </menu>
