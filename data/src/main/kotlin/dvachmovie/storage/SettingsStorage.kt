@@ -13,7 +13,6 @@ open class SettingsStorage @Inject constructor(
         private const val LOADING_PARAM = "LoadingMoviesOrNot"
         private const val BOARD = "board"
         private const val COOKIE = "cookie"
-        private const val ALLOWUNMODERATEDCONTENT = "isAllowUnmoderatedContent"
         private const val GESTURE = "gesture"
     }
 
@@ -37,7 +36,7 @@ open class SettingsStorage @Inject constructor(
         }
     }
 
-    fun getBoard() = pref.getString(BOARD) ?: "vg"
+    fun getBoard() = pref.getString(BOARD) ?: "mu"
 
     fun getCookie() = pref.getString(COOKIE) ?: ""
 

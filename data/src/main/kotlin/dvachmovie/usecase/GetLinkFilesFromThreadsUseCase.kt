@@ -45,14 +45,14 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachApi: D
                 thread.posts?.forEach { post ->
                     if (post.banned==0){
                         listFiles.addAll(post.files?.map {
+                            it.copy(thread = resp.currentThread.toLong())
+                            it.copy(num = post.num.toLong())
                             it.copy(date = post.date)
                         } ?: listOf())
                     }
                 }
             }
-
             logger.d(TAG, "parsing finished for $num")
-
             executorResult.onSuccess(GetLinkFilesFromThreadsModel(listFiles))
         }
 

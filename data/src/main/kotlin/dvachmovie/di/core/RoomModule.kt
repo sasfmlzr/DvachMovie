@@ -19,7 +19,7 @@ class RoomModule(private val application: Application) {
     @Singleton
     @Provides
     internal fun providesMovieDatabase(): MovieDatabase {
-        val MIGRATION_1_2 = object : Migration(1,2) {
+        val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 val date = LocalDateTime().minusYears(1)
 
@@ -29,8 +29,16 @@ class RoomModule(private val application: Application) {
             }
         }
 
+        val MIGRATION_1_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE movieData ADD COLUMN thread LONG DEFAULT '' NOT NULL")
+
+                database.execSQL("ALTER TABLE movieData ADD COLUMN post LONG DEFAULT '' NOT NULL")
+            }
+        }
+
         return Room.databaseBuilder(application, MovieDatabase::class.java, "movieData")
-                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_1_2, MIGRATION_1_3)
                 .build()
     }
 

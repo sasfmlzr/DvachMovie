@@ -34,4 +34,6 @@ data class FileItem(@SerializedName("tn_height")
                     val md5: String = "",
                     @SerializedName("nsfw")
                     val nsfw: Int = 0,
-                    val date: String = "")
+                    val date: String = "",
+                    val thread: Long = 0,
+                    val num: Long = 0)

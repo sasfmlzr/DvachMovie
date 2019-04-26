@@ -89,7 +89,9 @@ class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromD
                         movieUrl = BuildConfig.DVACH_URL + fileItem.path,
                         previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail,
                         date = localDateTime,
-                        md5 = fileItem.md5)
+                        md5 = fileItem.md5,
+                        thread = fileItem.thread,
+                        post = fileItem.num)
                 listMovies.add(movieEntity)
             }
         }

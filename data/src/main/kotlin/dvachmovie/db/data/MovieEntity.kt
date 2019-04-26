@@ -13,7 +13,9 @@ data class MovieEntity(@PrimaryKey @ColumnInfo(name = "movieUrl") override val m
                        @ColumnInfo(name = "board") override val board: String = "",
                        @ColumnInfo(name = "isPlayed") override var isPlayed: Boolean = false,
                        @ColumnInfo(name = "date") override var date: LocalDateTime = LocalDateTime(),
-                       @ColumnInfo(name = "md5") override val md5: String = ""
+                       @ColumnInfo(name = "md5") override val md5: String = "",
+                       @ColumnInfo(name = "thread") override val thread: Long = 0,
+                       @ColumnInfo(name = "post") override val post: Long = 0
 ) : Movie {
 
     companion object {
@@ -42,4 +44,6 @@ interface Movie {
     var isPlayed: Boolean
     var date: LocalDateTime
     val md5: String
+    val post: Long
+    val thread: Long
 }

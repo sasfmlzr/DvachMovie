@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import dvachmovie.db.data.MovieDao
 import dvachmovie.db.data.MovieEntity
 
-@Database(entities = [MovieEntity::class], version = 2, exportSchema = false)
+@Database(entities = [MovieEntity::class], version = 3, exportSchema = false)
 abstract class MovieDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao
