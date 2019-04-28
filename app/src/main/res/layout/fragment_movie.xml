@@ -124,7 +124,7 @@
             android:src="@drawable/outline_report_problem_24"
             android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
-            app:layout_constraintEnd_toStartOf="@+id/copyURLButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shuffleButton" />
 
         <com.google.android.exoplayer2.ui.PlayerView

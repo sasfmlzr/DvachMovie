@@ -42,7 +42,6 @@ import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
 import javax.inject.Inject
 
-
 abstract class MovieBaseFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
@@ -232,7 +231,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         reportButton.setOnClickListener {
             val executorResult = object : ExecutorResult {
                 override fun onSuccess(useCaseModel: UseCaseModel) {
-                    extensions.showMessage((useCaseModel as DvachReportModel).message)
+                    extensions.showMessage("Report submitted!")
+                   // extensions.showMessage((useCaseModel as DvachReportModel).message)
                 }
 
                 override fun onFailure(t: Throwable) {
