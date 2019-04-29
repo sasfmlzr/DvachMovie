@@ -57,12 +57,12 @@ android {
     productFlavors {
         demo {
             dimension "environment"
-            applicationId "com.dvachmovie.android.lite"
+            applicationId "com.dvachmovie.android.standard"
             buildConfigField "boolean", "FULL_VERSION", "false"
         }
         demowithoutads {
             dimension "environment"
-            applicationId "com.dvachmovie.android.litedvach"
+            applicationId "com.dvachmovie.android.lite"
             buildConfigField "boolean", "FULL_VERSION", "true"
         }
         pro {
