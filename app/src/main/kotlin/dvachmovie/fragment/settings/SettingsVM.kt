@@ -120,5 +120,5 @@ class SettingsVM @Inject constructor(
                 .show()
     }
 
-    val sdkKey = MutableLiveData("ca-app-pub-3074235676525198~3986251123")
+    val sdkKey = MutableLiveData("ca-app-pub-3074235676525198~1117408577")
 }

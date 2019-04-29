@@ -85,9 +85,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     private fun initAds() {
         MobileAds.initialize(context,
-                "ca-app-pub-3074235676525198~3986251123")
+                "ca-app-pub-3074235676525198~1117408577")
         ads = InterstitialAd(context)
-        ads.adUnitId = "ca-app-pub-3074235676525198/2334198033"
+        ads.adUnitId = "ca-app-pub-3074235676525198/4313459697"
 
         ads.adListener = object : AdListener() {
             override fun onAdOpened() {
