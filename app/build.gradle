@@ -60,7 +60,7 @@ android {
             applicationId "com.dvachmovie.android.standard"
             buildConfigField "boolean", "FULL_VERSION", "false"
         }
-        demowithoutads {
+        lite {
             dimension "environment"
             applicationId "com.dvachmovie.android.lite"
             buildConfigField "boolean", "FULL_VERSION", "true"
