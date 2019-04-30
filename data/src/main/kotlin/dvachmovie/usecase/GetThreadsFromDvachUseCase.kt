@@ -37,8 +37,12 @@ class GetThreadsFromDvachUseCase @Inject constructor(private val dvachApi: Dvach
         return object : Callback<DvachCatalogRequest> {
             override fun onResponse(call: Call<DvachCatalogRequest>,
                                     response: Response<DvachCatalogRequest>) {
-                val numThreads = response.body()?.threads?.map { it.num } ?: listOf()
-                executorResult.onSuccess(GetThreadsFromDvachModel(numThreads))
+                if (response.code() == 200) {
+                    val numThreads = response.body()?.threads?.map { it.num } ?: listOf()
+                    executorResult.onSuccess(GetThreadsFromDvachModel(numThreads))
+                } else {
+                    executorResult.onFailure(RuntimeException("Server return ${response.code()} code"))
+                }
                 logger.d(TAG, "2.hk connected")
             }
 

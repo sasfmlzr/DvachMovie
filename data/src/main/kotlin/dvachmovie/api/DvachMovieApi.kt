@@ -11,14 +11,14 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface DvachMovieApi {
-    @GET("https://2ch.hk/{board}/catalog.json")
+    @GET("/{board}/catalog.json")
     fun getCatalog(@Path("board") board: String): Call<DvachCatalogRequest>
 
-    @GET("https://2ch.hk/{board}/res/{numThread}.json")
+    @GET("/{board}/res/{numThread}.json")
     fun getThread(@Path("board") board: String,
                   @Path("numThread") numThread: String): Call<DvachThreadRequest>
 
-    @POST("https://2ch.hk/makaba/makaba.fcgi")
+    @POST("/makaba/makaba.fcgi")
     @FormUrlEncoded
     fun reportPost(@Field("task") task: String,
                    @Field("board") board: String,
