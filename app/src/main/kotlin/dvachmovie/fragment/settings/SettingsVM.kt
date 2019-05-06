@@ -28,6 +28,10 @@ class SettingsVM @Inject constructor(
 
     val prepareLoading = MutableLiveData<Boolean>(settingsStorage.isLoadingEveryTime())
 
+    val isReportBtnVisible = MutableLiveData<Boolean>(settingsStorage.isReportBtnVisible())
+
+    val isListBtnVisible = MutableLiveData<Boolean>(settingsStorage.isListBtnVisible())
+
     val onCleanDB = MutableLiveData<Boolean>(false)
 
     val onChangeBoard = MutableLiveData<Boolean>(false)
@@ -37,6 +41,16 @@ class SettingsVM @Inject constructor(
     val onPrepareLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
                 prepareLoading.value = isChecked
+            }
+
+    val onReportSwitchClicked =
+            CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                isReportBtnVisible.value = isChecked
+            }
+
+    val onListSwitchClicked =
+            CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                isListBtnVisible.value = isChecked
             }
 
     val isGestureEnabled = MutableLiveData<Boolean>(settingsStorage.isAllowGesture())
