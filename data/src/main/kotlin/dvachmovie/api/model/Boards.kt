@@ -1,6 +1,8 @@
-package dvachmovie.fragment.settings
+package dvachmovie.api.model
 
 object Boards {
+    val defaultMap = linkedMapOf<String, String>()
+
     val popularMap = hashMapOf<String, String>()
 
     val themeMap = hashMapOf<String, String>() // Тематика
@@ -20,6 +22,9 @@ object Boards {
     val adultMap = hashMapOf<String, String>() // Взрослым 18+
 
     init {
+        defaultMap["b"] = "Бред"
+
+        popularMap["b"] = "Бред"
         popularMap["vg"] = "Video Games General"
         popularMap["mov"] = "Фильмы"
         popularMap["po"] = "Политика"

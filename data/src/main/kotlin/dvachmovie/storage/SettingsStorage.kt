@@ -1,5 +1,6 @@
 package dvachmovie.storage
 
+import dvachmovie.api.model.Boards
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -36,7 +37,7 @@ open class SettingsStorage @Inject constructor(
         }
     }
 
-    fun getBoard() = pref.getString(BOARD) ?: "mu"
+    fun getBoard() = pref.getString(BOARD) ?: Boards.defaultMap.iterator().next().key
 
     fun getCookie() = pref.getString(COOKIE) ?: ""
 
