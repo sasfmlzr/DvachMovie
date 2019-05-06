@@ -57,6 +57,14 @@ class SettingsFragment : BaseFragment<SettingsVM,
             settingsStorage.putLoadingEveryTime(it)
         })
 
+        viewModel.isReportBtnVisible.observe(this, Observer {
+            settingsStorage.putReportBtnVisible(it)
+        })
+
+        viewModel.isListBtnVisible.observe(this, Observer {
+            settingsStorage.putListBtnVisible(it)
+        })
+
         viewModel.onCleanDB.observe(this, Observer {
             if (it) {
                 WorkerManager.deleteAllInDB(this) {

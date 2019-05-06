@@ -244,15 +244,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                     executorResult).execute()
         }
 
-        reportButton.visibility = when (settingsStorage.isReportBtnVisible()) {
-            true -> View.VISIBLE
-            false -> View.GONE
-        }
+        viewModel.isReportBtnVisible.value = settingsStorage.isReportBtnVisible()
 
-        listVideosButton.visibility = when (settingsStorage.isListBtnVisible()) {
-            true -> View.VISIBLE
-            false -> View.GONE
-        }
+        viewModel.isListBtnVisible.value = settingsStorage.isListBtnVisible()
     }
 
     override fun onStart() {

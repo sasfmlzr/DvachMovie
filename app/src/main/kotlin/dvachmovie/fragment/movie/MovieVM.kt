@@ -26,6 +26,10 @@ class MovieVM @Inject constructor(movieStorage: MovieStorage,
 
     val isPlayerControlVisibility = MutableLiveData<Boolean>(true)
 
+    val isReportBtnVisible = MutableLiveData<Boolean>(settingsStorage.isReportBtnVisible())
+
+    val isListBtnVisible = MutableLiveData<Boolean>(settingsStorage.isListBtnVisible())
+
     private val function = Function<List<MovieEntity>, LiveData<List<Uri>>> { values ->
         val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
         if (urlVideo.isNotEmpty()) {

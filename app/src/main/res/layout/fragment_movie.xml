@@ -104,7 +104,7 @@
             android:scaleX="1.2"
             android:scaleY="1.2"
             android:src="@drawable/outline_list_24"
-            android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
+            android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility &amp; viewModel.isListBtnVisible)? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toStartOf="@+id/copyURLButton"
             app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
@@ -122,7 +122,7 @@
             android:scaleX="1.2"
             android:scaleY="1.2"
             android:src="@drawable/outline_report_problem_24"
-            android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
+            android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility &amp; viewModel.isReportBtnVisible())? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shuffleButton" />

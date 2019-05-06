@@ -30,25 +30,25 @@ open class SettingsStorage @Inject constructor(
         }
     }
 
-    fun isReportBtnVisible() = pref.getBoolean(LOADING_PARAM) ?: true
+    fun isReportBtnVisible() = pref.getBoolean(REPORT_BTN_VISIBLE) ?: true
 
     fun putReportBtnVisible(value: Boolean) {
         val job = SupervisorJob()
         val scope = CoroutineScope(Dispatchers.Default + job)
 
         scope.launch {
-            pref.putBoolean(LOADING_PARAM, value)
+            pref.putBoolean(REPORT_BTN_VISIBLE, value)
         }
     }
 
-    fun isListBtnVisible() = pref.getBoolean(LOADING_PARAM) ?: true
+    fun isListBtnVisible() = pref.getBoolean(LIST_BTN_VISIBLE) ?: true
 
     fun putListBtnVisible(value: Boolean) {
         val job = SupervisorJob()
         val scope = CoroutineScope(Dispatchers.Default + job)
 
         scope.launch {
-            pref.putBoolean(LOADING_PARAM, value)
+            pref.putBoolean(LIST_BTN_VISIBLE, value)
         }
     }
 
