@@ -33,7 +33,6 @@ import dvachmovie.repository.local.MovieStorage
 import dvachmovie.repository.local.MovieUtils
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.DvachReportModel
 import dvachmovie.usecase.ExecutorResult
 import dvachmovie.usecase.ReportUseCase
 import dvachmovie.usecase.UseCaseModel
@@ -232,7 +231,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             val executorResult = object : ExecutorResult {
                 override fun onSuccess(useCaseModel: UseCaseModel) {
                     extensions.showMessage("Report submitted!")
-                   // extensions.showMessage((useCaseModel as DvachReportModel).message)
+                    // extensions.showMessage((useCaseModel as DvachReportModel).message)
                 }
 
                 override fun onFailure(t: Throwable) {
@@ -243,6 +242,16 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                     movieStorage.currentMovie.value?.thread!!,
                     movieStorage.currentMovie.value?.post!!,
                     executorResult).execute()
+        }
+
+        reportButton.visibility = when (settingsStorage.isReportBtnVisible()) {
+            true -> View.VISIBLE
+            false -> View.GONE
+        }
+
+        listVideosButton.visibility = when (settingsStorage.isListBtnVisible()) {
+            true -> View.VISIBLE
+            false -> View.GONE
         }
     }
 
@@ -272,7 +281,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     }
 
     private fun updateStartPosition() {
-        viewModel.currentPos.value = Pair(playerView.player.currentWindowIndex, playerView.player.currentPosition)
+        viewModel.currentPos.value = Pair(playerView.player.currentWindowIndex,
+                playerView.player.currentPosition)
         PlayerCache.isPrepared = false
     }
 
