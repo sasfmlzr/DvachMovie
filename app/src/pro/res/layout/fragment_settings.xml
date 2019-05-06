@@ -1,179 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
             type="dvachmovie.fragment.settings.SettingsVM" />
-
-        <variable
-            name="view"
-            type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:theme="@style/MyToolBarStyle"
-            app:title="Settings" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/scrollContainer"
+        <include
+            android:id="@+id/primary_settings_layout"
+            layout="@layout/include_settings_fragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/versionText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Switch
-                        android:id="@+id/loading_switch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:checked="@{safeUnbox(viewModel.prepareLoading)}"
-                        android:onCheckedChanged="@{viewModel.onPrepareLoadingClicked}"
-                        android:text="@string/prepare_each_times"
-                        android:visibility="gone" />
-
-                    <Switch
-                        android:id="@+id/gesture_switch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:checked="@{safeUnbox(viewModel.isGestureEnabled)}"
-                        android:onCheckedChanged="@{viewModel.onGestureLoadingClicked}"
-                        android:text="@string/gesture" />
-
-                    <Button
-                        android:id="@+id/buttonRefreshDatabase"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onRefreshDatabase}"
-                        android:text="@string/clean_movies" />
-
-                    <Button
-                        android:id="@+id/buttonPopularBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetPopularBoard}"
-                        android:text="@string/set_popular_board" />
-
-                    <Button
-                        android:id="@+id/buttonThemeBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetThemeBoard}"
-                        android:text="@string/set_theme_board" />
-
-                    <Button
-                        android:id="@+id/buttonGamesBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetGamesBoard}"
-                        android:text="@string/set_games_board" />
-
-                    <Button
-                        android:id="@+id/buttonTechSoftBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetTechSoftBoard}"
-                        android:text="@string/set_tech_and_soft_board" />
-
-                    <Button
-                        android:id="@+id/buttonPolNewsBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetPolNewsBoard}"
-                        android:text="@string/set_politics_and_news_board" />
-
-                    <Button
-                        android:id="@+id/buttonCreationBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetCreationBoard}"
-                        android:text="@string/set_creation_board" />
-
-                    <Button
-                        android:id="@+id/buttonJapanBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetJapanBoard}"
-                        android:text="@string/set_japan_board" />
-                </LinearLayout>
-            </ScrollView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            bind:viewModel="@{viewModel}" />
 
         <TextView
             android:id="@+id/versionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             android:text="@={viewModel.version}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollContainer" />
+            app:layout_constraintTop_toBottomOf="@+id/primary_settings_layout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

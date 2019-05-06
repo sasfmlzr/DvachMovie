@@ -17,6 +17,7 @@ import dvachmovie.di.core.Injector
 import dvachmovie.repository.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
+import kotlinx.android.synthetic.main.include_settings_fragment.*
 import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
@@ -36,15 +37,19 @@ class SettingsFragment : BaseFragment<SettingsVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
         setHasOptionsMenu(true)
-        setUpToolbar()
         configureVM()
 
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpToolbar()
+    }
+
     private fun setUpToolbar() {
         val activity = (activity as AppCompatActivity)
-        activity.setSupportActionBar(binding.toolbar)
+        activity.setSupportActionBar(toolbar)
     }
 
     private fun configureVM() {
