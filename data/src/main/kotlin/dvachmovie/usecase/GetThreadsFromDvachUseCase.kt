@@ -1,19 +1,11 @@
 package dvachmovie.usecase
 
-import dvachmovie.api.DvachMovieApi
-import dvachmovie.api.model.catalog.DvachCatalogRequest
 import dvachmovie.architecture.logging.Logger
-import dvachmovie.repository.BaseRepository
 import dvachmovie.repository.DvachRepository
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.lang.Exception
 import javax.inject.Inject
 
-open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
-                                                     private val logger: Logger,
-                                                          private val dvachRepository: DvachRepository) {
+open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository: DvachRepository,
+                                                          private val logger: Logger) {
 
     companion object {
         private const val TAG = "DvachUseCase"
@@ -31,14 +23,13 @@ open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachApi: 
 
     suspend fun execute() {
         logger.d(TAG, "connecting to 2.hk...")
-        return  try {
-            val request = dvachRepository.getThreads(board)
-            val numThreads = request?.threads?.map { it.num } ?: listOf()
+        return try {
+            val numThreads = dvachRepository.getNumThreadsFromCatalog(board)
             executorResult.onSuccess(GetThreadsFromDvachModel(numThreads))
             logger.d(TAG, "2.hk connected")
-        }catch (e: Exception) {
+        } catch (e: Exception) {
+            logger.e("GetThreadsFromDvachUseCase", e.message ?: "Something network error")
             executorResult.onFailure(e)
         }
-
     }
 }

@@ -14,9 +14,6 @@ import javax.inject.Singleton
 
 @Module
 internal class ApiModule {
-    companion object {
-        private const val port = 8000
-    }
 
     @Provides
     @Singleton

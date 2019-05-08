@@ -1,19 +1,9 @@
 package dvachmovie.usecase
 
-import dvachmovie.api.DvachMovieApi
-import dvachmovie.api.model.DvachReportRequest
-import dvachmovie.architecture.logging.Logger
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import dvachmovie.repository.DvachRepository
 import javax.inject.Inject
 
-class ReportUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
-                                        private val logger: Logger) : UseCase {
-
-    companion object {
-        private const val TAG = "ReportUseCase"
-    }
+class ReportUseCase @Inject constructor(private val dvachRepository: DvachRepository) : UseCase {
 
     private lateinit var board: String
     private var thread: Long = 0
@@ -34,23 +24,15 @@ class ReportUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
     }
 
     override suspend fun execute() {
-        dvachApi.reportPost("report",
-                board,
-                thread,
-                comment,
-                post).enqueue(dvachReportCallback)
-    }
-
-    private val dvachReportCallback = object : Callback<DvachReportRequest> {
-        override fun onResponse(call: Call<DvachReportRequest>,
-                                response: Response<DvachReportRequest>) {
-            logger.d(TAG, "Report was successful")
-            executorResult.onSuccess(DvachReportModel(response.body()?.message ?: ""))
-        }
-
-        override fun onFailure(call: Call<DvachReportRequest>, t: Throwable) {
-            logger.e(TAG, t.message ?: "Something network error")
-            executorResult.onFailure(t)
+        try {
+            val response = dvachRepository.reportPost(
+                    board,
+                    thread,
+                    post,
+                    comment)
+            executorResult.onSuccess(DvachReportModel(response ?: ""))
+        } catch (e: Exception) {
+            executorResult.onFailure(e)
         }
     }
 }

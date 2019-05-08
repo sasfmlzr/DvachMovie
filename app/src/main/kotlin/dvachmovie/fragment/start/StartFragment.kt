@@ -21,6 +21,7 @@ import dvachmovie.usecase.UseCaseModel
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -118,14 +119,18 @@ class StartFragment : BaseFragment<StartVM,
 
     private val executorResult = object : ExecutorResult {
         override fun onSuccess(useCaseModel: UseCaseModel) {
-            useCaseModel as DvachModel
-            movieDBCache.movieList.value = useCaseModel.movies
-            router.navigateStartToMovieFragment()
+            GlobalScope.launch {
+                useCaseModel as DvachModel
+                movieDBCache.movieList.postValue(useCaseModel.movies)
+                router.navigateStartToMovieFragment()
+            }
         }
 
         override fun onFailure(t: Throwable) {
-            extensions.showMessage(t.message!!)
-            viewModel.viewRetryBtn.value = true
+
+                extensions.showMessage(t.message!!)
+                viewModel.viewRetryBtn.postValue(true)
+
         }
     }
 }
