@@ -8,7 +8,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class GetThreadsFromDvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
+open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
                                                      private val logger: Logger) : UseCase {
 
     companion object {

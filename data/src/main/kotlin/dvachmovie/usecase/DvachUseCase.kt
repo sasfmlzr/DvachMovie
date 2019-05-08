@@ -7,7 +7,7 @@ import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
-class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromDvachUseCase,
+class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                        getLinkFilesFromThreadsUseCase:
                                        GetLinkFilesFromThreadsUseCase) : UseCase {
 
@@ -31,7 +31,7 @@ class DvachUseCase @Inject constructor(private val dvachUseCase: GetThreadsFromD
     }
 
     override fun execute() {
-        dvachUseCase.addParams(board, counterWebm, dvachUseCaseExecutorResult).execute()
+        getThreadUseCase.addParams(board, counterWebm, dvachUseCaseExecutorResult).execute()
     }
 
     private val dvachUseCaseExecutorResult = object : ExecutorResult {
