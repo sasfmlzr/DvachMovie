@@ -1,5 +1,6 @@
 package dvachmovie.di.core
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dvachmovie.api.CookieManager
@@ -27,6 +28,7 @@ internal class ApiModule {
                 .baseUrl(BuildConfig.DVACH_URL)
                 .client(httpClient)
                 .addConverterFactory(getOwnerContactConverterFactory())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()
         return retrofit.create(DvachMovieApi::class.java)
     }

@@ -3,6 +3,9 @@ package dvachmovie.usecase
 import dvachmovie.api.model.thread.FileItem
 import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.MovieEntity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
@@ -19,6 +22,8 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     private var count = 0
     private var fileItems = mutableListOf<FileItem>()
 
+    private val scope = CoroutineScope(Dispatchers.Default)
+
     fun addParams(board: String,
                   counterWebm: CounterWebm,
                   executorResult: ExecutorResult): DvachUseCase {
@@ -30,8 +35,8 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         return this
     }
 
-    override fun execute() {
-        getThreadUseCase.addParams(board, counterWebm, dvachUseCaseExecutorResult).execute()
+    override suspend fun execute() {
+        getThreadUseCase.addParams(board, dvachUseCaseExecutorResult).execute()
     }
 
     private val dvachUseCaseExecutorResult = object : ExecutorResult {
@@ -40,10 +45,12 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
             listThreadSize = useCaseModel.listThreads.size
             counterWebm.updateCountVideos(listThreadSize)
 
-            useCaseModel.listThreads.forEach { num ->
-                getLinkFilesFromThreadsUseCase
-                        .addParams(board, num, getLinkFilesFromThreadsUseCaseResult)
-                        .execute()
+            scope.launch {
+                useCaseModel.listThreads.forEach { num ->
+                    getLinkFilesFromThreadsUseCase
+                            .addParams(board, num, getLinkFilesFromThreadsUseCaseResult)
+                            .execute()
+                }
             }
         }
 

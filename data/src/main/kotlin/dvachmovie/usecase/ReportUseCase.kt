@@ -33,7 +33,7 @@ class ReportUseCase @Inject constructor(private val dvachApi: DvachMovieApi,
         return this
     }
 
-    override fun execute() {
+    override suspend fun execute() {
         dvachApi.reportPost("report",
                 board,
                 thread,

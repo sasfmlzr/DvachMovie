@@ -29,7 +29,7 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachApi: D
         return this
     }
 
-    override fun execute() {
+    override suspend fun execute() {
         dvachApi.getThread(board, numThread).enqueue(dvachLinkFilesCallback)
     }
 

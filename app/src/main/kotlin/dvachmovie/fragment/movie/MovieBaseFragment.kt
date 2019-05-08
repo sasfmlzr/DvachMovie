@@ -39,6 +39,9 @@ import dvachmovie.usecase.UseCaseModel
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 abstract class MovieBaseFragment : BaseFragment<MovieVM,
@@ -54,6 +57,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     lateinit var settingsStorage: SettingsStorage
     @Inject
     lateinit var reportUseCase: ReportUseCase
+
+    private val mainScope = CoroutineScope(Dispatchers.Main)
 
     private lateinit var ads: InterstitialAd
 
@@ -238,10 +243,14 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                     extensions.showMessage("Something went wrong. Please try again")
                 }
             }
-            reportUseCase.addParams(movieStorage.currentMovie.value?.board!!,
-                    movieStorage.currentMovie.value?.thread!!,
-                    movieStorage.currentMovie.value?.post!!,
-                    executorResult).execute()
+
+            mainScope.launch {
+                reportUseCase.addParams(movieStorage.currentMovie.value?.board!!,
+                        movieStorage.currentMovie.value?.thread!!,
+                        movieStorage.currentMovie.value?.post!!,
+                        executorResult).execute()
+            }
+
         }
 
         viewModel.isReportBtnVisible.value = settingsStorage.isReportBtnVisible()

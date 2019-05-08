@@ -82,14 +82,24 @@ class StartFragment : BaseFragment<StartVM,
         buttonRetry.setOnClickListener {
             viewModel.viewRetryBtn.value = false
             progressLoadingSource.progress = 0
-            dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
+            scope.launch {
+        //       withContext(Dispatchers.Default) {
+                    dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
+            //   }
+            }
+
         }
+
     }
 
     private fun prepareData() {
         movieRepository.observeDB(viewLifecycleOwner, Observer { movies ->
             if (settingsStorage.isLoadingEveryTime() || movies.size < MINIMUM_COUNT_MOVIES) {
-                dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
+                scope.launch {
+                //    withContext(Dispatchers.Default) {
+                        dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
+              //      }
+                }
             } else {
                 router.navigateStartToMovieFragment()
             }
