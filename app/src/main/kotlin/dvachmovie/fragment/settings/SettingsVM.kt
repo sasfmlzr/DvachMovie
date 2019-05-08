@@ -14,6 +14,10 @@ import dvachmovie.R
 import dvachmovie.api.model.Boards
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -25,6 +29,8 @@ class SettingsVM @Inject constructor(
     companion object {
         private const val TAG = "SettingsVM"
     }
+
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     val prepareLoading = MutableLiveData<Boolean>(settingsStorage.isLoadingEveryTime())
 
@@ -127,8 +133,12 @@ class SettingsVM @Inject constructor(
                 }
                 .setPositiveButton("Ok") { _, _ ->
                     if (checkedItem != -1) {
-                        settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
-                        onChangeBoard.value = true
+                        scope.launch {
+                            withContext(Dispatchers.Default) {
+                                settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
+                            }
+                            onChangeBoard.value = true
+                        }
                     }
                 }
                 .setNegativeButton("Cancel") { _, _ -> }

@@ -18,6 +18,10 @@ import dvachmovie.repository.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
@@ -27,6 +31,8 @@ class SettingsFragment : BaseFragment<SettingsVM,
     lateinit var settingsStorage: SettingsStorage
     @Inject
     lateinit var movieStorage: MovieStorage
+
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     override fun getLayoutId() = R.layout.fragment_settings
 
@@ -54,15 +60,27 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
     private fun configureVM() {
         viewModel.prepareLoading.observe(this, Observer {
-            settingsStorage.putLoadingEveryTime(it)
+            scope.launch {
+                withContext(Dispatchers.Default) {
+                    settingsStorage.putLoadingEveryTime(it)
+                }
+            }
         })
 
         viewModel.isReportBtnVisible.observe(this, Observer {
-            settingsStorage.putReportBtnVisible(it)
+            scope.launch {
+                withContext(Dispatchers.Default) {
+                    settingsStorage.putReportBtnVisible(it)
+                }
+            }
         })
 
         viewModel.isListBtnVisible.observe(this, Observer {
-            settingsStorage.putListBtnVisible(it)
+            scope.launch {
+                withContext(Dispatchers.Default) {
+                    settingsStorage.putListBtnVisible(it)
+                }
+            }
         })
 
         viewModel.onCleanDB.observe(this, Observer {
@@ -82,7 +100,11 @@ class SettingsFragment : BaseFragment<SettingsVM,
         })
 
         viewModel.isGestureEnabled.observe(this, Observer {
-            settingsStorage.putIsAllowGesture(it)
+            scope.launch {
+                withContext(Dispatchers.Default) {
+                    settingsStorage.putIsAllowGesture(it)
+                }
+            }
         })
     }
 

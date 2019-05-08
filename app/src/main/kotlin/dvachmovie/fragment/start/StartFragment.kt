@@ -19,6 +19,10 @@ import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.ExecutorResult
 import dvachmovie.usecase.UseCaseModel
 import kotlinx.android.synthetic.main.fragment_start.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartVM,
@@ -40,6 +44,8 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var movieDBCache: MovieDBCache
 
+    private val scope = CoroutineScope(Dispatchers.Main)
+
     override fun getLayoutId() = R.layout.fragment_start
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
@@ -50,7 +56,11 @@ class StartFragment : BaseFragment<StartVM,
         binding.viewModel = viewModel
 
         val value = "92ea293bf47456479e25b11ba67bb17a"
-        settingsStorage.putCookie(value)
+        scope.launch {
+            withContext(Dispatchers.Default) {
+                settingsStorage.putCookie(value)
+            }
+        }
         viewModel.imageId.value = R.raw.cybermilosgif
         prepareData()
 
@@ -62,7 +72,11 @@ class StartFragment : BaseFragment<StartVM,
         super.onViewCreated(view, savedInstanceState)
 
         buttonChangeDefaultBoard.setOnClickListener {
-            settingsStorage.putBoard("mu")
+            scope.launch {
+                withContext(Dispatchers.Default) {
+                    settingsStorage.putBoard(board = "mu")
+                }
+            }
             activity?.recreate()
         }
         buttonRetry.setOnClickListener {
