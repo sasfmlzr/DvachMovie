@@ -33,9 +33,9 @@ import dvachmovie.repository.local.MovieStorage
 import dvachmovie.repository.local.MovieUtils
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.ExecutorResult
-import dvachmovie.usecase.ReportUseCase
-import dvachmovie.usecase.UseCaseModel
+import dvachmovie.usecase.base.ExecutorResult
+import dvachmovie.usecase.real.ReportUseCase
+import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*

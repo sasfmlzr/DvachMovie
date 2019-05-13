@@ -1,4 +1,4 @@
-package dvachmovie.usecase
+package dvachmovie.usecase.base
 
 interface ExecutorResult {
     fun onSuccess(useCaseModel: UseCaseModel)

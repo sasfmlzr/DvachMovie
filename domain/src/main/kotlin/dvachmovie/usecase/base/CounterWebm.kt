@@ -1,4 +1,4 @@
-package dvachmovie.usecase
+package dvachmovie.usecase.base
 
 interface CounterWebm {
     fun updateCurrentCountVideos(count: Int)

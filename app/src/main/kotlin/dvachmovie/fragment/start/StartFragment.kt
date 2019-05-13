@@ -13,17 +13,13 @@ import dvachmovie.di.core.Injector
 import dvachmovie.repository.local.MovieDBCache
 import dvachmovie.repository.local.MovieRepository
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.CounterWebm
 import dvachmovie.usecase.DvachModel
 import dvachmovie.usecase.DvachUseCase
-import dvachmovie.usecase.ExecutorResult
-import dvachmovie.usecase.UseCaseModel
+import dvachmovie.usecase.base.CounterWebm
+import dvachmovie.usecase.base.ExecutorResult
+import dvachmovie.usecase.base.UseCaseModel
 import kotlinx.android.synthetic.main.fragment_start.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartVM,
@@ -84,22 +80,16 @@ class StartFragment : BaseFragment<StartVM,
             viewModel.viewRetryBtn.value = false
             progressLoadingSource.progress = 0
             scope.launch {
-        //       withContext(Dispatchers.Default) {
-                    dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
-            //   }
+                dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
             }
-
         }
-
     }
 
     private fun prepareData() {
         movieRepository.observeDB(viewLifecycleOwner, Observer { movies ->
             if (settingsStorage.isLoadingEveryTime() || movies.size < MINIMUM_COUNT_MOVIES) {
                 scope.launch {
-                //    withContext(Dispatchers.Default) {
-                        dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
-              //      }
+                    dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
                 }
             } else {
                 router.navigateStartToMovieFragment()
@@ -127,10 +117,8 @@ class StartFragment : BaseFragment<StartVM,
         }
 
         override fun onFailure(t: Throwable) {
-
-                extensions.showMessage(t.message!!)
-                viewModel.viewRetryBtn.postValue(true)
-
+            extensions.showMessage(t.message!!)
+            viewModel.viewRetryBtn.postValue(true)
         }
     }
 }

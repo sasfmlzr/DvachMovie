@@ -1,6 +1,8 @@
-package dvachmovie.usecase
+package dvachmovie.usecase.real
 
 import dvachmovie.repository.DvachRepository
+import dvachmovie.usecase.base.ExecutorResult
+import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
 class ReportUseCase @Inject constructor(private val dvachRepository: DvachRepository) : UseCase {
