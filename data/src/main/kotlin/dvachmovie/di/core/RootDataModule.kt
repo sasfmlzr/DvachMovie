@@ -14,7 +14,8 @@ import javax.inject.Singleton
 @Module(includes = [
     ApiModule::class,
     StorageModule::class,
-    RoomModule::class
+    RoomModule::class,
+    RepositoryModule::class
 ])
 class RootDataModule {
     @Provides

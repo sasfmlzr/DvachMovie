@@ -1,6 +1,6 @@
 package dvachmovie.usecase
 
-import dvachmovie.api.model.thread.FileItem
+import dvachmovie.api.FileItem
 import dvachmovie.db.data.MovieEntity
 
 data class GetThreadsFromDvachModel(val listThreads: List<String>) : UseCaseModel

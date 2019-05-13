@@ -1,6 +1,6 @@
 package dvachmovie.usecase
 
-import dvachmovie.api.model.thread.FileItem
+import dvachmovie.api.FileItem
 import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.MovieEntity
 import kotlinx.coroutines.CoroutineScope
@@ -97,8 +97,8 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                         previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail,
                         date = localDateTime,
                         md5 = fileItem.md5,
-                        thread = fileItem.thread,
-                        post = fileItem.num)
+                        thread = fileItem.numThread,
+                        post = fileItem.numPost)
                 listMovies.add(movieEntity)
             }
         }
