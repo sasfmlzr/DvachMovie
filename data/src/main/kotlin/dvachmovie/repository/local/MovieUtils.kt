@@ -13,5 +13,13 @@ class MovieUtils {
         fun calculateDiff(localList: List<MovieEntity>,
                           dbList: List<MovieEntity>): List<MovieEntity> =
                 dbList.filter { !localList.contains(it) && !it.isPlayed }
+
+        fun getIndexPosition(currentMovie: MovieEntity, movieList: List<MovieEntity>): Int =
+                movieList.let {
+                    val index = it.indexOf(currentMovie)
+                    if (index == -1) {
+                        0
+                    } else index
+                }
     }
 }

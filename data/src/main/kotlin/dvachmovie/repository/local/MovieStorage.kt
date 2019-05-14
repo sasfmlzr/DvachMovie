@@ -12,12 +12,6 @@ data class MovieStorage(
         currentMovie.value = MovieEntity("")
     }
 
-    /** return 0 if element not contained */
-    fun getIndexPosition(): Int =
-            (movieList.value ?: listOf()).let { list ->
-                if (list.contains(currentMovie.value)) {
-                    return list.indexOf(currentMovie.value)
-                }
-                return 0
-            }
+    fun getIndexPosition(): Int = MovieUtils.getIndexPosition(currentMovie.value!!,
+            movieList.value ?: listOf())
 }
