@@ -30,29 +30,19 @@ internal class GetThreadsFromDvachUseCaseTest {
 
     private val testException = TestException()
 
-    private val executorResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
-            Assert.assertEquals(listNumThreads, (useCaseModel as GetThreadsFromDvachModel).listThreads)
-        }
-
-        override fun onFailure(t: Throwable) {
-            Assert.assertEquals(testException, t)
-        }
-    }
-
     @Test
     fun `Happy pass`() {
         runBlocking {
-            useCase.addParams("test", executorResult)
+            useCase.addParams("test")
             given(dvachRepository.getNumThreadsFromCatalog("test")).willReturn(listNumThreads)
-            useCase.execute()
+            Assert.assertEquals(GetThreadsFromDvachModel(listNumThreads), useCase.execute())
         }
     }
 
-    @Test
+    @Test(expected = TestException::class)
     fun `Error send to callback`() {
         runBlocking {
-            useCase.addParams("test", executorResult)
+            useCase.addParams("test")
             given(dvachRepository.getNumThreadsFromCatalog("test")).willThrow(testException)
             useCase.execute()
         }

@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
-                                       getLinkFilesFromThreadsUseCase:
+                                       private val getLinkFilesFromThreadsUseCase:
                                        GetLinkFilesFromThreadsUseCase) {
 
     private lateinit var board: String
@@ -41,12 +41,8 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     }
 
     suspend fun execute() {
-        getThreadUseCase.addParams(board, dvachUseCaseExecutorResult).execute()
-    }
-
-    private val dvachUseCaseExecutorResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
-            useCaseModel as GetThreadsFromDvachModel
+        try {
+            val useCaseModel = getThreadUseCase.addParams(board).execute() as GetThreadsFromDvachModel
             listThreadSize = useCaseModel.listThreads.size
             counterWebm.updateCountVideos(listThreadSize)
 
@@ -57,10 +53,8 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                             .execute()
                 }
             }
-        }
-
-        override fun onFailure(t: Throwable) {
-            executorResult.onFailure(t)
+        } catch (e: Exception) {
+            executorResult.onFailure(e)
         }
     }
 
