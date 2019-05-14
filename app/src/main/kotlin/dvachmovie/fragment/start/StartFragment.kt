@@ -41,7 +41,7 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var movieDBCache: MovieDBCache
 
-    private val scope = CoroutineScope(Dispatchers.Main)
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     override fun getLayoutId() = R.layout.fragment_start
 

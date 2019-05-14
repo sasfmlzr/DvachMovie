@@ -9,9 +9,6 @@ import dvachmovie.usecase.real.GetLinkFilesFromThreadsModel
 import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCase
 import dvachmovie.usecase.real.GetThreadsFromDvachModel
 import dvachmovie.usecase.real.GetThreadsFromDvachUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
@@ -25,8 +22,6 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     private var listThreadSize = 0
     private var count = 0
     private var fileItems = mutableListOf<FileItem>()
-
-    private val scope = CoroutineScope(Dispatchers.Default)
 
     fun addParams(board: String,
                   counterWebm: CounterWebm,
@@ -46,10 +41,8 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
             listThreadSize = useCaseModel.listThreads.size
             counterWebm.updateCountVideos(listThreadSize)
 
-            scope.launch {
-                useCaseModel.listThreads.forEach { num ->
-                    executeLinkFilesUseCase(num)
-                }
+            useCaseModel.listThreads.forEach { num ->
+                executeLinkFilesUseCase(num)
             }
         } catch (e: Exception) {
             executorResult.onFailure(e)
