@@ -4,8 +4,6 @@ import dvachmovie.TestException
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.repository.DvachRepository
-import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.base.UseCaseModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -31,29 +29,20 @@ internal class GetLinkFilesFromThreadsUseCaseTest {
 
     private val testException = TestException()
 
-    private val executorResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
-            Assert.assertEquals(listFiles, (useCaseModel as GetLinkFilesFromThreadsModel).fileItems)
-        }
-
-        override fun onFailure(t: Throwable) {
-            Assert.assertEquals(testException, t)
-        }
-    }
-
     @Test
     fun `Happy pass`() {
         runBlocking {
-            useCase.addParams("test", "test", executorResult)
+            useCase.addParams("test", "test")
             given(dvachRepository.getConcreteThreadByNum("test", "test")).willReturn(listFiles)
-            useCase.execute()
+            Assert.assertEquals(GetLinkFilesFromThreadsModel(listFiles), useCase.execute())
+
         }
     }
 
-    @Test
+    @Test(expected = TestException::class)
     fun `Error send to callback`() {
         runBlocking {
-            useCase.addParams("test", "test", executorResult)
+            useCase.addParams("test", "test")
             given(dvachRepository.getConcreteThreadByNum("test", "test")).willThrow(testException)
             useCase.execute()
         }

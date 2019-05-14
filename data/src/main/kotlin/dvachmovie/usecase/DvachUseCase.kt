@@ -5,7 +5,6 @@ import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieUtils
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.GetLinkFilesFromThreadsModel
 import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCase
 import dvachmovie.usecase.real.GetThreadsFromDvachModel
@@ -48,9 +47,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
 
             scope.launch {
                 useCaseModel.listThreads.forEach { num ->
-                    getLinkFilesFromThreadsUseCase
-                            .addParams(board, num, getLinkFilesFromThreadsUseCaseResult)
-                            .execute()
+                    executeLinkFilesUseCase(num)
                 }
             }
         } catch (e: Exception) {
@@ -58,13 +55,14 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         }
     }
 
-    private val getLinkFilesFromThreadsUseCaseResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
-            useCaseModel as GetLinkFilesFromThreadsModel
-
+    private suspend fun executeLinkFilesUseCase(num: String) {
+        try {
+            val useCaseLinkFilesModel = getLinkFilesFromThreadsUseCase
+                    .addParams(board, num)
+                    .execute() as GetLinkFilesFromThreadsModel
             count++
             counterWebm.updateCurrentCountVideos(count)
-            fileItems.addAll(useCaseModel.fileItems)
+            fileItems.addAll(useCaseLinkFilesModel.fileItems)
 
             if (count == listThreadSize) {
                 if (fileItems.isEmpty()) {
@@ -73,11 +71,9 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                     finally(MovieUtils.convertFileItemToMovieEntity(fileItems, board))
                 }
             }
-        }
-
-        override fun onFailure(t: Throwable) {
+        } catch (e: Exception) {
             count++
-            executorResult.onFailure(t)
+            executorResult.onFailure(e)
         }
     }
 
