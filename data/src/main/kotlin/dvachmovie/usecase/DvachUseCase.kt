@@ -73,6 +73,9 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
             }
         } catch (e: Exception) {
             count++
+            if (count == listThreadSize && fileItems.isNotEmpty()) {
+                finally(MovieUtils.convertFileItemToMovieEntity(fileItems, board))
+            }
             executorResult.onFailure(e)
         }
     }
