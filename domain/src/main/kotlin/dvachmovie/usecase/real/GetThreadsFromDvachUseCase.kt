@@ -5,7 +5,7 @@ import dvachmovie.repository.DvachRepository
 import dvachmovie.usecase.base.ExecutorResult
 import javax.inject.Inject
 
-open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository: DvachRepository,
+class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository: DvachRepository,
                                                           private val logger: Logger) {
 
     companion object {

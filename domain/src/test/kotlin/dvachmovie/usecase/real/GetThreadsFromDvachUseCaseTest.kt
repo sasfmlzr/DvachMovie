@@ -1,7 +1,6 @@
 package dvachmovie.usecase.real
 
 import dvachmovie.TestException
-import dvachmovie.api.FileItem
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.repository.DvachRepository
 import dvachmovie.usecase.base.ExecutorResult
@@ -16,10 +15,10 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-internal class GetLinkFilesFromThreadsUseCaseTest {
+internal class GetThreadsFromDvachUseCaseTest {
 
     @InjectMocks
-    private lateinit var useCase: GetLinkFilesFromThreadsUseCase
+    private lateinit var useCase: GetThreadsFromDvachUseCase
 
     @Mock
     private lateinit var logger: Logger
@@ -27,13 +26,13 @@ internal class GetLinkFilesFromThreadsUseCaseTest {
     @Mock
     private lateinit var dvachRepository: DvachRepository
 
-    private val listFiles = listOf(FileItem())
+    private val listNumThreads = listOf("Test")
 
     private val testException = TestException()
 
     private val executorResult = object : ExecutorResult {
         override fun onSuccess(useCaseModel: UseCaseModel) {
-            Assert.assertEquals(listFiles, (useCaseModel as GetLinkFilesFromThreadsModel).fileItems)
+            Assert.assertEquals(listNumThreads, (useCaseModel as GetThreadsFromDvachModel).listThreads)
         }
 
         override fun onFailure(t: Throwable) {
@@ -44,8 +43,8 @@ internal class GetLinkFilesFromThreadsUseCaseTest {
     @Test
     fun `Happy pass`() {
         runBlocking {
-            useCase.addParams("test", "test", executorResult)
-            given(dvachRepository.getConcreteThreadByNum("test", "test")).willReturn(listFiles)
+            useCase.addParams("test", executorResult)
+            given(dvachRepository.getNumThreadsFromCatalog("test")).willReturn(listNumThreads)
             useCase.execute()
         }
     }
@@ -53,8 +52,8 @@ internal class GetLinkFilesFromThreadsUseCaseTest {
     @Test
     fun `Error send to callback`() {
         runBlocking {
-            useCase.addParams("test", "test", executorResult)
-            given(dvachRepository.getConcreteThreadByNum("test", "test")).willThrow(testException)
+            useCase.addParams("test", executorResult)
+            given(dvachRepository.getNumThreadsFromCatalog("test")).willThrow(testException)
             useCase.execute()
         }
     }
