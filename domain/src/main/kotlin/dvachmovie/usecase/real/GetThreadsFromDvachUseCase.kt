@@ -2,11 +2,12 @@ package dvachmovie.usecase.real
 
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.repository.DvachRepository
+import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
 import javax.inject.Inject
 
-class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository: DvachRepository,
-                                                     private val logger: Logger) {
+open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository: DvachRepository,
+                                                     private val logger: Logger) : UseCase{
 
     companion object {
         private const val TAG = "DvachUseCase"
@@ -19,7 +20,7 @@ class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository
         return this
     }
 
-    suspend fun execute(): UseCaseModel =
+    override suspend fun execute(): UseCaseModel =
             try {
                 logger.d(TAG, "connecting to 2.hk...")
                 val numThreads = dvachRepository.getNumThreadsFromCatalog(board)

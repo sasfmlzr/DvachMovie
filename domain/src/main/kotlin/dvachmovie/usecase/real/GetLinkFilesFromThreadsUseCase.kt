@@ -2,11 +2,12 @@ package dvachmovie.usecase.real
 
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.repository.DvachRepository
+import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
 import javax.inject.Inject
 
-class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachRepository: DvachRepository,
-                                                         private val logger: Logger) {
+open class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachRepository: DvachRepository,
+                                                              private val logger: Logger) : UseCase {
 
     companion object {
         private const val TAG = "GetLinkFilesFromThreadsUseCase"
@@ -22,7 +23,7 @@ class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachReposi
         return this
     }
 
-    suspend fun execute(): UseCaseModel =
+    override suspend fun execute(): UseCaseModel =
             try {
                 val listFiles = dvachRepository.getConcreteThreadByNum(board, numThread)
                 GetLinkFilesFromThreadsModel(listFiles)

@@ -41,7 +41,8 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
 
     suspend fun execute() {
         try {
-            val useCaseModel = getThreadUseCase.addParams(board).execute() as GetThreadsFromDvachModel
+            val useCaseModel = getThreadUseCase.addParams(board).execute()
+            useCaseModel as GetThreadsFromDvachModel
             listThreadSize = useCaseModel.listThreads.size
             counterWebm.updateCountVideos(listThreadSize)
 
