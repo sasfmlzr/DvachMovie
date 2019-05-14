@@ -59,6 +59,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
             fileItems.addAll(useCaseLinkFilesModel.fileItems)
 
             if (count == listThreadSize) {
+                fileItems = MovieUtils.filterFileItemOnlyAsWebm(fileItems) as MutableList<FileItem>
                 if (fileItems.isEmpty()) {
                     executorResult.onFailure(RuntimeException("This is a private board"))
                 } else {

@@ -26,19 +26,21 @@ class MovieUtils {
                     } else index
                 }
 
-        fun convertFileItemToMovieEntity(fileItems: List<FileItem>, board: String): List<MovieEntity> =
+        fun filterFileItemOnlyAsWebm(fileItems: List<FileItem>): List<FileItem> =
                 fileItems.filter { it.path.contains(".webm") }
-                        .map { fileItem ->
-                            MovieEntity(board = board,
-                                    movieUrl = BuildConfig.DVACH_URL + fileItem.path,
-                                    previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail,
-                                    date = LocalDateTime.parse(fileItem.date,
-                                            DateTimeFormat.forPattern
-                                            ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
-                                            .plusYears(2000),
-                                    md5 = fileItem.md5,
-                                    thread = fileItem.numThread,
-                                    post = fileItem.numPost)
-                        }
+
+        fun convertFileItemToMovieEntity(fileItems: List<FileItem>, board: String): List<MovieEntity> =
+                fileItems.map { fileItem ->
+                    MovieEntity(board = board,
+                            movieUrl = BuildConfig.DVACH_URL + fileItem.path,
+                            previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail,
+                            date = LocalDateTime.parse(fileItem.date,
+                                    DateTimeFormat.forPattern
+                                    ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
+                                    .plusYears(2000),
+                            md5 = fileItem.md5,
+                            thread = fileItem.numThread,
+                            post = fileItem.numPost)
+                }
     }
 }
