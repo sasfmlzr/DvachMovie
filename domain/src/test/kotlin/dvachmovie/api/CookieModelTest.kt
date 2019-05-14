@@ -8,6 +8,6 @@ class CookieModelTest {
     @Test
     fun `Verify cookie model` (){
         val cookie = Cookie("var", "val")
-        Assert.assertEquals(cookie.toString(), "var=val")
+        Assert.assertEquals(cookie.toString(), "${cookie.header}=${cookie.value}")
     }
 }
