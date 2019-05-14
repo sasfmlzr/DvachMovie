@@ -1,18 +1,19 @@
 package dvachmovie.usecase
 
 import dvachmovie.api.FileItem
-import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.MovieEntity
+import dvachmovie.repository.local.MovieUtils
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
-import dvachmovie.usecase.real.*
+import dvachmovie.usecase.real.GetLinkFilesFromThreadsModel
+import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCase
+import dvachmovie.usecase.real.GetThreadsFromDvachModel
+import dvachmovie.usecase.real.GetThreadsFromDvachUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.joda.time.LocalDateTime
-import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
@@ -76,7 +77,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                 if (fileItems.isEmpty()) {
                     executorResult.onFailure(RuntimeException("This is a private board"))
                 } else {
-                    convertFileItemToMovieEntity(fileItems)
+                    finally(MovieUtils.convertFileItemToMovieEntity(fileItems, board))
                 }
             }
         }
@@ -87,30 +88,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         }
     }
 
-    private fun convertFileItemToMovieEntity(fileItems: MutableList<FileItem>) {
-        val listMovies = mutableListOf<MovieEntity>()
-        fileItems.forEach { fileItem ->
-            if (fileItem.path.contains(".webm")) {
-                val localDateTime =
-                        LocalDateTime.parse(fileItem.date,
-                                DateTimeFormat.forPattern
-                                ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
-                                .plusYears(2000)
-
-                val movieEntity = MovieEntity(board = this.board,
-                        movieUrl = BuildConfig.DVACH_URL + fileItem.path,
-                        previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail,
-                        date = localDateTime,
-                        md5 = fileItem.md5,
-                        thread = fileItem.numThread,
-                        post = fileItem.numPost)
-                listMovies.add(movieEntity)
-            }
-        }
-        finally(listMovies)
-    }
-
-    private fun finally(listMovies: MutableList<MovieEntity>) {
+    private fun finally(listMovies: List<MovieEntity>) {
         executorResult.onSuccess(DvachModel(listMovies))
     }
 }
