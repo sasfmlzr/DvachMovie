@@ -7,27 +7,22 @@ import dvachmovie.usecase.base.UseCaseModel
 import javax.inject.Inject
 
 open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository: DvachRepository,
-                                                     private val logger: Logger) : UseCase{
-
+                                                          private val logger: Logger) :
+        UseCase<GetThreadsFromDvachUseCase.Params, GetThreadsFromDvachModel>() {
     companion object {
         private const val TAG = "DvachUseCase"
     }
 
-    private lateinit var board: String
-
-    fun addParams(board: String): GetThreadsFromDvachUseCase {
-        this.board = board
-        return this
-    }
-
-    override suspend fun execute(): UseCaseModel =
+    override suspend fun execute(input: Params): GetThreadsFromDvachModel =
             try {
                 logger.d(TAG, "connecting to 2.hk...")
-                val numThreads = dvachRepository.getNumThreadsFromCatalog(board)
+                val numThreads = dvachRepository.getNumThreadsFromCatalog(input.board)
                 logger.d(TAG, "2.hk connected")
                 GetThreadsFromDvachModel(numThreads)
             } catch (e: Exception) {
                 logger.e("GetThreadsFromDvachUseCase", e.message ?: "Something network error")
                 throw e
             }
+
+    data class Params(val board: String) : UseCaseModel
 }

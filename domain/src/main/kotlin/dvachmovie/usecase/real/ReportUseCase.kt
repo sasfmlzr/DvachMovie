@@ -2,38 +2,30 @@ package dvachmovie.usecase.real
 
 import dvachmovie.repository.DvachRepository
 import dvachmovie.usecase.base.ExecutorResult
+import dvachmovie.usecase.base.UseCase
+import dvachmovie.usecase.base.UseCaseModel
 import javax.inject.Inject
 
-class ReportUseCase @Inject constructor(private val dvachRepository: DvachRepository) {
+class ReportUseCase @Inject constructor(private val dvachRepository: DvachRepository) :
+        UseCase<ReportUseCase.Params, Unit>() {
 
-    private lateinit var board: String
-    private var thread: Long = 0
-    private lateinit var comment: String
-    private var post: Long = 0
-    private lateinit var executorResult: ExecutorResult
+    private val comment = "Adult content"
 
-    fun addParams(board: String,
-                  thread: Long,
-                  post: Long,
-                  executorResult: ExecutorResult): ReportUseCase {
-        this.board = board
-        this.thread = thread
-        this.comment = "Adult content"
-        this.post = post
-        this.executorResult = executorResult
-        return this
-    }
-
-    suspend fun execute() {
+    override suspend fun execute(input: Params) {
         try {
             val response = dvachRepository.reportPost(
-                    board,
-                    thread,
-                    post,
+                    input.board,
+                    input.thread,
+                    input.post,
                     comment)
-            executorResult.onSuccess(DvachReportModel(response ?: ""))
+            input.executorResult.onSuccess(DvachReportModel(response ?: ""))
         } catch (e: Exception) {
-            executorResult.onFailure(e)
+            input.executorResult.onFailure(e)
         }
     }
+
+    data class Params(val board: String,
+                      val thread: Long,
+                      val post: Long,
+                      val executorResult: ExecutorResult) : UseCaseModel
 }

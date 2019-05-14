@@ -79,22 +79,25 @@ class StartFragment : BaseFragment<StartVM,
         buttonRetry.setOnClickListener {
             viewModel.viewRetryBtn.value = false
             progressLoadingSource.progress = 0
-            scope.launch {
-                dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
-            }
+            loadNewMovies()
         }
     }
 
     private fun prepareData() {
         movieRepository.observeDB(viewLifecycleOwner, Observer { movies ->
             if (settingsStorage.isLoadingEveryTime() || movies.size < MINIMUM_COUNT_MOVIES) {
-                scope.launch {
-                    dvachUseCase.addParams(settingsStorage.getBoard(), counterWebm, executorResult).execute()
-                }
+                loadNewMovies()
             } else {
                 router.navigateStartToMovieFragment()
             }
         })
+    }
+
+    private fun loadNewMovies() {
+        scope.launch {
+            val inputModel = DvachUseCase.Params(settingsStorage.getBoard(), counterWebm, executorResult)
+            dvachUseCase.execute(inputModel)
+        }
     }
 
     private val counterWebm = object : CounterWebm {

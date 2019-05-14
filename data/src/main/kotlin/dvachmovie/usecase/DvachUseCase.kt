@@ -5,15 +5,14 @@ import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieUtils
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.real.GetLinkFilesFromThreadsModel
+import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCase
-import dvachmovie.usecase.real.GetThreadsFromDvachModel
 import dvachmovie.usecase.real.GetThreadsFromDvachUseCase
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                        private val getLinkFilesFromThreadsUseCase:
-                                       GetLinkFilesFromThreadsUseCase) {
+                                       GetLinkFilesFromThreadsUseCase) : UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
@@ -23,21 +22,13 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     private var count = 0
     private var fileItems = mutableListOf<FileItem>()
 
-    fun addParams(board: String,
-                  counterWebm: CounterWebm,
-                  executorResult: ExecutorResult): DvachUseCase {
-        this.board = board
-        this.counterWebm = counterWebm
-        this.executorResult = executorResult
-        count = 0
-        fileItems = mutableListOf()
-        return this
-    }
-
-    suspend fun execute() {
+    override suspend fun execute(input: Params) {
         try {
-            val useCaseModel = getThreadUseCase.addParams(board).execute()
-            useCaseModel as GetThreadsFromDvachModel
+            board = input.board
+            executorResult = input.executorResult
+            counterWebm = input.counterWebm
+            val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
+            val useCaseModel = getThreadUseCase.execute(inputModel)
             listThreadSize = useCaseModel.listThreads.size
             counterWebm.updateCountVideos(listThreadSize)
 
@@ -51,9 +42,9 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
 
     private suspend fun executeLinkFilesUseCase(num: String) {
         try {
+            val inputModel = GetLinkFilesFromThreadsUseCase.Params(board, num)
             val useCaseLinkFilesModel = getLinkFilesFromThreadsUseCase
-                    .addParams(board, num)
-                    .execute() as GetLinkFilesFromThreadsModel
+                    .execute(inputModel)
             count++
             counterWebm.updateCurrentCountVideos(count)
             fileItems.addAll(useCaseLinkFilesModel.fileItems)
@@ -78,4 +69,8 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     private fun finally(listMovies: List<MovieEntity>) {
         executorResult.onSuccess(DvachModel(listMovies))
     }
+
+    data class Params(val board: String,
+                      val counterWebm: CounterWebm,
+                      val executorResult: ExecutorResult)
 }

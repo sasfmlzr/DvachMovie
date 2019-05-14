@@ -1,6 +1,6 @@
 package dvachmovie.usecase.base
 
-interface UseCase {
+abstract class UseCase<in Input, Output> {
 
-    suspend fun execute(): UseCaseModel
+    abstract suspend fun execute(input: Input): Output
 }

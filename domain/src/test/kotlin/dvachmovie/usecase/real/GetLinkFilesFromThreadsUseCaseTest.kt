@@ -29,12 +29,13 @@ internal class GetLinkFilesFromThreadsUseCaseTest {
 
     private val testException = TestException()
 
+    private val model = GetLinkFilesFromThreadsUseCase.Params("test", "test")
     @Test
     fun `Happy pass`() {
         runBlocking {
-            useCase.addParams("test", "test")
             given(dvachRepository.getConcreteThreadByNum("test", "test")).willReturn(listFiles)
-            Assert.assertEquals(GetLinkFilesFromThreadsModel(listFiles), useCase.execute())
+            Assert.assertEquals(GetLinkFilesFromThreadsModel(listFiles),
+                    useCase.execute(model))
 
         }
     }
@@ -42,9 +43,8 @@ internal class GetLinkFilesFromThreadsUseCaseTest {
     @Test(expected = TestException::class)
     fun `Error send to callback`() {
         runBlocking {
-            useCase.addParams("test", "test")
             given(dvachRepository.getConcreteThreadByNum("test", "test")).willThrow(testException)
-            useCase.execute()
+            useCase.execute(model)
         }
     }
 }

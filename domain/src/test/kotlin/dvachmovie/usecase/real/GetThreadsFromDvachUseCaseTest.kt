@@ -3,8 +3,6 @@ package dvachmovie.usecase.real
 import dvachmovie.TestException
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.repository.DvachRepository
-import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.base.UseCaseModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -30,21 +28,21 @@ internal class GetThreadsFromDvachUseCaseTest {
 
     private val testException = TestException()
 
+    private val model = GetThreadsFromDvachUseCase.Params("test")
+
     @Test
     fun `Happy pass`() {
         runBlocking {
-            useCase.addParams("test")
             given(dvachRepository.getNumThreadsFromCatalog("test")).willReturn(listNumThreads)
-            Assert.assertEquals(GetThreadsFromDvachModel(listNumThreads), useCase.execute())
+            Assert.assertEquals(GetThreadsFromDvachModel(listNumThreads), useCase.execute(model))
         }
     }
 
     @Test(expected = TestException::class)
     fun `Error send to callback`() {
         runBlocking {
-            useCase.addParams("test")
             given(dvachRepository.getNumThreadsFromCatalog("test")).willThrow(testException)
-            useCase.execute()
+            useCase.execute(model)
         }
     }
 }

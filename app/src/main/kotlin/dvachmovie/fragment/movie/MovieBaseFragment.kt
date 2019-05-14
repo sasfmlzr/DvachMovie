@@ -34,8 +34,8 @@ import dvachmovie.repository.local.MovieUtils
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.real.ReportUseCase
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.ReportUseCase
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
@@ -245,12 +245,12 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
 
             mainScope.launch {
-                reportUseCase.addParams(movieStorage.currentMovie.value?.board!!,
+                val inputModel = ReportUseCase.Params(movieStorage.currentMovie.value?.board!!,
                         movieStorage.currentMovie.value?.thread!!,
                         movieStorage.currentMovie.value?.post!!,
-                        executorResult).execute()
+                        executorResult)
+                reportUseCase.execute(inputModel)
             }
-
         }
 
         viewModel.isReportBtnVisible.value = settingsStorage.isReportBtnVisible()

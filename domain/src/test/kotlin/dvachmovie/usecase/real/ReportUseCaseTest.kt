@@ -22,7 +22,6 @@ internal class ReportUseCaseTest {
     @Mock
     private lateinit var dvachRepository: DvachRepository
 
-
     private val testException = TestException()
 
     private val executorResult = object : ExecutorResult {
@@ -35,21 +34,21 @@ internal class ReportUseCaseTest {
         }
     }
 
+    private val model = ReportUseCase.Params("test", 0, 0, executorResult)
+
     @Test
     fun `Happy pass`() {
         runBlocking {
-            useCase.addParams("test", 0, 0, executorResult)
             given(dvachRepository.reportPost("test", 0, 0, "Adult content")).willReturn("Test")
-            useCase.execute()
+            useCase.execute(model)
         }
     }
 
     @Test
     fun `Error send to callback`() {
         runBlocking {
-            useCase.addParams("test", 0, 0, executorResult)
             given(dvachRepository.reportPost("test", 0, 0, "Adult content")).willThrow(testException)
-            useCase.execute()
+            useCase.execute(model)
         }
     }
 }

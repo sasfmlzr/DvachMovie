@@ -34,13 +34,16 @@ class MovieUtils {
                     MovieEntity(board = board,
                             movieUrl = BuildConfig.DVACH_URL + fileItem.path,
                             previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail,
-                            date = LocalDateTime.parse(fileItem.date,
-                                    DateTimeFormat.forPattern
-                                    ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
-                                    .plusYears(2000),
+                            date = parseDateFromFileItem(fileItem),
                             md5 = fileItem.md5,
                             thread = fileItem.numThread,
                             post = fileItem.numPost)
                 }
+
+        fun parseDateFromFileItem(fileItem: FileItem): LocalDateTime =
+                LocalDateTime.parse(fileItem.date,
+                        DateTimeFormat.forPattern
+                        ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
+                        .plusYears(2000)
     }
 }

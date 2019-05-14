@@ -7,28 +7,21 @@ import dvachmovie.usecase.base.UseCaseModel
 import javax.inject.Inject
 
 open class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachRepository: DvachRepository,
-                                                              private val logger: Logger) : UseCase {
-
+                                                              private val logger: Logger) :
+        UseCase<GetLinkFilesFromThreadsUseCase.Params, GetLinkFilesFromThreadsModel>() {
     companion object {
         private const val TAG = "GetLinkFilesFromThreadsUseCase"
     }
 
-    private lateinit var board: String
-    private lateinit var numThread: String
-
-    fun addParams(board: String,
-                  numThread: String): GetLinkFilesFromThreadsUseCase {
-        this.numThread = numThread
-        this.board = board
-        return this
-    }
-
-    override suspend fun execute(): UseCaseModel =
+    override suspend fun execute(input: Params):
+            GetLinkFilesFromThreadsModel =
             try {
-                val listFiles = dvachRepository.getConcreteThreadByNum(board, numThread)
+                val listFiles = dvachRepository.getConcreteThreadByNum(input.board, input.numThread)
                 GetLinkFilesFromThreadsModel(listFiles)
             } catch (e: Exception) {
                 logger.e(TAG, e.message ?: "Something network error")
                 throw e
             }
+
+    data class Params(val board: String, val numThread: String) : UseCaseModel
 }
