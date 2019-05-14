@@ -5,7 +5,6 @@ import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.local.MovieUtils
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.GetLinkFilesFromThreadsModel
 import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCase
@@ -18,7 +17,7 @@ import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                        getLinkFilesFromThreadsUseCase:
-                                       GetLinkFilesFromThreadsUseCase) : UseCase {
+                                       GetLinkFilesFromThreadsUseCase) {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
@@ -41,7 +40,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         return this
     }
 
-    override suspend fun execute() {
+    suspend fun execute() {
         getThreadUseCase.addParams(board, dvachUseCaseExecutorResult).execute()
     }
 

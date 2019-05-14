@@ -2,10 +2,9 @@ package dvachmovie.usecase.real
 
 import dvachmovie.repository.DvachRepository
 import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
-class ReportUseCase @Inject constructor(private val dvachRepository: DvachRepository) : UseCase {
+class ReportUseCase @Inject constructor(private val dvachRepository: DvachRepository) {
 
     private lateinit var board: String
     private var thread: Long = 0
@@ -25,7 +24,7 @@ class ReportUseCase @Inject constructor(private val dvachRepository: DvachReposi
         return this
     }
 
-    override suspend fun execute() {
+    suspend fun execute() {
         try {
             val response = dvachRepository.reportPost(
                     board,
