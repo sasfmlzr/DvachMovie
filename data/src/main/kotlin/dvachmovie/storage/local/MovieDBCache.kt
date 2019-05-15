@@ -1,4 +1,4 @@
-package dvachmovie.repository.local
+package dvachmovie.storage.local
 
 import androidx.lifecycle.MutableLiveData
 import dvachmovie.db.data.MovieEntity

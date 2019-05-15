@@ -27,10 +27,10 @@ import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
-import dvachmovie.repository.local.MovieDBCache
-import dvachmovie.repository.local.MovieRepository
-import dvachmovie.repository.local.MovieStorage
-import dvachmovie.repository.local.MovieUtils
+import dvachmovie.storage.local.MovieDBCache
+import dvachmovie.utils.MovieObserver
+import dvachmovie.storage.local.MovieStorage
+import dvachmovie.utils.MovieUtils
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.base.ExecutorResult
@@ -48,7 +48,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
     @Inject
-    lateinit var movieRepository: MovieRepository
+    lateinit var movieObserver: MovieObserver
     @Inject
     lateinit var movieStorage: MovieStorage
     @Inject
@@ -77,7 +77,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
         })
 
-        movieRepository.observeDB(viewLifecycleOwner)
+        movieObserver.observeDB(viewLifecycleOwner)
 
         if (viewModel.currentPos.value == Pair(0, 0L)) {
             viewModel.currentPos.value = Pair(movieStorage.getIndexPosition(), 0)
@@ -176,7 +176,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     private val playerListener by lazy {
         object : Player.EventListener {
             override fun onPlayerError(error: ExoPlaybackException?) {
-                movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+                movieObserver.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
 
                 movieCaches.movieList.value = listOf()
                 movieStorage.movieList.value = listOf()
@@ -189,7 +189,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 if (playerView != null) {
                     currentIndex = playerView.player.currentPeriodIndex
                 }
-                movieRepository.markCurrentMovieAsPlayed(true, currentIndex)
+                movieObserver.markCurrentMovieAsPlayed(true, currentIndex)
                 if (containsAds) {
                     showAds()
                 }
@@ -272,7 +272,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        movieRepository.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+        movieObserver.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
         super.onStop()
         releasePlayer()
     }

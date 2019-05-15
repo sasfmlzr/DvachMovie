@@ -10,8 +10,8 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.repository.local.MovieDBCache
-import dvachmovie.repository.local.MovieRepository
+import dvachmovie.storage.local.MovieDBCache
+import dvachmovie.utils.MovieObserver
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.DvachModel
 import dvachmovie.usecase.DvachUseCase
@@ -36,7 +36,7 @@ class StartFragment : BaseFragment<StartVM,
     lateinit var settingsStorage: SettingsStorage
 
     @Inject
-    lateinit var movieRepository: MovieRepository
+    lateinit var movieObserver: MovieObserver
 
     @Inject
     lateinit var movieDBCache: MovieDBCache
@@ -84,7 +84,7 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     private fun prepareData() {
-        movieRepository.observeDB(viewLifecycleOwner, Observer { movies ->
+        movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
             if (settingsStorage.isLoadingEveryTime() || movies.size < MINIMUM_COUNT_MOVIES) {
                 loadNewMovies()
             } else {

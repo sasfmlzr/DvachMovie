@@ -4,7 +4,7 @@ import dvachmovie.TestException
 import dvachmovie.api.FileItem
 import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.MovieEntity
-import dvachmovie.repository.local.MovieUtils
+import dvachmovie.utils.MovieUtils
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel

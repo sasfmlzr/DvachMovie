@@ -5,9 +5,9 @@ import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dvachmovie.repository.db.MovieDBRepository
-import dvachmovie.repository.local.MovieDBCache
-import dvachmovie.repository.local.MovieRepository
-import dvachmovie.repository.local.MovieStorage
+import dvachmovie.storage.local.MovieDBCache
+import dvachmovie.utils.MovieObserver
+import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Singleton
 
@@ -37,5 +37,5 @@ class RootDataModule {
     internal fun movieRepository(movieStorage: MovieStorage,
                                  movieDBRepository: MovieDBRepository,
                                  settingsStorage: SettingsStorage) =
-            MovieRepository(movieStorage, movieDBRepository, settingsStorage)
+            MovieObserver(movieStorage, movieDBRepository, settingsStorage)
 }

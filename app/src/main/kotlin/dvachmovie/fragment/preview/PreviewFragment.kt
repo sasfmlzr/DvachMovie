@@ -9,7 +9,7 @@ import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
-import dvachmovie.repository.local.MovieStorage
+import dvachmovie.storage.local.MovieStorage
 import javax.inject.Inject
 
 class PreviewFragment : BaseFragment<PreviewVM,

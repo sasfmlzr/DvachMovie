@@ -1,4 +1,4 @@
-package dvachmovie.repository.local
+package dvachmovie.utils
 
 import dvachmovie.api.FileItem
 import dvachmovie.data.BuildConfig

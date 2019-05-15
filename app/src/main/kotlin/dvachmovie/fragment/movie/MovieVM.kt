@@ -8,7 +8,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dvachmovie.api.CookieManager
 import dvachmovie.db.data.MovieEntity
-import dvachmovie.repository.local.MovieStorage
+import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
 

@@ -14,7 +14,7 @@ import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.MovieEntity
-import dvachmovie.repository.local.MovieStorage
+import dvachmovie.storage.local.MovieStorage
 import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(private val movieStorage: MovieStorage,

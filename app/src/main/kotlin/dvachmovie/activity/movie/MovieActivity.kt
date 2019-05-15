@@ -10,7 +10,7 @@ import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
-import dvachmovie.repository.local.MovieDBCache
+import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 

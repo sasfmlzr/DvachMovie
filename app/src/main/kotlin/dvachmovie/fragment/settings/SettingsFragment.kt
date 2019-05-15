@@ -14,7 +14,7 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.repository.local.MovieStorage
+import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*

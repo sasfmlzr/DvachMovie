@@ -1,13 +1,14 @@
-package dvachmovie.repository.local
+package dvachmovie.utils
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.db.MovieDBRepository
+import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
 
-class MovieRepository @Inject constructor(
+class MovieObserver @Inject constructor(
         private val movieStorage: MovieStorage,
         private val movieDBRepository: MovieDBRepository,
         private val settingsStorage: SettingsStorage
@@ -16,9 +17,8 @@ class MovieRepository @Inject constructor(
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, Observer { dbMovies ->
                     val movieList = movieStorage.movieList.value ?: listOf()
-                    val diffList = MovieUtils
-                            .calculateDiff(movieList,
-                                    dbMovies)
+                    val diffList = MovieUtils.calculateDiff(movieList,
+                            dbMovies)
 
                     if (diffList.isNotEmpty()) {
                         movieStorage.movieList.value = diffList + movieList
