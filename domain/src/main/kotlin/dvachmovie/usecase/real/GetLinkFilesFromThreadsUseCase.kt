@@ -18,7 +18,7 @@ open class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachR
             try {
                 val listFiles = dvachRepository.getConcreteThreadByNum(input.board, input.numThread)
                 GetLinkFilesFromThreadsModel(listFiles)
-            } catch (e: Exception) {
+            } catch (e: RuntimeException) {
                 logger.e(TAG, e.message ?: "Something network error")
                 throw e
             }

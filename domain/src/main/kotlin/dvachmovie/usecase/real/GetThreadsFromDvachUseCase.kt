@@ -19,7 +19,7 @@ open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepos
                 val numThreads = dvachRepository.getNumThreadsFromCatalog(input.board)
                 logger.d(TAG, "2.hk connected")
                 GetThreadsFromDvachModel(numThreads)
-            } catch (e: Exception) {
+            } catch (e: RuntimeException) {
                 logger.e("GetThreadsFromDvachUseCase", e.message ?: "Something network error")
                 throw e
             }

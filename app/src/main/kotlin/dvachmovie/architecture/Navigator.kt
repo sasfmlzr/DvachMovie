@@ -57,7 +57,7 @@ class Navigator(private val router: NavController,
     private fun navigate(direction: NavDirections) {
         try {
             router.navigate(direction)
-        } catch (e: Exception) {
+        } catch (e: RuntimeException) {
             logger.e("Already attached")
         }
     }

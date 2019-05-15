@@ -19,7 +19,7 @@ class ReportUseCase @Inject constructor(private val dvachRepository: DvachReposi
                     input.post,
                     comment)
             input.executorResult.onSuccess(DvachReportModel(response ?: ""))
-        } catch (e: Exception) {
+        } catch (e: RuntimeException) {
             input.executorResult.onFailure(e)
         }
     }
