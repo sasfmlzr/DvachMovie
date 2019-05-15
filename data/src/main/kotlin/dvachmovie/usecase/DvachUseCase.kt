@@ -35,7 +35,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
             useCaseModel.listThreads.forEach { num ->
                 executeLinkFilesUseCase(num)
             }
-        } catch (e: RuntimeException) {
+        } catch (e: Exception) {
             executorResult.onFailure(e)
         }
     }
@@ -57,7 +57,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                     finally(MovieUtils.convertFileItemToMovieEntity(fileItems, board))
                 }
             }
-        } catch (e: RuntimeException) {
+        } catch (e: Exception) {
             count++
             if (count == listThreadSize && fileItems.isNotEmpty()) {
                 finally(MovieUtils.convertFileItemToMovieEntity(fileItems, board))

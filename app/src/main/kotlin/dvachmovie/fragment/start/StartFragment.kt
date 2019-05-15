@@ -41,7 +41,7 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var movieDBCache: MovieDBCache
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    private val scopeIO = CoroutineScope(Dispatchers.IO)
 
     override fun getLayoutId() = R.layout.fragment_start
 
@@ -53,10 +53,8 @@ class StartFragment : BaseFragment<StartVM,
         binding.viewModel = viewModel
 
         val value = "92ea293bf47456479e25b11ba67bb17a"
-        scope.launch {
-            withContext(Dispatchers.Default) {
+        scopeIO.launch(Job()) {
                 settingsStorage.putCookie(value)
-            }
         }
         viewModel.imageId.value = R.raw.cybermilosgif
         prepareData()
@@ -69,12 +67,12 @@ class StartFragment : BaseFragment<StartVM,
         super.onViewCreated(view, savedInstanceState)
 
         buttonChangeDefaultBoard.setOnClickListener {
-            scope.launch {
-                withContext(Dispatchers.Default) {
-                    settingsStorage.putBoard(board = "mu")
-                }
+            scopeIO.launch(Job()) {
+                    settingsStorage.putBoard(board = "b")
             }
-            activity?.recreate()
+            viewModel.viewRetryBtn.value = false
+            progressLoadingSource.progress = 0
+            loadNewMovies()
         }
         buttonRetry.setOnClickListener {
             viewModel.viewRetryBtn.value = false
@@ -94,9 +92,9 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     private fun loadNewMovies() {
-        scope.launch {
-            val inputModel = DvachUseCase.Params(settingsStorage.getBoard(), counterWebm, executorResult)
-            dvachUseCase.execute(inputModel)
+        scopeIO.launch(Job()) {
+                val inputModel = DvachUseCase.Params(settingsStorage.getBoard(), counterWebm, executorResult)
+                dvachUseCase.execute(inputModel)
         }
     }
 
@@ -112,7 +110,7 @@ class StartFragment : BaseFragment<StartVM,
 
     private val executorResult = object : ExecutorResult {
         override fun onSuccess(useCaseModel: UseCaseModel) {
-            GlobalScope.launch {
+            GlobalScope.launch(Job()) {
                 useCaseModel as DvachModel
                 movieDBCache.movieList.postValue(useCaseModel.movies)
                 router.navigateStartToMovieFragment()
