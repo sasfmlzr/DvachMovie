@@ -95,7 +95,7 @@ class DvachUseCaseTest {
     }
 
     @Test
-    fun happypass() {
+    fun `Happy pass`() {
         runBlocking {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.execute(threadModel)).willReturn(model)
@@ -114,7 +114,7 @@ class DvachUseCaseTest {
     }
 
     @Test
-    fun getThreadUseCaseEmitsError() {
+    fun `Error emits error in the GetThreadUseCase`() {
         runBlocking {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.execute(threadModel)).willThrow(testException)
@@ -125,7 +125,7 @@ class DvachUseCaseTest {
     }
 
     @Test
-    fun getLinkFilesFromThreadsUseCaseEmitsError() {
+    fun `Error emits error but return a part of successful result`() {
         runBlocking {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.execute(threadModel)).willReturn(model)
@@ -145,7 +145,7 @@ class DvachUseCaseTest {
     }
 
     @Test
-    fun dvachUseCaseReturnZeroMovies() {
+    fun `Return zero movies`() {
         runBlocking {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.execute(threadModel)).willReturn(model)
