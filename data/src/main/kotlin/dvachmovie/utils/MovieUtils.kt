@@ -6,44 +6,43 @@ import dvachmovie.db.data.MovieEntity
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 
-class MovieUtils {
-    companion object {
-        fun shuffleMovies(movies: List<MovieEntity>): List<MovieEntity> =
-                deleteIfMoviesIsPlayed(movies).shuffled()
+object MovieUtils {
 
-        private fun deleteIfMoviesIsPlayed(movies: List<MovieEntity>): List<MovieEntity> =
-                movies.filter { !it.isPlayed }
+    fun shuffleMovies(movies: List<MovieEntity>): List<MovieEntity> =
+            deleteIfMoviesIsPlayed(movies).shuffled()
 
-        fun calculateDiff(localList: List<MovieEntity>,
-                          dbList: List<MovieEntity>): List<MovieEntity> =
-                dbList.filter { !localList.contains(it) && !it.isPlayed }
+    private fun deleteIfMoviesIsPlayed(movies: List<MovieEntity>): List<MovieEntity> =
+            movies.filter { !it.isPlayed }
 
-        fun getIndexPosition(currentMovie: MovieEntity, movieList: List<MovieEntity>): Int =
-                movieList.let {
-                    val index = it.indexOf(currentMovie)
-                    if (index == -1) {
-                        0
-                    } else index
-                }
+    fun calculateDiff(localList: List<MovieEntity>,
+                      dbList: List<MovieEntity>): List<MovieEntity> =
+            dbList.filter { !localList.contains(it) && !it.isPlayed }
 
-        fun filterFileItemOnlyAsWebm(fileItems: List<FileItem>): List<FileItem> =
-                fileItems.filter { it.path.contains(".webm") }
+    fun getIndexPosition(currentMovie: MovieEntity, movieList: List<MovieEntity>): Int =
+            movieList.let {
+                val index = it.indexOf(currentMovie)
+                if (index == -1) {
+                    0
+                } else index
+            }
 
-        fun convertFileItemToMovieEntity(fileItems: List<FileItem>, board: String): List<MovieEntity> =
-                fileItems.map { fileItem ->
-                    MovieEntity(board = board,
-                            movieUrl = BuildConfig.DVACH_URL + fileItem.path,
-                            previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail,
-                            date = parseDateFromFileItem(fileItem),
-                            md5 = fileItem.md5,
-                            thread = fileItem.numThread,
-                            post = fileItem.numPost)
-                }
+    fun filterFileItemOnlyAsWebm(fileItems: List<FileItem>): List<FileItem> =
+            fileItems.filter { it.path.contains(".webm") }
 
-        fun parseDateFromFileItem(fileItem: FileItem): LocalDateTime =
-                LocalDateTime.parse(fileItem.date,
-                        DateTimeFormat.forPattern
-                        ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
-                        .plusYears(2000)
-    }
+    fun convertFileItemToMovieEntity(fileItems: List<FileItem>, board: String): List<MovieEntity> =
+            fileItems.map { fileItem ->
+                MovieEntity(board = board,
+                        movieUrl = BuildConfig.DVACH_URL + fileItem.path,
+                        previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail,
+                        date = parseDateFromFileItem(fileItem),
+                        md5 = fileItem.md5,
+                        thread = fileItem.numThread,
+                        post = fileItem.numPost)
+            }
+
+    fun parseDateFromFileItem(fileItem: FileItem): LocalDateTime =
+            LocalDateTime.parse(fileItem.date,
+                    DateTimeFormat.forPattern
+                    ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
+                    .plusYears(2000)
 }
