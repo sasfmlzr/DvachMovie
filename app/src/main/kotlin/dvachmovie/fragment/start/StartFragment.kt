@@ -54,7 +54,7 @@ class StartFragment : BaseFragment<StartVM,
 
         val value = "92ea293bf47456479e25b11ba67bb17a"
         scopeIO.launch(Job()) {
-                settingsStorage.putCookie(value)
+            settingsStorage.putCookie(value)
         }
         viewModel.imageId.value = R.raw.cybermilosgif
         prepareData()
@@ -68,7 +68,7 @@ class StartFragment : BaseFragment<StartVM,
 
         buttonChangeDefaultBoard.setOnClickListener {
             scopeIO.launch(Job()) {
-                    settingsStorage.putBoard(board = "b")
+                settingsStorage.putBoard(board = "b")
             }
             viewModel.viewRetryBtn.value = false
             progressLoadingSource.progress = 0
@@ -93,8 +93,8 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun loadNewMovies() {
         scopeIO.launch(Job()) {
-                val inputModel = DvachUseCase.Params(settingsStorage.getBoard(), counterWebm, executorResult)
-                dvachUseCase.execute(inputModel)
+            val inputModel = DvachUseCase.Params(settingsStorage.getBoard(), counterWebm, executorResult)
+            dvachUseCase.execute(inputModel)
         }
     }
 
