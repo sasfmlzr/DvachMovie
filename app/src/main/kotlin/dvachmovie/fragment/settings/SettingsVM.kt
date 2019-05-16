@@ -37,21 +37,11 @@ class SettingsVM @Inject constructor(
 
     val isListBtnVisible = MutableLiveData<Boolean>(settingsStorage.isListBtnVisible())
 
-    val isProxyEnabled = MutableLiveData<Boolean>(settingsStorage.isProxyEnabled())
-
     val onCleanDB = MutableLiveData<Boolean>(false)
 
     val onChangeBoard = MutableLiveData<Boolean>(false)
 
     val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
-
-    private val proxyUrl = if (settingsStorage.getProxyUrl() == "") {
-        ""
-    } else {
-        "${settingsStorage.getProxyUrl()}:${settingsStorage.getProxyPort()}"
-    }
-
-    val proxyText = MutableLiveData<String>(proxyUrl)
 
     val onPrepareLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -66,11 +56,6 @@ class SettingsVM @Inject constructor(
     val onListSwitchClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
                 isListBtnVisible.value = isChecked
-            }
-
-    val onProxySwitchClicked =
-            CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                isProxyEnabled.value = isChecked
             }
 
     val isGestureEnabled = MutableLiveData<Boolean>(settingsStorage.isAllowGesture())

@@ -1,7 +1,6 @@
 package dvachmovie.fragment.settings
 
 import android.os.Bundle
-import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -21,13 +20,8 @@ import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
-import java.net.InetSocketAddress
-import java.net.Socket
 import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
@@ -57,83 +51,6 @@ class SettingsFragment : BaseFragment<SettingsVM,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
-
-        buttonSetProxy.setOnClickListener {
-            GlobalScope.launch(Dispatchers.IO + Job()) {
-                val proxyText = proxyEditText.text.toString()
-                if (!proxyText.matches(("^\\d{1,3}(\\." +
-                                "(\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3}(\\:(\\d{1,5})?)?)?)?)?)?)?)?").toRegex()) ||
-                        proxyText.split(".", ":").dropLastWhile { it.isEmpty() }.size != 5) {
-                    extensions.showMessage("Proxy not correct")
-                } else {
-                    val urlPort = proxyText.split(":").dropLastWhile { it.isEmpty() }
-                    val url = urlPort.first()
-                    val port = Integer.parseInt(urlPort.last())
-                    if (isOnline(url, port)) {
-                        settingsStorage.putProxyUrl(url)
-                        settingsStorage.putProxyPort(port)
-                        extensions.showMessage("Proxy saved!")
-                    } else {
-                        extensions.showMessage("Proxy unavailable")
-                    }
-                }
-            }
-        }
-
-        proxyEditText.filters = getFilterTextAsIP()
-    }
-
-    private fun isOnline(proxyUrl: String, proxyPort: Int): Boolean {
-        return try {
-            val timeoutMs = 2000
-            val sock = Socket()
-            val socketAdress = InetSocketAddress(proxyUrl, proxyPort)
-
-            sock.connect(socketAdress, timeoutMs)
-            sock.close()
-
-            true
-        } catch (e: IOException) {
-            false
-        }
-    }
-
-    private fun getFilterTextAsIP(): Array<InputFilter?> {
-        val filters: Array<InputFilter?> = arrayOfNulls(1)
-        filters[0] = InputFilter { source, start, end, dest, dstart, dend ->
-            if (end > start) {
-                val destTxt = dest.toString()
-                val resultingTxt = destTxt.substring(0, dstart) +
-                        source.subSequence(start, end) +
-                        destTxt.substring(dend)
-                if (!resultingTxt.matches(("^\\d{1,3}(\\." +
-                                "(\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3}(\\:(\\d{1,5})?)?)?)?)?)?)?)?").toRegex())) {
-                    return@InputFilter ""
-                } else {
-                    var port = ""
-                    val splits = if (resultingTxt.contains(":")) {
-                        val list = resultingTxt.split(":")
-                        port = list.last()
-                        list.first().split(".").dropLastWhile { it.isEmpty() }
-                    } else {
-                        resultingTxt.split(".").dropLastWhile { it.isEmpty() }
-                    }
-
-                    if (port != "") {
-                        if (Integer.valueOf(port) > 65536) {
-                            return@InputFilter ""
-                        }
-                    }
-                    for (i in splits.indices) {
-                        if (Integer.valueOf(splits[i]) > 255) {
-                            return@InputFilter ""
-                        }
-                    }
-                }
-            }
-            null
-        }
-        return filters
     }
 
     private fun setUpToolbar() {
@@ -162,14 +79,6 @@ class SettingsFragment : BaseFragment<SettingsVM,
             scope.launch {
                 withContext(Dispatchers.Default) {
                     settingsStorage.putListBtnVisible(it)
-                }
-            }
-        })
-
-        viewModel.isProxyEnabled.observe(this, Observer {
-            scope.launch {
-                withContext(Dispatchers.Default) {
-                    settingsStorage.putIsProxyEnabled(it)
                 }
             }
         })

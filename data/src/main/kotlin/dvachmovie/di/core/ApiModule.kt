@@ -7,7 +7,6 @@ import dvachmovie.api.CookieManager
 import dvachmovie.api.DvachMovieApi
 import dvachmovie.api.getOwnerContactConverterFactory
 import dvachmovie.data.BuildConfig
-import dvachmovie.storage.local.LocalProxyStorage
 import okhttp3.CookieJar
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -18,18 +17,10 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun dvachRetrofitService(cookieJar: CookieJar, proxyStorage: LocalProxyStorage): DvachMovieApi {
-        val proxy = proxyStorage.getProxy()
-        val httpClient = if (proxy != null) {
-            OkHttpClient.Builder()
-                    .proxy(proxy)
-                    .cookieJar(cookieJar)
-                    .build()
-        } else {
-            OkHttpClient.Builder()
-                    .cookieJar(cookieJar)
-                    .build()
-        }
+    fun dvachRetrofitService(cookieJar: CookieJar): DvachMovieApi {
+        val httpClient = OkHttpClient.Builder()
+                .cookieJar(cookieJar)
+                .build()
 
         val retrofit = Retrofit.Builder()
                 .baseUrl(BuildConfig.DVACH_URL)

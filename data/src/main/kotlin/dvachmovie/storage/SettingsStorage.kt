@@ -16,9 +16,6 @@ class SettingsStorage @Inject constructor(
         private const val BOARD = "board"
         private const val COOKIE = "cookie"
         private const val GESTURE = "gesture"
-        private const val PROXY_ENABLED = "ProxyEnabled"
-        private const val PROXYURL = "proxyUrl"
-        private const val PROXYPORT = "proxyPort"
     }
 
     fun isLoadingEveryTime() = pref.getBoolean(LOADING_PARAM) ?: false
@@ -64,30 +61,6 @@ class SettingsStorage @Inject constructor(
     suspend fun putIsAllowGesture(value: Boolean) {
         withContext(CoroutineScope(Dispatchers.Default).coroutineContext) {
             pref.putBoolean(GESTURE, value)
-        }
-    }
-
-    fun isProxyEnabled() = pref.getBoolean(PROXY_ENABLED) ?: false
-
-    suspend fun putIsProxyEnabled(value: Boolean) {
-        withContext(CoroutineScope(Dispatchers.Default).coroutineContext) {
-            pref.putBoolean(PROXY_ENABLED, value)
-        }
-    }
-
-    fun getProxyUrl() = pref.getString(PROXYURL) ?: ""
-
-    suspend fun putProxyUrl(value: String) {
-        withContext(CoroutineScope(Dispatchers.Default).coroutineContext) {
-            pref.putString(PROXYURL, value)
-        }
-    }
-
-    fun getProxyPort() = pref.getInt(PROXYPORT) ?: 8080
-
-    suspend fun putProxyPort(value: Int) {
-        withContext(CoroutineScope(Dispatchers.Default).coroutineContext) {
-            pref.putInt(PROXYPORT, value)
         }
     }
 }

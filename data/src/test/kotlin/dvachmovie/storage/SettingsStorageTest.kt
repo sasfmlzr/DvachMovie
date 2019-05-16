@@ -31,9 +31,6 @@ class SettingsStorageTest {
         private const val BOARD = "board"
         private const val COOKIE = "cookie"
         private const val GESTURE = "gesture"
-        private const val PROXY_ENABLED = "ProxyEnabled"
-        private const val PROXYURL = "proxyUrl"
-        private const val PROXYPORT = "proxyPort"
     }
 
     @Test
@@ -202,89 +199,5 @@ class SettingsStorageTest {
     fun `Get AllowGesture is fault, but return default value`() {
         doReturn(null).`when`(keyValueStorage).getBoolean(GESTURE)
         Assert.assertEquals(true, settingsStorage.isAllowGesture())
-    }
-
-    @Test
-    fun `Put IsProxyEnabled to storage was successful`() {
-        doNothing().`when`(keyValueStorage).putBoolean(PROXY_ENABLED, true)
-        runBlocking {
-            settingsStorage.putIsProxyEnabled(true)
-        }
-    }
-
-    @Test(expected = TestException::class)
-    fun `Put IsProxyEnabled to storage was fault`() {
-        doThrow(testException).`when`(keyValueStorage).putBoolean(PROXY_ENABLED, true)
-        runBlocking {
-            settingsStorage.putIsProxyEnabled(true)
-        }
-    }
-
-    @Test
-    fun `Get IsProxyEnabled is successful`() {
-        doReturn(true).`when`(keyValueStorage).getBoolean(PROXY_ENABLED)
-        Assert.assertEquals(true, settingsStorage.isProxyEnabled())
-    }
-
-    @Test
-    fun `Get IsProxyEnabled is fault, but return default value`() {
-        doReturn(null).`when`(keyValueStorage).getBoolean(PROXY_ENABLED)
-        Assert.assertEquals(false, settingsStorage.isProxyEnabled())
-    }
-
-    @Test
-    fun `Put Proxy Url to storage was successful`() {
-        doNothing().`when`(keyValueStorage).putString(PROXYURL, "test")
-        runBlocking {
-            settingsStorage.putProxyUrl("test")
-        }
-    }
-
-    @Test(expected = TestException::class)
-    fun `Put Proxy Url to storage was fault`() {
-        doThrow(testException).`when`(keyValueStorage).putString(PROXYURL, "test")
-        runBlocking {
-            settingsStorage.putProxyUrl("test")
-        }
-    }
-
-    @Test
-    fun `Get Proxy Url is successful`() {
-        doReturn("test").`when`(keyValueStorage).getString(PROXYURL)
-        Assert.assertEquals("test", settingsStorage.getProxyUrl())
-    }
-
-    @Test
-    fun `Get Proxy Url is fault, but return default value`() {
-        doReturn(null).`when`(keyValueStorage).getString(PROXYURL)
-        Assert.assertEquals("", settingsStorage.getProxyUrl())
-    }
-
-    @Test
-    fun `Put Proxy port to storage was successful`() {
-        doNothing().`when`(keyValueStorage).putInt(PROXYPORT, 80)
-        runBlocking {
-            settingsStorage.putProxyPort(80)
-        }
-    }
-
-    @Test(expected = TestException::class)
-    fun `Put Proxy port to storage was fault`() {
-        doThrow(testException).`when`(keyValueStorage).putInt(PROXYPORT, 80)
-        runBlocking {
-            settingsStorage.putProxyPort(80)
-        }
-    }
-
-    @Test
-    fun `Get Proxy port is successful`() {
-        doReturn(80).`when`(keyValueStorage).getInt(PROXYPORT)
-        Assert.assertEquals(80, settingsStorage.getProxyPort())
-    }
-
-    @Test
-    fun `Get Proxy port is fault, but return default value`() {
-        doReturn(null).`when`(keyValueStorage).getInt(PROXYPORT)
-        Assert.assertEquals(8080, settingsStorage.getProxyPort())
     }
 }
