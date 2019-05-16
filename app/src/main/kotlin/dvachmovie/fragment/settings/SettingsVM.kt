@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
 class SettingsVM @Inject constructor(
         private val settingsStorage: SettingsStorage,
         logger: Logger
@@ -46,7 +45,13 @@ class SettingsVM @Inject constructor(
 
     val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
 
-    val proxyText = MutableLiveData<String>(settingsStorage.getProxy())
+    private val proxyUrl = if (settingsStorage.getProxyUrl() == "") {
+        ""
+    } else {
+        "${settingsStorage.getProxyUrl()}:${settingsStorage.getProxyPort()}"
+    }
+
+    val proxyText = MutableLiveData<String>(proxyUrl)
 
     val onPrepareLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->

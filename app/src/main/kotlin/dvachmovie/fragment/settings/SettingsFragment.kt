@@ -22,8 +22,12 @@ import kotlinx.android.synthetic.main.include_settings_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
@@ -55,17 +59,47 @@ class SettingsFragment : BaseFragment<SettingsVM,
         setUpToolbar()
 
         buttonSetProxy.setOnClickListener {
-            GlobalScope.launch {
-                settingsStorage.putProxy(proxyEditText.text.toString())
+            GlobalScope.launch(Dispatchers.IO + Job()) {
+                val proxyText = proxyEditText.text.toString()
+                if (!proxyText.matches(("^\\d{1,3}(\\." +
+                                "(\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3}(\\:(\\d{1,5})?)?)?)?)?)?)?)?").toRegex()) ||
+                        proxyText.split(".", ":").dropLastWhile { it.isEmpty() }.size != 5) {
+                    extensions.showMessage("Proxy not correct")
+                } else {
+                    val urlPort = proxyText.split(":").dropLastWhile { it.isEmpty() }
+                    val url = urlPort.first()
+                    val port = Integer.parseInt(urlPort.last())
+                    if (isOnline(url, port)) {
+                        settingsStorage.putProxyUrl(url)
+                        settingsStorage.putProxyPort(port)
+                        extensions.showMessage("Proxy saved!")
+                    } else {
+                        extensions.showMessage("Proxy unavailable")
+                    }
+                }
             }
-            extensions.showMessage("Proxy set!")
         }
 
         proxyEditText.filters = getFilterTextAsIP()
     }
 
-    fun getFilterTextAsIP(): Array<InputFilter?>{
-        val filters: Array<InputFilter?> = arrayOfNulls<InputFilter>(1)
+    private fun isOnline(proxyUrl: String, proxyPort: Int): Boolean {
+        return try {
+            val timeoutMs = 2000
+            val sock = Socket()
+            val socketAdress = InetSocketAddress(proxyUrl, proxyPort)
+
+            sock.connect(socketAdress, timeoutMs)
+            sock.close()
+
+            true
+        } catch (e: IOException) {
+            false
+        }
+    }
+
+    private fun getFilterTextAsIP(): Array<InputFilter?> {
+        val filters: Array<InputFilter?> = arrayOfNulls(1)
         filters[0] = InputFilter { source, start, end, dest, dstart, dend ->
             if (end > start) {
                 val destTxt = dest.toString()
