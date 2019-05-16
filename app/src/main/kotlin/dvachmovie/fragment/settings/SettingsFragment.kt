@@ -21,6 +21,7 @@ import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -53,7 +54,18 @@ class SettingsFragment : BaseFragment<SettingsVM,
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
 
-        val filters = arrayOfNulls<InputFilter>(1)
+        buttonSetProxy.setOnClickListener {
+            GlobalScope.launch {
+                settingsStorage.putProxy(proxyEditText.text.toString())
+            }
+            extensions.showMessage("Proxy set!")
+        }
+
+        proxyEditText.filters = getFilterTextAsIP()
+    }
+
+    fun getFilterTextAsIP(): Array<InputFilter?>{
+        val filters: Array<InputFilter?> = arrayOfNulls<InputFilter>(1)
         filters[0] = InputFilter { source, start, end, dest, dstart, dend ->
             if (end > start) {
                 val destTxt = dest.toString()
@@ -87,7 +99,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
             }
             null
         }
-        proxy_edit_text.filters = filters
+        return filters
     }
 
     private fun setUpToolbar() {

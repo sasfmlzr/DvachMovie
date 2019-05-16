@@ -46,6 +46,8 @@ class SettingsVM @Inject constructor(
 
     val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
 
+    val proxyText = MutableLiveData<String>(settingsStorage.getProxy())
+
     val onPrepareLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
                 prepareLoading.value = isChecked

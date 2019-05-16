@@ -29,4 +29,7 @@
     <string name="promote">Promote</string>
     <string name="list_button_visible">List button visible</string>
     <string name="report_button_visible">Report button visible</string>
+    <string name="set_proxy">Set proxy</string>
+    <string name="_127_0_0_1_8080">127.0.0.1:8080</string>
+    <string name="proxy">Proxy</string>
 </resources>
