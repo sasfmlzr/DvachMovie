@@ -10,7 +10,6 @@ data class MovieStorage(
 
     init {
         movieList.value = listOf()
-        currentMovie.value = MovieEntity("")
     }
 
     fun getIndexPosition(): Int = MovieUtils.getIndexPosition(currentMovie.value!!,

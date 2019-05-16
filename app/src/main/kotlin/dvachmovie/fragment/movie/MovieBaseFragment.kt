@@ -27,16 +27,16 @@ import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
-import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.utils.MovieObserver
-import dvachmovie.storage.local.MovieStorage
-import dvachmovie.utils.MovieUtils
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.SettingsStorage
+import dvachmovie.storage.local.MovieDBCache
+import dvachmovie.storage.local.MovieStorage
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.ReportUseCase
 import dvachmovie.utils.DirectoryHelper
+import dvachmovie.utils.MovieObserver
+import dvachmovie.utils.MovieUtils
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
 import kotlinx.coroutines.CoroutineScope
@@ -80,7 +80,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         movieObserver.observeDB(viewLifecycleOwner)
 
         if (viewModel.currentPos.value == Pair(0, 0L)) {
-            viewModel.currentPos.value = Pair(movieStorage.getIndexPosition(), 0)
+            if (movieStorage.currentMovie.value != null) {
+                viewModel.currentPos.value = Pair(movieStorage.getIndexPosition(), 0)
+            }
         }
         initAds()
 
