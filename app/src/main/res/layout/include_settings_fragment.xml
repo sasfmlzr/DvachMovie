@@ -105,6 +105,29 @@
                         android:onClick="@{viewModel.onRefreshDatabase}"
                         android:text="@string/clean_movies" />
 
+                    <Switch
+                        android:id="@+id/proxy_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:checked="@{safeUnbox(viewModel.isProxyEnabled)}"
+                        android:onCheckedChanged="@{viewModel.onProxySwitchClicked}"
+                        android:text="Proxy" />
+
+                    <EditText
+                        android:id="@+id/proxy_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:digits="0123456789.:"
+                        android:hint="127.0.0.1:8080"/>
+
                     <include
                         layout="@layout/include_boards"
                         bind:viewModel="@{viewModel}" />

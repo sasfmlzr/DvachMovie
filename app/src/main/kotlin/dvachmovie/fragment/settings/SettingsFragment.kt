@@ -1,6 +1,7 @@
 package dvachmovie.fragment.settings
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -14,8 +15,8 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
+import dvachmovie.storage.local.MovieStorage
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +52,42 @@ class SettingsFragment : BaseFragment<SettingsVM,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
+
+        val filters = arrayOfNulls<InputFilter>(1)
+        filters[0] = InputFilter { source, start, end, dest, dstart, dend ->
+            if (end > start) {
+                val destTxt = dest.toString()
+                val resultingTxt = destTxt.substring(0, dstart) +
+                        source.subSequence(start, end) +
+                        destTxt.substring(dend)
+                if (!resultingTxt.matches(("^\\d{1,3}(\\." +
+                                "(\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3}(\\:(\\d{1,5})?)?)?)?)?)?)?)?").toRegex())) {
+                    return@InputFilter ""
+                } else {
+                    var port = ""
+                    val splits = if (resultingTxt.contains(":")) {
+                        val list = resultingTxt.split(":")
+                        port = list.last()
+                        list.first().split(".").dropLastWhile { it.isEmpty() }
+                    } else {
+                        resultingTxt.split(".").dropLastWhile { it.isEmpty() }
+                    }
+
+                    if (port != "") {
+                        if (Integer.valueOf(port) > 65536) {
+                            return@InputFilter ""
+                        }
+                    }
+                    for (i in splits.indices) {
+                        if (Integer.valueOf(splits[i]) > 255) {
+                            return@InputFilter ""
+                        }
+                    }
+                }
+            }
+            null
+        }
+        proxy_edit_text.filters = filters
     }
 
     private fun setUpToolbar() {
@@ -79,6 +116,14 @@ class SettingsFragment : BaseFragment<SettingsVM,
             scope.launch {
                 withContext(Dispatchers.Default) {
                     settingsStorage.putListBtnVisible(it)
+                }
+            }
+        })
+
+        viewModel.isProxyEnabled.observe(this, Observer {
+            scope.launch {
+                withContext(Dispatchers.Default) {
+                    settingsStorage.putIsProxyEnabled(it)
                 }
             }
         })
