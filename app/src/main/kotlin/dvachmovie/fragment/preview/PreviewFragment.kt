@@ -51,11 +51,13 @@ class PreviewFragment : BaseFragment<PreviewVM,
     }
 
     private fun configureScrollRecyclerView() {
-        movieStorage.getIndexPosition().let { pos ->
-            if (pos < SMOOTH_POSITION) {
-                binding.moviesList.smoothScrollToPosition(pos)
-            } else {
-                binding.moviesList.scrollToPosition(pos)
+        if (movieStorage.currentMovie.value != null) {
+            movieStorage.getIndexPosition().let { pos ->
+                if (pos < SMOOTH_POSITION) {
+                    binding.moviesList.smoothScrollToPosition(pos)
+                } else {
+                    binding.moviesList.scrollToPosition(pos)
+                }
             }
         }
     }
