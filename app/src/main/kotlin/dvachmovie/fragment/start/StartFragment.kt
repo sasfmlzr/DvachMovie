@@ -78,7 +78,7 @@ class StartFragment : BaseFragment<StartVM,
     //TODO: cookie factory for full version
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        router.navigateStartToMovieFragment()
+
         buttonChangeDefaultBoard.setOnClickListener {
             scopeIO.launch(Job()) {
                 putBoardUseCase.execute("b")
@@ -97,7 +97,7 @@ class StartFragment : BaseFragment<StartVM,
     private fun prepareData() {
         runBlocking {
             movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
-                runBlocking {
+                scopeUI.launch {
                     if (getIsLoadingEveryTimeUseCase.execute(Unit) ||
                             movies.size < MINIMUM_COUNT_MOVIES) {
                         loadNewMovies()
@@ -105,6 +105,7 @@ class StartFragment : BaseFragment<StartVM,
                         router.navigateStartToMovieFragment()
                     }
                 }
+
             })
         }
     }
