@@ -22,7 +22,6 @@ import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
 import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -47,7 +46,7 @@ class SettingsVM @Inject constructor(
     val isListBtnVisible = MutableLiveData<Boolean>()
 
     init {
-        runBlocking {
+        ScopeProvider.getUiScope().launch {
             prepareLoading.value = getIsLoadingEveryTimeUseCase.execute(Unit)
             isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
             isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)
