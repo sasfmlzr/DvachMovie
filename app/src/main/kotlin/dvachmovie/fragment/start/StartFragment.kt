@@ -11,15 +11,21 @@ import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.utils.MovieObserver
-import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.DvachModel
 import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.settingsStorage.GetBoardUseCase
+import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
+import dvachmovie.usecase.settingsStorage.PutBoardUseCase
+import dvachmovie.usecase.settingsStorage.PutCookieUseCase
+import dvachmovie.utils.MovieObserver
 import kotlinx.android.synthetic.main.fragment_start.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartVM,
@@ -33,15 +39,22 @@ class StartFragment : BaseFragment<StartVM,
     lateinit var dvachUseCase: DvachUseCase
 
     @Inject
-    lateinit var settingsStorage: SettingsStorage
-
-    @Inject
     lateinit var movieObserver: MovieObserver
 
     @Inject
     lateinit var movieDBCache: MovieDBCache
 
-    private val scopeIO = CoroutineScope(Dispatchers.IO)
+    @Inject
+    lateinit var getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase
+
+    @Inject
+    lateinit var getBoardUseCase: GetBoardUseCase
+
+    @Inject
+    lateinit var putCookieUseCase: PutCookieUseCase
+
+    @Inject
+    lateinit var putBoardUseCase: PutBoardUseCase
 
     override fun getLayoutId() = R.layout.fragment_start
 
@@ -54,7 +67,7 @@ class StartFragment : BaseFragment<StartVM,
 
         val value = "92ea293bf47456479e25b11ba67bb17a"
         scopeIO.launch(Job()) {
-            settingsStorage.putCookie(value)
+            putCookieUseCase.execute(value)
         }
         viewModel.imageId.value = R.raw.cybermilosgif
         prepareData()
@@ -65,10 +78,10 @@ class StartFragment : BaseFragment<StartVM,
     //TODO: cookie factory for full version
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        router.navigateStartToMovieFragment()
         buttonChangeDefaultBoard.setOnClickListener {
             scopeIO.launch(Job()) {
-                settingsStorage.putBoard(board = "b")
+                putBoardUseCase.execute("b")
             }
             viewModel.viewRetryBtn.value = false
             progressLoadingSource.progress = 0
@@ -82,18 +95,23 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     private fun prepareData() {
-        movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
-            if (settingsStorage.isLoadingEveryTime() || movies.size < MINIMUM_COUNT_MOVIES) {
-                loadNewMovies()
-            } else {
-                router.navigateStartToMovieFragment()
-            }
-        })
+        runBlocking {
+            movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
+                runBlocking {
+                    if (getIsLoadingEveryTimeUseCase.execute(Unit) ||
+                            movies.size < MINIMUM_COUNT_MOVIES) {
+                        loadNewMovies()
+                    } else {
+                        router.navigateStartToMovieFragment()
+                    }
+                }
+            })
+        }
     }
 
     private fun loadNewMovies() {
         scopeIO.launch(Job()) {
-            val inputModel = DvachUseCase.Params(settingsStorage.getBoard(), counterWebm, executorResult)
+            val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), counterWebm, executorResult)
             dvachUseCase.execute(inputModel)
         }
     }

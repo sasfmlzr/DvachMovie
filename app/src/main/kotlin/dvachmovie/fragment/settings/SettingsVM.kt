@@ -11,17 +11,28 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvachmovie.BuildConfig
 import dvachmovie.R
+import dvachmovie.ScopeProvider
 import dvachmovie.api.model.Boards
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
-import kotlinx.coroutines.CoroutineScope
+import dvachmovie.usecase.settingsStorage.GetBoardUseCase
+import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
+import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
+import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
+import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
         private val settingsStorage: SettingsStorage,
+        getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase,
+        getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase,
+        getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase,
+        getIsAllowGestureUseCase: GetIsAllowGestureUseCase,
+        private val getBoardUseCase: GetBoardUseCase,
         logger: Logger
 ) : ViewModel() {
 
@@ -29,13 +40,20 @@ class SettingsVM @Inject constructor(
         private const val TAG = "SettingsVM"
     }
 
-    private val scope = CoroutineScope(Dispatchers.Main)
+    val prepareLoading = MutableLiveData<Boolean>()
 
-    val prepareLoading = MutableLiveData<Boolean>(settingsStorage.isLoadingEveryTime())
+    val isReportBtnVisible = MutableLiveData<Boolean>()
 
-    val isReportBtnVisible = MutableLiveData<Boolean>(settingsStorage.isReportBtnVisible())
+    val isListBtnVisible = MutableLiveData<Boolean>()
 
-    val isListBtnVisible = MutableLiveData<Boolean>(settingsStorage.isListBtnVisible())
+    init {
+        runBlocking {
+            prepareLoading.value = getIsLoadingEveryTimeUseCase.execute(Unit)
+            isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
+            isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)
+            isGestureEnabled.value = getIsAllowGestureUseCase.execute(Unit)
+        }
+    }
 
     val onCleanDB = MutableLiveData<Boolean>(false)
 
@@ -58,7 +76,7 @@ class SettingsVM @Inject constructor(
                 isListBtnVisible.value = isChecked
             }
 
-    val isGestureEnabled = MutableLiveData<Boolean>(settingsStorage.isAllowGesture())
+    val isGestureEnabled = MutableLiveData<Boolean>()
 
     val onGestureLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -121,27 +139,29 @@ class SettingsVM @Inject constructor(
             }
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
-        var checkedItem = boardMap.keys.indexOf(settingsStorage.getBoard())
-        AlertDialog.Builder(context, R.style.AlertDialogStyle)
-                .setTitle("Set board")
-                .setSingleChoiceItems(
-                        boardMap.values.toTypedArray(),
-                        checkedItem
-                ) { _, which ->
-                    checkedItem = which
-                }
-                .setPositiveButton("Ok") { _, _ ->
-                    if (checkedItem != -1) {
-                        scope.launch {
-                            withContext(Dispatchers.Default) {
-                                settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
+        ScopeProvider.getUiScope().launch {
+            var checkedItem = boardMap.keys.indexOf(getBoardUseCase.execute(Unit))
+            AlertDialog.Builder(context, R.style.AlertDialogStyle)
+                    .setTitle("Set board")
+                    .setSingleChoiceItems(
+                            boardMap.values.toTypedArray(),
+                            checkedItem
+                    ) { _, which ->
+                        checkedItem = which
+                    }
+                    .setPositiveButton("Ok") { _, _ ->
+                        if (checkedItem != -1) {
+                            ScopeProvider.getUiScope().launch {
+                                withContext(Dispatchers.Default) {
+                                    settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
+                                }.await()
+                                onChangeBoard.value = true
                             }
-                            onChangeBoard.value = true
                         }
                     }
-                }
-                .setNegativeButton("Cancel") { _, _ -> }
-                .show()
+                    .setNegativeButton("Cancel") { _, _ -> }
+                    .show()
+        }
     }
 
     val sdkKey = MutableLiveData("ca-app-pub-3074235676525198~1117408577")

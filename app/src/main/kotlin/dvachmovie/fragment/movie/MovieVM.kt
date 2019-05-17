@@ -8,15 +8,20 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dvachmovie.api.CookieManager
 import dvachmovie.db.data.MovieEntity
-import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
 import dvachmovie.usecase.moviestorage.GetMovieListUseCase
+import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
+import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
+import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class MovieVM @Inject constructor(cookieManager: CookieManager,
-                                  settingsStorage: SettingsStorage,
                                   getMovieListUseCase: GetMovieListUseCase,
-                                  getCurrentMovieUseCase: GetCurrentMovieUseCase) : ViewModel() {
+                                  getCurrentMovieUseCase: GetCurrentMovieUseCase,
+                                  getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase,
+                                  getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase,
+                                  getIsAllowGestureUseCase: GetIsAllowGestureUseCase) : ViewModel() {
 
     val movieList = getMovieListUseCase.getMovieList()
     val currentMovie = getCurrentMovieUseCase.getCurrentMovie()
@@ -31,9 +36,9 @@ class MovieVM @Inject constructor(cookieManager: CookieManager,
 
     val isPlayerControlVisibility = MutableLiveData<Boolean>(true)
 
-    val isReportBtnVisible = MutableLiveData<Boolean>(settingsStorage.isReportBtnVisible())
+    val isReportBtnVisible = MutableLiveData<Boolean>()
 
-    val isListBtnVisible = MutableLiveData<Boolean>(settingsStorage.isListBtnVisible())
+    val isListBtnVisible = MutableLiveData<Boolean>()
 
     private val function = Function<List<MovieEntity>, LiveData<List<Uri>>> { values ->
         val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
@@ -47,5 +52,13 @@ class MovieVM @Inject constructor(cookieManager: CookieManager,
             Transformations.switchMap(movieList, function)
                     as MutableLiveData<List<Uri>>
 
-    val isGestureEnabled = MutableLiveData<Boolean>(settingsStorage.isAllowGesture())
+    val isGestureEnabled = MutableLiveData<Boolean>()
+
+    init {
+        runBlocking {
+            isGestureEnabled.value = getIsAllowGestureUseCase.execute(Unit)
+            isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
+            isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)
+        }
+    }
 }

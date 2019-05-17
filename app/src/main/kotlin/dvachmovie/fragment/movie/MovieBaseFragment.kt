@@ -28,12 +28,13 @@ import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.service.DownloadService
-import dvachmovie.storage.SettingsStorage
 import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.usecase.real.ReportUseCase
+import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
+import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
 import dvachmovie.utils.MovieUtils
@@ -42,7 +43,6 @@ import kotlinx.android.synthetic.main.fragment_movie.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 abstract class MovieBaseFragment : BaseFragment<MovieVM,
@@ -56,8 +56,16 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     @Inject
     lateinit var movieCaches: MovieDBCache
+
     @Inject
-    lateinit var settingsStorage: SettingsStorage
+    lateinit var isAllowGestureUseCase: GetIsAllowGestureUseCase
+
+    @Inject
+    lateinit var getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase
+
+    @Inject
+    lateinit var getIsReportBtnVisibleUseCase: GetIsListBtnVisibleUseCase
+
     @Inject
     lateinit var reportUseCase: ReportUseCase
 
@@ -80,7 +88,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
         })
 
-        movieObserver.observeDB(viewLifecycleOwner)
+        mainScope.launch {
+            movieObserver.observeDB(viewLifecycleOwner)
+        }
 
         if (viewModel.currentPos.value == Pair(0, 0L)) {
             viewModel.currentPos.value = try {
@@ -120,7 +130,10 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.isGestureEnabled.value = settingsStorage.isAllowGesture()
+        mainScope.launch {
+            viewModel.isGestureEnabled.value = isAllowGestureUseCase.execute(Unit)
+        }
+
         initPlayer(playerView)
         configureButtons()
     }
@@ -260,9 +273,12 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
         }
 
-        viewModel.isReportBtnVisible.value = settingsStorage.isReportBtnVisible()
+        mainScope.launch {
+            viewModel.isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
 
-        viewModel.isListBtnVisible.value = settingsStorage.isListBtnVisible()
+            viewModel.isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)
+        }
+
     }
 
     override fun onStart() {

@@ -14,11 +14,12 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.storage.SettingsStorage
 import dvachmovie.storage.local.MovieStorage
+import dvachmovie.usecase.settingsStorage.PutIsAllowGestureUseCase
+import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase
+import dvachmovie.usecase.settingsStorage.PutIsReportBtnVisibleUseCase
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,11 +29,19 @@ class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class) {
 
     @Inject
-    lateinit var settingsStorage: SettingsStorage
-    @Inject
     lateinit var movieStorage: MovieStorage
 
-    private val scope = CoroutineScope(Dispatchers.Main)
+    @Inject
+    lateinit var putLoadingEveryTimeUseCase: PutIsLoadingEveryTimeUseCase
+
+    @Inject
+    lateinit var putReportBtnVisibleUseCase: PutIsReportBtnVisibleUseCase
+
+    @Inject
+    lateinit var putListBtnVisibleUseCase: PutIsReportBtnVisibleUseCase
+
+    @Inject
+    lateinit var putIsAllowGestureUseCase: PutIsAllowGestureUseCase
 
     override fun getLayoutId() = R.layout.fragment_settings
 
@@ -60,25 +69,23 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
     private fun configureVM() {
         viewModel.prepareLoading.observe(this, Observer {
-            scope.launch {
-                withContext(Dispatchers.Default) {
-                    settingsStorage.putLoadingEveryTime(it)
-                }
+            scopeUI.launch {
+                putLoadingEveryTimeUseCase.execute(it)
             }
         })
 
         viewModel.isReportBtnVisible.observe(this, Observer {
-            scope.launch {
+            scopeUI.launch {
                 withContext(Dispatchers.Default) {
-                    settingsStorage.putReportBtnVisible(it)
+                    putReportBtnVisibleUseCase.execute(it)
                 }
             }
         })
 
         viewModel.isListBtnVisible.observe(this, Observer {
-            scope.launch {
+            scopeUI.launch {
                 withContext(Dispatchers.Default) {
-                    settingsStorage.putListBtnVisible(it)
+                    putListBtnVisibleUseCase.execute(it)
                 }
             }
         })
@@ -100,9 +107,9 @@ class SettingsFragment : BaseFragment<SettingsVM,
         })
 
         viewModel.isGestureEnabled.observe(this, Observer {
-            scope.launch {
+            scopeUI.launch {
                 withContext(Dispatchers.Default) {
-                    settingsStorage.putIsAllowGesture(it)
+                    putIsAllowGestureUseCase.execute(it)
                 }
             }
         })

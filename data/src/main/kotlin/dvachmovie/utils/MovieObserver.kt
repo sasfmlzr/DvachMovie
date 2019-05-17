@@ -6,6 +6,7 @@ import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.db.MovieDBRepository
 import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
+import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import javax.inject.Inject
 
 class MovieObserver @Inject constructor(
@@ -13,8 +14,8 @@ class MovieObserver @Inject constructor(
         private val movieDBRepository: MovieDBRepository,
         private val settingsStorage: SettingsStorage
 ) {
-    fun observeDB(lifecycleOwner: LifecycleOwner) {
-        movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
+    suspend fun observeDB(lifecycleOwner: LifecycleOwner) {
+        movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard().await())
                 .observe(lifecycleOwner, Observer { dbMovies ->
                     val movieList = movieStorage.movieList.value ?: listOf()
                     val diffList = MovieUtils.calculateDiff(movieList,
@@ -26,10 +27,10 @@ class MovieObserver @Inject constructor(
                 })
     }
 
-    fun observeDB(lifecycleOwner: LifecycleOwner,
-                  observer: Observer<List<MovieEntity>>) {
+    suspend fun observeDB(lifecycleOwner: LifecycleOwner,
+                          observer: Observer<List<MovieEntity>>) {
         movieDBRepository
-                .getMoviesFromBoard(settingsStorage.getBoard())
+                .getMoviesFromBoard(settingsStorage.getBoard().await())
                 .observe(lifecycleOwner, observer)
     }
 
