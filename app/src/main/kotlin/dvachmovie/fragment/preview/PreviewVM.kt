@@ -4,11 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.storage.local.MovieStorage
+import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
+import dvachmovie.usecase.moviestorage.GetMovieListUseCase
 import javax.inject.Inject
 
-class PreviewVM @Inject constructor(movieStorage: MovieStorage) : ViewModel() {
+class PreviewVM @Inject constructor(getMovieListUseCase: GetMovieListUseCase,
+                                    getCurrentMovieUseCase: GetCurrentMovieUseCase) : ViewModel() {
+    val movieList = getMovieListUseCase.getMovieList()
+    val currentMovie = getCurrentMovieUseCase.getCurrentMovie()
+
     private val uriMovie = MutableLiveData<List<MovieEntity>>().apply {
-        value = movieStorage.movieList.value?.map {it}
+        value = movieList.value?.map {it}
     }
 
     fun getUriMovie() = uriMovie

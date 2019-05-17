@@ -30,9 +30,9 @@ import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.storage.local.MovieStorage
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.usecase.real.ReportUseCase
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
@@ -42,6 +42,7 @@ import kotlinx.android.synthetic.main.fragment_movie.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 abstract class MovieBaseFragment : BaseFragment<MovieVM,
@@ -49,8 +50,10 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     @Inject
     lateinit var movieObserver: MovieObserver
+
     @Inject
-    lateinit var movieStorage: MovieStorage
+    lateinit var getIndexPosUseCase: GetIndexPosByMovieUseCase
+
     @Inject
     lateinit var movieCaches: MovieDBCache
     @Inject
@@ -71,7 +74,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
-        movieStorage.currentMovie.observe(viewLifecycleOwner, Observer {
+        viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
                 WorkerManager.insertMovieInDB()
             }
@@ -80,8 +83,10 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         movieObserver.observeDB(viewLifecycleOwner)
 
         if (viewModel.currentPos.value == Pair(0, 0L)) {
-            if (movieStorage.currentMovie.value != null) {
-                viewModel.currentPos.value = Pair(movieStorage.getIndexPosition(), 0)
+            viewModel.currentPos.value = try {
+                Pair(getIndexPosUseCase.getIndexPosByMovie(viewModel.currentMovie.value), 0)
+            } catch (e: Exception) {
+                Pair(0, 0L)
             }
         }
         initAds()
@@ -181,7 +186,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 movieObserver.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
 
                 movieCaches.movieList.value = listOf()
-                movieStorage.movieList.value = listOf()
+                viewModel.movieList.value = listOf()
                 activity?.recreate()
             }
 
@@ -208,8 +213,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     private fun configureButtons() {
         shuffleButton.setOnClickListener {
-            movieStorage.movieList.value =
-                    MovieUtils.shuffleMovies(movieStorage.movieList.value
+            viewModel.movieList.value =
+                    MovieUtils.shuffleMovies(viewModel.movieList.value
                             ?: listOf())
         }
 
@@ -225,7 +230,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE)
                     as ClipboardManager
             val clip = ClipData
-                    .newPlainText("Copied Text", movieStorage.currentMovie.value?.movieUrl)
+                    .newPlainText("Copied Text", viewModel.currentMovie.value?.movieUrl)
             clipboard.primaryClip = clip
             extensions.showMessage("URL video copied")
         }
@@ -247,9 +252,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
 
             mainScope.launch {
-                val inputModel = ReportUseCase.Params(movieStorage.currentMovie.value?.board!!,
-                        movieStorage.currentMovie.value?.thread!!,
-                        movieStorage.currentMovie.value?.post!!,
+                val inputModel = ReportUseCase.Params(viewModel.currentMovie.value?.board!!,
+                        viewModel.currentMovie.value?.thread!!,
+                        viewModel.currentMovie.value?.post!!,
                         executorResult)
                 reportUseCase.execute(inputModel)
             }
@@ -293,11 +298,11 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     override fun onPermissionsGranted(permissions: List<String>) {
         DirectoryHelper.createDirectory(context!!)
-        movieStorage.currentMovie.value =
-                movieStorage.movieList.value?.get(playerView.player.currentWindowIndex)
+        viewModel.currentMovie.value =
+                viewModel.movieList.value?.get(playerView.player.currentWindowIndex)
         activity?.startService(DownloadService.getDownloadService(
                 context!!,
-                movieStorage.currentMovie.value?.movieUrl ?: "",
+                viewModel.currentMovie.value?.movieUrl ?: "",
                 DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
     }
 }

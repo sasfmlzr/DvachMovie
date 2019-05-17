@@ -8,13 +8,18 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dvachmovie.api.CookieManager
 import dvachmovie.db.data.MovieEntity
-import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
+import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
+import dvachmovie.usecase.moviestorage.GetMovieListUseCase
 import javax.inject.Inject
 
-class MovieVM @Inject constructor(movieStorage: MovieStorage,
-                                  cookieManager: CookieManager,
-                                  settingsStorage: SettingsStorage) : ViewModel() {
+class MovieVM @Inject constructor(cookieManager: CookieManager,
+                                  settingsStorage: SettingsStorage,
+                                  getMovieListUseCase: GetMovieListUseCase,
+                                  getCurrentMovieUseCase: GetCurrentMovieUseCase) : ViewModel() {
+
+    val movieList = getMovieListUseCase.getMovieList()
+    val currentMovie = getCurrentMovieUseCase.getCurrentMovie()
 
     val currentPos: MutableLiveData<Pair<Int, Long>> by lazy {
         MutableLiveData<Pair<Int, Long>>(Pair(0, 0L))
@@ -39,7 +44,7 @@ class MovieVM @Inject constructor(movieStorage: MovieStorage,
     }
 
     val uriMovies: MutableLiveData<List<Uri>> =
-            Transformations.switchMap(movieStorage.movieList, function)
+            Transformations.switchMap(movieList, function)
                     as MutableLiveData<List<Uri>>
 
     val isGestureEnabled = MutableLiveData<Boolean>(settingsStorage.isAllowGesture())
