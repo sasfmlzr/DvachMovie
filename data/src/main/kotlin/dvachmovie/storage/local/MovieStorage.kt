@@ -6,7 +6,8 @@ import dvachmovie.utils.MovieUtils
 
 data class MovieStorage(
         val movieList: MutableLiveData<List<MovieEntity>> = MutableLiveData(),
-        val currentMovie: MutableLiveData<MovieEntity> = MutableLiveData()) {
+        val currentMovie: MutableLiveData<MovieEntity> = MutableLiveData(),
+        val movieIntentFilterEntity: MutableLiveData<List<MovieEntity>> = MutableLiveData()) {
 
     init {
         movieList.value = listOf()

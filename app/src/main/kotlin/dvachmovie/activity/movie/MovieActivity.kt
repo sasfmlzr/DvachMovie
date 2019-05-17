@@ -32,7 +32,7 @@ class MovieActivity : BaseActivity<MovieActivityVM,
 
         binding.viewModel = viewModel
 
-        if (!movieDBCache.movieList.hasActiveObservers()) {
+        if (!movieDBCache.movieList.hasObservers()) {
             movieDBCache.movieList.observe(this, Observer {
                 WorkerManager.initDB()
             })

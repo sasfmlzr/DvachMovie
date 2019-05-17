@@ -71,11 +71,17 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
-        movieStorage.currentMovie.observe(viewLifecycleOwner, Observer {
-            if (it?.isPlayed == true) {
-                WorkerManager.insertMovieInDB()
-            }
-        })
+        if (!movieStorage.currentMovie.hasObservers()) {
+            movieStorage.currentMovie.observe(viewLifecycleOwner, Observer {
+                if (it?.isPlayed == true) {
+                    WorkerManager.insertMovieInDB()
+                }
+            })
+        }
+
+        if (movieStorage.movieIntentFilterEntity.value != null) {
+            movieStorage.movieList.value = movieStorage.movieIntentFilterEntity.value
+        }
 
         movieObserver.observeDB(viewLifecycleOwner)
 

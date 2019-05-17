@@ -96,6 +96,8 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
 
+    implementation "joda-time:joda-time:$jodaTimeVersion"
+
     implementation project(':data')
     implementation project(':domain')
 

@@ -23,6 +23,10 @@ class MovieObserver @Inject constructor(
                     if (diffList.isNotEmpty()) {
                         movieStorage.movieList.value = diffList + movieList
                     }
+
+                    if (movieStorage.movieIntentFilterEntity.value!=null) {
+                        movieStorage.movieList.value = movieStorage.movieIntentFilterEntity.value
+                    }
                 })
     }
 

@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/BlackTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.start.StartActivity"
+        <activity
+            android:name=".activity.start.StartActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +31,17 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="dvachmovie" />
+                <data
+                    android:host="2ch.hk"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
