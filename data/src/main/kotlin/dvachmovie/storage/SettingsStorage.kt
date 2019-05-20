@@ -50,7 +50,7 @@ class SettingsStorage @Inject constructor(
             ScopeProvider.getIOScope().async { pref.putString(COOKIE, cookie) }
 
     fun isAllowGesture() =
-            ScopeProvider.getUiScope().async { pref.getBoolean(GESTURE) ?: true }
+            ScopeProvider.getIOScope().async { pref.getBoolean(GESTURE) ?: true }
 
     fun putIsAllowGesture(value: Boolean) =
             ScopeProvider.getIOScope().async { pref.putBoolean(GESTURE, value) }
