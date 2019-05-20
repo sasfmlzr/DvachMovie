@@ -15,7 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class SettingsStorageTest {
 
     @InjectMocks
-    lateinit var settingsStorage: SettingsStorage
+    lateinit var settingsStorage: LocalSettingsStorage
 
     @Mock
     lateinit var keyValueStorage: KeyValueStorage

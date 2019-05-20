@@ -5,9 +5,9 @@ import dvachmovie.api.model.Boards
 import kotlinx.coroutines.async
 import javax.inject.Inject
 
-class SettingsStorage @Inject constructor(
+class LocalSettingsStorage @Inject constructor(
         private val pref: KeyValueStorage
-) {
+) : SettingsStorage{
     companion object {
         private const val LOADING_PARAM = "LoadingMoviesOrNot"
         private const val REPORT_BTN_VISIBLE = "ReportBtnVisibleOrNot"
@@ -17,41 +17,41 @@ class SettingsStorage @Inject constructor(
         private const val GESTURE = "gesture"
     }
 
-    fun isLoadingEveryTime() =
+    override fun isLoadingEveryTime() =
             ScopeProvider.getIOScope().async { pref.getBoolean(LOADING_PARAM) ?: false }
 
-    fun putLoadingEveryTime(value: Boolean) =
+    override fun putLoadingEveryTime(value: Boolean) =
             ScopeProvider.getIOScope().async { pref.putBoolean(LOADING_PARAM, value) }
 
-    fun isReportBtnVisible() =
+    override fun isReportBtnVisible() =
             ScopeProvider.getIOScope().async { pref.getBoolean(REPORT_BTN_VISIBLE) ?: true }
 
-    fun putReportBtnVisible(value: Boolean) =
+    override fun putReportBtnVisible(value: Boolean) =
             ScopeProvider.getIOScope().async { pref.putBoolean(REPORT_BTN_VISIBLE, value) }
 
-    fun isListBtnVisible() =
+    override fun isListBtnVisible() =
             ScopeProvider.getIOScope().async { pref.getBoolean(LIST_BTN_VISIBLE) ?: true }
 
-    fun putListBtnVisible(value: Boolean) =
+    override fun putListBtnVisible(value: Boolean) =
             ScopeProvider.getIOScope().async { pref.putBoolean(LIST_BTN_VISIBLE, value) }
 
-    fun getBoard() =
+    override fun getBoard() =
             ScopeProvider.getIOScope().async {
                 pref.getString(BOARD) ?: Boards.defaultMap.iterator().next().key
             }
 
-    fun putBoard(board: String) =
+    override fun putBoard(board: String) =
             ScopeProvider.getIOScope().async { pref.putString(BOARD, board) }
 
-    fun getCookie() =
+    override fun getCookie() =
             ScopeProvider.getIOScope().async { pref.getString(COOKIE) ?: "" }
 
-    fun putCookie(cookie: String) =
+    override fun putCookie(cookie: String) =
             ScopeProvider.getIOScope().async { pref.putString(COOKIE, cookie) }
 
-    fun isAllowGesture() =
+    override fun isAllowGesture() =
             ScopeProvider.getIOScope().async { pref.getBoolean(GESTURE) ?: true }
 
-    fun putIsAllowGesture(value: Boolean) =
+    override fun putIsAllowGesture(value: Boolean) =
             ScopeProvider.getIOScope().async { pref.putBoolean(GESTURE, value) }
 }
