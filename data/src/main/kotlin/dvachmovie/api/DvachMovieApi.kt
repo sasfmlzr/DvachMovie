@@ -1,8 +1,8 @@
 package dvachmovie.api
 
 import dvachmovie.api.model.DvachReportRequest
-import dvachmovie.api.model.catalog.DvachCatalogRequest
-import dvachmovie.api.model.thread.DvachThreadRequest
+import dvachmovie.api.model.gson.dvach.catalog.DvachCatalogRequest
+import dvachmovie.api.model.gson.dvach.thread.DvachThreadRequest
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.Field
