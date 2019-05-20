@@ -15,13 +15,10 @@ import dvachmovie.ScopeProvider
 import dvachmovie.api.model.Boards
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.settingsStorage.GetBoardUseCase
-import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
-import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
-import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
-import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
+import dvachmovie.usecase.settingsStorage.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -39,18 +36,21 @@ class SettingsVM @Inject constructor(
         private const val TAG = "SettingsVM"
     }
 
-    val prepareLoading = MutableLiveData<Boolean>()
+    val prepareLoading: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
 
-    val isReportBtnVisible = MutableLiveData<Boolean>()
+    val isReportBtnVisible: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(runBlocking { getIsReportBtnVisibleUseCase.execute(Unit) })
+    }
 
-    val isListBtnVisible = MutableLiveData<Boolean>()
+    val isListBtnVisible: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(runBlocking { getIsListBtnVisibleUseCase.execute(Unit) })
+    }
 
     init {
         ScopeProvider.getUiScope().launch {
             prepareLoading.value = getIsLoadingEveryTimeUseCase.execute(Unit)
-            isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
-            isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)
-            isGestureEnabled.value = getIsAllowGestureUseCase.execute(Unit)
         }
     }
 
@@ -75,7 +75,9 @@ class SettingsVM @Inject constructor(
                 isListBtnVisible.value = isChecked
             }
 
-    val isGestureEnabled = MutableLiveData<Boolean>()
+    val isGestureEnabled: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(runBlocking { getIsAllowGestureUseCase.execute(Unit) })
+    }
 
     val onGestureLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
