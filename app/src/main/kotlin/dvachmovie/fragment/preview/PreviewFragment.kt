@@ -42,7 +42,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
     }
 
     private fun subscribeUi(adapter: PreviewMovieAdapter) {
-        binding.viewModel?.getUriMovie()
+        binding.viewModel?.uriMovie
                 ?.observe(viewLifecycleOwner, Observer { movies ->
                     if (movies != null) {
                         adapter.submitList(movies)

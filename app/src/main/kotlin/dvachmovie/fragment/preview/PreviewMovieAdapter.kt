@@ -13,6 +13,7 @@ import dvachmovie.api.CookieManager
 import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ItemPreviewMoviesBinding
+import dvachmovie.db.data.Movie
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.storage.local.MovieStorage
 import javax.inject.Inject
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class PreviewMovieAdapter @Inject constructor(private val movieStorage: MovieStorage,
                                               private val cookieManager: CookieManager,
                                               private val logger: Logger) :
-        ListAdapter<MovieEntity, PreviewMovieAdapter.ViewHolder>
+        ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>
         (PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -40,7 +41,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieStorage: MovieSto
         }
     }
 
-    private fun createOnClickListener(movie: MovieEntity): View.OnClickListener {
+    private fun createOnClickListener(movie: Movie): View.OnClickListener {
         return View.OnClickListener {
             movieStorage.currentMovie.value = movie
             Navigator(it.findNavController(), logger).navigatePreviewToMovieFragment()
@@ -50,7 +51,7 @@ class PreviewMovieAdapter @Inject constructor(private val movieStorage: MovieSto
     class ViewHolder(
             private val binding: ItemPreviewMoviesBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: MovieEntity, cookie: Cookie, listener: View.OnClickListener) {
+        fun bind(movie: Movie, cookie: Cookie, listener: View.OnClickListener) {
             with(binding) {
                 viewModel = PreviewItemVM(movie, cookie)
                 clickListener = listener

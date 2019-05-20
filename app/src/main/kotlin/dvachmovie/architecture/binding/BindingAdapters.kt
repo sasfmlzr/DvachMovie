@@ -10,10 +10,11 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import dvachmovie.api.Cookie
+import dvachmovie.db.data.Movie
 import dvachmovie.db.data.MovieEntity
 
 @BindingAdapter("imageFromUrl", "cookie", requireAll = true)
-fun ImageView.bindImageFromUrl(movieEntity: MovieEntity, cookie: Cookie) {
+fun ImageView.bindImageFromUrl(movieEntity: Movie, cookie: Cookie) {
     if (movieEntity.previewUrl.isNotEmpty()) {
         val builder = LazyHeaders.Builder().addHeader("Cookie", cookie.toString())
 

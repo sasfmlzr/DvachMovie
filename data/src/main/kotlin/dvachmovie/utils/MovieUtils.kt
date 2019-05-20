@@ -2,23 +2,24 @@ package dvachmovie.utils
 
 import dvachmovie.api.FileItem
 import dvachmovie.data.BuildConfig
+import dvachmovie.db.data.Movie
 import dvachmovie.db.data.MovieEntity
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 
 object MovieUtils {
 
-    fun shuffleMovies(movies: List<MovieEntity>): List<MovieEntity> =
+    fun shuffleMovies(movies: List<Movie>): List<Movie> =
             deleteIfMoviesIsPlayed(movies).shuffled()
 
-    private fun deleteIfMoviesIsPlayed(movies: List<MovieEntity>): List<MovieEntity> =
+    private fun deleteIfMoviesIsPlayed(movies: List<Movie>): List<Movie> =
             movies.filter { !it.isPlayed }
 
-    fun calculateDiff(localList: List<MovieEntity>,
-                      dbList: List<MovieEntity>): List<MovieEntity> =
+    fun calculateDiff(localList: List<Movie>,
+                      dbList: List<Movie>): List<Movie> =
             dbList.filter { !localList.contains(it) && !it.isPlayed }
 
-    fun getIndexPosition(currentMovie: MovieEntity?, movieList: List<MovieEntity>?): Int {
+    fun getIndexPosition(currentMovie: Movie?, movieList: List<Movie>?): Int {
         if (currentMovie == null) throw RuntimeException("Current movie cannot be null")
         if (movieList == null) throw RuntimeException("Movie list cannot be null")
 

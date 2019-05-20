@@ -2,11 +2,11 @@ package dvachmovie.utils
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import dvachmovie.db.data.Movie
 import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.db.MovieDBRepository
-import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.settingsStorage.GetBoardUseCase
+import dvachmovie.storage.local.MovieStorage
 import javax.inject.Inject
 
 class MovieObserver @Inject constructor(
@@ -28,7 +28,7 @@ class MovieObserver @Inject constructor(
     }
 
     suspend fun observeDB(lifecycleOwner: LifecycleOwner,
-                          observer: Observer<List<MovieEntity>>) {
+                          observer: Observer<List<Movie>>) {
         movieDBRepository
                 .getMoviesFromBoard(settingsStorage.getBoard().await())
                 .observe(lifecycleOwner, observer)

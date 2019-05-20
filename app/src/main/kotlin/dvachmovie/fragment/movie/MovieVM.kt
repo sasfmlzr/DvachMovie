@@ -8,14 +8,13 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dvachmovie.ScopeProvider
 import dvachmovie.api.CookieManager
-import dvachmovie.db.data.MovieEntity
+import dvachmovie.db.data.Movie
 import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
 import dvachmovie.usecase.moviestorage.GetMovieListUseCase
 import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
 import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class MovieVM @Inject constructor(cookieManager: CookieManager,
@@ -42,7 +41,7 @@ class MovieVM @Inject constructor(cookieManager: CookieManager,
 
     val isListBtnVisible = MutableLiveData<Boolean>()
 
-    private val function = Function<List<MovieEntity>, LiveData<List<Uri>>> { values ->
+    private val function = Function<List<Movie>, LiveData<List<Uri>>> { values ->
         val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
         if (urlVideo.isNotEmpty()) {
             cookie.value = cookieManager.getCookie().toString()
