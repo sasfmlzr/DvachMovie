@@ -35,6 +35,7 @@ import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.usecase.real.ReportUseCase
 import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
+import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
 import dvachmovie.utils.MovieUtils
@@ -64,7 +65,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     lateinit var getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase
 
     @Inject
-    lateinit var getIsReportBtnVisibleUseCase: GetIsListBtnVisibleUseCase
+    lateinit var getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase
 
     @Inject
     lateinit var reportUseCase: ReportUseCase

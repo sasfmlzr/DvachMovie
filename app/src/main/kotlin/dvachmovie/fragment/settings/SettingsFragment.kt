@@ -16,6 +16,7 @@ import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.storage.local.MovieStorage
 import dvachmovie.usecase.settingsStorage.PutIsAllowGestureUseCase
+import dvachmovie.usecase.settingsStorage.PutIsListBtnVisibleUseCase
 import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase
 import dvachmovie.usecase.settingsStorage.PutIsReportBtnVisibleUseCase
 import dvachmovie.worker.WorkerManager
@@ -38,7 +39,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
     lateinit var putReportBtnVisibleUseCase: PutIsReportBtnVisibleUseCase
 
     @Inject
-    lateinit var putListBtnVisibleUseCase: PutIsReportBtnVisibleUseCase
+    lateinit var putListBtnVisibleUseCase: PutIsListBtnVisibleUseCase
 
     @Inject
     lateinit var putIsAllowGestureUseCase: PutIsAllowGestureUseCase
@@ -76,17 +77,13 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.isReportBtnVisible.observe(this, Observer {
             scopeUI.launch {
-                withContext(Dispatchers.Default) {
                     putReportBtnVisibleUseCase.execute(it)
-                }
             }
         })
 
         viewModel.isListBtnVisible.observe(this, Observer {
             scopeUI.launch {
-                withContext(Dispatchers.Default) {
                     putListBtnVisibleUseCase.execute(it)
-                }
             }
         })
 
@@ -108,9 +105,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.isGestureEnabled.observe(this, Observer {
             scopeUI.launch {
-                withContext(Dispatchers.Default) {
                     putIsAllowGestureUseCase.execute(it)
-                }
             }
         })
     }
