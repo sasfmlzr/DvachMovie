@@ -18,13 +18,14 @@ object MovieUtils {
                       dbList: List<MovieEntity>): List<MovieEntity> =
             dbList.filter { !localList.contains(it) && !it.isPlayed }
 
-    fun getIndexPosition(currentMovie: MovieEntity, movieList: List<MovieEntity>): Int =
-            movieList.let {
-                val index = it.indexOf(currentMovie)
-                if (index == -1) {
-                    0
-                } else index
-            }
+    fun getIndexPosition(currentMovie: MovieEntity?, movieList: List<MovieEntity>?): Int {
+        if (currentMovie == null) throw RuntimeException("Current movie cannot be null")
+        if (movieList == null) throw RuntimeException("Movie list cannot be null")
+
+        movieList.indexOf(currentMovie).let {index ->
+            return if (index == -1) 0 else index
+        }
+    }
 
     fun filterFileItemOnlyAsWebm(fileItems: List<FileItem>): List<FileItem> =
             fileItems.filter { it.path.contains(".webm") }

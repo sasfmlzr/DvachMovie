@@ -2,7 +2,7 @@ package dvachmovie.api
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
-import dvachmovie.api.model.catalog.DvachCatalogRequest
+import dvachmovie.api.model.gson.dvach.catalog.DvachCatalogRequest
 import retrofit2.converter.gson.GsonConverterFactory
 
 internal fun getOwnerContactConverterFactory(): GsonConverterFactory {

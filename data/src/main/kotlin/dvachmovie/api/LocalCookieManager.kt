@@ -1,6 +1,7 @@
 package dvachmovie.api
 
 import dvachmovie.storage.SettingsStorage
+import kotlinx.coroutines.runBlocking
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import javax.inject.Inject
@@ -16,21 +17,31 @@ internal class LocalCookieManager @Inject constructor(
 
     override fun getCookie() = cookie
 
-    private val cookieJar = object : CookieJar {
-        override fun saveFromResponse(url: HttpUrl, cookies: MutableList<okhttp3.Cookie>) {
-        }
+    private lateinit var cookieJar: CookieJar
 
-        override fun loadForRequest(url: HttpUrl): MutableList<okhttp3.Cookie> {
-            val value = settingsStorage.getCookie()
-            cookie = Cookie(header, value)
-            return mutableListOf(okhttp3.Cookie
-                    .Builder()
-                    .name(header)
-                    .value(value)
-                    .domain("2ch.hk")
-                    .build())
+    private lateinit var cookieValue: String
+
+    private lateinit var cookie: Cookie
+
+    init {
+        runBlocking {
+            cookieValue = settingsStorage.getCookie().await()
+            cookie = Cookie(header, cookieValue)
+
+            cookieJar = object : CookieJar {
+                override fun saveFromResponse(url: HttpUrl, cookies: MutableList<okhttp3.Cookie>) {
+                }
+
+                override fun loadForRequest(url: HttpUrl): MutableList<okhttp3.Cookie> {
+                    cookie = Cookie(header, cookieValue)
+                    return mutableListOf(okhttp3.Cookie
+                            .Builder()
+                            .name(header)
+                            .value(cookieValue)
+                            .domain("2ch.hk")
+                            .build())
+                }
+            }
         }
     }
-
-    private var cookie = Cookie(header, settingsStorage.getCookie())
 }

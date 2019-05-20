@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import dvachmovie.ScopeProvider
 import dvachmovie.architecture.Extensions
 import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.logging.Logger
@@ -42,6 +43,10 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
 
     protected lateinit var extensions: Extensions
     protected lateinit var router: Navigator
+
+    protected val scopeUI = ScopeProvider.getUiScope()
+
+    protected val scopeIO = ScopeProvider.getIOScope()
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {

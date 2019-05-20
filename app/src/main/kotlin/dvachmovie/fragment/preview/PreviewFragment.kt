@@ -9,7 +9,7 @@ import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
-import dvachmovie.storage.local.MovieStorage
+import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import javax.inject.Inject
 
 class PreviewFragment : BaseFragment<PreviewVM,
@@ -20,7 +20,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
     }
 
     @Inject
-    lateinit var movieStorage: MovieStorage
+    lateinit var getIndexPosByMovieUseCase: GetIndexPosByMovieUseCase
     @Inject
     lateinit var adapter: PreviewMovieAdapter
 
@@ -51,13 +51,11 @@ class PreviewFragment : BaseFragment<PreviewVM,
     }
 
     private fun configureScrollRecyclerView() {
-        if (movieStorage.currentMovie.value != null) {
-            movieStorage.getIndexPosition().let { pos ->
-                if (pos < SMOOTH_POSITION) {
-                    binding.moviesList.smoothScrollToPosition(pos)
-                } else {
-                    binding.moviesList.scrollToPosition(pos)
-                }
+        getIndexPosByMovieUseCase.getIndexPosByMovie(viewModel.currentMovie.value).let { pos ->
+            if (pos < SMOOTH_POSITION) {
+                binding.moviesList.smoothScrollToPosition(pos)
+            } else {
+                binding.moviesList.scrollToPosition(pos)
             }
         }
     }
