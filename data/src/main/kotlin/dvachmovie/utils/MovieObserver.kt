@@ -14,10 +14,13 @@ class MovieObserver @Inject constructor(
         private val settingsStorage: SettingsStorage
 ) {
     suspend fun observeDB(lifecycleOwner: LifecycleOwner) {
+        val movieUtils = LocalMovieUtils()
+
+
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard().await())
                 .observe(lifecycleOwner, Observer { dbMovies ->
                     val movieList = movieStorage.movieList.value ?: listOf()
-                    val diffList = MovieUtils.calculateDiff(movieList,
+                    val diffList = movieUtils.calculateDiff(movieList,
                             dbMovies)
 
                     if (diffList.isNotEmpty()) {

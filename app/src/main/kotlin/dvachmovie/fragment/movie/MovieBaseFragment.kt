@@ -37,6 +37,7 @@ import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
 import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
 import dvachmovie.utils.DirectoryHelper
+import dvachmovie.utils.LocalMovieUtils
 import dvachmovie.utils.MovieObserver
 import dvachmovie.utils.MovieUtils
 import dvachmovie.worker.WorkerManager
@@ -227,8 +228,10 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     private fun configureButtons() {
         shuffleButton.setOnClickListener {
+            val movieUtils = LocalMovieUtils()
+
             viewModel.movieList.value =
-                    MovieUtils.shuffleMovies(viewModel.movieList.value
+                    movieUtils.shuffleMovies(viewModel.movieList.value
                             ?: listOf())
         }
 
