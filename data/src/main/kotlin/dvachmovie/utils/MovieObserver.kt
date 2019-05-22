@@ -3,7 +3,6 @@ package dvachmovie.utils
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import dvachmovie.db.data.Movie
-import dvachmovie.db.data.MovieEntity
 import dvachmovie.repository.db.MovieDBRepository
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.storage.local.MovieStorage
