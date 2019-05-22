@@ -1,12 +1,10 @@
-package dvachmovie.usecase
+package dvachmovie.usecase.real
 
 import dvachmovie.api.FileItem
 import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
-import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCase
-import dvachmovie.usecase.real.GetThreadsFromDvachUseCase
 import dvachmovie.utils.MovieUtils
 import javax.inject.Inject
 

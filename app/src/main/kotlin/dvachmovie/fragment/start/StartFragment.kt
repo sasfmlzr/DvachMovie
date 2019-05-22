@@ -11,11 +11,11 @@ import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.usecase.DvachModel
-import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.DvachModel
+import dvachmovie.usecase.real.DvachUseCase
 import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
 import dvachmovie.usecase.settingsStorage.PutBoardUseCase
