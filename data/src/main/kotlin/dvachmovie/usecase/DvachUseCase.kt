@@ -7,13 +7,13 @@ import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCase
 import dvachmovie.usecase.real.GetThreadsFromDvachUseCase
-import dvachmovie.utils.LocalMovieUtils
 import dvachmovie.utils.MovieUtils
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                        private val getLinkFilesFromThreadsUseCase:
-                                       GetLinkFilesFromThreadsUseCase) : UseCase<DvachUseCase.Params, Unit>() {
+                                       GetLinkFilesFromThreadsUseCase,
+                                       private val movieUtils: MovieUtils) : UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
@@ -42,8 +42,6 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     }
 
     private suspend fun executeLinkFilesUseCase(num: String) {
-        val movieUtils = LocalMovieUtils()
-
         try {
             val inputModel = GetLinkFilesFromThreadsUseCase.Params(board, num)
             val useCaseLinkFilesModel = getLinkFilesFromThreadsUseCase

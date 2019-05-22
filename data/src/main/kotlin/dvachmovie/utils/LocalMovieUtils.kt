@@ -6,8 +6,9 @@ import dvachmovie.db.data.Movie
 import dvachmovie.db.data.MovieEntity
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
+import javax.inject.Inject
 
-class LocalMovieUtils : MovieUtils {
+class LocalMovieUtils @Inject constructor() : MovieUtils {
 
     override fun shuffleMovies(movies: List<Movie>): List<Movie> =
             deleteIfMoviesIsPlayed(movies).shuffled()

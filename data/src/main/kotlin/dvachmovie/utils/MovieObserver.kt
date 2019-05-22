@@ -11,11 +11,10 @@ import javax.inject.Inject
 class MovieObserver @Inject constructor(
         private val movieStorage: MovieStorage,
         private val movieDBRepository: MovieDBRepository,
-        private val settingsStorage: SettingsStorage
+        private val settingsStorage: SettingsStorage,
+        private val movieUtils: MovieUtils
 ) {
     suspend fun observeDB(lifecycleOwner: LifecycleOwner) {
-        val movieUtils = LocalMovieUtils()
-
 
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard().await())
                 .observe(lifecycleOwner, Observer { dbMovies ->
