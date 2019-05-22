@@ -1,4 +1,4 @@
-package dvachmovie.usecase.moviestorage
+package dvachmovie.moviestorage
 
 import dvachmovie.storage.local.MovieStorage
 import javax.inject.Inject

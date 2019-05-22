@@ -1,6 +1,7 @@
 package dvachmovie.di.core
 
 import dagger.Component
+import dvachmovie.di.RootDataAndroidModule
 import javax.inject.Singleton
 
 @Singleton
@@ -9,6 +10,6 @@ import javax.inject.Singleton
     ExoModule::class,
     ViewModelFactoryModule::class,
     RootDataModule::class,
-    FullViewModule::class
+    RootDataAndroidModule::class
 ])
 interface FullApplicationComponent : DemoApplicationComponent

@@ -1,4 +1,4 @@
-package dvachmovie.usecase.moviestorage
+package dvachmovie.moviestorage
 
 import dvachmovie.db.data.Movie
 import dvachmovie.storage.local.MovieStorage

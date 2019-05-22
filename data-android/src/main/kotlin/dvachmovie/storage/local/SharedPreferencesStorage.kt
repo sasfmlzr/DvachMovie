@@ -1,4 +1,4 @@
-package dvachmovie.storage.base
+package dvachmovie.storage.local
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences

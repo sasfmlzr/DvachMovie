@@ -1,12 +1,7 @@
 package dvachmovie.fragment.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import dvachmovie.R
@@ -21,9 +16,7 @@ import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase
 import dvachmovie.usecase.settingsStorage.PutIsReportBtnVisibleUseCase
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
@@ -77,13 +70,13 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.isReportBtnVisible.observe(this, Observer {
             scopeUI.launch {
-                    putReportBtnVisibleUseCase.execute(it)
+                putReportBtnVisibleUseCase.execute(it)
             }
         })
 
         viewModel.isListBtnVisible.observe(this, Observer {
             scopeUI.launch {
-                    putListBtnVisibleUseCase.execute(it)
+                putListBtnVisibleUseCase.execute(it)
             }
         })
 
@@ -105,7 +98,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.isGestureEnabled.observe(this, Observer {
             scopeUI.launch {
-                    putIsAllowGestureUseCase.execute(it)
+                putIsAllowGestureUseCase.execute(it)
             }
         })
     }

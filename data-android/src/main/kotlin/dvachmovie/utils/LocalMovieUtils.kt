@@ -1,14 +1,14 @@
 package dvachmovie.utils
 
+import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
-import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.Movie
 import dvachmovie.db.data.MovieEntity
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
-class LocalMovieUtils @Inject constructor() : MovieUtils {
+class LocalMovieUtils @Inject constructor(private val appConfig: AppConfig) : MovieUtils {
 
     override fun shuffleMovies(movies: List<Movie>): List<Movie> =
             deleteIfMoviesIsPlayed(movies).shuffled()
@@ -35,8 +35,8 @@ class LocalMovieUtils @Inject constructor() : MovieUtils {
     override fun convertFileItemToMovie(fileItems: List<FileItem>, board: String): List<Movie> =
             fileItems.map { fileItem ->
                 MovieEntity(board = board,
-                        movieUrl = BuildConfig.DVACH_URL + fileItem.path,
-                        previewUrl = BuildConfig.DVACH_URL + fileItem.thumbnail,
+                        movieUrl = appConfig.DVACH_URL + fileItem.path,
+                        previewUrl = appConfig.DVACH_URL + fileItem.thumbnail,
                         date = parseDateFromFileItem(fileItem),
                         md5 = fileItem.md5,
                         thread = fileItem.numThread,

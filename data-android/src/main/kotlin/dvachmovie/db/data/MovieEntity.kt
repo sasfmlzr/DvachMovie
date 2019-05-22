@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import dvachmovie.db.data.Movie
 import org.joda.time.LocalDateTime
 
 @Entity(tableName = "movieData")

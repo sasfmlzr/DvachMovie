@@ -9,7 +9,7 @@ import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
-import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
+import dvachmovie.moviestorage.GetIndexPosByMovieUseCase
 import javax.inject.Inject
 
 class PreviewFragment : BaseFragment<PreviewVM,

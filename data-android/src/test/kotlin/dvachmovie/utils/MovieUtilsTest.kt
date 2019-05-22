@@ -1,5 +1,6 @@
 package dvachmovie.utils
 
+import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.MovieEntity
@@ -24,17 +25,19 @@ class MovieUtilsTest {
     private val fileThree = FileItem(path = "three", date = "14/05/19 Втр 21:20:37")
     private val fileItems = listOf(fileOne, fileTwo, fileThree)
 
+    val AppConfig = dvachmovie.AppConfig("whew")
+
     private val movieEntityOne = MovieEntity(board = board,
-            movieUrl = BuildConfig.DVACH_URL + fileOne.path,
-            previewUrl = BuildConfig.DVACH_URL,
+            movieUrl = AppConfig.DVACH_URL + fileOne.path,
+            previewUrl = AppConfig.DVACH_URL,
             date = movieUtils.parseDateFromFileItem(fileOne))
     private val movieEntityTwo = MovieEntity(board = board,
-            movieUrl = BuildConfig.DVACH_URL + fileTwo.path,
-            previewUrl = BuildConfig.DVACH_URL,
+            movieUrl = AppConfig.DVACH_URL + fileTwo.path,
+            previewUrl = AppConfig.DVACH_URL,
             date = movieUtils.parseDateFromFileItem(fileTwo))
     private val movieEntityThree = MovieEntity(board = board,
-            movieUrl = BuildConfig.DVACH_URL + fileThree.path,
-            previewUrl = BuildConfig.DVACH_URL,
+            movieUrl = AppConfig.DVACH_URL + fileThree.path,
+            previewUrl = AppConfig.DVACH_URL,
             date = movieUtils.parseDateFromFileItem(fileThree))
     private val movieEntities = listOf(movieEntityOne,
             movieEntityTwo,

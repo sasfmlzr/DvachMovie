@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel
 import dvachmovie.ScopeProvider
 import dvachmovie.api.CookieManager
 import dvachmovie.db.data.Movie
-import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
-import dvachmovie.usecase.moviestorage.GetMovieListUseCase
+import dvachmovie.moviestorage.GetCurrentMovieUseCase
+import dvachmovie.moviestorage.GetMovieListUseCase
 import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
 import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
