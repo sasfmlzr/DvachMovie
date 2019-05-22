@@ -18,9 +18,6 @@ class MovieActivity : BaseActivity<MovieActivityVM,
         ActivityMovieBinding>(MovieActivityVM::class) {
 
     @Inject
-    lateinit var movieDBCache: MovieDBCache
-
-    @Inject
     lateinit var logger: Logger
 
     override val layoutId = R.layout.activity_movie
@@ -31,12 +28,6 @@ class MovieActivity : BaseActivity<MovieActivityVM,
         super.onCreate(savedInstanceState)
 
         binding.viewModel = viewModel
-
-        if (!movieDBCache.movieList.hasActiveObservers()) {
-            movieDBCache.movieList.observe(this, Observer {
-                WorkerManager.initDB()
-            })
-        }
     }
 
     override fun onSupportNavigateUp() =

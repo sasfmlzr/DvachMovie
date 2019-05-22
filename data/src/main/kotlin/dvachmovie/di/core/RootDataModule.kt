@@ -31,10 +31,6 @@ class RootDataModule {
 
     @Singleton
     @Provides
-    internal fun movieDBCache() = MovieDBCache()
-
-    @Singleton
-    @Provides
     internal fun movieRepository(movieStorage: MovieStorage,
                                  movieDBRepository: MovieDBRepository,
                                  settingsStorage: SettingsStorage,
