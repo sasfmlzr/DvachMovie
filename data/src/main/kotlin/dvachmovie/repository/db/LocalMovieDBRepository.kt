@@ -15,12 +15,12 @@ internal class LocalMovieDBRepository @Inject constructor(
         return movieDao.getMoviesFromBoard(boardThread) as LiveData<List<Movie>>
     }
 
-    override fun insert(movieEntity: MovieEntity) {
-        movieDao.insert(movieEntity)
+    override fun insert(movieEntity: Movie) {
+        movieDao.insert(movieEntity as MovieEntity)
     }
 
-    override fun insertAll(moviesEntity: List<MovieEntity>) {
-        movieDao.insertAll(moviesEntity)
+    override fun insertAll(moviesEntity: List<Movie>) {
+        movieDao.insertAll(moviesEntity as List<MovieEntity>)
     }
 
     override fun deleteAll() {

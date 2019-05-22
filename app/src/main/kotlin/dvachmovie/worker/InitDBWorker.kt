@@ -14,14 +14,12 @@ class InitDBWorker(@NonNull context: Context,
 ) : BaseDBWorker(context, workerParams) {
 
     @Inject
-    lateinit var movieCaches: MovieDBCache
-    @Inject
     lateinit var movieDBRepository: MovieDBRepository
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
     override fun execute() {
-        movieDBRepository.insertAll(movieCaches.movieList.value!!)
+        movieDBRepository.insertAll(MovieDBCache.movieList)
     }
 
 }

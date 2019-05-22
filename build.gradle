@@ -13,7 +13,7 @@ buildscript {
         detektVersion = '1.0.0-RC12'
         exoplayerVersion = '2.9.0'
         glideVersion = '4.9.0'
-        gradleVersion = '3.4.0'
+        gradleVersion = '3.4.1'
         gsonVersion = '2.8.5'
         junitVersion = '4.13-beta-3'
         jodaTimeVersion = '2.10.1'

@@ -10,6 +10,8 @@ import org.junit.Test
 
 class MovieUtilsTest {
 
+    private val movieUtils = LocalMovieUtils()
+
     private val movieOne = MovieEntity("Whew", isPlayed = true)
     private val movieTwo = MovieEntity("Test", isPlayed = false)
     private val movieThree = MovieEntity("TestWhew", isPlayed = false)
@@ -25,22 +27,22 @@ class MovieUtilsTest {
     private val movieEntityOne = MovieEntity(board = board,
             movieUrl = BuildConfig.DVACH_URL + fileOne.path,
             previewUrl = BuildConfig.DVACH_URL,
-            date = MovieUtils.parseDateFromFileItem(fileOne))
+            date = movieUtils.parseDateFromFileItem(fileOne))
     private val movieEntityTwo = MovieEntity(board = board,
             movieUrl = BuildConfig.DVACH_URL + fileTwo.path,
             previewUrl = BuildConfig.DVACH_URL,
-            date = MovieUtils.parseDateFromFileItem(fileTwo))
+            date = movieUtils.parseDateFromFileItem(fileTwo))
     private val movieEntityThree = MovieEntity(board = board,
             movieUrl = BuildConfig.DVACH_URL + fileThree.path,
             previewUrl = BuildConfig.DVACH_URL,
-            date = MovieUtils.parseDateFromFileItem(fileThree))
+            date = movieUtils.parseDateFromFileItem(fileThree))
     private val movieEntities = listOf(movieEntityOne,
             movieEntityTwo,
             movieEntityThree)
 
     @Test
     fun `Shuffle movies and delete played movies`() {
-        val movieShuffleList = MovieUtils.shuffleMovies(movieList)
+        val movieShuffleList = movieUtils.shuffleMovies(movieList)
 
         Assert.assertNotEquals(movieList, movieShuffleList)
         Assert.assertEquals(movieList.last(), movieShuffleList.first())
@@ -50,7 +52,7 @@ class MovieUtilsTest {
 
     @Test
     fun `Find diff movies and delete played movies`() {
-        val movieResultList = MovieUtils.calculateDiff(movieList, movieDiffList)
+        val movieResultList = movieUtils.calculateDiff(movieList, movieDiffList)
 
         Assert.assertNotEquals(movieList, movieResultList)
         Assert.assertEquals(1, movieResultList.size)
@@ -59,15 +61,15 @@ class MovieUtilsTest {
 
     @Test
     fun `Getting index movie of movie list`() {
-        val pos = MovieUtils.getIndexPosition(movieThree, movieDiffList)
-        val posNothing = MovieUtils.getIndexPosition(movieThree, movieList)
+        val pos = movieUtils.getIndexPosition(movieThree, movieDiffList)
+        val posNothing = movieUtils.getIndexPosition(movieThree, movieList)
         Assert.assertEquals(1, pos)
         Assert.assertEquals(0, posNothing)
     }
 
     @Test
     fun `Filter file as only webm file`() {
-        val resultList = MovieUtils.filterFileItemOnlyAsWebm(fileItems)
+        val resultList = movieUtils.filterFileItemOnlyAsWebm(fileItems)
 
         Assert.assertEquals(2, resultList.size)
         Assert.assertEquals(false, resultList.contains(fileThree))
@@ -77,14 +79,14 @@ class MovieUtilsTest {
 
     @Test
     fun `Convert FileItem to MovieItem`() {
-        val resultList = MovieUtils.convertFileItemToMovieEntity(fileItems, board)
+        val resultList = movieUtils.convertFileItemToMovie(fileItems, board)
 
         Assert.assertEquals(movieEntities, resultList)
     }
 
     @Test
     fun `Convert string date to LocalDateTime`() {
-        val resultList = MovieUtils.parseDateFromFileItem(fileOne)
+        val resultList = movieUtils.parseDateFromFileItem(fileOne)
 
         Assert.assertEquals(LocalDateTime.parse(fileOne.date,
                 DateTimeFormat.forPattern

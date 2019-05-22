@@ -9,6 +9,7 @@ import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.utils.MovieObserver
 import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.SettingsStorage
+import dvachmovie.utils.MovieUtils
 import javax.inject.Singleton
 
 @Module(includes = [
@@ -30,12 +31,9 @@ class RootDataModule {
 
     @Singleton
     @Provides
-    internal fun movieDBCache() = MovieDBCache()
-
-    @Singleton
-    @Provides
     internal fun movieRepository(movieStorage: MovieStorage,
                                  movieDBRepository: MovieDBRepository,
-                                 settingsStorage: SettingsStorage) =
-            MovieObserver(movieStorage, movieDBRepository, settingsStorage)
+                                 settingsStorage: SettingsStorage,
+                                 movieUtils: MovieUtils) =
+            MovieObserver(movieStorage, movieDBRepository, settingsStorage, movieUtils)
 }

@@ -11,16 +11,17 @@ import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.usecase.DvachModel
-import dvachmovie.usecase.DvachUseCase
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.DvachModel
+import dvachmovie.usecase.real.DvachUseCase
 import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
 import dvachmovie.usecase.settingsStorage.PutBoardUseCase
 import dvachmovie.usecase.settingsStorage.PutCookieUseCase
 import dvachmovie.utils.MovieObserver
+import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -40,9 +41,6 @@ class StartFragment : BaseFragment<StartVM,
 
     @Inject
     lateinit var movieObserver: MovieObserver
-
-    @Inject
-    lateinit var movieDBCache: MovieDBCache
 
     @Inject
     lateinit var getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase
@@ -131,7 +129,10 @@ class StartFragment : BaseFragment<StartVM,
         override fun onSuccess(useCaseModel: UseCaseModel) {
             GlobalScope.launch(Job()) {
                 useCaseModel as DvachModel
-                movieDBCache.movieList.postValue(useCaseModel.movies)
+
+                MovieDBCache.movieList = useCaseModel.movies
+                WorkerManager.initDB()
+
                 router.navigateStartToMovieFragment()
             }
         }

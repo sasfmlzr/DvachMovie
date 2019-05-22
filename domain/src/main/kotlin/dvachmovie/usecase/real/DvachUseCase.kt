@@ -1,18 +1,17 @@
-package dvachmovie.usecase
+package dvachmovie.usecase.real
 
 import dvachmovie.api.FileItem
-import dvachmovie.db.data.MovieEntity
-import dvachmovie.utils.MovieUtils
+import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
-import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCase
-import dvachmovie.usecase.real.GetThreadsFromDvachUseCase
+import dvachmovie.utils.MovieUtils
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                        private val getLinkFilesFromThreadsUseCase:
-                                       GetLinkFilesFromThreadsUseCase) : UseCase<DvachUseCase.Params, Unit>() {
+                                       GetLinkFilesFromThreadsUseCase,
+                                       private val movieUtils: MovieUtils) : UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
@@ -50,23 +49,23 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
             fileItems.addAll(useCaseLinkFilesModel.fileItems)
 
             if (count == listThreadSize) {
-                fileItems = MovieUtils.filterFileItemOnlyAsWebm(fileItems) as MutableList<FileItem>
+                fileItems = movieUtils.filterFileItemOnlyAsWebm(fileItems) as MutableList<FileItem>
                 if (fileItems.isEmpty()) {
                     executorResult.onFailure(RuntimeException("This is a private board"))
                 } else {
-                    finally(MovieUtils.convertFileItemToMovieEntity(fileItems, board))
+                    finally(movieUtils.convertFileItemToMovie(fileItems, board))
                 }
             }
         } catch (e: Exception) {
             count++
             if (count == listThreadSize && fileItems.isNotEmpty()) {
-                finally(MovieUtils.convertFileItemToMovieEntity(fileItems, board))
+                finally(movieUtils.convertFileItemToMovie(fileItems, board))
             }
             executorResult.onFailure(e)
         }
     }
 
-    private fun finally(listMovies: List<MovieEntity>) {
+    private fun finally(listMovies: List<Movie>) {
         executorResult.onSuccess(DvachModel(listMovies))
     }
 

@@ -1,9 +1,8 @@
 package dvachmovie.storage.local
 
-import androidx.lifecycle.MutableLiveData
-import dvachmovie.db.data.MovieEntity
-import javax.inject.Singleton
+import dvachmovie.db.data.Movie
 
-@Singleton
-data class MovieDBCache(
-        val movieList: MutableLiveData<List<MovieEntity>> = MutableLiveData())
+object MovieDBCache {
+    var movieList: List<Movie> = listOf()
+}
+

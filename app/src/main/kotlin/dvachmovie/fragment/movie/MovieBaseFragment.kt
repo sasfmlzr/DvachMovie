@@ -56,9 +56,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     lateinit var getIndexPosUseCase: GetIndexPosByMovieUseCase
 
     @Inject
-    lateinit var movieCaches: MovieDBCache
-
-    @Inject
     lateinit var isAllowGestureUseCase: GetIsAllowGestureUseCase
 
     @Inject
@@ -69,6 +66,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     @Inject
     lateinit var reportUseCase: ReportUseCase
+
+    @Inject
+    lateinit var movieUtils: MovieUtils
 
     private val mainScope = CoroutineScope(Dispatchers.Main)
 
@@ -199,7 +199,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             override fun onPlayerError(error: ExoPlaybackException?) {
                 movieObserver.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
 
-                movieCaches.movieList.value = listOf()
+                MovieDBCache.movieList = listOf()
                 viewModel.movieList.value = listOf()
                 activity?.recreate()
             }
@@ -228,7 +228,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     private fun configureButtons() {
         shuffleButton.setOnClickListener {
             viewModel.movieList.value =
-                    MovieUtils.shuffleMovies(viewModel.movieList.value
+                    movieUtils.shuffleMovies(viewModel.movieList.value
                             ?: listOf())
         }
 
