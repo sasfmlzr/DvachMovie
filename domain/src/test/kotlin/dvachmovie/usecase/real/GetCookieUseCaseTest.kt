@@ -25,7 +25,7 @@ class GetCookieUseCaseTest {
     @Test
     fun `Happy pass`() {
         runBlocking {
-            given(cookieStorage.getCookie()).willReturn(testCookie)
+            given(cookieStorage.cookie).willReturn(testCookie)
 
             Assert.assertEquals(testCookie, getCookieUseCase.execute(Unit))
         }
@@ -34,7 +34,7 @@ class GetCookieUseCaseTest {
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
-            given(cookieStorage.getCookie()).willThrow(TestException())
+            given(cookieStorage.cookie).willThrow(TestException())
 
             getCookieUseCase.execute(Unit)
         }

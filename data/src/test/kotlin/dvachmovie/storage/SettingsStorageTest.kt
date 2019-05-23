@@ -2,8 +2,12 @@ package dvachmovie.storage
 
 import dvachmovie.TestException
 import dvachmovie.api.Boards
+import dvachmovie.architecture.ScopeProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.*
@@ -20,6 +24,9 @@ class SettingsStorageTest {
     @Mock
     lateinit var keyValueStorage: KeyValueStorage
 
+    @Mock
+    lateinit var scopeProvider: ScopeProvider
+
     private val testException = TestException()
 
     companion object {
@@ -29,6 +36,11 @@ class SettingsStorageTest {
         private const val BOARD = "board"
         private const val COOKIE = "cookie"
         private const val GESTURE = "gesture"
+    }
+
+    @Before
+    fun `Set up`(){
+        given(scopeProvider.ioScope).willReturn(CoroutineScope(Dispatchers.IO))
     }
 
     @Test
