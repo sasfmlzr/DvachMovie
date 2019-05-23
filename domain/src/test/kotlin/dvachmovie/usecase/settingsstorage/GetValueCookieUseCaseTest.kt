@@ -2,7 +2,7 @@ package dvachmovie.usecase.settingsstorage
 
 import dvachmovie.TestException
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.settingsStorage.GetCookieUseCase
+import dvachmovie.usecase.settingsStorage.GetValueCookieUseCase
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -14,10 +14,10 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class GetCookieUseCaseTest {
+class GetValueCookieUseCaseTest {
 
     @InjectMocks
-    lateinit var useCase: GetCookieUseCase
+    lateinit var useCaseValue: GetValueCookieUseCase
 
     @Mock
     lateinit var settingsStorage: SettingsStorage
@@ -26,7 +26,7 @@ class GetCookieUseCaseTest {
     fun `Happy pass`() {
         runBlocking {
             given(settingsStorage.getCookie()).willReturn(CompletableDeferred("test"))
-            Assert.assertEquals("test", useCase.execute(Unit))
+            Assert.assertEquals("test", useCaseValue.execute(Unit))
         }
     }
 
@@ -34,7 +34,7 @@ class GetCookieUseCaseTest {
     fun `Something was wrong`() {
         runBlocking {
             given(settingsStorage.getCookie()).willThrow(TestException())
-            useCase.execute(Unit)
+            useCaseValue.execute(Unit)
         }
     }
 }

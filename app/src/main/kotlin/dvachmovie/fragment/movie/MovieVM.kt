@@ -6,11 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import dvachmovie.api.CookieManager
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
 import dvachmovie.moviestorage.GetCurrentMovieUseCase
 import dvachmovie.moviestorage.GetMovieListUseCase
+import dvachmovie.usecase.real.GetCookieUseCase
 import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
 import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-class MovieVM @Inject constructor(cookieManager: CookieManager,
+class MovieVM @Inject constructor(getCookieUseCase: GetCookieUseCase,
                                   getMovieListUseCase: GetMovieListUseCase,
                                   getCurrentMovieUseCase: GetCurrentMovieUseCase,
                                   getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase,
@@ -34,7 +34,9 @@ class MovieVM @Inject constructor(cookieManager: CookieManager,
     }
 
     val cookie: MutableLiveData<String> by lazy {
-        MutableLiveData<String>(cookieManager.getCookie().toString())
+        runBlocking {
+            MutableLiveData<String>(getCookieUseCase.execute(Unit).toString())
+        }
     }
 
     val isPlayerControlVisibility = MutableLiveData<Boolean>(true)
@@ -46,7 +48,9 @@ class MovieVM @Inject constructor(cookieManager: CookieManager,
     private val function = Function<List<Movie>, LiveData<List<Uri>>> { values ->
         val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
         if (urlVideo.isNotEmpty()) {
-            cookie.value = cookieManager.getCookie().toString()
+            runBlocking {
+                cookie.value = getCookieUseCase.execute(Unit).toString()
+            }
         }
         MutableLiveData<List<Uri>>(urlVideo)
     }

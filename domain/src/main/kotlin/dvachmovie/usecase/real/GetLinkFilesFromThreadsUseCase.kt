@@ -13,10 +13,10 @@ open class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachR
         private const val TAG = "GetLinkFilesFromThreadsUseCase"
     }
 
-    override suspend fun execute(input: Params):
-            GetLinkFilesFromThreadsModel =
+    override suspend fun execute(input: Params): GetLinkFilesFromThreadsModel =
             try {
-                val listFiles = dvachRepository.getConcreteThreadByNum(input.board, input.numThread)
+                val listFiles =
+                        dvachRepository.getConcreteThreadByNum(input.board, input.numThread)
                 GetLinkFilesFromThreadsModel(listFiles)
             } catch (e: Exception) {
                 logger.e(TAG, e.message ?: "Something network error")

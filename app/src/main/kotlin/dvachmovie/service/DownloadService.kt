@@ -7,14 +7,19 @@ import android.content.Intent
 import android.net.Uri
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import dvachmovie.api.CookieManager
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.di.core.Injector
+import dvachmovie.usecase.real.GetCookieUseCase
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
 
     @Inject
-    lateinit var cookieManager: CookieManager
+    lateinit var getCookieUseCase: GetCookieUseCase
+    @Inject
+    lateinit var scopeProvider: ScopeProvider
 
     companion object {
         private const val DOWNLOAD_PATH = "dvachmovie.service_DownloadService_Download_path"
@@ -42,15 +47,17 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
 
     private fun startDownload(downloadPath: String, destinationPath: String) {
         val uri = Uri.parse(downloadPath)
-        val request = DownloadManager.Request(uri)
-                .addRequestHeader("Cookie", cookieManager.getCookie().toString())
-                .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or
-                        DownloadManager.Request.NETWORK_WIFI)
-                .setNotificationVisibility(
-                        DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                .setTitle(uri.pathSegments.last())
-                .setVisibleInDownloadsUi(true)
-                .setDestinationInExternalPublicDir(destinationPath, uri.lastPathSegment)
-        (getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).enqueue(request)
+        scopeProvider.ioScope.launch {
+            val request = DownloadManager.Request(uri)
+                    .addRequestHeader("Cookie", getCookieUseCase.execute(Unit).toString())
+                    .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or
+                            DownloadManager.Request.NETWORK_WIFI)
+                    .setNotificationVisibility(
+                            DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                    .setTitle(uri.pathSegments.last())
+                    .setVisibleInDownloadsUi(true)
+                    .setDestinationInExternalPublicDir(destinationPath, uri.lastPathSegment)
+            (getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).enqueue(request)
+        }
     }
 }
