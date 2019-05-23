@@ -5,7 +5,8 @@ import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
-import dvachmovie.repository.MovieDBRepository
+import dvachmovie.usecase.EraseDBUseCase
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class DeleteDBWorker(@NonNull context: Context,
@@ -13,11 +14,13 @@ class DeleteDBWorker(@NonNull context: Context,
 ) : BaseDBWorker(context, workerParams) {
 
     @Inject
-    lateinit var movieDBRepository: MovieDBRepository
+    lateinit var eraseDBUseCase: EraseDBUseCase
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
     override fun execute() {
-        movieDBRepository.deleteAll()
+        runBlocking {
+            eraseDBUseCase.execute(Unit)
+        }
     }
 }

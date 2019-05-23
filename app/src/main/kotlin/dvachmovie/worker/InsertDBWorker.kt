@@ -5,10 +5,9 @@ import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseDBWorker
-import dvachmovie.db.model.MovieEntity
 import dvachmovie.di.core.WorkerComponent
 import dvachmovie.moviestorage.GetCurrentMovieUseCase
-import dvachmovie.repository.MovieDBRepository
+import dvachmovie.usecase.InsertionMovieToDBUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,7 +18,7 @@ class InsertDBWorker(@NonNull context: Context,
     @Inject
     lateinit var getCurrentMovieUseCase: GetCurrentMovieUseCase
     @Inject
-    lateinit var movieDBRepository: MovieDBRepository
+    lateinit var insertionMovieToDBUseCase: InsertionMovieToDBUseCase
     @Inject
     lateinit var scopeProvider: ScopeProvider
 
@@ -27,7 +26,9 @@ class InsertDBWorker(@NonNull context: Context,
 
     override fun execute() {
         scopeProvider.ioScope.launch {
-            movieDBRepository.insert(getCurrentMovieUseCase.execute(Unit).value as MovieEntity)
+            getCurrentMovieUseCase.execute(Unit).value?.let {
+                insertionMovieToDBUseCase.execute(it)
+            }
         }
     }
 }

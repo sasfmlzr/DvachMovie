@@ -23,7 +23,6 @@ import dvachmovie.usecase.settingsStorage.PutCookieUseCase
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_start.*
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -126,7 +125,7 @@ class StartFragment : BaseFragment<StartVM,
 
     private val executorResult = object : ExecutorResult {
         override fun onSuccess(useCaseModel: UseCaseModel) {
-            GlobalScope.launch(Job()) {
+            scopeUI.launch(Job()) {
                 useCaseModel as DvachModel
 
                 MovieDBCache.movieList = useCaseModel.movies
