@@ -62,9 +62,8 @@ class StartFragment : BaseFragment<StartVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
-        val value = "92ea293bf47456479e25b11ba67bb17a"
         scopeIO.launch(Job()) {
-            putCookieUseCase.execute(value)
+            putCookieUseCase.execute("92ea293bf47456479e25b11ba67bb17a")
         }
         viewModel.imageId.value = R.raw.cybermilosgif
         prepareData()
@@ -72,7 +71,6 @@ class StartFragment : BaseFragment<StartVM,
         return binding.root
     }
 
-    //TODO: cookie factory for full version
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

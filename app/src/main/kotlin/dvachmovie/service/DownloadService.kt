@@ -11,7 +11,6 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.di.core.Injector
 import dvachmovie.usecase.real.GetCookieUseCase
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
