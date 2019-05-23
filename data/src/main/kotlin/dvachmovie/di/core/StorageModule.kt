@@ -3,7 +3,7 @@ package dvachmovie.di.core
 import dagger.Binds
 import dagger.Module
 import dvachmovie.api.CookieStorage
-import dvachmovie.api.LocalCookieStorage
+import dvachmovie.storage.LocalCookieStorage
 import dvachmovie.storage.LocalSettingsStorage
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Singleton
