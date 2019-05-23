@@ -1,4 +1,4 @@
-package dvachmovie.repository.db
+package dvachmovie.repository
 
 import androidx.lifecycle.LiveData
 import dvachmovie.db.data.Movie

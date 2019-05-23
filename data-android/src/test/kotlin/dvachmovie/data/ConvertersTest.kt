@@ -1,6 +1,6 @@
 package dvachmovie.data
 
-import dvachmovie.db.data.Converters
+import dvachmovie.db.model.Converters
 import org.joda.time.LocalDateTime
 import org.junit.Assert
 import org.junit.Test

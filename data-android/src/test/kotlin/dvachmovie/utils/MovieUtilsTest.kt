@@ -2,7 +2,7 @@ package dvachmovie.utils
 
 import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
-import dvachmovie.db.data.MovieEntity
+import dvachmovie.db.model.MovieEntity
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import org.junit.Assert
@@ -10,7 +10,7 @@ import org.junit.Test
 
 class MovieUtilsTest {
 
-    val appConfig = AppConfig("whew")
+    private val appConfig = AppConfig("whew")
     private val movieUtils = LocalMovieUtils(appConfig)
 
     private val movieOne = MovieEntity("Whew", isPlayed = true)

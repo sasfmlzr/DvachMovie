@@ -1,9 +1,9 @@
-package dvachmovie.repository.db
+package dvachmovie.repository
 
 import androidx.lifecycle.LiveData
 import dvachmovie.db.data.Movie
-import dvachmovie.db.data.MovieDao
-import dvachmovie.db.data.MovieEntity
+import dvachmovie.db.model.MovieDao
+import dvachmovie.db.model.MovieEntity
 import javax.inject.Inject
 
 internal class LocalMovieDBRepository @Inject constructor(

@@ -1,4 +1,4 @@
-package dvachmovie.db.data
+package dvachmovie.db.model
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

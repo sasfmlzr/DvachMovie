@@ -7,9 +7,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import dagger.Module
 import dagger.Provides
 import dvachmovie.db.MovieDatabase
-import dvachmovie.db.data.MovieDao
-import dvachmovie.repository.db.LocalMovieDBRepository
-import dvachmovie.repository.db.MovieDBRepository
+import dvachmovie.db.model.MovieDao
+import dvachmovie.repository.LocalMovieDBRepository
+import dvachmovie.repository.MovieDBRepository
 import org.joda.time.LocalDateTime
 import javax.inject.Singleton
 

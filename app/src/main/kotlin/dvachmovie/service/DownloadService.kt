@@ -43,14 +43,14 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
     private fun startDownload(downloadPath: String, destinationPath: String) {
         val uri = Uri.parse(downloadPath)
         val request = DownloadManager.Request(uri)
-        request.addRequestHeader("Cookie", cookieManager.getCookie().toString())
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or
-                DownloadManager.Request.NETWORK_WIFI)
-        request.setNotificationVisibility(
-                DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        request.setTitle(uri.pathSegments.last())
-        request.setVisibleInDownloadsUi(true)
-        request.setDestinationInExternalPublicDir(destinationPath, uri.lastPathSegment)
+                .addRequestHeader("Cookie", cookieManager.getCookie().toString())
+                .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or
+                        DownloadManager.Request.NETWORK_WIFI)
+                .setNotificationVisibility(
+                        DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setTitle(uri.pathSegments.last())
+                .setVisibleInDownloadsUi(true)
+                .setDestinationInExternalPublicDir(destinationPath, uri.lastPathSegment)
         (getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).enqueue(request)
     }
 }

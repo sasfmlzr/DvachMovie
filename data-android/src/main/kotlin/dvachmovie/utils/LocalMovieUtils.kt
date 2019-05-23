@@ -3,7 +3,7 @@ package dvachmovie.utils
 import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.db.data.Movie
-import dvachmovie.db.data.MovieEntity
+import dvachmovie.db.model.MovieEntity
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
