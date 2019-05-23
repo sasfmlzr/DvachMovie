@@ -2,7 +2,6 @@ package dvachmovie.utils
 
 import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
-import dvachmovie.data.BuildConfig
 import dvachmovie.db.data.MovieEntity
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
@@ -11,7 +10,8 @@ import org.junit.Test
 
 class MovieUtilsTest {
 
-    private val movieUtils = LocalMovieUtils()
+    val appConfig = AppConfig("whew")
+    private val movieUtils = LocalMovieUtils(appConfig)
 
     private val movieOne = MovieEntity("Whew", isPlayed = true)
     private val movieTwo = MovieEntity("Test", isPlayed = false)
@@ -25,19 +25,17 @@ class MovieUtilsTest {
     private val fileThree = FileItem(path = "three", date = "14/05/19 Втр 21:20:37")
     private val fileItems = listOf(fileOne, fileTwo, fileThree)
 
-    val AppConfig = dvachmovie.AppConfig("whew")
-
     private val movieEntityOne = MovieEntity(board = board,
-            movieUrl = AppConfig.DVACH_URL + fileOne.path,
-            previewUrl = AppConfig.DVACH_URL,
+            movieUrl = appConfig.DVACH_URL + fileOne.path,
+            previewUrl = appConfig.DVACH_URL,
             date = movieUtils.parseDateFromFileItem(fileOne))
     private val movieEntityTwo = MovieEntity(board = board,
-            movieUrl = AppConfig.DVACH_URL + fileTwo.path,
-            previewUrl = AppConfig.DVACH_URL,
+            movieUrl = appConfig.DVACH_URL + fileTwo.path,
+            previewUrl = appConfig.DVACH_URL,
             date = movieUtils.parseDateFromFileItem(fileTwo))
     private val movieEntityThree = MovieEntity(board = board,
-            movieUrl = AppConfig.DVACH_URL + fileThree.path,
-            previewUrl = AppConfig.DVACH_URL,
+            movieUrl = appConfig.DVACH_URL + fileThree.path,
+            previewUrl = appConfig.DVACH_URL,
             date = movieUtils.parseDateFromFileItem(fileThree))
     private val movieEntities = listOf(movieEntityOne,
             movieEntityTwo,
