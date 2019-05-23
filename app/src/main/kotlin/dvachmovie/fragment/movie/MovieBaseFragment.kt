@@ -30,6 +30,7 @@ import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.local.MovieDBCache
+import dvachmovie.usecase.MarkCurrentMovieAsPlayedUseCase
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.ReportUseCase
@@ -41,8 +42,7 @@ import dvachmovie.utils.MovieObserver
 import dvachmovie.utils.MovieUtils
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -70,7 +70,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     @Inject
     lateinit var movieUtils: MovieUtils
 
-    private val mainScope = CoroutineScope(Dispatchers.Main)
+    @Inject
+    lateinit var markCurrentMovieAsPlayedUseCase: MarkCurrentMovieAsPlayedUseCase
 
     private lateinit var ads: InterstitialAd
 
@@ -89,7 +90,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
         })
 
-        mainScope.launch {
+        scopeUI.launch {
             movieObserver.observeDB(viewLifecycleOwner)
         }
 
@@ -131,7 +132,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainScope.launch {
+        scopeUI.launch {
             viewModel.isGestureEnabled.value = isAllowGestureUseCase.execute(Unit)
         }
 
@@ -197,7 +198,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     private val playerListener by lazy {
         object : Player.EventListener {
             override fun onPlayerError(error: ExoPlaybackException?) {
-                movieObserver.markCurrentMovieAsPlayed(playerView.player.currentPeriodIndex)
+                scopeUI.launch {
+                    markCurrentMovieAsPlayedUseCase.execute(playerView.player.currentPeriodIndex)
+                }
 
                 MovieDBCache.movieList = listOf()
                 viewModel.movieList.value = listOf()
@@ -210,7 +213,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 if (playerView != null) {
                     currentIndex = playerView.player.currentPeriodIndex
                 }
-                movieObserver.markCurrentMovieAsPlayed(currentIndex)
+                scopeUI.launch {
+                    markCurrentMovieAsPlayedUseCase.execute(currentIndex)
+                }
                 if (containsAds) {
                     showAds()
                 }
@@ -265,7 +270,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 }
             }
 
-            mainScope.launch {
+            scopeUI.launch {
                 val inputModel = ReportUseCase.Params(viewModel.currentMovie.value?.board!!,
                         viewModel.currentMovie.value?.thread!!,
                         viewModel.currentMovie.value?.post!!,
@@ -274,7 +279,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
         }
 
-        mainScope.launch {
+        scopeUI.launch {
             viewModel.isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
 
             viewModel.isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)
@@ -296,9 +301,12 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        movieObserver.markCurrentMovieAsPlayed(playerView.player.currentPeriodIndex)
-        super.onStop()
+        val index = playerView.player.currentPeriodIndex
+        scopeUI.launch(Job()) {
+            markCurrentMovieAsPlayedUseCase.execute(index)
+        }
         releasePlayer()
+        super.onStop()
     }
 
     private fun releasePlayer() {

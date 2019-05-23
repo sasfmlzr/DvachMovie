@@ -34,11 +34,4 @@ class MovieObserver @Inject constructor(
                 .getMoviesFromBoard(settingsStorage.getBoard().await())
                 .observe(lifecycleOwner, observer)
     }
-
-    fun markCurrentMovieAsPlayed(indexPosition: Int) {
-        movieStorage.currentMovie.value =
-                movieStorage.movieList.value?.getOrNull(indexPosition).apply {
-                    this?.isPlayed = true
-                }
-    }
 }

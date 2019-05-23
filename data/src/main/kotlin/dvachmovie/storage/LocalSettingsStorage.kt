@@ -1,13 +1,14 @@
 package dvachmovie.storage
 
-import dvachmovie.ScopeProvider
 import dvachmovie.api.model.Boards
+import dvachmovie.architecture.ScopeProvider
 import kotlinx.coroutines.async
 import javax.inject.Inject
 
 class LocalSettingsStorage @Inject constructor(
-        private val pref: KeyValueStorage
-) : SettingsStorage{
+        private val pref: KeyValueStorage,
+        private val scopeProvider: ScopeProvider
+) : SettingsStorage {
     companion object {
         private const val LOADING_PARAM = "LoadingMoviesOrNot"
         private const val REPORT_BTN_VISIBLE = "ReportBtnVisibleOrNot"
@@ -18,40 +19,40 @@ class LocalSettingsStorage @Inject constructor(
     }
 
     override fun isLoadingEveryTime() =
-            ScopeProvider.getIOScope().async { pref.getBoolean(LOADING_PARAM) ?: false }
+            scopeProvider.ioScope.async { pref.getBoolean(LOADING_PARAM) ?: false }
 
     override fun putLoadingEveryTime(value: Boolean) =
-            ScopeProvider.getIOScope().async { pref.putBoolean(LOADING_PARAM, value) }
+            scopeProvider.ioScope.async { pref.putBoolean(LOADING_PARAM, value) }
 
     override fun isReportBtnVisible() =
-            ScopeProvider.getIOScope().async { pref.getBoolean(REPORT_BTN_VISIBLE) ?: true }
+            scopeProvider.ioScope.async { pref.getBoolean(REPORT_BTN_VISIBLE) ?: true }
 
     override fun putReportBtnVisible(value: Boolean) =
-            ScopeProvider.getIOScope().async { pref.putBoolean(REPORT_BTN_VISIBLE, value) }
+            scopeProvider.ioScope.async { pref.putBoolean(REPORT_BTN_VISIBLE, value) }
 
     override fun isListBtnVisible() =
-            ScopeProvider.getIOScope().async { pref.getBoolean(LIST_BTN_VISIBLE) ?: true }
+            scopeProvider.ioScope.async { pref.getBoolean(LIST_BTN_VISIBLE) ?: true }
 
     override fun putListBtnVisible(value: Boolean) =
-            ScopeProvider.getIOScope().async { pref.putBoolean(LIST_BTN_VISIBLE, value) }
+            scopeProvider.ioScope.async { pref.putBoolean(LIST_BTN_VISIBLE, value) }
 
     override fun getBoard() =
-            ScopeProvider.getIOScope().async {
+            scopeProvider.ioScope.async {
                 pref.getString(BOARD) ?: Boards.defaultMap.iterator().next().key
             }
 
     override fun putBoard(board: String) =
-            ScopeProvider.getIOScope().async { pref.putString(BOARD, board) }
+            scopeProvider.ioScope.async { pref.putString(BOARD, board) }
 
     override fun getCookie() =
-            ScopeProvider.getIOScope().async { pref.getString(COOKIE) ?: "" }
+            scopeProvider.ioScope.async { pref.getString(COOKIE) ?: "" }
 
     override fun putCookie(cookie: String) =
-            ScopeProvider.getIOScope().async { pref.putString(COOKIE, cookie) }
+            scopeProvider.ioScope.async { pref.putString(COOKIE, cookie) }
 
     override fun isAllowGesture() =
-            ScopeProvider.getIOScope().async { pref.getBoolean(GESTURE) ?: true }
+            scopeProvider.ioScope.async { pref.getBoolean(GESTURE) ?: true }
 
     override fun putIsAllowGesture(value: Boolean) =
-            ScopeProvider.getIOScope().async { pref.putBoolean(GESTURE, value) }
+            scopeProvider.ioScope.async { pref.putBoolean(GESTURE, value) }
 }

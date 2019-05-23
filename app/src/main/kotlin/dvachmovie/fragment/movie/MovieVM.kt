@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import dvachmovie.ScopeProvider
 import dvachmovie.api.CookieManager
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
 import dvachmovie.moviestorage.GetCurrentMovieUseCase
 import dvachmovie.moviestorage.GetMovieListUseCase
@@ -22,7 +22,8 @@ class MovieVM @Inject constructor(cookieManager: CookieManager,
                                   getCurrentMovieUseCase: GetCurrentMovieUseCase,
                                   getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase,
                                   getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase,
-                                  getIsAllowGestureUseCase: GetIsAllowGestureUseCase) : ViewModel() {
+                                  getIsAllowGestureUseCase: GetIsAllowGestureUseCase,
+                                  scopeProvider: ScopeProvider) : ViewModel() {
 
     val movieList = getMovieListUseCase.getMovieList()
     val currentMovie = getCurrentMovieUseCase.getCurrentMovie()
@@ -56,7 +57,7 @@ class MovieVM @Inject constructor(cookieManager: CookieManager,
     val isGestureEnabled = MutableLiveData<Boolean>()
 
     init {
-        ScopeProvider.getUiScope().launch {
+        scopeProvider.uiScope.launch {
             isGestureEnabled.value = getIsAllowGestureUseCase.execute(Unit)
             isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
             isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)

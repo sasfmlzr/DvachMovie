@@ -11,8 +11,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvachmovie.BuildConfig
 import dvachmovie.R
-import dvachmovie.ScopeProvider
 import dvachmovie.api.model.Boards
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.settingsStorage.*
@@ -29,7 +29,8 @@ class SettingsVM @Inject constructor(
         getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase,
         getIsAllowGestureUseCase: GetIsAllowGestureUseCase,
         private val getBoardUseCase: GetBoardUseCase,
-        logger: Logger
+        logger: Logger,
+        private val scopeProvider: ScopeProvider
 ) : ViewModel() {
 
     companion object {
@@ -49,7 +50,7 @@ class SettingsVM @Inject constructor(
     }
 
     init {
-        ScopeProvider.getUiScope().launch {
+        scopeProvider.uiScope.launch {
             prepareLoading.value = getIsLoadingEveryTimeUseCase.execute(Unit)
         }
     }
@@ -140,7 +141,7 @@ class SettingsVM @Inject constructor(
             }
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
-        ScopeProvider.getUiScope().launch {
+        scopeProvider.uiScope.launch {
             var checkedItem = boardMap.keys.indexOf(getBoardUseCase.execute(Unit))
             AlertDialog.Builder(context, R.style.AlertDialogStyle)
                     .setTitle("Set board")
@@ -152,7 +153,7 @@ class SettingsVM @Inject constructor(
                     }
                     .setPositiveButton("Ok") { _, _ ->
                         if (checkedItem != -1) {
-                            ScopeProvider.getUiScope().launch {
+                            scopeProvider.uiScope.launch {
                                 withContext(Dispatchers.Default) {
                                     settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
                                 }.await()

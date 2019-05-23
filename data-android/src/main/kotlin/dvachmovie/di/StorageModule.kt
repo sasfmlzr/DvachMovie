@@ -2,6 +2,8 @@ package dvachmovie.di
 
 import dagger.Binds
 import dagger.Module
+import dvachmovie.LocalScopeProvider
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.storage.KeyValueStorage
 import dvachmovie.storage.local.SharedPreferencesStorage
 import dvachmovie.utils.LocalMovieUtils
@@ -18,4 +20,8 @@ internal abstract class StorageModule {
     @Binds
     @Singleton
     internal abstract fun movieUtils(local: LocalMovieUtils): MovieUtils
+
+    @Binds
+    @Singleton
+    internal abstract fun scopeProvider(local: LocalScopeProvider): ScopeProvider
 }
