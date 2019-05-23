@@ -3,7 +3,7 @@ package dvachmovie.repository
 import dvachmovie.architecture.logging.Logger
 import retrofit2.Response
 
-abstract class BaseRepository constructor(private val logger: Logger) {
+abstract class BaseNetworkRepository constructor(private val logger: Logger) {
 
     suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>, errorMessage: String): T? {
 

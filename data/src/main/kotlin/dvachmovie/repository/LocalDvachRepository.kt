@@ -5,9 +5,9 @@ import dvachmovie.api.FileItem
 import dvachmovie.architecture.logging.Logger
 import javax.inject.Inject
 
-class LocalDvachRepository @Inject constructor(private val dvachApi: DvachMovieApi,
-                                               private val logger: Logger) : BaseRepository(logger),
-        DvachRepository {
+class LocalDvachRepository @Inject constructor(
+        private val dvachApi: DvachMovieApi,
+        private val logger: Logger) : BaseNetworkRepository(logger), DvachRepository {
 
     override suspend fun getNumThreadsFromCatalog(board: String) =
             safeApiCall(call = { dvachApi.getCatalog(board).await() },
