@@ -1,5 +1,5 @@
 package dvachmovie.api
 
-interface CookieManager {
+interface CookieStorage {
     fun getCookie(): Cookie
 }

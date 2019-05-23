@@ -2,8 +2,8 @@ package dvachmovie.di.core
 
 import dagger.Binds
 import dagger.Module
-import dvachmovie.api.CookieManager
-import dvachmovie.api.LocalCookieManager
+import dvachmovie.api.CookieStorage
+import dvachmovie.api.LocalCookieStorage
 import dvachmovie.storage.LocalSettingsStorage
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Singleton
@@ -13,7 +13,7 @@ internal abstract class StorageModule {
 
     @Binds
     @Singleton
-    internal abstract fun cookieManager(localCookieManager: LocalCookieManager): CookieManager
+    internal abstract fun cookieStorage(local: LocalCookieStorage): CookieStorage
 
     @Binds
     @Singleton

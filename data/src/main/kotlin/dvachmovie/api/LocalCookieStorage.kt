@@ -4,8 +4,8 @@ import dvachmovie.storage.SettingsStorage
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-internal class LocalCookieManager @Inject constructor(
-        private val settingsStorage: SettingsStorage) : CookieManager {
+internal class LocalCookieStorage @Inject constructor(
+        private val settingsStorage: SettingsStorage) : CookieStorage {
 
     companion object {
         private const val header = "usercode_auth"
