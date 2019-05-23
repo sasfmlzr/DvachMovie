@@ -1,7 +1,7 @@
 package dvachmovie.storage
 
 import dvachmovie.TestException
-import dvachmovie.api.model.Boards
+import dvachmovie.api.Boards
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test

@@ -1,6 +1,6 @@
 package dvachmovie.storage
 
-import dvachmovie.api.model.Boards
+import dvachmovie.api.Boards
 import dvachmovie.architecture.ScopeProvider
 import kotlinx.coroutines.async
 import javax.inject.Inject

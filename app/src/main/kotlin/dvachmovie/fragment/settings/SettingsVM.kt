@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvachmovie.BuildConfig
 import dvachmovie.R
-import dvachmovie.api.model.Boards
+import dvachmovie.api.Boards
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.usecase.settingsStorage.*

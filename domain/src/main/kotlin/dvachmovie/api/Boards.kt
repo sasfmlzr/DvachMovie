@@ -1,4 +1,4 @@
-package dvachmovie.api.model
+package dvachmovie.api
 
 object Boards {
     val defaultMap = linkedMapOf<String, String>()
