@@ -8,8 +8,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
-import dvachmovie.moviestorage.GetCurrentMovieUseCase
-import dvachmovie.moviestorage.GetMovieListUseCase
+import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
+import dvachmovie.usecase.moviestorage.GetMovieListUseCase
 import dvachmovie.usecase.real.GetCookieUseCase
 import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase

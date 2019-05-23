@@ -3,8 +3,8 @@ package dvachmovie.fragment.preview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvachmovie.db.data.Movie
-import dvachmovie.moviestorage.GetCurrentMovieUseCase
-import dvachmovie.moviestorage.GetMovieListUseCase
+import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
+import dvachmovie.usecase.moviestorage.GetMovieListUseCase
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 

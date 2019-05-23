@@ -8,7 +8,6 @@ import javax.inject.Inject
 class ShuffleMoviesUseCase @Inject constructor(
         private val movieUtils: MovieUtils) : UseCase<List<Movie>, List<Movie>>() {
 
-    override suspend fun execute(input: List<Movie>): List<Movie> {
-        return movieUtils.shuffleMovies(input)
-    }
+    override suspend fun execute(input: List<Movie>): List<Movie> =
+            movieUtils.shuffleMovies(input)
 }

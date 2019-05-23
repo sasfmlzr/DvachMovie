@@ -6,7 +6,7 @@ import androidx.work.WorkerParameters
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
-import dvachmovie.moviestorage.GetCurrentMovieUseCase
+import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
 import dvachmovie.usecase.InsertionMovieToDBUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject

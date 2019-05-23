@@ -8,7 +8,6 @@ import javax.inject.Inject
 class InsertionMovieListToDBUseCase @Inject constructor(
         private val movieDBRepository: MovieDBRepository) : UseCase<List<Movie>, Unit>() {
 
-    override suspend fun execute(input: List<Movie>) {
+    override suspend fun execute(input: List<Movie>) =
         movieDBRepository.insertAll(input)
-    }
 }
