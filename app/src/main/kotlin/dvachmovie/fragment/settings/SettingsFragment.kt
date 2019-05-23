@@ -9,7 +9,7 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.storage.local.MovieStorage
+import dvachmovie.usecase.EraseMovieStorageUseCase
 import dvachmovie.usecase.settingsStorage.PutIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.PutIsListBtnVisibleUseCase
 import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase
@@ -23,7 +23,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class) {
 
     @Inject
-    lateinit var movieStorage: MovieStorage
+    lateinit var eraseMovieStorageUseCase: EraseMovieStorageUseCase
 
     @Inject
     lateinit var putLoadingEveryTimeUseCase: PutIsLoadingEveryTimeUseCase
@@ -47,7 +47,6 @@ class SettingsFragment : BaseFragment<SettingsVM,
         binding.viewModel = viewModel
         setHasOptionsMenu(true)
         configureVM()
-
         return binding.root
     }
 
@@ -82,17 +81,21 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.onCleanDB.observe(this, Observer {
             if (it) {
-                WorkerManager.deleteAllInDB(this) {
-                    movieStorage.movieList.value = listOf()
-                    router.navigateSettingsToStartFragment()
+                WorkerManager.deleteAllInDB(this@SettingsFragment) {
+                    scopeUI.launch {
+                        eraseMovieStorageUseCase.execute(Unit)
+                        router.navigateSettingsToStartFragment()
+                    }
                 }
             }
         })
 
         viewModel.onChangeBoard.observe(this, Observer {
             if (it) {
-                movieStorage.movieList.value = listOf()
-                router.navigateSettingsToStartFragment()
+                scopeUI.launch {
+                    eraseMovieStorageUseCase.execute(Unit)
+                    router.navigateSettingsToStartFragment()
+                }
             }
         })
 

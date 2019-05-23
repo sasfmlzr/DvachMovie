@@ -37,9 +37,9 @@ import dvachmovie.usecase.real.ReportUseCase
 import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
 import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
+import dvachmovie.usecase.utils.ShuffleMoviesUseCase
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
-import dvachmovie.utils.MovieUtils
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
 import kotlinx.coroutines.Job
@@ -68,7 +68,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     lateinit var reportUseCase: ReportUseCase
 
     @Inject
-    lateinit var movieUtils: MovieUtils
+    lateinit var shuffleMoviesUseCase: ShuffleMoviesUseCase
 
     @Inject
     lateinit var markCurrentMovieAsPlayedUseCase: MarkCurrentMovieAsPlayedUseCase
@@ -95,10 +95,12 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         }
 
         if (viewModel.currentPos.value == Pair(0, 0L)) {
-            viewModel.currentPos.value = try {
-                Pair(getIndexPosUseCase.getIndexPosByMovie(viewModel.currentMovie.value), 0)
-            } catch (e: Exception) {
-                Pair(0, 0L)
+            scopeUI.launch {
+                viewModel.currentPos.value = try {
+                    Pair(getIndexPosUseCase.execute(viewModel.currentMovie.value!!), 0)
+                } catch (e: Exception) {
+                    Pair(0, 0L)
+                }
             }
         }
         initAds()
@@ -232,9 +234,11 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     private fun configureButtons() {
         shuffleButton.setOnClickListener {
-            viewModel.movieList.value =
-                    movieUtils.shuffleMovies(viewModel.movieList.value
-                            ?: listOf())
+            scopeUI.launch {
+                viewModel.movieList.value =
+                        shuffleMoviesUseCase.execute(viewModel.movieList.value
+                                ?: listOf())
+            }
         }
 
         downloadButton.setOnClickListener {

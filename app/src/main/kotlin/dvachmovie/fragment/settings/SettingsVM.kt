@@ -14,7 +14,6 @@ import dvachmovie.R
 import dvachmovie.api.model.Boards
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
-import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.settingsStorage.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,15 +22,14 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
-        private val settingsStorage: SettingsStorage,
+        private val scopeProvider: ScopeProvider,
+        private val putBoardUseCase: PutBoardUseCase,
+        private val getBoardUseCase: GetBoardUseCase,
         getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase,
         getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase,
         getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase,
         getIsAllowGestureUseCase: GetIsAllowGestureUseCase,
-        private val getBoardUseCase: GetBoardUseCase,
-        logger: Logger,
-        private val scopeProvider: ScopeProvider
-) : ViewModel() {
+        logger: Logger) : ViewModel() {
 
     companion object {
         private const val TAG = "SettingsVM"
@@ -155,8 +153,8 @@ class SettingsVM @Inject constructor(
                         if (checkedItem != -1) {
                             scopeProvider.uiScope.launch {
                                 withContext(Dispatchers.Default) {
-                                    settingsStorage.putBoard(boardMap.keys.elementAt(checkedItem))
-                                }.await()
+                                    putBoardUseCase.execute(boardMap.keys.elementAt(checkedItem))
+                                }
                                 onChangeBoard.value = true
                             }
                         }

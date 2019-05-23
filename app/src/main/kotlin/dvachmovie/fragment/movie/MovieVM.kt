@@ -15,6 +15,7 @@ import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
 import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class MovieVM @Inject constructor(cookieManager: CookieManager,
@@ -25,8 +26,8 @@ class MovieVM @Inject constructor(cookieManager: CookieManager,
                                   getIsAllowGestureUseCase: GetIsAllowGestureUseCase,
                                   scopeProvider: ScopeProvider) : ViewModel() {
 
-    val movieList = getMovieListUseCase.getMovieList()
-    val currentMovie = getCurrentMovieUseCase.getCurrentMovie()
+    val movieList by lazy { runBlocking { getMovieListUseCase.execute(Unit) } }
+    val currentMovie by lazy { runBlocking { getCurrentMovieUseCase.execute(Unit) } }
 
     val currentPos: MutableLiveData<Pair<Int, Long>> by lazy {
         MutableLiveData<Pair<Int, Long>>(Pair(0, 0L))

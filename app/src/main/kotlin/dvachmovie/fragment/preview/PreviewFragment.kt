@@ -10,6 +10,7 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.moviestorage.GetIndexPosByMovieUseCase
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PreviewFragment : BaseFragment<PreviewVM,
@@ -51,12 +52,14 @@ class PreviewFragment : BaseFragment<PreviewVM,
     }
 
     private fun configureScrollRecyclerView() {
-        viewModel.currentMovie.value?.let {
-            getIndexPosByMovieUseCase.getIndexPosByMovie(it).let { pos ->
-                if (pos < SMOOTH_POSITION) {
-                    binding.moviesList.smoothScrollToPosition(pos)
-                } else {
-                    binding.moviesList.scrollToPosition(pos)
+        scopeUI.launch {
+            viewModel.currentMovie.value?.let {
+                getIndexPosByMovieUseCase.execute(it).let { pos ->
+                    if (pos < SMOOTH_POSITION) {
+                        binding.moviesList.smoothScrollToPosition(pos)
+                    } else {
+                        binding.moviesList.scrollToPosition(pos)
+                    }
                 }
             }
         }

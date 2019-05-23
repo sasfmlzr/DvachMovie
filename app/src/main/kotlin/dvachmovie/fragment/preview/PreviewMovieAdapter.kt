@@ -11,17 +11,20 @@ import dvachmovie.R
 import dvachmovie.api.Cookie
 import dvachmovie.api.CookieManager
 import dvachmovie.architecture.Navigator
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.Movie
-import dvachmovie.storage.local.MovieStorage
+import dvachmovie.usecase.SetCurrentMovieStorageUseCase
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class PreviewMovieAdapter @Inject constructor(private val movieStorage: MovieStorage,
-                                              private val cookieManager: CookieManager,
-                                              private val logger: Logger) :
-        ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>
-        (PreviewMovieDiffCallback()) {
+class PreviewMovieAdapter @Inject constructor(
+        private val setCurrentMovieStorageUseCase: SetCurrentMovieStorageUseCase,
+        private val scopeProvider: ScopeProvider,
+        private val cookieManager: CookieManager,
+        private val logger: Logger) :
+        ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>(PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
                 DataBindingUtil.inflate(
@@ -42,8 +45,10 @@ class PreviewMovieAdapter @Inject constructor(private val movieStorage: MovieSto
 
     private fun createOnClickListener(movie: Movie): View.OnClickListener {
         return View.OnClickListener {
-            movieStorage.currentMovie.value = movie
-            Navigator(it.findNavController(), logger).navigatePreviewToMovieFragment()
+            scopeProvider.uiScope.launch {
+                setCurrentMovieStorageUseCase.execute(movie)
+                Navigator(it.findNavController(), logger).navigatePreviewToMovieFragment()
+            }
         }
     }
 
