@@ -103,7 +103,6 @@ class StartFragment : BaseFragment<StartVM,
                         router.navigateStartToMovieFragment()
                     }
                 }
-
             })
         }
     }

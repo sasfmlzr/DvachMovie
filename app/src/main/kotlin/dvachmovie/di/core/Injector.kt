@@ -1,6 +1,7 @@
 package dvachmovie.di.core
 
 import dvachmovie.BuildConfig
+import dvachmovie.di.RoomModule
 
 object Injector {
 

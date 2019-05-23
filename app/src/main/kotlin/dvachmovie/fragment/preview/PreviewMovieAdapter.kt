@@ -14,7 +14,6 @@ import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.Movie
-import dvachmovie.db.data.MovieEntity
 import dvachmovie.storage.local.MovieStorage
 import javax.inject.Inject
 

@@ -27,11 +27,11 @@ import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
+import dvachmovie.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
-import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.usecase.real.ReportUseCase
 import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
@@ -197,7 +197,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     private val playerListener by lazy {
         object : Player.EventListener {
             override fun onPlayerError(error: ExoPlaybackException?) {
-                movieObserver.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+                movieObserver.markCurrentMovieAsPlayed(playerView.player.currentPeriodIndex)
 
                 MovieDBCache.movieList = listOf()
                 viewModel.movieList.value = listOf()
@@ -210,7 +210,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 if (playerView != null) {
                     currentIndex = playerView.player.currentPeriodIndex
                 }
-                movieObserver.markCurrentMovieAsPlayed(true, currentIndex)
+                movieObserver.markCurrentMovieAsPlayed(currentIndex)
                 if (containsAds) {
                     showAds()
                 }
@@ -296,7 +296,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        movieObserver.markCurrentMovieAsPlayed(true, playerView.player.currentPeriodIndex)
+        movieObserver.markCurrentMovieAsPlayed(playerView.player.currentPeriodIndex)
         super.onStop()
         releasePlayer()
     }

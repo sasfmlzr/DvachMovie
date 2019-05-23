@@ -5,7 +5,7 @@ import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
-import dvachmovie.repository.db.MovieDBRepository
+import dvachmovie.repository.MovieDBRepository
 import dvachmovie.storage.local.MovieDBCache
 import javax.inject.Inject
 
@@ -21,5 +21,4 @@ class InitDBWorker(@NonNull context: Context,
     override fun execute() {
         movieDBRepository.insertAll(MovieDBCache.movieList)
     }
-
 }

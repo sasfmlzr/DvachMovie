@@ -1,7 +1,6 @@
 package dvachmovie.activity.movie
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import dvachmovie.R
@@ -10,8 +9,6 @@ import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
-import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.worker.WorkerManager
 import javax.inject.Inject
 
 class MovieActivity : BaseActivity<MovieActivityVM,

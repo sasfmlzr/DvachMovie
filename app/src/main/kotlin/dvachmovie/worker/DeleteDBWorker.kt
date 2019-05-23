@@ -5,7 +5,7 @@ import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
-import dvachmovie.repository.db.MovieDBRepository
+import dvachmovie.repository.MovieDBRepository
 import javax.inject.Inject
 
 class DeleteDBWorker(@NonNull context: Context,
