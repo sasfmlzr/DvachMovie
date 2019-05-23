@@ -9,7 +9,6 @@ class MarkCurrentMovieAsPlayedUseCase @Inject constructor(
 ) : UseCase<Int, Unit>() {
 
     override suspend fun execute(input: Int) {
-
         movieStorage.currentMovie.value =
                 movieStorage.movieList.value?.getOrNull(input).apply {
                     this?.isPlayed = true
