@@ -18,124 +18,156 @@
         android:layout_height="match_parent"
         tools:context=".fragment.movie.MovieFragment">
 
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/playerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:cookie="@{viewModel.cookie}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:movie="@{viewModel.uriMovies}"
+            app:movie_position="@{viewModel.currentPos}">
+
+        </com.google.android.exoplayer2.ui.PlayerView>
+
         <ImageButton
             android:id="@+id/shuffleButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
             android:alpha="1"
             android:background="@null"
             android:contentDescription="@string/shuffle"
             android:elevation="1dp"
-            android:padding="15dp"
+            android:padding="10dp"
             android:scaleX="1.2"
             android:scaleY="1.2"
             android:src="@drawable/outline_shuffle_24"
             android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/downloadButton"
+            app:layout_constraintTop_toTopOf="@+id/topButtonLayer" />
 
         <ImageButton
             android:id="@+id/downloadButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:alpha="1"
             android:background="@null"
             android:contentDescription="@string/download"
             android:elevation="1dp"
-            android:padding="15dp"
+            android:padding="10dp"
             android:scaleX="1.2"
             android:scaleY="1.2"
             android:src="@drawable/outline_cloud_download_24"
             android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toStartOf="@+id/shuffleButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/settingsButton"
             app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
         <ImageButton
             android:id="@+id/settingsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:alpha="1"
             android:background="@null"
             android:contentDescription="@string/settings_button"
             android:elevation="1dp"
-            android:padding="15dp"
+            android:padding="10dp"
             android:scaleX="1.2"
             android:scaleY="1.2"
             android:src="@drawable/round_settings_24"
             android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toStartOf="@+id/downloadButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/copyURLButton"
             app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
         <ImageButton
             android:id="@+id/copyURLButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:alpha="1"
             android:background="@null"
             android:contentDescription="@string/copy_url_button"
             android:elevation="1dp"
-            android:padding="15dp"
+            android:padding="10dp"
             android:scaleX="1.2"
             android:scaleY="1.2"
             android:src="@drawable/outline_file_copy_24"
             android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constraintEnd_toStartOf="@+id/settingsButton"
-            app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
-
-        <ImageButton
-            android:id="@+id/listVideosButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:alpha="1"
-            android:background="@null"
-            android:contentDescription="@string/list_videos"
-            android:elevation="1dp"
-            android:padding="15dp"
-            android:scaleX="1.2"
-            android:scaleY="1.2"
-            android:src="@drawable/outline_list_24"
-            android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility &amp; viewModel.isListBtnVisible)? View.VISIBLE : View.GONE}"
-            app:barrierAllowsGoneWidgets="false"
-            app:layout_constraintEnd_toStartOf="@+id/copyURLButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/reportButton"
             app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
         <ImageButton
             android:id="@+id/reportButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:alpha="1"
             android:background="@null"
             android:contentDescription="@string/report"
             android:elevation="1dp"
-            android:padding="15dp"
+            android:padding="10dp"
             android:scaleX="1.2"
             android:scaleY="1.2"
             android:src="@drawable/outline_report_problem_24"
             android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility &amp; viewModel.isReportBtnVisible())? View.VISIBLE : View.GONE}"
             app:barrierAllowsGoneWidgets="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shuffleButton" />
+            app:layout_constraintEnd_toStartOf="@+id/copyURLButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/listVideosButton"
+            app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/playerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cookie="@{viewModel.cookie}"
-            app:movie="@{viewModel.uriMovies}"
-            app:movie_position="@{viewModel.currentPos}"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
+        <ImageButton
+            android:id="@+id/listVideosButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:alpha="1"
+            android:background="@null"
+            android:contentDescription="@string/list_videos"
+            android:elevation="1dp"
+            android:padding="10dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/outline_list_24"
+            android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility &amp; viewModel.isListBtnVisible)? View.VISIBLE : View.GONE}"
+            app:barrierAllowsGoneWidgets="false"
+            app:layout_constraintEnd_toStartOf="@+id/reportButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/topButtonLayer"
+            app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
+
+
+        <ImageView
+            android:id="@+id/topButtonLayer"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:adjustViewBounds="false"
+            android:alpha="0.7"
+            android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility &amp; viewModel.isListBtnVisible)? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="@+id/playerView"
+            app:layout_constraintStart_toStartOf="@+id/playerView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:color/black" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
