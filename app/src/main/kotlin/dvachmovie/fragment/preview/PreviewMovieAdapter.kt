@@ -16,7 +16,7 @@ import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.Movie
 import dvachmovie.usecase.SetCurrentMovieStorageUseCase
 import dvachmovie.usecase.real.GetCookieUseCase
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(
@@ -38,7 +38,7 @@ class PreviewMovieAdapter @Inject constructor(
         getItem(position).let { movie ->
             with(holder) {
                 itemView.tag = movie
-                scopeProvider.uiScope.launch {
+                runBlocking {
                     bind(movie, getCookieUseCase.execute(Unit), createOnClickListener(movie))
                 }
             }
@@ -47,7 +47,7 @@ class PreviewMovieAdapter @Inject constructor(
 
     private fun createOnClickListener(movie: Movie): View.OnClickListener {
         return View.OnClickListener {
-            scopeProvider.uiScope.launch {
+            runBlocking {
                 setCurrentMovieStorageUseCase.execute(movie)
                 Navigator(it.findNavController(), logger).navigatePreviewToMovieFragment()
             }
