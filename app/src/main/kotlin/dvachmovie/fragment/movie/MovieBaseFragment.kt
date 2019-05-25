@@ -201,7 +201,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         object : Player.EventListener {
             override fun onPlayerError(error: ExoPlaybackException?) {
                 scopeUI.launch {
-                    markCurrentMovieAsPlayedUseCase.execute(playerView.player.currentPeriodIndex)
+                    if(playerView!=null) {
+                        markCurrentMovieAsPlayedUseCase.execute(playerView.player.currentPeriodIndex)
+                    }
                 }
 
                 MovieDBCache.movieList = listOf()
