@@ -4,6 +4,7 @@ import dvachmovie.api.FileItem
 import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
+import dvachmovie.usecase.base.ForcedStartCallback
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.utils.MovieUtils
 import javax.inject.Inject
@@ -11,7 +12,8 @@ import javax.inject.Inject
 class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                        private val getLinkFilesFromThreadsUseCase:
                                        GetLinkFilesFromThreadsUseCase,
-                                       private val movieUtils: MovieUtils) : UseCase<DvachUseCase.Params, Unit>() {
+                                       private val movieUtils: MovieUtils) : UseCase<DvachUseCase.Params, Unit>(),
+        ForcedStartCallback {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
@@ -19,7 +21,18 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
 
     private var listThreadSize = 0
     private var count = 0
-    private var fileItems = mutableListOf<FileItem>()
+
+    private var isForceStart = false
+
+    private val fileItems = mutableListOf<FileItem>()
+
+    override fun forceStart() {
+        if (fileItems.isNotEmpty()) {
+            isForceStart = true
+        } else {
+            executorResult.onFailure(RuntimeException("Current request is not containing movies"))
+        }
+    }
 
     override suspend fun execute(input: Params) {
         try {
@@ -31,38 +44,39 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
             listThreadSize = useCaseModel.listThreads.size
             counterWebm.updateCountVideos(listThreadSize)
 
+
+
             useCaseModel.listThreads.forEach { num ->
-                executeLinkFilesUseCase(num)
+                if (!isForceStart) {
+                    fileItems.addAll(executeLinkFilesUseCase(num))
+                }
+            }
+
+            val webmItems = movieUtils.filterFileItemOnlyAsWebm(fileItems)
+            val movies = movieUtils.convertFileItemToMovie(webmItems, board)
+            if (movies.isEmpty()) {
+                executorResult.onFailure(RuntimeException("This is a private board"))
+            } else {
+                finally(movies)
             }
         } catch (e: Exception) {
             executorResult.onFailure(e)
         }
     }
 
-    private suspend fun executeLinkFilesUseCase(num: String) {
-        try {
+    private suspend fun executeLinkFilesUseCase(num: String): List<FileItem> {
+        return try {
             val inputModel = GetLinkFilesFromThreadsUseCase.Params(board, num)
             val useCaseLinkFilesModel = getLinkFilesFromThreadsUseCase
                     .execute(inputModel)
-            count++
-            counterWebm.updateCurrentCountVideos(count)
-            fileItems.addAll(useCaseLinkFilesModel.fileItems)
-
-            if (count == listThreadSize) {
-                fileItems = movieUtils.filterFileItemOnlyAsWebm(fileItems) as MutableList<FileItem>
-                if (fileItems.isEmpty()) {
-                    executorResult.onFailure(RuntimeException("This is a private board"))
-                } else {
-                    finally(movieUtils.convertFileItemToMovie(fileItems, board))
-                }
-            }
+            useCaseLinkFilesModel.fileItems
         } catch (e: Exception) {
             count++
-            if (count == listThreadSize && fileItems.isNotEmpty()) {
-                fileItems = movieUtils.filterFileItemOnlyAsWebm(fileItems) as MutableList<FileItem>
-                finally(movieUtils.convertFileItemToMovie(fileItems, board))
-            }
             executorResult.onFailure(e)
+            emptyList()
+        } finally {
+            count++
+            counterWebm.updateCurrentCountVideos(count)
         }
     }
 

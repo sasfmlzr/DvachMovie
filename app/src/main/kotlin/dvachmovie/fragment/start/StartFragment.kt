@@ -87,6 +87,9 @@ class StartFragment : BaseFragment<StartVM,
             progressLoadingSource.progress = 0
             loadNewMovies()
         }
+        buttonStartMovies.setOnClickListener {
+            dvachUseCase.forceStart()
+        }
     }
 
     private fun prepareData() {
