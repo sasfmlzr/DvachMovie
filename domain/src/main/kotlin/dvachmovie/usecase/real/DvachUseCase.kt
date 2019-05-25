@@ -59,6 +59,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         } catch (e: Exception) {
             count++
             if (count == listThreadSize && fileItems.isNotEmpty()) {
+                fileItems = movieUtils.filterFileItemOnlyAsWebm(fileItems) as MutableList<FileItem>
                 finally(movieUtils.convertFileItemToMovie(fileItems, board))
             }
             executorResult.onFailure(e)
