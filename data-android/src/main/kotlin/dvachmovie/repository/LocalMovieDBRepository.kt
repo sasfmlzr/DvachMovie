@@ -7,7 +7,7 @@ import dvachmovie.db.model.MovieEntity
 import javax.inject.Inject
 
 internal class LocalMovieDBRepository @Inject constructor(
-        private var movieDao: MovieDao) : MovieDBRepository {
+        private val movieDao: MovieDao) : MovieDBRepository {
 
     override fun getAll() : LiveData<List<Movie>> = movieDao.getAll()  as LiveData<List<Movie>>
 

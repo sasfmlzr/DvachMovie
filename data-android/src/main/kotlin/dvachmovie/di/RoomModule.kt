@@ -8,8 +8,6 @@ import dagger.Module
 import dagger.Provides
 import dvachmovie.db.MovieDatabase
 import dvachmovie.db.model.MovieDao
-import dvachmovie.repository.LocalMovieDBRepository
-import dvachmovie.repository.MovieDBRepository
 import org.joda.time.LocalDateTime
 import javax.inject.Singleton
 
@@ -46,9 +44,4 @@ class RoomModule(private val application: Application) {
     @Provides
     internal fun providesMovieDao(movieDatabase: MovieDatabase): MovieDao =
             movieDatabase.movieDao()
-
-    @Singleton
-    @Provides
-    internal fun movieRepository(movieDao: MovieDao): MovieDBRepository =
-            LocalMovieDBRepository(movieDao)
 }
