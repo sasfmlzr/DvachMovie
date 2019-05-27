@@ -88,7 +88,10 @@ class StartFragment : BaseFragment<StartVM,
             loadNewMovies()
         }
         buttonStartMovies.setOnClickListener {
-            dvachUseCase.forceStart()
+            scopeIO.launch(Job()) {
+                val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), counterWebm, executorResult)
+                dvachUseCase.forceStart(inputModel)
+            }
         }
     }
 

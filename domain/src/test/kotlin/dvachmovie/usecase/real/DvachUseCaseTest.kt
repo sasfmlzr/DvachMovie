@@ -2,14 +2,18 @@ package dvachmovie.usecase.real
 
 import dvachmovie.TestException
 import dvachmovie.api.FileItem
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.utils.MovieUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.joda.time.LocalDateTime
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
@@ -31,6 +35,9 @@ class DvachUseCaseTest {
     @Mock
     lateinit var movieUtils: MovieUtils
 
+    @Mock
+    lateinit var scopeProvider: ScopeProvider
+
     private val board = "testBoard"
     private val fileOne = FileItem(path = "one.webm", date = "14/05/19 Втр 21:20:37")
     private val fileTwo = FileItem(path = "two.webm", date = "14/05/19 Втр 21:20:37")
@@ -47,7 +54,7 @@ class DvachUseCaseTest {
 
     private val movieEntityOne = object : Movie {
         override val movieUrl: String
-            get() = "testOne"
+            get() = "testOne.webm"
         override val previewUrl: String
             get() = ""
         override val board: String
@@ -68,7 +75,7 @@ class DvachUseCaseTest {
 
     private val movieEntityTwo = object : Movie {
         override val movieUrl: String
-            get() = "testTwo"
+            get() = "testTwo.webm"
         override val previewUrl: String
             get() = ""
         override val board: String
@@ -116,7 +123,17 @@ class DvachUseCaseTest {
         }
 
         override fun onFailure(t: Throwable) {
-            Assert.assertEquals("This is a private board", t.message)
+            Assert.assertEquals("This is a private board or internet problem", t.message)
+        }
+    }
+
+    private var forcedStartExecutorResult = object : ExecutorResult {
+        override fun onSuccess(useCaseModel: UseCaseModel) {
+            Assert.assertEquals(null, useCaseModel)
+        }
+
+        override fun onFailure(t: Throwable) {
+            Assert.assertEquals("Current request is not containing movies", t.message)
         }
     }
 
@@ -124,6 +141,11 @@ class DvachUseCaseTest {
         override fun updateCurrentCountVideos(count: Int) {}
 
         override fun updateCountVideos(count: Int) {}
+    }
+
+    @Before
+    fun `Set up`(){
+        given(scopeProvider.ioScope).willReturn(CoroutineScope(Dispatchers.IO))
     }
 
     @Test
@@ -173,6 +195,8 @@ class DvachUseCaseTest {
 
             given(getLinkFilesFromThreadsUseCase
                     .execute(linkFilesModelOne)).willReturn(linkOneModel)
+            given(movieUtils.filterFileItemOnlyAsWebm(listOf(fileOne)))
+                    .willReturn(listOf(fileOne))
             given(movieUtils.convertFileItemToMovie(listOf(fileOne), board))
                     .willReturn(listOf(movieEntityOne))
             given(getLinkFilesFromThreadsUseCase
@@ -181,6 +205,15 @@ class DvachUseCaseTest {
             val dvachInputModel = DvachUseCase.Params(board, counterWebm,
                     partOfSuccessfulyExecutorResult)
             dvachUseCase.execute(dvachInputModel)
+        }
+    }
+
+    @Test
+    fun `Error emits error when trying force starting before preparing`() {
+        runBlocking {
+            val dvachInputModel = DvachUseCase.Params(board, counterWebm,
+                    forcedStartExecutorResult)
+            dvachUseCase.forceStart(dvachInputModel)
         }
     }
 

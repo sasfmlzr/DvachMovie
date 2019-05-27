@@ -1,19 +1,21 @@
 package dvachmovie.usecase.real
 
 import dvachmovie.api.FileItem
-import dvachmovie.db.data.Movie
-import dvachmovie.usecase.base.CounterWebm
-import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.base.ForcedStartCallback
-import dvachmovie.usecase.base.UseCase
+import dvachmovie.architecture.ScopeProvider
+import dvachmovie.usecase.base.*
 import dvachmovie.utils.MovieUtils
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                        private val getLinkFilesFromThreadsUseCase:
                                        GetLinkFilesFromThreadsUseCase,
-                                       private val movieUtils: MovieUtils) : UseCase<DvachUseCase.Params, Unit>(),
-        ForcedStartCallback {
+                                       private val movieUtils: MovieUtils,
+                                       private val scopeProvider: ScopeProvider) :
+        UseCase<DvachUseCase.Params, Unit>(), ForcedStartCallback {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
@@ -22,46 +24,55 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     private var listThreadSize = 0
     private var count = 0
 
-    private var isForceStart = false
-
     private val fileItems = mutableListOf<FileItem>()
 
-    override fun forceStart() {
+    private lateinit var job: Job
+
+    override fun forceStart(input: UseCaseModel) {
+        input as Params
         if (fileItems.isNotEmpty()) {
-            isForceStart = true
+            job.cancel()
+            returnMovies(executorResult)
         } else {
-            executorResult.onFailure(RuntimeException("Current request is not containing movies"))
+            input.executorResult.onFailure(RuntimeException("Current request is not containing movies"))
         }
     }
 
     override suspend fun execute(input: Params) {
-        try {
-            board = input.board
-            executorResult = input.executorResult
-            counterWebm = input.counterWebm
-            val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
-            val useCaseModel = getThreadUseCase.execute(inputModel)
-            listThreadSize = useCaseModel.listThreads.size
-            counterWebm.updateCountVideos(listThreadSize)
 
+        board = input.board
+        executorResult = input.executorResult
+        counterWebm = input.counterWebm
+        val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
+        job = scopeProvider.ioScope.launch(Job()) {
+            try {
+                val useCaseModel = getThreadUseCase.execute(inputModel)
+                listThreadSize = useCaseModel.listThreads.size
+                counterWebm.updateCountVideos(listThreadSize)
 
+                for (num in useCaseModel.listThreads) {
+                    try {
+                        fileItems.addAll(executeLinkFilesUseCase(num))
+                    } catch (e: Exception) {
+                        if (e is CancellationException) {
+                            break
+                        } else {
+                            executorResult.onFailure(e)
+                        }
+                    }
+                }
 
-            useCaseModel.listThreads.forEach { num ->
-                if (!isForceStart) {
-                    fileItems.addAll(executeLinkFilesUseCase(num))
+                if (isActive) {
+                    returnMovies(executorResult)
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) {
+                } else {
+                    executorResult.onFailure(e)
                 }
             }
-
-            val webmItems = movieUtils.filterFileItemOnlyAsWebm(fileItems)
-            val movies = movieUtils.convertFileItemToMovie(webmItems, board)
-            if (movies.isEmpty()) {
-                executorResult.onFailure(RuntimeException("This is a private board"))
-            } else {
-                finally(movies)
-            }
-        } catch (e: Exception) {
-            executorResult.onFailure(e)
         }
+        job.join()
     }
 
     private suspend fun executeLinkFilesUseCase(num: String): List<FileItem> {
@@ -71,20 +82,24 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                     .execute(inputModel)
             useCaseLinkFilesModel.fileItems
         } catch (e: Exception) {
-            count++
-            executorResult.onFailure(e)
-            emptyList()
+            throw e
         } finally {
             count++
             counterWebm.updateCurrentCountVideos(count)
         }
     }
 
-    private fun finally(listMovies: List<Movie>) {
-        executorResult.onSuccess(DvachModel(listMovies))
+    private fun returnMovies(executorResult: ExecutorResult) {
+        val webmItems = movieUtils.filterFileItemOnlyAsWebm(fileItems)
+        val movies = movieUtils.convertFileItemToMovie(webmItems, board)
+        if (movies.isEmpty()) {
+            executorResult.onFailure(RuntimeException("This is a private board or internet problem"))
+        } else {
+            executorResult.onSuccess(DvachModel(movies))
+        }
     }
 
     data class Params(val board: String,
                       val counterWebm: CounterWebm,
-                      val executorResult: ExecutorResult)
+                      val executorResult: ExecutorResult) : UseCaseModel
 }
