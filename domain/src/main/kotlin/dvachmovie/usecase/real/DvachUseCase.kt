@@ -2,11 +2,14 @@ package dvachmovie.usecase.real
 
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
-import dvachmovie.usecase.base.*
+import dvachmovie.usecase.base.CounterWebm
+import dvachmovie.usecase.base.ExecutorResult
+import dvachmovie.usecase.base.UseCase
+import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,7 +18,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                                        GetLinkFilesFromThreadsUseCase,
                                        private val movieUtils: MovieUtils,
                                        private val scopeProvider: ScopeProvider) :
-        UseCase<DvachUseCase.Params, Unit>(), ForcedStartCallback {
+        UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
@@ -28,20 +31,20 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
 
     private lateinit var job: Job
 
-    override fun forceStart(input: UseCaseModel) {
-        input as Params
+    fun forceStart() {
         if (fileItems.isNotEmpty()) {
             job.cancel()
-            returnMovies(executorResult)
+            //delay(300)
+            returnMovies()
         } else {
-            input.executorResult.onFailure(RuntimeException("Current request is not containing movies"))
+            executorResult.onFailure(RuntimeException("Current request is not containing movies"))
         }
     }
 
     override suspend fun execute(input: Params) {
 
         board = input.board
-        executorResult = input.executorResult
+        executorResult = input.executorResult!!
         counterWebm = input.counterWebm
         val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
         job = scopeProvider.ioScope.launch(Job()) {
@@ -56,20 +59,18 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break
+
                         } else {
                             executorResult.onFailure(e)
                         }
                     }
                 }
 
-                if (isActive) {
-                    returnMovies(executorResult)
+                if (job.isActive) {
+                    returnMovies()
                 }
             } catch (e: Exception) {
-                if (e is CancellationException) {
-                } else {
-                    executorResult.onFailure(e)
-                }
+                executorResult.onFailure(e)
             }
         }
         job.join()
@@ -89,17 +90,22 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         }
     }
 
-    private fun returnMovies(executorResult: ExecutorResult) {
-        val webmItems = movieUtils.filterFileItemOnlyAsWebm(fileItems)
-        val movies = movieUtils.convertFileItemToMovie(webmItems, board)
-        if (movies.isEmpty()) {
-            executorResult.onFailure(RuntimeException("This is a private board or internet problem"))
-        } else {
-            executorResult.onSuccess(DvachModel(movies))
+    private fun returnMovies() {
+        try {
+            val webmItems = movieUtils.filterFileItemOnlyAsWebm(fileItems)
+            val movies = movieUtils.convertFileItemToMovie(webmItems, board)
+            if (movies.isEmpty()) {
+                executorResult.onFailure(RuntimeException("This is a private board or internet problem"))
+            } else {
+                executorResult.onSuccess(DvachModel(movies))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            executorResult.onFailure(e)
         }
     }
 
     data class Params(val board: String,
                       val counterWebm: CounterWebm,
-                      val executorResult: ExecutorResult) : UseCaseModel
+                      val executorResult: ExecutorResult? = null) : UseCaseModel
 }

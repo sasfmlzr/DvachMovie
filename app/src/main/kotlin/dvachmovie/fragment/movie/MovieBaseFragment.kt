@@ -27,12 +27,12 @@ import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
-import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.usecase.MarkCurrentMovieAsPlayedUseCase
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.usecase.real.ReportUseCase
 import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
@@ -48,6 +48,11 @@ import javax.inject.Inject
 
 abstract class MovieBaseFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
+
+    override fun render(useCaseModel: UseCaseModel) {
+
+        print("")
+    }
 
     @Inject
     lateinit var movieObserver: MovieObserver
@@ -201,7 +206,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         object : Player.EventListener {
             override fun onPlayerError(error: ExoPlaybackException?) {
                 scopeUI.launch {
-                    if(playerView!=null) {
+                    if (playerView != null) {
                         markCurrentMovieAsPlayedUseCase.execute(playerView.player.currentPeriodIndex)
                     }
                 }

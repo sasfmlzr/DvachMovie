@@ -11,11 +11,12 @@ import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.storage.local.MovieDBCache
+import dvachmovie.usecase.DvachPipe
 import dvachmovie.usecase.base.CounterWebm
-import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.DvachModel
 import dvachmovie.usecase.real.DvachUseCase
+import dvachmovie.usecase.real.ErrorModel
 import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
 import dvachmovie.usecase.settingsStorage.PutBoardUseCase
@@ -53,9 +54,31 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var putBoardUseCase: PutBoardUseCase
 
+    @Inject
+    lateinit var dvachPipe: DvachPipe
+
     override fun getLayoutId() = R.layout.fragment_start
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
+
+    override fun render(useCaseModel: UseCaseModel) {
+        when (useCaseModel) {
+
+            is DvachModel -> {
+                scopeProvider.uiScope.launch(Job()) {
+                    MovieDBCache.movieList = useCaseModel.movies
+                    WorkerManager.initDB()
+
+                    router.navigateStartToMovieFragment()
+                }
+            }
+
+            is ErrorModel -> {
+                extensions.showMessage(useCaseModel.throwable.message?:"wtf")
+                viewModel.viewRetryBtn.postValue(true)
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -89,10 +112,10 @@ class StartFragment : BaseFragment<StartVM,
         }
         buttonStartMovies.setOnClickListener {
             scopeIO.launch(Job()) {
-                val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), counterWebm, executorResult)
-                dvachUseCase.forceStart(inputModel)
+                dvachPipe.forceStart()
             }
         }
+
     }
 
     private fun prepareData() {
@@ -112,8 +135,9 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun loadNewMovies() {
         scopeIO.launch(Job()) {
-            val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), counterWebm, executorResult)
-            dvachUseCase.execute(inputModel)
+            val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), counterWebm)
+            dvachPipe.execute(inputModel)
+            // dvachUseCase.execute(inputModel)
         }
     }
 
@@ -124,24 +148,6 @@ class StartFragment : BaseFragment<StartVM,
 
         override fun updateCountVideos(count: Int) {
             binding.progressLoadingSource.max = count
-        }
-    }
-
-    private val executorResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
-            scopeUI.launch(Job()) {
-                useCaseModel as DvachModel
-
-                MovieDBCache.movieList = useCaseModel.movies
-                WorkerManager.initDB()
-
-                router.navigateStartToMovieFragment()
-            }
-        }
-
-        override fun onFailure(t: Throwable) {
-            extensions.showMessage(t.message!!)
-            viewModel.viewRetryBtn.postValue(true)
         }
     }
 }

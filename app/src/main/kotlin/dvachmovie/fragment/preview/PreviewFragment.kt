@@ -9,12 +9,17 @@ import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
+import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PreviewFragment : BaseFragment<PreviewVM,
         FragmentPreviewMoviesBinding>(PreviewVM::class) {
+
+    override fun render(useCaseModel: UseCaseModel) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     companion object {
         private const val SMOOTH_POSITION = 70

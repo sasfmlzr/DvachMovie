@@ -11,3 +11,5 @@ data class GetLinkFilesFromThreadsModel(val fileItems: List<FileItem>) : UseCase
 data class DvachReportModel(val message: String) : UseCaseModel
 
 data class DvachModel(val movies: List<Movie>) : UseCaseModel
+
+data class ErrorModel(val throwable: Throwable) : UseCaseModel

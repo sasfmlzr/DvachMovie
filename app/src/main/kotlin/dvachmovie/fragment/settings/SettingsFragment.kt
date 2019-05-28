@@ -1,7 +1,12 @@
 package dvachmovie.fragment.settings
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import dvachmovie.R
@@ -10,6 +15,7 @@ import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.usecase.EraseMovieStorageUseCase
+import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.settingsStorage.PutIsAllowGestureUseCase
 import dvachmovie.usecase.settingsStorage.PutIsListBtnVisibleUseCase
 import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase
@@ -21,6 +27,9 @@ import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class) {
+    override fun render(useCaseModel: UseCaseModel) {
+     print("")
+        }
 
     @Inject
     lateinit var eraseMovieStorageUseCase: EraseMovieStorageUseCase

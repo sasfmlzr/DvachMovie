@@ -20,6 +20,12 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
+import dvachmovie.usecase.base.UseCaseModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.broadcast
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -49,6 +55,9 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     protected val scopeUI by lazy { scopeProvider.uiScope }
     protected val scopeIO by lazy { scopeProvider.ioScope }
 
+    @Inject
+    protected lateinit var channel: Channel<UseCaseModel>
+
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +74,19 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
         viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(viewModelClass.java)
+        scopeUI.launch {
+            val flow =
+                    channel.broadcast().asFlow()
+
+            flow.collect {
+                render(it)
+            }
+        }
+
         return view
     }
+
+    protected abstract fun render(useCaseModel: UseCaseModel)
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

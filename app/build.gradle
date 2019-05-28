@@ -101,6 +101,8 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
     implementation project(':data-android')
+    implementation project(':presenter')
+
     // Tests
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
