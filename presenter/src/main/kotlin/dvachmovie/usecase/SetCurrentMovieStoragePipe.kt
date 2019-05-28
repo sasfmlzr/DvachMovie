@@ -8,12 +8,13 @@ import dvachmovie.usecase.real.ErrorModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DvachPipe @Inject constructor(
-        private val channel: Channel<UseCaseModel>,
+        private val broadcastChannel: BroadcastChannel<UseCaseModel>,
         private val dvachUseCase: DvachUseCase,
         private val scopeProvider: ScopeProvider) : Pipe<DvachUseCase.Params>() {
 
@@ -25,22 +26,22 @@ class DvachPipe @Inject constructor(
         val handler = CoroutineExceptionHandler { coroutineContext, throwable ->
             scopeProvider.uiScope.launch {
                 if (throwable !is CancellationException) {
-                    channel.send(ErrorModel(throwable))
+                    broadcastChannel.send(ErrorModel(throwable))
                 }
             }
         }
 
         val executorResult = object : ExecutorResult {
             override fun onSuccess(useCaseModel: UseCaseModel) {
-                scopeProvider.uiScope.launch {
-                    channel.send(useCaseModel)
+                scopeProvider.uiScope.launch(Job()) {
+                    broadcastChannel.send(useCaseModel)
                 }
             }
 
             override fun onFailure(t: Throwable) {
-                scopeProvider.uiScope.launch {
+                scopeProvider.uiScope.launch(Job())  {
                     if (t !is CancellationException) {
-                        channel.send(ErrorModel(t))
+                        broadcastChannel.send(ErrorModel(t))
                     }
                 }
             }

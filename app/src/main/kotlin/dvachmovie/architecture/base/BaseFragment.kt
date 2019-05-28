@@ -21,6 +21,8 @@ import dvachmovie.architecture.logging.Logger
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.usecase.base.UseCaseModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.broadcast
 import kotlinx.coroutines.flow.asFlow
@@ -55,8 +57,13 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     protected val scopeUI by lazy { scopeProvider.uiScope }
     protected val scopeIO by lazy { scopeProvider.ioScope }
 
+    lateinit var channelJob: Job
+
     @Inject
     protected lateinit var channel: Channel<UseCaseModel>
+
+    @Inject
+    protected lateinit var broadcastChannel: BroadcastChannel<UseCaseModel>
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,11 +81,8 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
         viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(viewModelClass.java)
-        scopeUI.launch {
-            val flow =
-                    channel.broadcast().asFlow()
-
-            flow.collect {
+        channelJob = scopeIO.launch(Job()) {
+            broadcastChannel.asFlow().collect {
                 render(it)
             }
         }
@@ -125,5 +129,11 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
         }
 
         (this as? PermissionsCallback)?.onPermissionsGranted(grantedPermissions)
+    }
+
+    @CallSuper
+    override fun onDestroy() {
+        channelJob.cancel()
+        super.onDestroy()
     }
 }

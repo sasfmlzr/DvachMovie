@@ -9,6 +9,7 @@ import dvachmovie.BuildConfig
 import dvachmovie.architecture.logging.AndroidLogger
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.usecase.base.UseCaseModel
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import javax.inject.Singleton
 
@@ -34,4 +35,8 @@ class ApplicationModule(private val application: MainApplication) {
     @Provides
     @Singleton
     internal fun channel() = Channel<UseCaseModel>()
+
+    @Provides
+    @Singleton
+    internal fun broadcastChannel() = BroadcastChannel<UseCaseModel>(1)
 }
