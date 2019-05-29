@@ -127,16 +127,6 @@ class DvachUseCaseTest {
         }
     }
 
-    private var forcedStartExecutorResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
-            Assert.assertEquals(null, useCaseModel)
-        }
-
-        override fun onFailure(t: Throwable) {
-            Assert.assertEquals("Current request is not containing movies", t.message)
-        }
-    }
-
     private var counterWebm = object : CounterWebm {
         override fun updateCurrentCountVideos(count: Int) {}
 
@@ -144,7 +134,7 @@ class DvachUseCaseTest {
     }
 
     @Before
-    fun `Set up`(){
+    fun `Set up`() {
         given(scopeProvider.ioScope).willReturn(CoroutineScope(Dispatchers.IO))
     }
 
@@ -163,10 +153,15 @@ class DvachUseCaseTest {
                     .execute(linkFilesModelTwo)).willReturn(linkTwoModel)
 
             given(movieUtils.filterFileItemOnlyAsWebm(
-                    listOf(fileOne, fileTwo)))
-                    .willReturn(listOf(fileOne, fileTwo))
-            given(movieUtils.convertFileItemToMovie(listOf(fileOne, fileTwo), board))
-                    .willReturn(listOf(movieEntityOne, movieEntityTwo))
+                    listOf(fileOne)))
+                    .willReturn(listOf(fileOne))
+            given(movieUtils.filterFileItemOnlyAsWebm(
+                    listOf(fileTwo)))
+                    .willReturn(listOf(fileTwo))
+            given(movieUtils.convertFileItemToMovie(listOf(fileOne), board))
+                    .willReturn(listOf(movieEntityOne))
+            given(movieUtils.convertFileItemToMovie(listOf(fileTwo), board))
+                    .willReturn(listOf(movieEntityTwo))
 
             val dvachInputModel = DvachUseCase.Params(board, counterWebm, happyExecutorResult)
             dvachUseCase.execute(dvachInputModel)
@@ -205,15 +200,6 @@ class DvachUseCaseTest {
             val dvachInputModel = DvachUseCase.Params(board, counterWebm,
                     partOfSuccessfulyExecutorResult)
             dvachUseCase.execute(dvachInputModel)
-        }
-    }
-
-    @Test
-    fun `Error emits error when trying force starting before preparing`() {
-        runBlocking {
-            val dvachInputModel = DvachUseCase.Params(board, counterWebm,
-                    forcedStartExecutorResult)
-            dvachUseCase.forceStart(dvachInputModel)
         }
     }
 
