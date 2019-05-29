@@ -29,17 +29,19 @@ open class StartVM @Inject constructor() : ViewModel() {
         super.onCleared()
     }
 
-   val broadcastChannel = BroadcastChannel<PresenterModel>(1)
+   lateinit var broadcastChannel: BroadcastChannel<PresenterModel>
 
     init {
-        viewModelScope.launch() {
-            broadcastChannel.asFlow().collect {
-                render(it)
-            }
-        }
+
     }
 
-
+fun subscribe(){
+    viewModelScope.launch() {
+        broadcastChannel.asFlow().collect {
+            render(it)
+        }
+    }
+}
 
     lateinit var routeTask: () -> Unit
     lateinit var errorTask: (throwable: Throwable) -> Unit

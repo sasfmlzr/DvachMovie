@@ -27,8 +27,7 @@ import javax.inject.Inject
 
 class MovieVM @Inject constructor(getCookieUseCase: GetCookieUseCase,
                                   getMovieListUseCase: GetMovieListUseCase,
-                                  getCurrentMovieUseCase: GetCurrentMovieUseCase,
-                                  private val broadcastChannel: BroadcastChannel<PresenterModel>) : ViewModel() {
+                                  getCurrentMovieUseCase: GetCurrentMovieUseCase) : ViewModel() {
 
 
     fun render(model: PresenterModel) {
@@ -55,6 +54,8 @@ class MovieVM @Inject constructor(getCookieUseCase: GetCookieUseCase,
         }
     }
 
+    lateinit var broadcastChannel: BroadcastChannel<PresenterModel>
+
     lateinit var download: (download: String, cookie: String) -> Unit
 
     override fun onCleared() {
@@ -63,6 +64,10 @@ class MovieVM @Inject constructor(getCookieUseCase: GetCookieUseCase,
     }
 
     init {
+
+    }
+
+    fun subscribe(){
         viewModelScope.launch {
             broadcastChannel.asFlow().collect {
                 render(it)

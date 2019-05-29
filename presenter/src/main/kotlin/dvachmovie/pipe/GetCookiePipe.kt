@@ -9,13 +9,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GetCookiePipe @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<PresenterModel>,
+       // private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: GetCookieUseCase,
         private val scopeProvider: ScopeProvider) : Pipe<Unit>() {
 
     override fun execute(input: Unit) {
         scopeProvider.ioScope.launch(Job()) {
-            broadcastChannel.send(CookieModel(useCase.execute(Unit)))
+  //          broadcastChannel.send(CookieModel(useCase.execute(Unit)))
         }
     }
 }

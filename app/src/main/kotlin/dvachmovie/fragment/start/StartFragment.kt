@@ -66,6 +66,10 @@ class StartFragment : BaseFragment<StartVM,
 
         viewModel.routeTask = routeTask
         viewModel.errorTask = errorTask
+
+        viewModel.broadcastChannel = broadcastChannel
+        viewModel.subscribe()
+
         scopeIO.launch(Job()) {
             putCookieUseCase.execute("92ea293bf47456479e25b11ba67bb17a")
         }
@@ -92,7 +96,7 @@ class StartFragment : BaseFragment<StartVM,
             loadNewMovies()
         }
         buttonStartMovies.setOnClickListener {
-                dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
+             //   dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
                 dvachPipe.forceStart()
         }
 
@@ -116,7 +120,7 @@ class StartFragment : BaseFragment<StartVM,
     private fun loadNewMovies() {
         scopeUI.launch {
             val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), counterWebm)
-            dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
+          //  dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
             dvachPipe.execute(inputModel)
         }
     }

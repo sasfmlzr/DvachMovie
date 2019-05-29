@@ -40,9 +40,9 @@ class SettingsVM @Inject constructor(
         getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase,
         logger: Logger,
         private val getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
-        private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
-        private val getIsAllowGesturePipe: GetIsAllowGesturePipe,
-        private val broadcastChannel: BroadcastChannel<PresenterModel>) : ViewModel() {
+        private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe
+     //   , private val getIsAllowGesturePipe: GetIsAllowGesturePipe
+) : ViewModel() {
 
     companion object {
         private const val TAG = "SettingsVM"
@@ -78,9 +78,9 @@ class SettingsVM @Inject constructor(
         viewModelScope.launch {
             prepareLoading.value = getIsLoadingEveryTimeUseCase.execute(Unit)
 
-            broadcastChannel.asFlow().collect {
-                render(it)
-            }
+        //    broadcastChannel.asFlow().collect {
+        //        render(it)
+        //    }
         }
     }
 
@@ -88,7 +88,7 @@ class SettingsVM @Inject constructor(
         viewModelScope.launch {
             getIsReportBtnVisiblePipe.execute(Unit)
             getIsListBtnVisiblePipe.execute(Unit)
-            getIsAllowGesturePipe.execute(Unit)
+         //   getIsAllowGesturePipe.execute(Unit)
         }
     }
 

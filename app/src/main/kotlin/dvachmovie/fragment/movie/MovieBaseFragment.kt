@@ -21,6 +21,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
+import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
@@ -44,6 +45,7 @@ import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -99,6 +101,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
+        viewModel.broadcastChannel = broadcastChannel
+        viewModel.subscribe()
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
                 WorkerManager.insertMovieInDB()

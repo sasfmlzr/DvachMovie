@@ -14,14 +14,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DvachPipe @Inject constructor(
+        val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: DvachUseCase,
         private val scopeProvider: ScopeProvider) : Pipe<DvachUseCase.Params>() {
 
-    private lateinit var broadcastChannel: BroadcastChannel<PresenterModel>
+   /* @Inject
+    lateinit var useCase: DvachUseCase
+    @Inject
+    lateinit var scopeProvider: ScopeProvider*/
 
-    fun setBroadcastChannel(broadcastChannel: BroadcastChannel<PresenterModel>) {
-        this.broadcastChannel = broadcastChannel
-    }
+
+
 
 
     fun forceStart() {

@@ -60,6 +60,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         configureVM()
         getBoardPipe.execute(Unit)
 
+
         return binding.root
     }
 

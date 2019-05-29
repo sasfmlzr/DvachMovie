@@ -9,13 +9,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GetIsReportBtnVisiblePipe @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<PresenterModel>,
+     //   private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: GetIsReportBtnVisibleUseCase,
         private val scopeProvider: ScopeProvider) : Pipe<Unit>() {
 
     override fun execute(input: Unit) {
         scopeProvider.ioScope.launch {
-            broadcastChannel.send(IsReportBtnVisibleModel(useCase.execute(input)))
+    //        broadcastChannel.send(IsReportBtnVisibleModel(useCase.execute(input)))
         }
     }
 }
