@@ -21,22 +21,16 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
-import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
-import dvachmovie.pipe.CookieModel
 import dvachmovie.pipe.GetCookiePipe
-import dvachmovie.pipe.ShuffledMoviesModel
 import dvachmovie.pipe.settingsStorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsStorage.GetIsReportBtnVisiblePipe
-import dvachmovie.pipe.settingsStorage.IsAllowGestureModel
-import dvachmovie.pipe.settingsStorage.IsListBtnVisibleModel
-import dvachmovie.pipe.settingsStorage.IsReportBtnVisibleModel
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.local.MovieDBCache
@@ -56,34 +50,6 @@ import javax.inject.Inject
 abstract class MovieBaseFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
-    override fun render(model: PresenterModel) {
-        when (model) {
-            is CookieModel -> {
-                DirectoryHelper.createDirectory(context!!)
-                activity?.startService(DownloadService.getDownloadService(
-                        context!!,
-                        viewModel.currentMovie.value?.movieUrl ?: "",
-                        "${DirectoryHelper.ROOT_DIRECTORY_NAME}/",
-                        model.cookie.toString()))
-            }
-
-            is ShuffledMoviesModel -> {
-                viewModel.movieList.postValue(model.movies)
-            }
-
-            is IsListBtnVisibleModel -> {
-                viewModel.isListBtnVisible.postValue(model.value)
-            }
-
-            is IsAllowGestureModel -> {
-                viewModel.isGestureEnabled.postValue(model.value)
-            }
-
-            is IsReportBtnVisibleModel -> {
-                viewModel.isReportBtnVisible.postValue(model.value)
-            }
-        }
-    }
 
     @Inject
     lateinit var movieObserver: MovieObserver
@@ -118,6 +84,16 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     override fun getLayoutId() = R.layout.fragment_movie
 
+    var downloadTask = { download: String, cookie: String ->
+        DirectoryHelper.createDirectory(context!!)
+        activity?.startService(DownloadService.getDownloadService(
+                context!!,
+                download,
+                "${DirectoryHelper.ROOT_DIRECTORY_NAME}/",
+                cookie))
+        Unit
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -129,6 +105,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
         })
 
+        viewModel.download = downloadTask
         scopeUI.launch {
             movieObserver.observeDB(viewLifecycleOwner)
         }

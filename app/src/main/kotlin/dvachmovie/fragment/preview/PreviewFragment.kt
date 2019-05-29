@@ -18,10 +18,6 @@ import javax.inject.Inject
 class PreviewFragment : BaseFragment<PreviewVM,
         FragmentPreviewMoviesBinding>(PreviewVM::class) {
 
-    override fun render(model: PresenterModel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     companion object {
         private const val SMOOTH_POSITION = 70
     }

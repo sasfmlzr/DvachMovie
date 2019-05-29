@@ -5,16 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.pipe.DvachModel
 import dvachmovie.pipe.DvachPipe
-import dvachmovie.pipe.ErrorModel
-import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.real.DvachUseCase
 import dvachmovie.usecase.settingsStorage.GetBoardUseCase
@@ -22,7 +18,6 @@ import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
 import dvachmovie.usecase.settingsStorage.PutBoardUseCase
 import dvachmovie.usecase.settingsStorage.PutCookieUseCase
 import dvachmovie.utils.MovieObserver
-import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -58,23 +53,10 @@ class StartFragment : BaseFragment<StartVM,
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
-    override fun render(model: PresenterModel) {
-        when (model) {
-
-            is DvachModel -> {
-                scopeProvider.uiScope.launch(Job()) {
-                    MovieDBCache.movieList = model.movies
-                    WorkerManager.initDB()
-
-                    router.navigateStartToMovieFragment()
-                }
-            }
-
-            is ErrorModel -> {
-                extensions.showMessage(model.throwable.message ?: "Please try again")
-                viewModel.viewRetryBtn.postValue(true)
-            }
-        }
+    val routeTask = {router.navigateStartToMovieFragment()}
+    var errorTask  = {throwable : Throwable->
+        extensions.showMessage(throwable.message ?: "Please try again")
+        Unit
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +64,8 @@ class StartFragment : BaseFragment<StartVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
+        viewModel.routeTask = routeTask
+        viewModel.errorTask = errorTask
         scopeIO.launch(Job()) {
             putCookieUseCase.execute("92ea293bf47456479e25b11ba67bb17a")
         }
@@ -108,9 +92,8 @@ class StartFragment : BaseFragment<StartVM,
             loadNewMovies()
         }
         buttonStartMovies.setOnClickListener {
-            scopeIO.launch(Job()) {
+                dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
                 dvachPipe.forceStart()
-            }
         }
 
     }
@@ -131,8 +114,9 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     private fun loadNewMovies() {
-        scopeIO.launch(Job()) {
+        scopeUI.launch {
             val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), counterWebm)
+            dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
             dvachPipe.execute(inputModel)
         }
     }

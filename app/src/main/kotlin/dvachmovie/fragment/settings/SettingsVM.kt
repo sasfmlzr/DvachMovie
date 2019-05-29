@@ -9,60 +9,99 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dvachmovie.BuildConfig
+import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.api.Boards
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
-import dvachmovie.usecase.settingsStorage.*
+import dvachmovie.pipe.settingsStorage.BoardModel
+import dvachmovie.pipe.settingsStorage.GetIsAllowGesturePipe
+import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
+import dvachmovie.pipe.settingsStorage.GetIsReportBtnVisiblePipe
+import dvachmovie.pipe.settingsStorage.IsAllowGestureModel
+import dvachmovie.pipe.settingsStorage.IsListBtnVisibleModel
+import dvachmovie.pipe.settingsStorage.IsReportBtnVisibleModel
+import dvachmovie.pipe.settingsStorage.PutBoardPipe
+import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
         private val scopeProvider: ScopeProvider,
-        private val putBoardUseCase: PutBoardUseCase,
-        private val getBoardUseCase: GetBoardUseCase,
+        private val putBoardPipe: PutBoardPipe,
         getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase,
-        getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase,
-        getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase,
-        getIsAllowGestureUseCase: GetIsAllowGestureUseCase,
-        logger: Logger) : ViewModel() {
+        logger: Logger,
+        private val getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
+        private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
+        private val getIsAllowGesturePipe: GetIsAllowGesturePipe,
+        private val broadcastChannel: BroadcastChannel<PresenterModel>) : ViewModel() {
 
     companion object {
         private const val TAG = "SettingsVM"
     }
 
-    val prepareLoading: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+
+    override fun onCleared() {
+        viewModelScope.cancel()
+        super.onCleared()
     }
 
-    val isReportBtnVisible: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(runBlocking { getIsReportBtnVisibleUseCase.execute(Unit) })
-    }
-
-    val isListBtnVisible: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(runBlocking { getIsListBtnVisibleUseCase.execute(Unit) })
-    }
-
-    init {
-        scopeProvider.uiScope.launch {
-            prepareLoading.value = getIsLoadingEveryTimeUseCase.execute(Unit)
+    protected fun render(model: PresenterModel) {
+        when (model) {
+            is BoardModel -> board = model.board
+            is IsReportBtnVisibleModel -> isReportBtnVisible.postValue(model.value)
+            is IsListBtnVisibleModel -> isListBtnVisible.postValue(model.value)
+            is IsAllowGestureModel -> isGestureEnabled.postValue(model.value)
         }
     }
+
+    val prepareLoading =
+            MutableLiveData<Boolean>()
+
+
+    val isReportBtnVisible =
+            MutableLiveData<Boolean>()
+
+
+    val isListBtnVisible = MutableLiveData<Boolean>()
+
+    /** onPrepareLoadingClicked unused in the future*/
+    init {
+        viewModelScope.launch {
+            prepareLoading.value = getIsLoadingEveryTimeUseCase.execute(Unit)
+
+            broadcastChannel.asFlow().collect {
+                render(it)
+            }
+        }
+    }
+
+    fun addField() {
+        viewModelScope.launch {
+            getIsReportBtnVisiblePipe.execute(Unit)
+            getIsListBtnVisiblePipe.execute(Unit)
+            getIsAllowGesturePipe.execute(Unit)
+        }
+    }
+
+    val onPrepareLoadingClicked =
+            CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                prepareLoading.value = isChecked
+            }
 
     val onCleanDB = MutableLiveData<Boolean>(false)
 
     val onChangeBoard = MutableLiveData<Boolean>(false)
 
     val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
-
-    val onPrepareLoadingClicked =
-            CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                prepareLoading.value = isChecked
-            }
 
     val onReportSwitchClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -75,7 +114,7 @@ class SettingsVM @Inject constructor(
             }
 
     val isGestureEnabled: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(runBlocking { getIsAllowGestureUseCase.execute(Unit) })
+        MutableLiveData<Boolean>()
     }
 
     val onGestureLoadingClicked =
@@ -138,9 +177,11 @@ class SettingsVM @Inject constructor(
                 startActivity(it.context, intent, null)
             }
 
+    var board = ""
+
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         scopeProvider.uiScope.launch {
-            var checkedItem = boardMap.keys.indexOf(getBoardUseCase.execute(Unit))
+            var checkedItem = boardMap.keys.indexOf(board)
             AlertDialog.Builder(context, R.style.AlertDialogStyle)
                     .setTitle("Set board")
                     .setSingleChoiceItems(
@@ -153,7 +194,7 @@ class SettingsVM @Inject constructor(
                         if (checkedItem != -1) {
                             scopeProvider.uiScope.launch {
                                 withContext(Dispatchers.Default) {
-                                    putBoardUseCase.execute(boardMap.keys.elementAt(checkedItem))
+                                    putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
                                 }
                                 onChangeBoard.value = true
                             }

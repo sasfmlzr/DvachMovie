@@ -14,11 +14,6 @@ import dvachmovie.di.core.FragmentComponent
 class BackFragment : BaseFragment<BackVM,
         FragmentBackBinding>(BackVM::class) {
 
-    override fun render(model: PresenterModel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-
     override fun getLayoutId() = R.layout.fragment_back
 
     override fun inject(component: FragmentComponent) = component.inject(this)

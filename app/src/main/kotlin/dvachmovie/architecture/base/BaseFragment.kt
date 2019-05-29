@@ -21,11 +21,7 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -43,6 +39,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     @Inject
     lateinit var scopeProvider: ScopeProvider
 
+
     protected abstract fun inject(component: FragmentComponent)
 
     protected abstract fun getLayoutId(): Int
@@ -55,8 +52,6 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     protected val scopeUI by lazy { scopeProvider.uiScope }
     protected val scopeIO by lazy { scopeProvider.ioScope }
 
-    lateinit var channelJob: Job
-
     @Inject
     protected lateinit var broadcastChannel: BroadcastChannel<PresenterModel>
 
@@ -64,6 +59,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inject(Injector.viewComponent())
+        lifecycle.addObserver(MyServer(logger))
     }
 
     @CallSuper
@@ -76,16 +72,9 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
         viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(viewModelClass.java)
-        channelJob = scopeIO.launch(Job()) {
-            broadcastChannel.asFlow().collect {
-                render(it)
-            }
-        }
 
         return view
     }
-
-    protected abstract fun render(model: PresenterModel)
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -124,13 +113,5 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
         }
 
         (this as? PermissionsCallback)?.onPermissionsGranted(grantedPermissions)
-    }
-
-    @CallSuper
-    override fun onDestroy() {
-        if (::channelJob.isInitialized) {
-            channelJob.cancel()
-        }
-        super.onDestroy()
     }
 }

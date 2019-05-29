@@ -6,21 +6,69 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import dvachmovie.architecture.ScopeProvider
+import androidx.lifecycle.viewModelScope
+import dvachmovie.PresenterModel
 import dvachmovie.db.data.Movie
+import dvachmovie.pipe.CookieModel
+import dvachmovie.pipe.ShuffledMoviesModel
+import dvachmovie.pipe.settingsStorage.IsAllowGestureModel
+import dvachmovie.pipe.settingsStorage.IsListBtnVisibleModel
+import dvachmovie.pipe.settingsStorage.IsReportBtnVisibleModel
 import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
 import dvachmovie.usecase.moviestorage.GetMovieListUseCase
 import dvachmovie.usecase.real.GetCookieUseCase
-import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
-import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
-import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class MovieVM @Inject constructor(getCookieUseCase: GetCookieUseCase,
                                   getMovieListUseCase: GetMovieListUseCase,
-                                  getCurrentMovieUseCase: GetCurrentMovieUseCase) : ViewModel() {
+                                  getCurrentMovieUseCase: GetCurrentMovieUseCase,
+                                  private val broadcastChannel: BroadcastChannel<PresenterModel>) : ViewModel() {
+
+
+    fun render(model: PresenterModel) {
+        when (model) {
+            is CookieModel -> {
+                download(currentMovie.value?.movieUrl ?: "", model.cookie.toString())
+            }
+
+            is ShuffledMoviesModel -> {
+                movieList.postValue(model.movies)
+            }
+
+            is IsListBtnVisibleModel -> {
+                isListBtnVisible.postValue(model.value)
+            }
+
+            is IsAllowGestureModel -> {
+                isGestureEnabled.postValue(model.value)
+            }
+
+            is IsReportBtnVisibleModel -> {
+                isReportBtnVisible.postValue(model.value)
+            }
+        }
+    }
+
+    lateinit var download: (download: String, cookie: String) -> Unit
+
+    override fun onCleared() {
+        viewModelScope.cancel()
+        super.onCleared()
+    }
+
+    init {
+        viewModelScope.launch {
+            broadcastChannel.asFlow().collect {
+                render(it)
+            }
+        }
+    }
 
     val movieList by lazy { runBlocking { getMovieListUseCase.execute(Unit) } }
     val currentMovie by lazy { runBlocking { getCurrentMovieUseCase.execute(Unit) } }
