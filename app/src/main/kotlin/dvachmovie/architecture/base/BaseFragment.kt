@@ -14,13 +14,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import dvachmovie.PresenterModel
 import dvachmovie.architecture.Extensions
 import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.usecase.base.UseCaseModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
@@ -58,7 +58,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     lateinit var channelJob: Job
 
     @Inject
-    protected lateinit var broadcastChannel: BroadcastChannel<UseCaseModel>
+    protected lateinit var broadcastChannel: BroadcastChannel<PresenterModel>
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +85,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
         return view
     }
 
-    protected abstract fun render(useCaseModel: UseCaseModel)
+    protected abstract fun render(model: PresenterModel)
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

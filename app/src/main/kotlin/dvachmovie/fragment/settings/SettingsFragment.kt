@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
@@ -28,7 +29,7 @@ import javax.inject.Inject
 class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class) {
 
-    override fun render(useCaseModel: UseCaseModel) {
+    override fun render(model: PresenterModel) {
         print("")
     }
 

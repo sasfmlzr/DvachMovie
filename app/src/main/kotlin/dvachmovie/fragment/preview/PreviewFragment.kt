@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
@@ -17,7 +18,7 @@ import javax.inject.Inject
 class PreviewFragment : BaseFragment<PreviewVM,
         FragmentPreviewMoviesBinding>(PreviewVM::class) {
 
-    override fun render(useCaseModel: UseCaseModel) {
+    override fun render(model: PresenterModel) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

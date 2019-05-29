@@ -18,7 +18,7 @@ class ReportUseCase @Inject constructor(private val dvachRepository: DvachReposi
                     input.thread,
                     input.post,
                     comment)
-            input.executorResult.onSuccess(DvachReportModel(response ?: ""))
+            input.executorResult.onSuccess(DvachReportUseCaseModel(response ?: ""))
         } catch (e: Exception) {
             input.executorResult.onFailure(e)
         }

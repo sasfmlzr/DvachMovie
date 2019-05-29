@@ -1,0 +1,3 @@
+package dvachmovie
+
+interface PresenterModel

@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dvachmovie.AppConfig
 import dvachmovie.BuildConfig
+import dvachmovie.PresenterModel
 import dvachmovie.architecture.logging.AndroidLogger
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.usecase.base.UseCaseModel
@@ -33,5 +34,5 @@ class ApplicationModule(private val application: MainApplication) {
 
     @Provides
     @Singleton
-    internal fun broadcastChannel() = BroadcastChannel<UseCaseModel>(1)
+    internal fun broadcastChannel() = BroadcastChannel<PresenterModel>(1)
 }

@@ -1,30 +1,32 @@
-package dvachmovie.usecase
+package dvachmovie.pipe
 
+import dvachmovie.PresenterModel
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.DvachUseCase
-import dvachmovie.usecase.real.ErrorModel
+import dvachmovie.usecase.real.DvachUseCaseModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DvachPipe @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<UseCaseModel>,
-        private val dvachUseCase: DvachUseCase,
+        private val broadcastChannel: BroadcastChannel<PresenterModel>,
+        private val useCase: DvachUseCase,
         private val scopeProvider: ScopeProvider) : Pipe<DvachUseCase.Params>() {
 
-    suspend fun forceStart() {
-        dvachUseCase.forceStart()
+    fun forceStart() {
+        scopeProvider.ioScope.launch {
+            useCase.forceStart()
+        }
     }
 
-    override suspend fun execute(input: DvachUseCase.Params) {
+    override fun execute(input: DvachUseCase.Params) {
         val handler = CoroutineExceptionHandler { coroutineContext, throwable ->
-            scopeProvider.uiScope.launch {
+            scopeProvider.ioScope.launch {
                 if (throwable !is CancellationException) {
                     broadcastChannel.send(ErrorModel(throwable))
                 }
@@ -33,13 +35,14 @@ class DvachPipe @Inject constructor(
 
         val executorResult = object : ExecutorResult {
             override fun onSuccess(useCaseModel: UseCaseModel) {
-                scopeProvider.uiScope.launch(Job()) {
-                    broadcastChannel.send(useCaseModel)
+                scopeProvider.ioScope.launch(Job()) {
+                    useCaseModel as DvachUseCaseModel
+                    broadcastChannel.send(DvachModel(useCaseModel.movies))
                 }
             }
 
             override fun onFailure(t: Throwable) {
-                scopeProvider.uiScope.launch(Job())  {
+                scopeProvider.ioScope.launch(Job()) {
                     if (t !is CancellationException) {
                         broadcastChannel.send(ErrorModel(t))
                     }
@@ -48,7 +51,7 @@ class DvachPipe @Inject constructor(
         }
 
         scopeProvider.ioScope.launch(Job() + handler) {
-            dvachUseCase.execute(input.copy(executorResult = executorResult))
+            useCase.execute(input.copy(executorResult = executorResult))
         }
     }
 }

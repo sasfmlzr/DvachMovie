@@ -102,7 +102,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                 if (movies.isEmpty()) {
                     executorResult.onFailure(RuntimeException("This is a private board or internet problem"))
                 } else {
-                    executorResult.onSuccess(DvachModel(movies))
+                    executorResult.onSuccess(DvachUseCaseModel(movies))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

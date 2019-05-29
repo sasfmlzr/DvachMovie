@@ -21,12 +21,15 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
+import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
+import dvachmovie.pipe.CookieModel
+import dvachmovie.pipe.GetCookiePipe
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.usecase.MarkCurrentMovieAsPlayedUseCase
@@ -49,8 +52,17 @@ import javax.inject.Inject
 abstract class MovieBaseFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
-    override fun render(useCaseModel: UseCaseModel) {
-        print("")
+    override fun render(model: PresenterModel) {
+        when (model) {
+            is CookieModel -> {
+                DirectoryHelper.createDirectory(context!!)
+                activity?.startService(DownloadService.getDownloadService(
+                        context!!,
+                        viewModel.currentMovie.value?.movieUrl ?: "",
+                        "${DirectoryHelper.ROOT_DIRECTORY_NAME}/",
+                        model.cookie.toString()))
+            }
+        }
     }
 
     @Inject
@@ -76,6 +88,9 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     @Inject
     lateinit var markCurrentMovieAsPlayedUseCase: MarkCurrentMovieAsPlayedUseCase
+
+    @Inject
+    lateinit var getCookiePipe: GetCookiePipe
 
     private lateinit var ads: InterstitialAd
 
@@ -334,12 +349,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
-        DirectoryHelper.createDirectory(context!!)
+        getCookiePipe.execute(Unit)
         viewModel.currentMovie.value =
                 viewModel.movieList.value?.get(playerView.player.currentWindowIndex)
-        activity?.startService(DownloadService.getDownloadService(
-                context!!,
-                viewModel.currentMovie.value?.movieUrl ?: "",
-                DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
     }
 }

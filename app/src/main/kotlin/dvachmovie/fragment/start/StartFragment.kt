@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
+import dvachmovie.pipe.DvachModel
+import dvachmovie.pipe.DvachPipe
+import dvachmovie.pipe.ErrorModel
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.usecase.DvachPipe
 import dvachmovie.usecase.base.CounterWebm
-import dvachmovie.usecase.base.UseCaseModel
-import dvachmovie.usecase.real.DvachModel
 import dvachmovie.usecase.real.DvachUseCase
-import dvachmovie.usecase.real.ErrorModel
 import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
 import dvachmovie.usecase.settingsStorage.PutBoardUseCase
@@ -58,12 +58,12 @@ class StartFragment : BaseFragment<StartVM,
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
-    override fun render(useCaseModel: UseCaseModel) {
-        when (useCaseModel) {
+    override fun render(model: PresenterModel) {
+        when (model) {
 
             is DvachModel -> {
                 scopeProvider.uiScope.launch(Job()) {
-                    MovieDBCache.movieList = useCaseModel.movies
+                    MovieDBCache.movieList = model.movies
                     WorkerManager.initDB()
 
                     router.navigateStartToMovieFragment()
@@ -71,7 +71,7 @@ class StartFragment : BaseFragment<StartVM,
             }
 
             is ErrorModel -> {
-                extensions.showMessage(useCaseModel.throwable.message ?: "Please try again")
+                extensions.showMessage(model.throwable.message ?: "Please try again")
                 viewModel.viewRetryBtn.postValue(true)
             }
         }
