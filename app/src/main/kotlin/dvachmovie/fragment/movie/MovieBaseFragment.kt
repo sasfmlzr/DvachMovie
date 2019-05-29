@@ -30,6 +30,14 @@ import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.pipe.CookieModel
 import dvachmovie.pipe.GetCookiePipe
+import dvachmovie.pipe.ShuffledMoviesModel
+import dvachmovie.pipe.settingsStorage.GetIsAllowGesturePipe
+import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
+import dvachmovie.pipe.settingsStorage.GetIsReportBtnVisiblePipe
+import dvachmovie.pipe.settingsStorage.IsAllowGestureModel
+import dvachmovie.pipe.settingsStorage.IsListBtnVisibleModel
+import dvachmovie.pipe.settingsStorage.IsReportBtnVisibleModel
+import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.usecase.MarkCurrentMovieAsPlayedUseCase
@@ -37,10 +45,6 @@ import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.usecase.real.ReportUseCase
-import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
-import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
-import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
-import dvachmovie.usecase.utils.ShuffleMoviesUseCase
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
@@ -62,6 +66,22 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                         "${DirectoryHelper.ROOT_DIRECTORY_NAME}/",
                         model.cookie.toString()))
             }
+
+            is ShuffledMoviesModel -> {
+                viewModel.movieList.postValue(model.movies)
+            }
+
+            is IsListBtnVisibleModel -> {
+                viewModel.isListBtnVisible.postValue(model.value)
+            }
+
+            is IsAllowGestureModel -> {
+                viewModel.isGestureEnabled.postValue(model.value)
+            }
+
+            is IsReportBtnVisibleModel -> {
+                viewModel.isReportBtnVisible.postValue(model.value)
+            }
         }
     }
 
@@ -72,22 +92,22 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     lateinit var getIndexPosUseCase: GetIndexPosByMovieUseCase
 
     @Inject
-    lateinit var isAllowGestureUseCase: GetIsAllowGestureUseCase
+    lateinit var isAllowGesturePipe: GetIsAllowGesturePipe
 
     @Inject
-    lateinit var getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase
+    lateinit var getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe
 
     @Inject
-    lateinit var getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase
+    lateinit var getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe
 
     @Inject
     lateinit var reportUseCase: ReportUseCase
 
     @Inject
-    lateinit var shuffleMoviesUseCase: ShuffleMoviesUseCase
+    lateinit var markCurrentMovieAsPlayedUseCase: MarkCurrentMovieAsPlayedUseCase
 
     @Inject
-    lateinit var markCurrentMovieAsPlayedUseCase: MarkCurrentMovieAsPlayedUseCase
+    lateinit var shuffleMoviesPipe: ShuffleMoviesPipe
 
     @Inject
     lateinit var getCookiePipe: GetCookiePipe
@@ -124,6 +144,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         }
         initAds()
 
+        getIsReportBtnVisiblePipe.execute(Unit)
+        getIsListBtnVisiblePipe.execute(Unit)
         return binding.root
     }
 
@@ -153,9 +175,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        scopeUI.launch {
-            viewModel.isGestureEnabled.value = isAllowGestureUseCase.execute(Unit)
-        }
+        isAllowGesturePipe.execute(Unit)
 
         initPlayer(playerView)
         configureButtons()
@@ -255,11 +275,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     private fun configureButtons() {
         shuffleButton.setOnClickListener {
-            scopeUI.launch {
-                viewModel.movieList.value =
-                        shuffleMoviesUseCase.execute(viewModel.movieList.value
-                                ?: listOf())
-            }
+            shuffleMoviesPipe.execute(viewModel.movieList.value ?: listOf())
         }
 
         downloadButton.setOnClickListener {
@@ -305,13 +321,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 }
             }
         }
-
-        scopeUI.launch {
-            viewModel.isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
-
-            viewModel.isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)
-        }
-
     }
 
     override fun onStart() {

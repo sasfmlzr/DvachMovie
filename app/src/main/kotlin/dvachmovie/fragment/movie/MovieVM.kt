@@ -20,11 +20,7 @@ import javax.inject.Inject
 
 class MovieVM @Inject constructor(getCookieUseCase: GetCookieUseCase,
                                   getMovieListUseCase: GetMovieListUseCase,
-                                  getCurrentMovieUseCase: GetCurrentMovieUseCase,
-                                  getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase,
-                                  getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase,
-                                  getIsAllowGestureUseCase: GetIsAllowGestureUseCase,
-                                  scopeProvider: ScopeProvider) : ViewModel() {
+                                  getCurrentMovieUseCase: GetCurrentMovieUseCase) : ViewModel() {
 
     val movieList by lazy { runBlocking { getMovieListUseCase.execute(Unit) } }
     val currentMovie by lazy { runBlocking { getCurrentMovieUseCase.execute(Unit) } }
@@ -41,9 +37,6 @@ class MovieVM @Inject constructor(getCookieUseCase: GetCookieUseCase,
 
     val isPlayerControlVisibility = MutableLiveData<Boolean>(true)
 
-    val isReportBtnVisible = MutableLiveData<Boolean>()
-
-    val isListBtnVisible = MutableLiveData<Boolean>()
 
     private val function = Function<List<Movie>, LiveData<List<Uri>>> { values ->
         val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
@@ -59,13 +52,9 @@ class MovieVM @Inject constructor(getCookieUseCase: GetCookieUseCase,
             Transformations.switchMap(movieList, function)
                     as MutableLiveData<List<Uri>>
 
-    val isGestureEnabled = MutableLiveData<Boolean>()
+    val isReportBtnVisible = MutableLiveData<Boolean>()
 
-    init {
-        scopeProvider.uiScope.launch {
-            isGestureEnabled.value = getIsAllowGestureUseCase.execute(Unit)
-            isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
-            isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)
-        }
-    }
+    val isListBtnVisible = MutableLiveData<Boolean>()
+
+    val isGestureEnabled = MutableLiveData<Boolean>()
 }
