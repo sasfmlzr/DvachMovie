@@ -37,9 +37,6 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     @Inject
-    lateinit var dvachUseCase: DvachUseCase
-
-    @Inject
     lateinit var movieObserver: MovieObserver
 
     @Inject
@@ -74,7 +71,7 @@ class StartFragment : BaseFragment<StartVM,
             }
 
             is ErrorModel -> {
-                extensions.showMessage(useCaseModel.throwable.message?:"wtf")
+                extensions.showMessage(useCaseModel.throwable.message ?: "Please try again")
                 viewModel.viewRetryBtn.postValue(true)
             }
         }
@@ -137,7 +134,6 @@ class StartFragment : BaseFragment<StartVM,
         scopeIO.launch(Job()) {
             val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), counterWebm)
             dvachPipe.execute(inputModel)
-            // dvachUseCase.execute(inputModel)
         }
     }
 

@@ -27,9 +27,10 @@ import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class) {
+
     override fun render(useCaseModel: UseCaseModel) {
-     print("")
-        }
+        print("")
+    }
 
     @Inject
     lateinit var eraseMovieStorageUseCase: EraseMovieStorageUseCase

@@ -2,6 +2,7 @@ package dvachmovie.usecase.real
 
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
+import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
@@ -9,7 +10,6 @@ import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,17 +24,18 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     private lateinit var executorResult: ExecutorResult
     private lateinit var counterWebm: CounterWebm
 
-    private var listThreadSize = 0
     private var count = 0
 
-    private val fileItems = mutableListOf<FileItem>()
+    private val movies = mutableListOf<Movie>()
 
-    private lateinit var job: Job
+    private lateinit var networkJob: Job
+    private var returnJob: Job? = null
 
-    fun forceStart() {
-        if (fileItems.isNotEmpty()) {
-            job.cancel()
-            //delay(300)
+    suspend fun forceStart() {
+        returnJob?.cancel()
+        networkJob.cancel()
+
+        if (movies.isNotEmpty()) {
             returnMovies()
         } else {
             executorResult.onFailure(RuntimeException("Current request is not containing movies"))
@@ -42,12 +43,13 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     }
 
     override suspend fun execute(input: Params) {
-
+        returnJob?.cancel()
+        var listThreadSize: Int
         board = input.board
         executorResult = input.executorResult!!
         counterWebm = input.counterWebm
         val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
-        job = scopeProvider.ioScope.launch(Job()) {
+        networkJob = scopeProvider.ioScope.launch(Job()) {
             try {
                 val useCaseModel = getThreadUseCase.execute(inputModel)
                 listThreadSize = useCaseModel.listThreads.size
@@ -55,7 +57,11 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
 
                 for (num in useCaseModel.listThreads) {
                     try {
-                        fileItems.addAll(executeLinkFilesUseCase(num))
+
+                        val webmItems =
+                                movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
+                        movies.addAll(movieUtils.convertFileItemToMovie(webmItems, board))
+
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break
@@ -66,14 +72,14 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
                     }
                 }
 
-                if (job.isActive) {
+                if (networkJob.isActive) {
                     returnMovies()
                 }
             } catch (e: Exception) {
                 executorResult.onFailure(e)
             }
         }
-        job.join()
+        networkJob.join()
     }
 
     private suspend fun executeLinkFilesUseCase(num: String): List<FileItem> {
@@ -90,19 +96,20 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         }
     }
 
-    private fun returnMovies() {
-        try {
-            val webmItems = movieUtils.filterFileItemOnlyAsWebm(fileItems)
-            val movies = movieUtils.convertFileItemToMovie(webmItems, board)
-            if (movies.isEmpty()) {
-                executorResult.onFailure(RuntimeException("This is a private board or internet problem"))
-            } else {
-                executorResult.onSuccess(DvachModel(movies))
+    private suspend fun returnMovies() {
+        returnJob = scopeProvider.ioScope.launch(Job()) {
+            try {
+                if (movies.isEmpty()) {
+                    executorResult.onFailure(RuntimeException("This is a private board or internet problem"))
+                } else {
+                    executorResult.onSuccess(DvachModel(movies))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                executorResult.onFailure(e)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            executorResult.onFailure(e)
         }
+        returnJob!!.join()
     }
 
     data class Params(val board: String,

@@ -23,8 +23,6 @@ import dvachmovie.di.core.Injector
 import dvachmovie.usecase.base.UseCaseModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.broadcast
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -58,9 +56,6 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     protected val scopeIO by lazy { scopeProvider.ioScope }
 
     lateinit var channelJob: Job
-
-    @Inject
-    protected lateinit var channel: Channel<UseCaseModel>
 
     @Inject
     protected lateinit var broadcastChannel: BroadcastChannel<UseCaseModel>
@@ -133,7 +128,9 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
 
     @CallSuper
     override fun onDestroy() {
-        channelJob.cancel()
+        if (::channelJob.isInitialized) {
+            channelJob.cancel()
+        }
         super.onDestroy()
     }
 }

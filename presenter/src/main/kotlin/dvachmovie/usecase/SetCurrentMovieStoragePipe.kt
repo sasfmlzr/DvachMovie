@@ -18,7 +18,7 @@ class DvachPipe @Inject constructor(
         private val dvachUseCase: DvachUseCase,
         private val scopeProvider: ScopeProvider) : Pipe<DvachUseCase.Params>() {
 
-    fun forceStart() {
+    suspend fun forceStart() {
         dvachUseCase.forceStart()
     }
 

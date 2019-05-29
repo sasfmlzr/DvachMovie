@@ -50,7 +50,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
     override fun render(useCaseModel: UseCaseModel) {
-
         print("")
     }
 
@@ -282,11 +281,13 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
 
             scopeUI.launch {
-                val inputModel = ReportUseCase.Params(viewModel.currentMovie.value?.board!!,
-                        viewModel.currentMovie.value?.thread!!,
-                        viewModel.currentMovie.value?.post!!,
-                        executorResult)
-                reportUseCase.execute(inputModel)
+                viewModel.currentMovie.value?.let { movie ->
+                    val inputModel = ReportUseCase.Params(movie.board,
+                            movie.thread,
+                            movie.post,
+                            executorResult)
+                    reportUseCase.execute(inputModel)
+                }
             }
         }
 
