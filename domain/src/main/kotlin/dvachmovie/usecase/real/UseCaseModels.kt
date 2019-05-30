@@ -11,3 +11,7 @@ data class GetLinkFilesFromThreadsUseCaseModel(val fileItems: List<FileItem>) : 
 data class DvachReportUseCaseModel(val message: String) : UseCaseModel
 
 data class DvachUseCaseModel(val movies: List<Movie>) : UseCaseModel
+
+data class DvachAmountRequestsUseCaseModel(val max: Int) : UseCaseModel
+
+data class DvachCountRequestUseCaseModel(val count: Int) : UseCaseModel

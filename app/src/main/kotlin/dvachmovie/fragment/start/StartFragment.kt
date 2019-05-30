@@ -10,9 +10,6 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.pipe.DvachPipe
-import dvachmovie.usecase.base.CounterWebm
-import dvachmovie.usecase.real.DvachUseCase
 import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
 import dvachmovie.usecase.settingsStorage.PutBoardUseCase
@@ -46,15 +43,12 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var putBoardUseCase: PutBoardUseCase
 
-    @Inject
-    lateinit var dvachPipe: DvachPipe
-
     override fun getLayoutId() = R.layout.fragment_start
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
-    val routeTask = {router.navigateStartToMovieFragment()}
-    var errorTask  = {throwable : Throwable->
+    val routeTask = { router.navigateStartToMovieFragment() }
+    var errorTask = { throwable: Throwable ->
         extensions.showMessage(throwable.message ?: "Please try again")
         Unit
     }
@@ -66,9 +60,6 @@ class StartFragment : BaseFragment<StartVM,
 
         viewModel.routeTask = routeTask
         viewModel.errorTask = errorTask
-
-        viewModel.broadcastChannel = broadcastChannel
-        viewModel.subscribe()
 
         scopeIO.launch(Job()) {
             putCookieUseCase.execute("92ea293bf47456479e25b11ba67bb17a")
@@ -88,16 +79,16 @@ class StartFragment : BaseFragment<StartVM,
             }
             viewModel.viewRetryBtn.value = false
             progressLoadingSource.progress = 0
-            loadNewMovies()
+            //     loadNewMovies()
         }
         buttonRetry.setOnClickListener {
             viewModel.viewRetryBtn.value = false
             progressLoadingSource.progress = 0
-            loadNewMovies()
+            //        loadNewMovies()
         }
         buttonStartMovies.setOnClickListener {
-             //   dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
-                dvachPipe.forceStart()
+            //   dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
+            //             dvachPipe.forceStart()
         }
 
     }
@@ -108,30 +99,12 @@ class StartFragment : BaseFragment<StartVM,
                 scopeUI.launch {
                     if (getIsLoadingEveryTimeUseCase.execute(Unit) ||
                             movies.size < MINIMUM_COUNT_MOVIES) {
-                        loadNewMovies()
+                        //            loadNewMovies()
                     } else {
-                        router.navigateStartToMovieFragment()
+                        //             router.navigateStartToMovieFragment()
                     }
                 }
             })
-        }
-    }
-
-    private fun loadNewMovies() {
-        scopeUI.launch {
-            val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), counterWebm)
-          //  dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
-            dvachPipe.execute(inputModel)
-        }
-    }
-
-    private val counterWebm = object : CounterWebm {
-        override fun updateCurrentCountVideos(count: Int) {
-            binding.progressLoadingSource.progress = count
-        }
-
-        override fun updateCountVideos(count: Int) {
-            binding.progressLoadingSource.max = count
         }
     }
 }

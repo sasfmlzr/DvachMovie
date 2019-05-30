@@ -3,7 +3,6 @@ package dvachmovie.usecase.real
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
-import dvachmovie.usecase.base.CounterWebm
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
@@ -22,7 +21,6 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
-    private lateinit var counterWebm: CounterWebm
 
     private var count = 0
 
@@ -47,13 +45,13 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         var listThreadSize: Int
         board = input.board
         executorResult = input.executorResult!!
-        counterWebm = input.counterWebm
         val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
         networkJob = scopeProvider.ioScope.launch(Job()) {
             try {
                 val useCaseModel = getThreadUseCase.execute(inputModel)
                 listThreadSize = useCaseModel.listThreads.size
-                counterWebm.updateCountVideos(listThreadSize)
+
+                executorResult.onSuccess(DvachAmountRequestsUseCaseModel(listThreadSize))
 
                 for (num in useCaseModel.listThreads) {
                     try {
@@ -92,7 +90,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
             throw e
         } finally {
             count++
-            counterWebm.updateCurrentCountVideos(count)
+            executorResult.onSuccess(DvachCountRequestUseCaseModel(count))
         }
     }
 
@@ -113,6 +111,5 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
     }
 
     data class Params(val board: String,
-                      val counterWebm: CounterWebm,
                       val executorResult: ExecutorResult? = null) : UseCaseModel
 }

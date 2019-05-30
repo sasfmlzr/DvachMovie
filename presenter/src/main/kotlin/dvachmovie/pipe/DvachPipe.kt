@@ -4,8 +4,11 @@ import dvachmovie.PresenterModel
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.DvachAmountRequestsUseCaseModel
+import dvachmovie.usecase.real.DvachCountRequestUseCaseModel
 import dvachmovie.usecase.real.DvachUseCase
 import dvachmovie.usecase.real.DvachUseCaseModel
+import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
@@ -14,18 +17,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DvachPipe @Inject constructor(
-        val broadcastChannel: BroadcastChannel<PresenterModel>,
+        private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: DvachUseCase,
-        private val scopeProvider: ScopeProvider) : Pipe<DvachUseCase.Params>() {
-
-   /* @Inject
-    lateinit var useCase: DvachUseCase
-    @Inject
-    lateinit var scopeProvider: ScopeProvider*/
-
-
-
-
+        private val scopeProvider: ScopeProvider,
+        private val getBoardUseCase: GetBoardUseCase) : Pipe<DvachUseCase.Params>() {
 
     fun forceStart() {
         scopeProvider.ioScope.launch {
@@ -45,8 +40,14 @@ class DvachPipe @Inject constructor(
         val executorResult = object : ExecutorResult {
             override fun onSuccess(useCaseModel: UseCaseModel) {
                 scopeProvider.ioScope.launch(Job()) {
-                    useCaseModel as DvachUseCaseModel
-                    broadcastChannel.send(DvachModel(useCaseModel.movies))
+                    when (useCaseModel) {
+                        is DvachUseCaseModel ->
+                            broadcastChannel.send(DvachModel(useCaseModel.movies))
+                        is DvachCountRequestUseCaseModel ->
+                            broadcastChannel.send(CountCompletedRequestsModel(useCaseModel.count))
+                        is DvachAmountRequestsUseCaseModel ->
+                            broadcastChannel.send(AmountRequestsModel(useCaseModel.max))
+                    }
                 }
             }
 
@@ -60,7 +61,8 @@ class DvachPipe @Inject constructor(
         }
 
         scopeProvider.ioScope.launch(Job() + handler) {
-            useCase.execute(input.copy(executorResult = executorResult))
+            val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), executorResult)
+            useCase.execute(inputModel)
         }
     }
 }
