@@ -9,6 +9,7 @@ import dvachmovie.activity.movie.MovieActivityVM
 import dvachmovie.activity.start.StartActivityVM
 import dvachmovie.architecture.ViewModelFactory
 import dvachmovie.architecture.ViewModelKey
+import dvachmovie.di.base.FragmentScope
 import dvachmovie.fragment.back.BackVM
 import dvachmovie.fragment.movie.MovieVM
 import dvachmovie.fragment.preview.PreviewVM
@@ -16,9 +17,9 @@ import dvachmovie.fragment.settings.SettingsVM
 import dvachmovie.fragment.start.StartVM
 
 @Module
-internal abstract class ViewModelFactoryModule {
-
+internal abstract class FragmentVMFactoryModule {
     @Binds
+    @FragmentScope
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 
     @Binds

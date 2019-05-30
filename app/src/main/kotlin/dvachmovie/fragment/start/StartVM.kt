@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-open class StartVM @Inject constructor() : ViewModel() {
+open class StartVM @Inject constructor(var broadcastChannel: BroadcastChannel<PresenterModel>) : ViewModel() {
     val initText = MutableLiveData<String>("Initialization")
     val viewRetryBtn = MutableLiveData<Boolean>(false)
     val imageId by lazy {
@@ -26,17 +26,17 @@ open class StartVM @Inject constructor() : ViewModel() {
 
     override fun onCleared() {
         viewModelScope.cancel()
+
         super.onCleared()
     }
 
-   lateinit var broadcastChannel: BroadcastChannel<PresenterModel>
 
     init {
 
     }
 
 fun subscribe(){
-    viewModelScope.launch() {
+  val Job =  viewModelScope.launch() {
         broadcastChannel.asFlow().collect {
             render(it)
         }
