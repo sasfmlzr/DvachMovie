@@ -11,13 +11,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ShuffleMoviesPipe @Inject constructor(
-     //   private val broadcastChannel: BroadcastChannel<PresenterModel>,
+        private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: ShuffleMoviesUseCase,
         private val scopeProvider: ScopeProvider) : Pipe<List<Movie>>() {
 
     override fun execute(input: List<Movie>) {
         scopeProvider.ioScope.launch {
-    //        broadcastChannel.send(ShuffledMoviesModel(useCase.execute(input)))
+            broadcastChannel.send(ShuffledMoviesModel(useCase.execute(input)))
         }
     }
 }

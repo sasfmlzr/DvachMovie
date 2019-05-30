@@ -11,6 +11,9 @@ import androidx.lifecycle.viewModelScope
 import dvachmovie.PresenterModel
 import dvachmovie.db.data.Movie
 import dvachmovie.pipe.CookieModel
+import dvachmovie.pipe.ErrorModel
+import dvachmovie.pipe.ReportModel
+import dvachmovie.pipe.ReportPipe
 import dvachmovie.pipe.ShuffledMoviesModel
 import dvachmovie.pipe.settingsStorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
@@ -22,6 +25,7 @@ import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
 import dvachmovie.usecase.moviestorage.GetMovieListUseCase
 import dvachmovie.usecase.real.GetCookieUseCase
+import dvachmovie.usecase.real.ReportUseCase
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
@@ -38,22 +42,17 @@ class MovieVM @Inject constructor(
         getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
         getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
         getIsAllowGesturePipe: GetIsAllowGesturePipe,
-        shuffleMoviesPipe: ShuffleMoviesPipe) : ViewModel() {
-
-
-    override fun onCleared() {
-        viewModelScope.cancel()
-        super.onCleared()
-    }
+        shuffleMoviesPipe: ShuffleMoviesPipe,
+        reportPipe: ReportPipe) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            getIsReportBtnVisiblePipe.execute(Unit)
-            getIsListBtnVisiblePipe.execute(Unit)
-            getIsAllowGesturePipe.execute(Unit)
             broadcastChannel.asFlow().collect {
                 render(it)
             }
+            getIsReportBtnVisiblePipe.execute(Unit)
+            getIsListBtnVisiblePipe.execute(Unit)
+            getIsAllowGesturePipe.execute(Unit)
         }
     }
 
@@ -62,7 +61,7 @@ class MovieVM @Inject constructor(
     lateinit var routeToSettingsTask: () -> Unit
     lateinit var copyURLTask: (movieUrl: String) -> Unit
     lateinit var routeToPreviewTask: () -> Unit
-
+    lateinit var showMessageTask: (message: String) -> Unit
 
     val onBtnDownloadClicked = View.OnClickListener { downloadBtnClicked() }
     val onBtnShuffleClicked = View.OnClickListener {
@@ -74,7 +73,14 @@ class MovieVM @Inject constructor(
         copyURLTask(currentMovie.value?.movieUrl ?: "")
     }
     val onBtnListVideosClicked = View.OnClickListener { routeToPreviewTask() }
-    //val onBtnReportClicked = View.OnClickListener { routeToSettingsTask() }
+
+    val onBtnReportClicked = View.OnClickListener {
+        currentMovie.value?.let {
+            ReportUseCase.Params(it.board, it.thread, it.post)
+        }?.let { model ->
+            reportPipe.execute(model)
+        }
+    }
 
     val movieList by lazy { runBlocking { getMovieListUseCase.execute(Unit) } }
     val currentMovie by lazy { runBlocking { getCurrentMovieUseCase.execute(Unit) } }
@@ -133,6 +139,19 @@ class MovieVM @Inject constructor(
             is IsReportBtnVisibleModel -> {
                 isReportBtnVisible.postValue(model.value)
             }
+
+            is ReportModel -> {
+                showMessageTask("Report submitted!")
+            }
+
+            is ErrorModel -> {
+                showMessageTask(model.throwable.message ?: "Something went wrong. Please try again")
+            }
         }
+    }
+
+    override fun onCleared() {
+        viewModelScope.cancel()
+        super.onCleared()
     }
 }

@@ -18,14 +18,14 @@ class ReportUseCase @Inject constructor(private val dvachRepository: DvachReposi
                     input.thread,
                     input.post,
                     comment)
-            input.executorResult.onSuccess(DvachReportUseCaseModel(response ?: ""))
+            input.executorResult?.onSuccess(DvachReportUseCaseModel(response ?: ""))
         } catch (e: Exception) {
-            input.executorResult.onFailure(e)
+            input.executorResult?.onFailure(e)
         }
     }
 
     data class Params(val board: String,
                       val thread: Long,
                       val post: Long,
-                      val executorResult: ExecutorResult) : UseCaseModel
+                      val executorResult: ExecutorResult? = null) : UseCaseModel
 }

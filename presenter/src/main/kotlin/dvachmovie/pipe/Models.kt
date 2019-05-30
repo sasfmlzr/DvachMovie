@@ -15,3 +15,5 @@ data class ShuffledMoviesModel(val movies: List<Movie>) : PresenterModel
 data class AmountRequestsModel(val max: Int) : PresenterModel
 
 data class CountCompletedRequestsModel(val count: Int) : PresenterModel
+
+data class ReportModel(val message: String) : PresenterModel

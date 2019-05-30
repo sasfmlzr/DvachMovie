@@ -28,14 +28,10 @@ import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.pipe.GetCookiePipe
-import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.usecase.MarkCurrentMovieAsPlayedUseCase
-import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
-import dvachmovie.usecase.real.ReportUseCase
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
@@ -55,9 +51,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     lateinit var getIndexPosUseCase: GetIndexPosByMovieUseCase
 
     @Inject
-    lateinit var reportUseCase: ReportUseCase
-
-    @Inject
     lateinit var markCurrentMovieAsPlayedUseCase: MarkCurrentMovieAsPlayedUseCase
 
     @Inject
@@ -70,7 +63,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     private val routeToSettingsTask = { router.navigateMovieToSettingsFragment() }
     private val downloadBtnClicked = { runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE) }
 
-    private val copyURLTask =   { movieUrl : String->
+    private val copyURLTask = { movieUrl: String ->
         val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
         clipboard.primaryClip = ClipData
@@ -79,6 +72,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     }
     private val routeToPreviewTask = { router.navigateMovieToPreviewFragment() }
 
+    private val showMessageTask = { message: String -> extensions.showMessage(message)!! }
 
     override fun getLayoutId() = R.layout.fragment_movie
 
@@ -102,6 +96,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         viewModel.downloadTask = downloadTask
         viewModel.routeToSettingsTask = routeToSettingsTask
         viewModel.copyURLTask = copyURLTask
+        viewModel.routeToPreviewTask = routeToPreviewTask
+        viewModel.showMessageTask = showMessageTask
 
         scopeUI.launch {
             movieObserver.observeDB(viewLifecycleOwner)
@@ -152,7 +148,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initPlayer(playerView)
-        configureButtons()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -244,31 +239,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         PlayerCache.countPlayed += 1
         if (PlayerCache.countPlayed % 30 == 0) {
             ads.loadAd(AdRequest.Builder().build())
-        }
-    }
-
-    private fun configureButtons() {
-        reportButton.setOnClickListener {
-            val executorResult = object : ExecutorResult {
-                override fun onSuccess(useCaseModel: UseCaseModel) {
-                    extensions.showMessage("Report submitted!")
-                    // extensions.showMessage((useCaseModel as DvachReportModel).message)
-                }
-
-                override fun onFailure(t: Throwable) {
-                    extensions.showMessage("Something went wrong. Please try again")
-                }
-            }
-
-            scopeUI.launch {
-                viewModel.currentMovie.value?.let { movie ->
-                    val inputModel = ReportUseCase.Params(movie.board,
-                            movie.thread,
-                            movie.post,
-                            executorResult)
-                    reportUseCase.execute(inputModel)
-                }
-            }
         }
     }
 
