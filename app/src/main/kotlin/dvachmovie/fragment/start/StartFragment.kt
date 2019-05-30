@@ -10,13 +10,8 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
-import dvachmovie.usecase.settingsStorage.PutBoardUseCase
-import dvachmovie.usecase.settingsStorage.PutCookieUseCase
 import dvachmovie.utils.MovieObserver
-import kotlinx.android.synthetic.main.fragment_start.*
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -31,24 +26,16 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var movieObserver: MovieObserver
 
+    // TODO: delete in after sort movies by date
     @Inject
     lateinit var getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase
-
-    @Inject
-    lateinit var getBoardUseCase: GetBoardUseCase
-
-    @Inject
-    lateinit var putCookieUseCase: PutCookieUseCase
-
-    @Inject
-    lateinit var putBoardUseCase: PutBoardUseCase
 
     override fun getLayoutId() = R.layout.fragment_start
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
-    val routeTask = { router.navigateStartToMovieFragment() }
-    var errorTask = { throwable: Throwable ->
+    private val routeTask = { router.navigateStartToMovieFragment() }
+    private var errorTask = { throwable: Throwable ->
         extensions.showMessage(throwable.message ?: "Please try again")
         Unit
     }
@@ -61,36 +48,10 @@ class StartFragment : BaseFragment<StartVM,
         viewModel.routeTask = routeTask
         viewModel.errorTask = errorTask
 
-        scopeIO.launch(Job()) {
-            putCookieUseCase.execute("92ea293bf47456479e25b11ba67bb17a")
-        }
         viewModel.imageId.value = R.raw.cybermilosgif
         prepareData()
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        buttonChangeDefaultBoard.setOnClickListener {
-            scopeIO.launch(Job()) {
-                putBoardUseCase.execute("b")
-            }
-            viewModel.viewRetryBtn.value = false
-            progressLoadingSource.progress = 0
-            //     loadNewMovies()
-        }
-        buttonRetry.setOnClickListener {
-            viewModel.viewRetryBtn.value = false
-            progressLoadingSource.progress = 0
-            //        loadNewMovies()
-        }
-        buttonStartMovies.setOnClickListener {
-            //   dvachPipe.setBroadcastChannel(viewModel.broadcastChannel)
-            //             dvachPipe.forceStart()
-        }
-
     }
 
     private fun prepareData() {
@@ -99,9 +60,9 @@ class StartFragment : BaseFragment<StartVM,
                 scopeUI.launch {
                     if (getIsLoadingEveryTimeUseCase.execute(Unit) ||
                             movies.size < MINIMUM_COUNT_MOVIES) {
-                        //            loadNewMovies()
+                        viewModel.loadNewMovies()
                     } else {
-                        //             router.navigateStartToMovieFragment()
+                        router.navigateStartToMovieFragment()
                     }
                 }
             })
