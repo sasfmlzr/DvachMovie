@@ -42,6 +42,12 @@ class MovieVM @Inject constructor(
         shuffleMoviesPipe: ShuffleMoviesPipe,
         reportPipe: ReportPipe) : ViewModel() {
 
+    val isReportBtnVisible = MutableLiveData<Boolean>()
+
+    val isListBtnVisible = MutableLiveData<Boolean>()
+
+    val isGestureEnabled = MutableLiveData<Boolean>()
+
     init {
         viewModelScope.launch {
             broadcastChannel.asFlow().collect {
@@ -118,12 +124,6 @@ class MovieVM @Inject constructor(
     val uriMovies: MutableLiveData<List<Uri>> =
             Transformations.switchMap(movieList, function)
                     as MutableLiveData<List<Uri>>
-
-    val isReportBtnVisible = MutableLiveData<Boolean>()
-
-    val isListBtnVisible = MutableLiveData<Boolean>()
-
-    val isGestureEnabled = MutableLiveData<Boolean>()
 
     private fun render(model: PresenterModel) {
         when (model) {

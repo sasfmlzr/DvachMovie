@@ -11,25 +11,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dvachmovie.BuildConfig
-import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.api.Boards
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
-import dvachmovie.pipe.settingsStorage.BoardModel
+import dvachmovie.pipe.settingsStorage.GetBoardPipe
 import dvachmovie.pipe.settingsStorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
+import dvachmovie.pipe.settingsStorage.GetIsLoadingEveryTimePipe
 import dvachmovie.pipe.settingsStorage.GetIsReportBtnVisiblePipe
-import dvachmovie.pipe.settingsStorage.IsAllowGestureModel
-import dvachmovie.pipe.settingsStorage.IsListBtnVisibleModel
-import dvachmovie.pipe.settingsStorage.IsReportBtnVisibleModel
 import dvachmovie.pipe.settingsStorage.PutBoardPipe
-import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -37,59 +30,43 @@ import javax.inject.Inject
 class SettingsVM @Inject constructor(
         private val scopeProvider: ScopeProvider,
         private val putBoardPipe: PutBoardPipe,
-        getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase,
+        private val getIsLoadingEveryTimePipe: GetIsLoadingEveryTimePipe,
         logger: Logger,
         private val getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
-        private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe
-     //   , private val getIsAllowGesturePipe: GetIsAllowGesturePipe
+        private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
+        private val getIsAllowGesturePipe: GetIsAllowGesturePipe,
+        private val getBoardPipe: GetBoardPipe
 ) : ViewModel() {
 
     companion object {
         private const val TAG = "SettingsVM"
     }
 
-
     override fun onCleared() {
         viewModelScope.cancel()
         super.onCleared()
     }
 
-    protected fun render(model: PresenterModel) {
-        when (model) {
-            is BoardModel -> board = model.board
-            is IsReportBtnVisibleModel -> isReportBtnVisible.postValue(model.value)
-            is IsListBtnVisibleModel -> isListBtnVisible.postValue(model.value)
-            is IsAllowGestureModel -> isGestureEnabled.postValue(model.value)
-        }
-    }
+    val prepareLoading = MutableLiveData<Boolean>()
 
-    val prepareLoading =
-            MutableLiveData<Boolean>()
-
-
-    val isReportBtnVisible =
-            MutableLiveData<Boolean>()
-
-
+    var board = ""
+    val isReportBtnVisible = MutableLiveData<Boolean>()
     val isListBtnVisible = MutableLiveData<Boolean>()
+    val isGestureEnabled = MutableLiveData<Boolean>()
 
     /** onPrepareLoadingClicked unused in the future*/
     init {
-        viewModelScope.launch {
-            prepareLoading.value = getIsLoadingEveryTimeUseCase.execute(Unit)
-
-        //    broadcastChannel.asFlow().collect {
-        //        render(it)
-        //    }
-        }
+        addField()
     }
 
     fun addField() {
-        viewModelScope.launch {
-            getIsReportBtnVisiblePipe.execute(Unit)
-            getIsListBtnVisiblePipe.execute(Unit)
-         //   getIsAllowGesturePipe.execute(Unit)
-        }
+        board = getBoardPipe.execute(Unit)
+        prepareLoading.value = getIsLoadingEveryTimePipe.execute(Unit)
+
+        isReportBtnVisible.value = getIsReportBtnVisiblePipe.execute(Unit)
+        isListBtnVisible.value = getIsListBtnVisiblePipe.execute(Unit)
+        isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
+
     }
 
     val onPrepareLoadingClicked =
@@ -112,10 +89,6 @@ class SettingsVM @Inject constructor(
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
                 isListBtnVisible.value = isChecked
             }
-
-    val isGestureEnabled: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
 
     val onGestureLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -176,8 +149,6 @@ class SettingsVM @Inject constructor(
                 intent.data = Uri.parse("market://details?id=com.dvachmovie.android.pro")
                 startActivity(it.context, intent, null)
             }
-
-    var board = ""
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         scopeProvider.uiScope.launch {

@@ -54,7 +54,7 @@ open class StartVM @Inject constructor(
 
     val onButtonChangeDefaultBoardClicked = View.OnClickListener {
         viewModelScope.launch(Job()) {
-            putBoardUseCase.execute("b")
+            putBoardUseCase.executeAsync("b")
             loadNewMovies()
         }
     }
@@ -62,7 +62,7 @@ open class StartVM @Inject constructor(
     init {
         viewModelScope.launch {
             //In the future move
-            putCookieUseCase.execute("92ea293bf47456479e25b11ba67bb17a")
+            putCookieUseCase.executeAsync("92ea293bf47456479e25b11ba67bb17a")
 
             broadcastChannel.asFlow().collect {
                 render(it)
@@ -73,7 +73,9 @@ open class StartVM @Inject constructor(
     fun loadNewMovies() {
         viewRetryBtn.value = false
         progressLoadingMovies.value = 0
-        dvachPipe.execute(Unit)
+        viewModelScope.launch {
+            dvachPipe.execute(Unit)
+        }
     }
 
     private fun render(model: PresenterModel) {

@@ -76,15 +76,21 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
     private fun configureVM() {
         viewModel.prepareLoading.observe(this, Observer {
-            putLoadingEveryTimePipe.execute(it)
+            scopeUI.launch {
+                putLoadingEveryTimePipe.execute(it)
+            }
         })
 
         viewModel.isReportBtnVisible.observe(this, Observer {
-            putReportBtnVisiblePipe.execute(it)
+            scopeUI.launch {
+                putReportBtnVisiblePipe.execute(it)
+            }
         })
 
         viewModel.isListBtnVisible.observe(this, Observer {
-            putListBtnVisiblePipe.execute(it)
+            scopeUI.launch {
+                putListBtnVisiblePipe.execute(it)
+            }
         })
 
         viewModel.onCleanDB.observe(this, Observer {
@@ -108,7 +114,9 @@ class SettingsFragment : BaseFragment<SettingsVM,
         })
 
         viewModel.isGestureEnabled.observe(this, Observer {
-            putIsAllowGesturePipe.execute(it)
+            scopeUI.launch {
+                putIsAllowGesturePipe.execute(it)
+            }
         })
     }
 

@@ -15,7 +15,7 @@ class LocalMovieObserver @Inject constructor(
         private val movieUtils: MovieUtils
 ) : MovieObserver{
     override suspend fun observeDB(lifecycleOwner: LifecycleOwner) {
-        movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard().await())
+        movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, Observer { dbMovies ->
                     val movieList = movieStorage.movieList.value ?: listOf()
                     val diffList = movieUtils.calculateDiff(movieList,
@@ -30,7 +30,7 @@ class LocalMovieObserver @Inject constructor(
     override suspend fun observeDB(lifecycleOwner: LifecycleOwner,
                                    observer: Observer<List<Movie>>) {
         movieDBRepository
-                .getMoviesFromBoard(settingsStorage.getBoard().await())
+                .getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, observer)
     }
 }
