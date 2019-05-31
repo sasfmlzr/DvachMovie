@@ -7,7 +7,7 @@ import javax.inject.Inject
 class EraseMovieStorageUseCase @Inject constructor(
         private val movieStorage: MovieStorage) : UseCase<Unit, Unit>() {
 
-    override suspend fun execute(input: Unit) {
+    override fun execute(input: Unit) {
         movieStorage.currentMovie.value = null
         movieStorage.movieList.value = listOf()
     }

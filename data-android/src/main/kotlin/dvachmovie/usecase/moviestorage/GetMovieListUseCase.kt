@@ -9,6 +9,6 @@ import javax.inject.Inject
 class GetMovieListUseCase @Inject constructor(
         private val movieStorage: MovieStorage) : UseCase<Unit, MutableLiveData<List<Movie>>>() {
 
-    override suspend fun execute(input: Unit): MutableLiveData<List<Movie>> =
+    override fun execute(input: Unit): MutableLiveData<List<Movie>> =
             movieStorage.movieList
 }
