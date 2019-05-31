@@ -20,7 +20,7 @@ class DvachPipe @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: DvachUseCase,
         private val scopeProvider: ScopeProvider,
-        private val getBoardUseCase: GetBoardUseCase) : Pipe<Unit>() {
+        private val getBoardUseCase: GetBoardUseCase) : PipeAsync<Unit>() {
 
     fun forceStart() {
         scopeProvider.ioScope.launch {
@@ -28,7 +28,7 @@ class DvachPipe @Inject constructor(
         }
     }
 
-    override fun execute(input: Unit) {
+    override suspend fun execute(input: Unit) {
         val handler = CoroutineExceptionHandler { _, throwable ->
             scopeProvider.ioScope.launch {
                 if (throwable !is CancellationException) {
@@ -62,7 +62,7 @@ class DvachPipe @Inject constructor(
 
         scopeProvider.ioScope.launch(Job() + handler) {
             val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), executorResult)
-            useCase.execute(inputModel)
+            useCase.executeAsync(inputModel)
         }
     }
 }

@@ -1,18 +1,13 @@
 package dvachmovie.pipe.settingsStorage
 
-import dvachmovie.architecture.ScopeProvider
-import dvachmovie.pipe.Pipe
+import dvachmovie.pipe.PipeAsync
 import dvachmovie.usecase.settingsStorage.PutIsAllowGestureUseCase
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PutIsAllowGesturePipe @Inject constructor(
-        private val useCase: PutIsAllowGestureUseCase,
-        private val scopeProvider: ScopeProvider) : Pipe<Boolean>() {
+        private val useCase: PutIsAllowGestureUseCase) : PipeAsync<Boolean>() {
 
-    override fun execute(input: Boolean) {
-        scopeProvider.ioScope.launch {
-            useCase.execute(input)
-        }
+    override suspend fun execute(input: Boolean) {
+        useCase.executeAsync(input)
     }
 }

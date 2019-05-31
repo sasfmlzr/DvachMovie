@@ -1,18 +1,13 @@
 package dvachmovie.pipe.settingsStorage
 
-import dvachmovie.architecture.ScopeProvider
-import dvachmovie.pipe.Pipe
+import dvachmovie.pipe.PipeAsync
 import dvachmovie.usecase.settingsStorage.PutCookieUseCase
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PutCookiePipe @Inject constructor(
-        private val useCase: PutCookieUseCase,
-        private val scopeProvider: ScopeProvider) : Pipe<String>() {
+        private val useCase: PutCookieUseCase) : PipeAsync<String>() {
 
-    override fun execute(input: String) {
-        scopeProvider.ioScope.launch {
-            useCase.execute(input)
-        }
+    override suspend fun execute(input: String) {
+        useCase.executeAsync(input)
     }
 }

@@ -17,9 +17,9 @@ class ReportPipe @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: ReportUseCase,
         private val scopeProvider: ScopeProvider
-) : Pipe<ReportUseCase.Params>() {
+) : PipeAsync<ReportUseCase.Params>() {
 
-    override fun execute(input: ReportUseCase.Params) {
+    override suspend fun execute(input: ReportUseCase.Params) {
 
         val handler = CoroutineExceptionHandler { _, throwable ->
             scopeProvider.ioScope.launch {
@@ -48,7 +48,7 @@ class ReportPipe @Inject constructor(
 
         scopeProvider.ioScope.launch(Job() + handler) {
             val inputModel = input.copy(executorResult = executorResult)
-            useCase.execute(inputModel)
+            useCase.executeAsync(inputModel)
         }
     }
 }

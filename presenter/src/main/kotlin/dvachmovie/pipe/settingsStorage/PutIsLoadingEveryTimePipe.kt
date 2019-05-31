@@ -1,19 +1,13 @@
 package dvachmovie.pipe.settingsStorage
 
-import dvachmovie.architecture.ScopeProvider
-import dvachmovie.pipe.Pipe
-import dvachmovie.usecase.settingsStorage.PutIsListBtnVisibleUseCase
+import dvachmovie.pipe.PipeAsync
 import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PutIsLoadingEveryTimePipe @Inject constructor(
-        private val useCase: PutIsLoadingEveryTimeUseCase,
-        private val scopeProvider: ScopeProvider) : Pipe<Boolean>() {
+        private val useCase: PutIsLoadingEveryTimeUseCase) : PipeAsync<Boolean>() {
 
-    override fun execute(input: Boolean) {
-        scopeProvider.ioScope.launch {
-            useCase.execute(input)
-        }
+    override suspend fun execute(input: Boolean) {
+        useCase.executeAsync(input)
     }
 }

@@ -18,9 +18,6 @@ import dvachmovie.pipe.ShuffledMoviesModel
 import dvachmovie.pipe.settingsStorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsStorage.GetIsReportBtnVisiblePipe
-import dvachmovie.pipe.settingsStorage.IsAllowGestureModel
-import dvachmovie.pipe.settingsStorage.IsListBtnVisibleModel
-import dvachmovie.pipe.settingsStorage.IsReportBtnVisibleModel
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
 import dvachmovie.usecase.moviestorage.GetMovieListUseCase
@@ -39,21 +36,27 @@ class MovieVM @Inject constructor(
         getCookieUseCase: GetCookieUseCase,
         getMovieListUseCase: GetMovieListUseCase,
         getCurrentMovieUseCase: GetCurrentMovieUseCase,
-        getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
-        getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
-        getIsAllowGesturePipe: GetIsAllowGesturePipe,
+        private val getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
+        private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
+        private val getIsAllowGesturePipe: GetIsAllowGesturePipe,
         shuffleMoviesPipe: ShuffleMoviesPipe,
         reportPipe: ReportPipe) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            getIsReportBtnVisiblePipe.execute(Unit)
-            getIsListBtnVisiblePipe.execute(Unit)
-            getIsAllowGesturePipe.execute(Unit)
             broadcastChannel.asFlow().collect {
                 render(it)
             }
         }
+        refreshVM()
+    }
+
+    fun refreshVM() {
+        isReportBtnVisible.value = getIsReportBtnVisiblePipe.execute(Unit)
+
+        isListBtnVisible.value = getIsListBtnVisiblePipe.execute(Unit)
+
+        isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
     }
 
     lateinit var downloadBtnClicked: () -> Unit
@@ -65,7 +68,9 @@ class MovieVM @Inject constructor(
 
     val onBtnDownloadClicked = View.OnClickListener { downloadBtnClicked() }
     val onBtnShuffleClicked = View.OnClickListener {
-        shuffleMoviesPipe.execute(movieList.value ?: listOf())
+        viewModelScope.launch {
+            shuffleMoviesPipe.execute(movieList.value ?: listOf())
+        }
     }
     val onBtnSettingsClicked = View.OnClickListener { routeToSettingsTask() }
 
@@ -78,7 +83,9 @@ class MovieVM @Inject constructor(
         currentMovie.value?.let {
             ReportUseCase.Params(it.board, it.thread, it.post)
         }?.let { model ->
-            reportPipe.execute(model)
+            viewModelScope.launch {
+                reportPipe.execute(model)
+            }
         }
     }
 
@@ -124,21 +131,7 @@ class MovieVM @Inject constructor(
                 downloadTask(currentMovie.value?.movieUrl ?: "", model.cookie.toString())
             }
 
-            is ShuffledMoviesModel -> {
-                movieList.postValue(model.movies)
-            }
-
-            is IsListBtnVisibleModel -> {
-                isListBtnVisible.postValue(model.value)
-            }
-
-            is IsAllowGestureModel -> {
-                isGestureEnabled.postValue(model.value)
-            }
-
-            is IsReportBtnVisibleModel -> {
-                isReportBtnVisible.postValue(model.value)
-            }
+            is ShuffledMoviesModel -> movieList.postValue(model.movies)
 
             is ReportModel -> {
                 showMessageTask("Report submitted!")

@@ -1,21 +1,12 @@
 package dvachmovie.pipe.settingsStorage
 
-import dvachmovie.PresenterModel
-import dvachmovie.architecture.ScopeProvider
-import dvachmovie.pipe.Pipe
+import dvachmovie.pipe.PipeSync
 import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GetIsListBtnVisiblePipe @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<PresenterModel>,
-        private val useCase: GetIsListBtnVisibleUseCase,
-        private val scopeProvider: ScopeProvider) : Pipe<Unit>() {
+        private val useCase: GetIsListBtnVisibleUseCase) : PipeSync<Unit, Boolean>() {
 
-    override fun execute(input: Unit) {
-        scopeProvider.ioScope.launch {
-            broadcastChannel.send(IsListBtnVisibleModel(useCase.execute(input)))
-        }
-    }
+    override fun execute(input: Unit): Boolean = useCase.execute(input)
+
 }

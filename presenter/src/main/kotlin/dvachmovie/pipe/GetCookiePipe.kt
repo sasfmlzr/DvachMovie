@@ -1,21 +1,12 @@
 package dvachmovie.pipe
 
-import dvachmovie.PresenterModel
-import dvachmovie.architecture.ScopeProvider
+import dvachmovie.api.Cookie
 import dvachmovie.usecase.real.GetCookieUseCase
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GetCookiePipe @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<PresenterModel>,
-        private val useCase: GetCookieUseCase,
-        private val scopeProvider: ScopeProvider) : Pipe<Unit>() {
+        private val useCase: GetCookieUseCase) : PipeSync<Unit, Cookie>() {
 
-    override fun execute(input: Unit) {
-        scopeProvider.ioScope.launch(Job()) {
-            broadcastChannel.send(CookieModel(useCase.execute(Unit)))
-        }
-    }
+    override fun execute(input: Unit): Cookie = useCase.execute(Unit)
+
 }
