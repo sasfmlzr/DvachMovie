@@ -47,12 +47,12 @@ class MovieVM @Inject constructor(
 
     init {
         viewModelScope.launch {
-            broadcastChannel.asFlow().collect {
-                render(it)
-            }
             getIsReportBtnVisiblePipe.execute(Unit)
             getIsListBtnVisiblePipe.execute(Unit)
             getIsAllowGesturePipe.execute(Unit)
+            broadcastChannel.asFlow().collect {
+                render(it)
+            }
         }
     }
 
