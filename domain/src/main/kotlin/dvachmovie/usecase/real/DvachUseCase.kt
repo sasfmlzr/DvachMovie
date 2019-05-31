@@ -40,7 +40,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         }
     }
 
-    override suspend fun execute(input: Params) {
+    override suspend fun executeAsync(input: Params) {
         returnJob?.cancel()
         var listThreadSize: Int
         board = input.board
@@ -48,7 +48,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
         networkJob = scopeProvider.ioScope.launch(Job()) {
             try {
-                val useCaseModel = getThreadUseCase.execute(inputModel)
+                val useCaseModel = getThreadUseCase.executeAsync(inputModel)
                 listThreadSize = useCaseModel.listThreads.size
 
                 executorResult.onSuccess(DvachAmountRequestsUseCaseModel(listThreadSize))
@@ -84,7 +84,7 @@ class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsF
         return try {
             val inputModel = GetLinkFilesFromThreadsUseCase.Params(board, num)
             val useCaseLinkFilesModel = getLinkFilesFromThreadsUseCase
-                    .execute(inputModel)
+                    .executeAsync(inputModel)
             useCaseLinkFilesModel.fileItems
         } catch (e: Exception) {
             throw e

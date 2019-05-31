@@ -13,8 +13,6 @@ class LocalCookieStorage @Inject constructor(
     }
 
     override val cookie : Cookie by lazy {
-        runBlocking {
-            Cookie(header,  settingsStorage.getCookie().await())
-        }
+            Cookie(header,  settingsStorage.getCookie())
     }
 }

@@ -13,7 +13,7 @@ open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepos
         private const val TAG = "DvachUseCase"
     }
 
-    override suspend fun execute(input: Params): GetThreadsFromDvachUseCaseModel =
+    override suspend fun executeAsync(input: Params): GetThreadsFromDvachUseCaseModel =
             try {
                 logger.d(TAG, "connecting to 2.hk...")
                 val numThreads = dvachRepository.getNumThreadsFromCatalog(input.board)

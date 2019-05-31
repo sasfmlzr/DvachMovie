@@ -13,7 +13,7 @@ open class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachR
         private const val TAG = "GetLinkFilesFromThreadsUseCase"
     }
 
-    override suspend fun execute(input: Params): GetLinkFilesFromThreadsUseCaseModel =
+    override suspend fun executeAsync(input: Params): GetLinkFilesFromThreadsUseCaseModel =
             try {
                 val listFiles =
                         dvachRepository.getConcreteThreadByNum(input.board, input.numThread)

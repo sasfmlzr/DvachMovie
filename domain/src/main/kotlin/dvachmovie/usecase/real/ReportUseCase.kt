@@ -11,7 +11,7 @@ class ReportUseCase @Inject constructor(private val dvachRepository: DvachReposi
 
     private val comment = "Adult content"
 
-    override suspend fun execute(input: Params) {
+    override suspend fun executeAsync(input: Params) {
         try {
             val response = dvachRepository.reportPost(
                     input.board,
