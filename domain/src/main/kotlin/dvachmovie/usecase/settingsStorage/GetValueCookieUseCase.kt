@@ -7,6 +7,9 @@ import javax.inject.Inject
 class GetValueCookieUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<Unit, String>() {
 
-    override suspend fun execute(input: Unit): String =
-            settingsStorage.getCookie().await()
+    override suspend fun executeAsync(input: Unit): String =
+            settingsStorage.getCookieAsync().await()
+
+    override fun execute(input: Unit): String =
+            settingsStorage.getCookie()
 }

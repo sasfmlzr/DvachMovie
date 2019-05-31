@@ -7,6 +7,9 @@ import javax.inject.Inject
 class GetBoardUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<Unit, String>() {
 
-    override suspend fun execute(input: Unit): String =
-            settingsStorage.getBoard().await()
+    override suspend fun executeAsync(input: Unit): String =
+            settingsStorage.getBoardAsync().await()
+
+    override fun execute(input: Unit): String =
+            settingsStorage.getBoard()
 }
