@@ -34,8 +34,8 @@ internal class GetLinkFilesFromThreadsUseCaseTest {
     fun `Happy pass`() {
         runBlocking {
             given(dvachRepository.getConcreteThreadByNum("test", "test")).willReturn(listFiles)
-            Assert.assertEquals(GetLinkFilesFromThreadsModel(listFiles),
-                    useCase.execute(model))
+            Assert.assertEquals(GetLinkFilesFromThreadsUseCaseModel(listFiles),
+                    useCase.executeAsync(model))
 
         }
     }
@@ -44,7 +44,7 @@ internal class GetLinkFilesFromThreadsUseCaseTest {
     fun `Error send to callback`() {
         runBlocking {
             given(dvachRepository.getConcreteThreadByNum("test", "test")).willThrow(testException)
-            useCase.execute(model)
+            useCase.executeAsync(model)
         }
     }
 }

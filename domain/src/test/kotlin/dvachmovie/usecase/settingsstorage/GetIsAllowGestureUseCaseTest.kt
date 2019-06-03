@@ -24,17 +24,19 @@ class GetIsAllowGestureUseCaseTest {
 
     @Test
     fun `Happy pass`() {
+        given(settingsStorage.isAllowGesture()).willReturn(false)
+        Assert.assertEquals(false, useCase.execute(Unit))
         runBlocking {
-            given(settingsStorage.isAllowGesture()).willReturn(CompletableDeferred(false))
-            Assert.assertEquals(false, useCase.execute(Unit))
+            given(settingsStorage.isAllowGestureAsync()).willReturn(CompletableDeferred(false))
+            Assert.assertEquals(false, useCase.executeAsync(Unit))
         }
     }
 
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
-            given(settingsStorage.isAllowGesture()).willThrow(TestException())
-            useCase.execute(Unit)
+            given(settingsStorage.isAllowGestureAsync()).willThrow(TestException())
+            useCase.executeAsync(Unit)
         }
     }
 }

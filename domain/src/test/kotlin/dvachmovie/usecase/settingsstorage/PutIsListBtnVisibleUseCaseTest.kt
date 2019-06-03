@@ -26,7 +26,7 @@ class PutIsListBtnVisibleUseCaseTest {
     fun `Happy pass`() {
         runBlocking {
             given(settingsStorage.putListBtnVisible(false)).willReturn(CompletableDeferred(Unit))
-            Assert.assertEquals(Unit, useCase.execute(false))
+            Assert.assertEquals(Unit, useCase.executeAsync(false))
         }
     }
 
@@ -34,7 +34,7 @@ class PutIsListBtnVisibleUseCaseTest {
     fun `Something was wrong`() {
         runBlocking {
             given(settingsStorage.putListBtnVisible(false)).willThrow(TestException())
-            useCase.execute(false)
+            useCase.executeAsync(false)
         }
     }
 }

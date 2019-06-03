@@ -26,7 +26,7 @@ internal class ReportUseCaseTest {
 
     private val executorResult = object : ExecutorResult {
         override fun onSuccess(useCaseModel: UseCaseModel) {
-            Assert.assertEquals("Test", (useCaseModel as DvachReportModel).message)
+            Assert.assertEquals("Test", (useCaseModel as DvachReportUseCaseModel).message)
         }
 
         override fun onFailure(t: Throwable) {
@@ -39,16 +39,20 @@ internal class ReportUseCaseTest {
     @Test
     fun `Happy pass`() {
         runBlocking {
-            given(dvachRepository.reportPost("test", 0, 0, "Adult content")).willReturn("Test")
-            useCase.execute(model)
+            given(dvachRepository
+                    .reportPost("test", 0, 0, "Adult content"))
+                    .willReturn("Test")
+            useCase.executeAsync(model)
         }
     }
 
     @Test
     fun `Error send to callback`() {
         runBlocking {
-            given(dvachRepository.reportPost("test", 0, 0, "Adult content")).willThrow(testException)
-            useCase.execute(model)
+            given(dvachRepository
+                    .reportPost("test", 0, 0, "Adult content"))
+                    .willThrow(testException)
+            useCase.executeAsync(model)
         }
     }
 }

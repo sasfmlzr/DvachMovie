@@ -24,17 +24,19 @@ class GetIsListBtnVisibleUseCaseTest {
 
     @Test
     fun `Happy pass`() {
+        given(settingsStorage.isListBtnVisible()).willReturn(false)
+        Assert.assertEquals(false, useCase.execute(Unit))
         runBlocking {
-            given(settingsStorage.isListBtnVisible()).willReturn(CompletableDeferred(false))
-            Assert.assertEquals(false, useCase.execute(Unit))
+            given(settingsStorage.isListBtnVisibleAsync()).willReturn(CompletableDeferred(false))
+            Assert.assertEquals(false, useCase.executeAsync(Unit))
         }
     }
 
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
-            given(settingsStorage.isListBtnVisible()).willThrow(TestException())
-            useCase.execute(Unit)
+            given(settingsStorage.isListBtnVisibleAsync()).willThrow(TestException())
+            useCase.executeAsync(Unit)
         }
     }
 }

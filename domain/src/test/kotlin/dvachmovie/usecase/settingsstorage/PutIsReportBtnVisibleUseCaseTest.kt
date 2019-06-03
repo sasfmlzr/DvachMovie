@@ -26,7 +26,7 @@ class PutIsReportBtnVisibleUseCaseTest {
     fun `Happy pass`() {
         runBlocking {
             given(settingsStorage.putReportBtnVisible(false)).willReturn(CompletableDeferred(Unit))
-            Assert.assertEquals(Unit, useCase.execute(false))
+            Assert.assertEquals(Unit, useCase.executeAsync(false))
         }
     }
 
@@ -34,7 +34,7 @@ class PutIsReportBtnVisibleUseCaseTest {
     fun `Something was wrong`() {
         runBlocking {
             given(settingsStorage.putReportBtnVisible(false)).willThrow(TestException())
-            useCase.execute(false)
+            useCase.executeAsync(false)
         }
     }
 }

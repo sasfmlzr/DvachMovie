@@ -17,24 +17,26 @@ import org.mockito.junit.MockitoJUnitRunner
 class GetValueCookieUseCaseTest {
 
     @InjectMocks
-    lateinit var useCaseValue: GetValueCookieUseCase
+    lateinit var useCase: GetValueCookieUseCase
 
     @Mock
     lateinit var settingsStorage: SettingsStorage
 
     @Test
     fun `Happy pass`() {
+        given(settingsStorage.getCookie()).willReturn("test")
+        Assert.assertEquals("test", useCase.execute(Unit))
         runBlocking {
-            given(settingsStorage.getCookie()).willReturn(CompletableDeferred("test"))
-            Assert.assertEquals("test", useCaseValue.execute(Unit))
+            given(settingsStorage.getCookieAsync()).willReturn(CompletableDeferred("test"))
+            Assert.assertEquals("test", useCase.executeAsync(Unit))
         }
     }
 
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
-            given(settingsStorage.getCookie()).willThrow(TestException())
-            useCaseValue.execute(Unit)
+            given(settingsStorage.getCookieAsync()).willThrow(TestException())
+            useCase.executeAsync(Unit)
         }
     }
 }

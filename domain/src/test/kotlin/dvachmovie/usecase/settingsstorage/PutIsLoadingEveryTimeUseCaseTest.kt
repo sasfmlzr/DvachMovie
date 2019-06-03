@@ -26,7 +26,7 @@ class PutIsLoadingEveryTimeUseCaseTest {
     fun `Happy pass`() {
         runBlocking {
             given(settingsStorage.putLoadingEveryTime(false)).willReturn(CompletableDeferred(Unit))
-            Assert.assertEquals(Unit, useCase.execute(false))
+            Assert.assertEquals(Unit, useCase.executeAsync(false))
         }
     }
 
@@ -34,7 +34,7 @@ class PutIsLoadingEveryTimeUseCaseTest {
     fun `Something was wrong`() {
         runBlocking {
             given(settingsStorage.putLoadingEveryTime(false)).willThrow(TestException())
-            useCase.execute(false)
+            useCase.executeAsync(false)
         }
     }
 }

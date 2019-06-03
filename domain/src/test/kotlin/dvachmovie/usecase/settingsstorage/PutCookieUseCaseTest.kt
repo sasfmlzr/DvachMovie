@@ -26,7 +26,7 @@ class PutCookieUseCaseTest {
     fun `Happy pass`() {
         runBlocking {
             given(settingsStorage.putCookie("test")).willReturn(CompletableDeferred(Unit))
-            Assert.assertEquals(Unit, useCase.execute("test"))
+            Assert.assertEquals(Unit, useCase.executeAsync("test"))
         }
     }
 
@@ -34,7 +34,7 @@ class PutCookieUseCaseTest {
     fun `Something was wrong`() {
         runBlocking {
             given(settingsStorage.putCookie("test")).willThrow(TestException())
-            useCase.execute("test")
+            useCase.executeAsync("test")
         }
     }
 }

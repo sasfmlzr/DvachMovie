@@ -26,7 +26,7 @@ class PutBoardUseCaseTest {
     fun `Happy pass`() {
         runBlocking {
             given(settingsStorage.putBoard("test")).willReturn(CompletableDeferred(Unit))
-            Assert.assertEquals(Unit, useCase.execute("test"))
+            Assert.assertEquals(Unit, useCase.executeAsync("test"))
         }
     }
 
@@ -34,7 +34,7 @@ class PutBoardUseCaseTest {
     fun `Something was wrong`() {
         runBlocking {
             given(settingsStorage.putBoard("test")).willThrow(TestException())
-            useCase.execute("test")
+            useCase.executeAsync("test")
         }
     }
 }

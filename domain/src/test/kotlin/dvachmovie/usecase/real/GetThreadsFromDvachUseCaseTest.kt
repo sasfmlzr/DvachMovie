@@ -34,7 +34,8 @@ internal class GetThreadsFromDvachUseCaseTest {
     fun `Happy pass`() {
         runBlocking {
             given(dvachRepository.getNumThreadsFromCatalog("test")).willReturn(listNumThreads)
-            Assert.assertEquals(GetThreadsFromDvachModel(listNumThreads), useCase.execute(model))
+            Assert.assertEquals(GetThreadsFromDvachUseCaseModel(listNumThreads),
+                    useCase.executeAsync(model))
         }
     }
 
@@ -42,7 +43,7 @@ internal class GetThreadsFromDvachUseCaseTest {
     fun `Error send to callback`() {
         runBlocking {
             given(dvachRepository.getNumThreadsFromCatalog("test")).willThrow(testException)
-            useCase.execute(model)
+            useCase.executeAsync(model)
         }
     }
 }

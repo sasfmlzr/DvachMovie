@@ -24,17 +24,19 @@ class GetIsLoadingEveryTimeUseCaseTest {
 
     @Test
     fun `Happy pass`() {
+        given(settingsStorage.isLoadingEveryTime()).willReturn(false)
+        Assert.assertEquals(false, useCase.execute(Unit))
         runBlocking {
-            given(settingsStorage.isLoadingEveryTime()).willReturn(CompletableDeferred(false))
-            Assert.assertEquals(false, useCase.execute(Unit))
+            given(settingsStorage.isLoadingEveryTimeAsync()).willReturn(CompletableDeferred(false))
+            Assert.assertEquals(false, useCase.executeAsync(Unit))
         }
     }
 
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
-            given(settingsStorage.isLoadingEveryTime()).willThrow(TestException())
-            useCase.execute(Unit)
+            given(settingsStorage.isLoadingEveryTimeAsync()).willThrow(TestException())
+            useCase.executeAsync(Unit)
         }
     }
 }
