@@ -1,7 +1,10 @@
-package dvachmovie.pipe
+package dvachmovie.pipe.network
 
 import dvachmovie.PresenterModel
+import dvachmovie.architecture.PipeAsync
 import dvachmovie.architecture.ScopeProvider
+import dvachmovie.pipe.ErrorModel
+import dvachmovie.pipe.ReportModel
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.DvachReportUseCaseModel

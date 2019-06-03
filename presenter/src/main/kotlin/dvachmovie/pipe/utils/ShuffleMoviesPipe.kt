@@ -3,7 +3,7 @@ package dvachmovie.pipe.utils
 import dvachmovie.PresenterModel
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
-import dvachmovie.pipe.PipeAsync
+import dvachmovie.architecture.PipeAsync
 import dvachmovie.pipe.ShuffledMoviesModel
 import dvachmovie.usecase.utils.ShuffleMoviesUseCase
 import kotlinx.coroutines.channels.BroadcastChannel

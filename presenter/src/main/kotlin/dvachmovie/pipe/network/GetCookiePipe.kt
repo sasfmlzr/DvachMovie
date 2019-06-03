@@ -1,6 +1,7 @@
-package dvachmovie.pipe
+package dvachmovie.pipe.network
 
 import dvachmovie.api.Cookie
+import dvachmovie.architecture.PipeSync
 import dvachmovie.usecase.real.GetCookieUseCase
 import javax.inject.Inject
 

@@ -1,6 +1,6 @@
 package dvachmovie.pipe.settingsStorage
 
-import dvachmovie.pipe.PipeSync
+import dvachmovie.architecture.PipeSync
 import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import javax.inject.Inject
 

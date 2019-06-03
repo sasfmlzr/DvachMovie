@@ -8,11 +8,11 @@ import dvachmovie.PresenterModel
 import dvachmovie.pipe.AmountRequestsModel
 import dvachmovie.pipe.CountCompletedRequestsModel
 import dvachmovie.pipe.DvachModel
-import dvachmovie.pipe.DvachPipe
+import dvachmovie.pipe.network.DvachPipe
 import dvachmovie.pipe.ErrorModel
+import dvachmovie.pipe.settingsStorage.PutBoardPipe
+import dvachmovie.pipe.settingsStorage.PutCookiePipe
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.usecase.settingsStorage.PutBoardUseCase
-import dvachmovie.usecase.settingsStorage.PutCookieUseCase
 import dvachmovie.worker.WorkerManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -25,8 +25,8 @@ import javax.inject.Inject
 open class StartVM @Inject constructor(
         private var broadcastChannel: BroadcastChannel<PresenterModel>,
         private var dvachPipe: DvachPipe,
-        putCookieUseCase: PutCookieUseCase,
-        putBoardUseCase: PutBoardUseCase) : ViewModel() {
+        putCookiePipe: PutCookiePipe,
+        putBoardPipe: PutBoardPipe) : ViewModel() {
 
     val initText = MutableLiveData<String>("Initialization")
 
@@ -54,7 +54,7 @@ open class StartVM @Inject constructor(
 
     val onButtonChangeDefaultBoardClicked = View.OnClickListener {
         viewModelScope.launch(Job()) {
-            putBoardUseCase.executeAsync("b")
+            putBoardPipe.execute("b")
             loadNewMovies()
         }
     }
@@ -62,7 +62,7 @@ open class StartVM @Inject constructor(
     init {
         viewModelScope.launch {
             //In the future move
-            putCookieUseCase.executeAsync("92ea293bf47456479e25b11ba67bb17a")
+            putCookiePipe.execute("92ea293bf47456479e25b11ba67bb17a")
 
             broadcastChannel.asFlow().collect {
                 render(it)

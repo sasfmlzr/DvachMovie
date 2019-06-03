@@ -10,19 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 import dvachmovie.R
 import dvachmovie.api.Cookie
 import dvachmovie.architecture.Navigator
-import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.Movie
+import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.usecase.SetCurrentMovieStorageUseCase
-import dvachmovie.usecase.real.GetCookieUseCase
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(
         private val setCurrentMovieStorageUseCase: SetCurrentMovieStorageUseCase,
-        private val getCookieUseCase: GetCookieUseCase,
-        private val scopeProvider: ScopeProvider,
+        private val getCookiePipe: GetCookiePipe,
         private val logger: Logger) :
         ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>(PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,9 +36,7 @@ class PreviewMovieAdapter @Inject constructor(
         getItem(position).let { movie ->
             with(holder) {
                 itemView.tag = movie
-                runBlocking {
-                    bind(movie, getCookieUseCase.execute(Unit), createOnClickListener(movie))
-                }
+                bind(movie, getCookiePipe.execute(Unit), createOnClickListener(movie))
             }
         }
     }

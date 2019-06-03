@@ -12,8 +12,9 @@ import dvachmovie.PresenterModel
 import dvachmovie.db.data.Movie
 import dvachmovie.pipe.CookieModel
 import dvachmovie.pipe.ErrorModel
+import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.pipe.ReportModel
-import dvachmovie.pipe.ReportPipe
+import dvachmovie.pipe.network.ReportPipe
 import dvachmovie.pipe.ShuffledMoviesModel
 import dvachmovie.pipe.settingsStorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
@@ -21,7 +22,6 @@ import dvachmovie.pipe.settingsStorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
 import dvachmovie.usecase.moviestorage.GetMovieListUseCase
-import dvachmovie.usecase.real.GetCookieUseCase
 import dvachmovie.usecase.real.ReportUseCase
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 class MovieVM @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
-        getCookieUseCase: GetCookieUseCase,
+        getCookiePipe: GetCookiePipe,
         getMovieListUseCase: GetMovieListUseCase,
         getCurrentMovieUseCase: GetCurrentMovieUseCase,
         private val getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
@@ -103,9 +103,7 @@ class MovieVM @Inject constructor(
     }
 
     val cookie: MutableLiveData<String> by lazy {
-        runBlocking {
-            MutableLiveData<String>(getCookieUseCase.execute(Unit).toString())
-        }
+        MutableLiveData<String>(getCookiePipe.execute(Unit).toString())
     }
 
     val isPlayerControlVisibility = MutableLiveData<Boolean>(true)
@@ -114,9 +112,7 @@ class MovieVM @Inject constructor(
     private val function = Function<List<Movie>, LiveData<List<Uri>>> { values ->
         val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
         if (urlVideo.isNotEmpty()) {
-            runBlocking {
-                cookie.value = getCookieUseCase.execute(Unit).toString()
-            }
+            cookie.value = getCookiePipe.execute(Unit).toString()
         }
         MutableLiveData<List<Uri>>(urlVideo)
     }
