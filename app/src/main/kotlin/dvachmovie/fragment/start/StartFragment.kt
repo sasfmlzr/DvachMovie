@@ -10,7 +10,7 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.pipe.settingsStorage.GetIsLoadingEveryTimePipe
+import dvachmovie.pipe.settingsstorage.GetIsLoadingEveryTimePipe
 import dvachmovie.utils.MovieObserver
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

@@ -10,8 +10,8 @@ import dvachmovie.pipe.CountCompletedRequestsModel
 import dvachmovie.pipe.DvachModel
 import dvachmovie.pipe.network.DvachPipe
 import dvachmovie.pipe.ErrorModel
-import dvachmovie.pipe.settingsStorage.PutBoardPipe
-import dvachmovie.pipe.settingsStorage.PutCookiePipe
+import dvachmovie.pipe.settingsstorage.PutBoardPipe
+import dvachmovie.pipe.settingsstorage.PutCookiePipe
 import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.worker.WorkerManager
 import kotlinx.coroutines.Job

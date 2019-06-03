@@ -15,11 +15,11 @@ import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.pipe.android.EraseMovieStoragePipe
-import dvachmovie.pipe.settingsStorage.GetBoardPipe
-import dvachmovie.pipe.settingsStorage.PutIsAllowGesturePipe
-import dvachmovie.pipe.settingsStorage.PutIsListBtnVisiblePipe
-import dvachmovie.pipe.settingsStorage.PutIsLoadingEveryTimePipe
-import dvachmovie.pipe.settingsStorage.PutIsReportBtnVisiblePipe
+import dvachmovie.pipe.settingsstorage.GetBoardPipe
+import dvachmovie.pipe.settingsstorage.PutIsAllowGesturePipe
+import dvachmovie.pipe.settingsstorage.PutIsListBtnVisiblePipe
+import dvachmovie.pipe.settingsstorage.PutIsLoadingEveryTimePipe
+import dvachmovie.pipe.settingsstorage.PutIsReportBtnVisiblePipe
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
 import kotlinx.coroutines.launch

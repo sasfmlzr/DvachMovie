@@ -18,9 +18,9 @@ import dvachmovie.pipe.android.moviestorage.GetCurrentMoviePipe
 import dvachmovie.pipe.android.moviestorage.GetMovieListPipe
 import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.pipe.network.ReportPipe
-import dvachmovie.pipe.settingsStorage.GetIsAllowGesturePipe
-import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
-import dvachmovie.pipe.settingsStorage.GetIsReportBtnVisiblePipe
+import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
+import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe
+import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.usecase.real.ReportUseCase
 import kotlinx.coroutines.cancel
