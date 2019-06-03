@@ -27,7 +27,7 @@ class LocalCookieStorageTest {
     fun `Happy pass`() {
         runBlocking {
             val testCookie = Cookie(header, "test")
-            given(settingsStorage.getCookie()).willReturn(CompletableDeferred("test"))
+            given(settingsStorage.getCookie()).willReturn("test")
 
             Assert.assertEquals(testCookie, localCookieStorage.cookie)
             Assert.assertEquals(testCookie.toString(), localCookieStorage.cookie.toString())
