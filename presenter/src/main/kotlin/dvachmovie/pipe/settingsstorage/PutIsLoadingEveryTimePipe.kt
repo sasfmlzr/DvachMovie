@@ -1,4 +1,4 @@
-package dvachmovie.pipe.settingsStorage
+package dvachmovie.pipe.settingsstorage
 
 import dvachmovie.architecture.PipeAsync
 import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase

@@ -1,4 +1,4 @@
-package dvachmovie.pipe.settingsStorage
+package dvachmovie.pipe.settingsstorage
 
 import dvachmovie.architecture.PipeSync
 import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
