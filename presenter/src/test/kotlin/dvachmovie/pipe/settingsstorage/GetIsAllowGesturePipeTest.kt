@@ -1,11 +1,9 @@
 package dvachmovie.pipe.settingsstorage
 
 import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
-import dvachmovie.usecase.utils.ShuffleMoviesUseCase
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.BDDMockito
 import org.mockito.BDDMockito.given
 import org.mockito.InjectMocks
 import org.mockito.Mock

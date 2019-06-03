@@ -1,7 +1,6 @@
 package dvachmovie.pipe.settingsstorage
 
 import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
-import dvachmovie.usecase.utils.ShuffleMoviesUseCase
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
