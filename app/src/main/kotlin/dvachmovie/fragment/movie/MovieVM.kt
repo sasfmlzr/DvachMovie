@@ -12,16 +12,16 @@ import dvachmovie.PresenterModel
 import dvachmovie.db.data.Movie
 import dvachmovie.pipe.CookieModel
 import dvachmovie.pipe.ErrorModel
-import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.pipe.ReportModel
-import dvachmovie.pipe.network.ReportPipe
 import dvachmovie.pipe.ShuffledMoviesModel
+import dvachmovie.pipe.android.moviestorage.GetCurrentMoviePipe
+import dvachmovie.pipe.android.moviestorage.GetMovieListPipe
+import dvachmovie.pipe.network.GetCookiePipe
+import dvachmovie.pipe.network.ReportPipe
 import dvachmovie.pipe.settingsStorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsStorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
-import dvachmovie.usecase.moviestorage.GetCurrentMovieUseCase
-import dvachmovie.usecase.moviestorage.GetMovieListUseCase
 import dvachmovie.usecase.real.ReportUseCase
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -34,8 +34,8 @@ import javax.inject.Inject
 class MovieVM @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
         getCookiePipe: GetCookiePipe,
-        getMovieListUseCase: GetMovieListUseCase,
-        getCurrentMovieUseCase: GetCurrentMovieUseCase,
+        getMovieListPipe: GetMovieListPipe,
+        getCurrentMoviePipe: GetCurrentMoviePipe,
         private val getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
         private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
         private val getIsAllowGesturePipe: GetIsAllowGesturePipe,
@@ -95,8 +95,8 @@ class MovieVM @Inject constructor(
         }
     }
 
-    val movieList by lazy { runBlocking { getMovieListUseCase.execute(Unit) } }
-    val currentMovie by lazy { runBlocking { getCurrentMovieUseCase.execute(Unit) } }
+    val movieList by lazy { runBlocking { getMovieListPipe.execute(Unit) } }
+    val currentMovie by lazy { runBlocking { getCurrentMoviePipe.execute(Unit) } }
 
     val currentPos: MutableLiveData<Pair<Int, Long>> by lazy {
         MutableLiveData<Pair<Int, Long>>(Pair(0, 0L))

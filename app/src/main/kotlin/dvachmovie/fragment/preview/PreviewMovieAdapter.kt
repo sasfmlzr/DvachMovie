@@ -13,13 +13,12 @@ import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.Movie
+import dvachmovie.pipe.android.SetCurrentMovieStoragePipe
 import dvachmovie.pipe.network.GetCookiePipe
-import dvachmovie.usecase.SetCurrentMovieStorageUseCase
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(
-        private val setCurrentMovieStorageUseCase: SetCurrentMovieStorageUseCase,
+        private val setCurrentMovieStoragePipe: SetCurrentMovieStoragePipe,
         private val getCookiePipe: GetCookiePipe,
         private val logger: Logger) :
         ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>(PreviewMovieDiffCallback()) {
@@ -43,10 +42,8 @@ class PreviewMovieAdapter @Inject constructor(
 
     private fun createOnClickListener(movie: Movie): View.OnClickListener {
         return View.OnClickListener {
-            runBlocking {
-                setCurrentMovieStorageUseCase.execute(movie)
-                Navigator(it.findNavController(), logger).navigatePreviewToMovieFragment()
-            }
+            setCurrentMovieStoragePipe.execute(movie)
+            Navigator(it.findNavController(), logger).navigatePreviewToMovieFragment()
         }
     }
 

@@ -3,12 +3,10 @@ package dvachmovie.worker
 import android.content.Context
 import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
-import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
+import dvachmovie.pipe.android.InsertionMovieListToDBPipe
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.usecase.InsertionMovieListToDBUseCase
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class InitDBWorker(@NonNull context: Context,
@@ -16,15 +14,11 @@ class InitDBWorker(@NonNull context: Context,
 ) : BaseDBWorker(context, workerParams) {
 
     @Inject
-    lateinit var insertionMovieListToDBUseCase: InsertionMovieListToDBUseCase
-    @Inject
-    lateinit var scopeProvider: ScopeProvider
+    lateinit var insertionMovieListToDBPipe: InsertionMovieListToDBPipe
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
     override fun execute() {
-        scopeProvider.ioScope.launch {
-            insertionMovieListToDBUseCase.execute(MovieDBCache.movieList)
-        }
+        insertionMovieListToDBPipe.execute(MovieDBCache.movieList)
     }
 }

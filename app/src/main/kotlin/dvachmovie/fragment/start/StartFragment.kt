@@ -10,7 +10,7 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
+import dvachmovie.pipe.settingsStorage.GetIsLoadingEveryTimePipe
 import dvachmovie.utils.MovieObserver
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -28,7 +28,7 @@ class StartFragment : BaseFragment<StartVM,
 
     // TODO: delete in after sort movies by date
     @Inject
-    lateinit var getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase
+    lateinit var getIsLoadingEveryTimePipe: GetIsLoadingEveryTimePipe
 
     override fun getLayoutId() = R.layout.fragment_start
 
@@ -58,7 +58,7 @@ class StartFragment : BaseFragment<StartVM,
         runBlocking {
             movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
                 scopeUI.launch {
-                    if (getIsLoadingEveryTimeUseCase.execute(Unit) ||
+                    if (getIsLoadingEveryTimePipe.execute(Unit) ||
                             movies.size < MINIMUM_COUNT_MOVIES) {
                         viewModel.loadNewMovies()
                     } else {

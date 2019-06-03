@@ -81,7 +81,6 @@ open class StartVM @Inject constructor(
     private fun render(model: PresenterModel) {
         when (model) {
             is DvachModel -> {
-
                 MovieDBCache.movieList = model.movies
                 WorkerManager.initDB()
                 routeTask()
@@ -89,7 +88,6 @@ open class StartVM @Inject constructor(
 
             is ErrorModel -> {
                 errorTask(model.throwable)
-
                 viewRetryBtn.postValue(true)
             }
 

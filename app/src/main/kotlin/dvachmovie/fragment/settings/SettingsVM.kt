@@ -21,10 +21,9 @@ import dvachmovie.pipe.settingsStorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsStorage.GetIsLoadingEveryTimePipe
 import dvachmovie.pipe.settingsStorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.settingsStorage.PutBoardPipe
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
@@ -66,7 +65,6 @@ class SettingsVM @Inject constructor(
         isReportBtnVisible.value = getIsReportBtnVisiblePipe.execute(Unit)
         isListBtnVisible.value = getIsListBtnVisiblePipe.execute(Unit)
         isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
-
     }
 
     val onPrepareLoadingClicked =
@@ -163,10 +161,9 @@ class SettingsVM @Inject constructor(
                     }
                     .setPositiveButton("Ok") { _, _ ->
                         if (checkedItem != -1) {
-                            scopeProvider.uiScope.launch {
-                                withContext(Dispatchers.Default) {
-                                    putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
-                                }
+                            scopeProvider.ioScope.launch(Job()) {
+                                putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
+
                                 onChangeBoard.value = true
                             }
                         }

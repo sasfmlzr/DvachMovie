@@ -14,12 +14,12 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
+import dvachmovie.pipe.android.EraseMovieStoragePipe
 import dvachmovie.pipe.settingsStorage.GetBoardPipe
 import dvachmovie.pipe.settingsStorage.PutIsAllowGesturePipe
 import dvachmovie.pipe.settingsStorage.PutIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsStorage.PutIsLoadingEveryTimePipe
 import dvachmovie.pipe.settingsStorage.PutIsReportBtnVisiblePipe
-import dvachmovie.usecase.EraseMovieStorageUseCase
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class) {
 
     @Inject
-    lateinit var eraseMovieStorageUseCase: EraseMovieStorageUseCase
+    lateinit var eraseMovieStoragePipe: EraseMovieStoragePipe
 
     @Inject
     lateinit var putLoadingEveryTimePipe: PutIsLoadingEveryTimePipe
@@ -97,7 +97,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
             if (it) {
                 WorkerManager.deleteAllInDB(this@SettingsFragment) {
                     scopeUI.launch {
-                        eraseMovieStorageUseCase.execute(Unit)
+                        eraseMovieStoragePipe.execute(Unit)
                         router.navigateSettingsToStartFragment()
                     }
                 }
@@ -107,7 +107,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         viewModel.onChangeBoard.observe(this, Observer {
             if (it) {
                 scopeUI.launch {
-                    eraseMovieStorageUseCase.execute(Unit)
+                    eraseMovieStoragePipe.execute(Unit)
                     router.navigateSettingsToStartFragment()
                 }
             }

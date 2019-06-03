@@ -39,7 +39,6 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     @Inject
     lateinit var scopeProvider: ScopeProvider
 
-
     protected abstract fun inject(component: FragmentComponent)
 
     protected abstract fun getLayoutId(): Int

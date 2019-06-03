@@ -7,14 +7,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import dvachmovie.architecture.ScopeProvider
 import dvachmovie.di.core.Injector
-import javax.inject.Inject
 
 class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
-
-    @Inject
-    lateinit var scopeProvider: ScopeProvider
 
     companion object {
         private const val DOWNLOAD_PATH = "dvachmovie.service_DownloadService_Download_path"

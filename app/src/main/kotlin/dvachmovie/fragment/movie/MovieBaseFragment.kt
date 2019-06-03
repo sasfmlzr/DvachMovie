@@ -27,11 +27,11 @@ import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
+import dvachmovie.pipe.android.MarkCurrentMovieAsPlayedPipe
+import dvachmovie.pipe.android.moviestorage.GetIndexPosByMoviePipe
 import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.usecase.MarkCurrentMovieAsPlayedUseCase
-import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
@@ -48,10 +48,10 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     lateinit var movieObserver: MovieObserver
 
     @Inject
-    lateinit var getIndexPosUseCase: GetIndexPosByMovieUseCase
+    lateinit var getIndexPosPipe: GetIndexPosByMoviePipe
 
     @Inject
-    lateinit var markCurrentMovieAsPlayedUseCase: MarkCurrentMovieAsPlayedUseCase
+    lateinit var markCurrentMovieAsPlayedPipe: MarkCurrentMovieAsPlayedPipe
 
     @Inject
     lateinit var getCookiePipe: GetCookiePipe
@@ -112,7 +112,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         if (viewModel.currentPos.value == Pair(0, 0L)) {
             scopeUI.launch {
                 viewModel.currentPos.value = try {
-                    Pair(getIndexPosUseCase.execute(viewModel.currentMovie.value!!), 0)
+                    Pair(getIndexPosPipe.execute(viewModel.currentMovie.value!!), 0)
                 } catch (e: Exception) {
                     Pair(0, 0L)
                 }
@@ -210,7 +210,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             override fun onPlayerError(error: ExoPlaybackException?) {
                 scopeUI.launch {
                     if (playerView != null) {
-                        markCurrentMovieAsPlayedUseCase.execute(playerView.player.currentPeriodIndex)
+                        markCurrentMovieAsPlayedPipe.execute(playerView.player.currentPeriodIndex)
                     }
                 }
 
@@ -226,7 +226,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                     currentIndex = playerView.player.currentPeriodIndex
                 }
                 scopeUI.launch {
-                    markCurrentMovieAsPlayedUseCase.execute(currentIndex)
+                    markCurrentMovieAsPlayedPipe.execute(currentIndex)
                 }
                 if (containsAds) {
                     showAds()
@@ -258,7 +258,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     override fun onStop() {
         val index = playerView.player.currentPeriodIndex
         scopeUI.launch(Job()) {
-            markCurrentMovieAsPlayedUseCase.execute(index)
+            markCurrentMovieAsPlayedPipe.execute(index)
         }
         releasePlayer()
         super.onStop()
