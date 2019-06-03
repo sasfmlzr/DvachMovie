@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class ShuffleMoviesPipeTest {
 
     @InjectMocks
-    lateinit var shuffleMoviesPipe: ShuffleMoviesPipe
+    lateinit var pipe: ShuffleMoviesPipe
 
     @Mock
     lateinit var useCase: ShuffleMoviesUseCase
@@ -74,7 +74,7 @@ class ShuffleMoviesPipeTest {
     fun `Happy pass`() {
         runBlocking {
             given(useCase.executeAsync(testList)).willReturn(resultList)
-            shuffleMoviesPipe.execute(testList)
+            pipe.execute(testList)
         }
     }
 }

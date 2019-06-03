@@ -4,7 +4,7 @@ import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
-class GetBoardUseCase @Inject constructor(
+open class GetBoardUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<Unit, String>() {
 
     override suspend fun executeAsync(input: Unit): String =

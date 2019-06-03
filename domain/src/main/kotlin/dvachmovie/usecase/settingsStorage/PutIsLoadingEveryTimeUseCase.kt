@@ -4,7 +4,7 @@ import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
-class PutIsLoadingEveryTimeUseCase @Inject constructor(
+open class PutIsLoadingEveryTimeUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<Boolean, Unit>() {
 
     override suspend fun executeAsync(input: Boolean) =
