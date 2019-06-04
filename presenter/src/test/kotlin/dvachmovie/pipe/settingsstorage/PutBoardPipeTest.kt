@@ -1,6 +1,6 @@
 package dvachmovie.pipe.settingsstorage
 
-import dvachmovie.usecase.settingsStorage.PutBoardUseCase
+import dvachmovie.usecase.settingsstorage.PutBoardUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith

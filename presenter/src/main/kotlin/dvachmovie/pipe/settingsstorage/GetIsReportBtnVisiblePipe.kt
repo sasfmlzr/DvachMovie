@@ -1,7 +1,7 @@
 package dvachmovie.pipe.settingsstorage
 
 import dvachmovie.architecture.PipeSync
-import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
+import dvachmovie.usecase.settingsstorage.GetIsReportBtnVisibleUseCase
 import javax.inject.Inject
 
 class GetIsReportBtnVisiblePipe @Inject constructor(

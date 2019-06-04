@@ -1,6 +1,6 @@
 package dvachmovie.pipe.settingsstorage
 
-import dvachmovie.usecase.settingsStorage.GetValueCookieUseCase
+import dvachmovie.usecase.settingsstorage.GetValueCookieUseCase
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

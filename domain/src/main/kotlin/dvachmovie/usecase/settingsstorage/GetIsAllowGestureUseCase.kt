@@ -1,15 +1,15 @@
-package dvachmovie.usecase.settingsstorage
+package dvachmovie.usecase.settingsStorage
 
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
-open class GetIsReportBtnVisibleUseCase @Inject constructor(
+open class GetIsAllowGestureUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<Unit, Boolean>() {
 
     override suspend fun executeAsync(input: Unit): Boolean =
-            settingsStorage.isReportBtnVisibleAsync().await()
+            settingsStorage.isAllowGestureAsync().await()
 
     override fun execute(input: Unit): Boolean =
-            settingsStorage.isReportBtnVisible()
+            settingsStorage.isAllowGesture()
 }

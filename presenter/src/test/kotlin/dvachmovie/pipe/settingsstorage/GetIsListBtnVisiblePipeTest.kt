@@ -1,6 +1,6 @@
 package dvachmovie.pipe.settingsstorage
 
-import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
+import dvachmovie.usecase.settingsstorage.GetIsListBtnVisibleUseCase
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -1,7 +1,7 @@
 package dvachmovie.pipe.settingsstorage
 
 import dvachmovie.architecture.PipeAsync
-import dvachmovie.usecase.settingsStorage.PutIsAllowGestureUseCase
+import dvachmovie.usecase.settingsstorage.PutIsAllowGestureUseCase
 import javax.inject.Inject
 
 class PutIsAllowGesturePipe @Inject constructor(

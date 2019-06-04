@@ -1,6 +1,6 @@
 package dvachmovie.pipe.settingsstorage
 
-import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase
+import dvachmovie.usecase.settingsstorage.PutIsLoadingEveryTimeUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith

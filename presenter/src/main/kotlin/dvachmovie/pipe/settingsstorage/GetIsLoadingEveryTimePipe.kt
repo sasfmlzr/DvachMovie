@@ -1,7 +1,7 @@
 package dvachmovie.pipe.settingsstorage
 
 import dvachmovie.architecture.PipeSync
-import dvachmovie.usecase.settingsStorage.GetIsLoadingEveryTimeUseCase
+import dvachmovie.usecase.settingsstorage.GetIsLoadingEveryTimeUseCase
 import javax.inject.Inject
 
 class GetIsLoadingEveryTimePipe @Inject constructor(

@@ -1,7 +1,7 @@
 package dvachmovie.pipe.settingsstorage
 
 import dvachmovie.architecture.PipeAsync
-import dvachmovie.usecase.settingsStorage.PutCookieUseCase
+import dvachmovie.usecase.settingsstorage.PutCookieUseCase
 import javax.inject.Inject
 
 class PutCookiePipe @Inject constructor(

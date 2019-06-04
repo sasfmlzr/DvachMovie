@@ -1,4 +1,4 @@
-package dvachmovie.usecase.settingsstorage
+package dvachmovie.usecase.settingsStorage
 
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.base.UseCase

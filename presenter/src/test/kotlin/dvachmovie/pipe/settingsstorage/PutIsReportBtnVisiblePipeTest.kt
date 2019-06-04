@@ -1,6 +1,6 @@
 package dvachmovie.pipe.settingsstorage
 
-import dvachmovie.usecase.settingsStorage.PutIsReportBtnVisibleUseCase
+import dvachmovie.usecase.settingsstorage.PutIsReportBtnVisibleUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith

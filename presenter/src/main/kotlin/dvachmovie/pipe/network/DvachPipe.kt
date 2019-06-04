@@ -13,7 +13,7 @@ import dvachmovie.usecase.real.DvachAmountRequestsUseCaseModel
 import dvachmovie.usecase.real.DvachCountRequestUseCaseModel
 import dvachmovie.usecase.real.DvachUseCase
 import dvachmovie.usecase.real.DvachUseCaseModel
-import dvachmovie.usecase.settingsStorage.GetBoardUseCase
+import dvachmovie.usecase.settingsstorage.GetBoardUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.BroadcastChannel

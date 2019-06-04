@@ -6,7 +6,7 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.DvachUseCase
-import dvachmovie.usecase.settingsStorage.GetBoardUseCase
+import dvachmovie.usecase.settingsstorage.GetBoardUseCase
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

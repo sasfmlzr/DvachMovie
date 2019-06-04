@@ -1,6 +1,6 @@
 package dvachmovie.pipe.settingsstorage
 
-import dvachmovie.usecase.settingsStorage.GetBoardUseCase
+import dvachmovie.usecase.settingsstorage.GetBoardUseCase
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

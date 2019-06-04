@@ -1,7 +1,7 @@
 package dvachmovie.pipe.settingsstorage
 
 import dvachmovie.architecture.PipeSync
-import dvachmovie.usecase.settingsStorage.GetBoardUseCase
+import dvachmovie.usecase.settingsstorage.GetBoardUseCase
 import javax.inject.Inject
 
 class GetBoardPipe @Inject constructor(
