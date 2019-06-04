@@ -118,6 +118,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 }
             }
         }
+
+        viewModel.refreshVM()
         return binding.root
     }
 
