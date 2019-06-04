@@ -44,7 +44,9 @@ open class StartVM @Inject constructor(
     val amountMovies = MutableLiveData<Int>()
 
     override fun onCleared() {
-        dvachJob.cancel()
+        if (::dvachJob.isInitialized){
+            dvachJob.cancel()
+        }
         viewModelScope.cancel()
         super.onCleared()
     }

@@ -149,7 +149,6 @@ class SettingsVM @Inject constructor(
             }
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
-        scopeProvider.uiScope.launch {
             var checkedItem = boardMap.keys.indexOf(board)
             AlertDialog.Builder(context, R.style.AlertDialogStyle)
                     .setTitle("Set board")
@@ -164,13 +163,12 @@ class SettingsVM @Inject constructor(
                             scopeProvider.ioScope.launch(Job()) {
                                 putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
 
-                                onChangeBoard.value = true
+                                onChangeBoard.postValue(true)
                             }
                         }
                     }
                     .setNegativeButton("Cancel") { _, _ -> }
                     .show()
-        }
     }
 
     val sdkKey = MutableLiveData("ca-app-pub-3074235676525198~1117408577")
