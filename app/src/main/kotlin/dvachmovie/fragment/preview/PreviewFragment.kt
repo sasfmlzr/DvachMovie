@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.pipe.android.moviestorage.GetIndexPosByMoviePipe
-import dvachmovie.usecase.base.UseCaseModel
-import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

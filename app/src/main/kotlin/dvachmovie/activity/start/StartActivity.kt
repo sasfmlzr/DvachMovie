@@ -7,7 +7,11 @@ import dvachmovie.activity.movie.MovieActivity
 import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.databinding.ActivityStartBinding
 import dvachmovie.di.core.ActivityComponent
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 class StartActivity : BaseActivity<StartActivityVM,

@@ -6,12 +6,8 @@ import dagger.Module
 import dagger.Provides
 import dvachmovie.AppConfig
 import dvachmovie.BuildConfig
-import dvachmovie.PresenterModel
 import dvachmovie.architecture.logging.AndroidLogger
 import dvachmovie.architecture.logging.Logger
-import dvachmovie.di.base.FragmentScope
-import dvachmovie.usecase.base.UseCaseModel
-import kotlinx.coroutines.channels.BroadcastChannel
 import javax.inject.Singleton
 
 @Module

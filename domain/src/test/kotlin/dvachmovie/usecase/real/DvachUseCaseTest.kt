@@ -140,7 +140,7 @@ class DvachUseCaseTest {
 
     @Before
     fun `Set up`() {
-        given(scopeProvider.ioScope).willReturn(CoroutineScope(Dispatchers.IO))
+        given(scopeProvider.ioScope).willReturn(CoroutineScope(Dispatchers.Unconfined))
     }
 
     @Test

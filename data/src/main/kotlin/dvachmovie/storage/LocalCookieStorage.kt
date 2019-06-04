@@ -2,7 +2,6 @@ package dvachmovie.storage
 
 import dvachmovie.api.Cookie
 import dvachmovie.api.CookieStorage
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class LocalCookieStorage @Inject constructor(

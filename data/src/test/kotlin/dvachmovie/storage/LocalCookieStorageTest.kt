@@ -2,7 +2,6 @@ package dvachmovie.storage
 
 import dvachmovie.TestException
 import dvachmovie.api.Cookie
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test

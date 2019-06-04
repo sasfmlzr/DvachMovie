@@ -9,6 +9,7 @@ import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,7 +47,8 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
         board = input.board
         executorResult = input.executorResult!!
         val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
-        networkJob = scopeProvider.ioScope.launch(Job()) {
+
+        networkJob = scopeProvider.ioScope.async (Job()) {
             try {
                 val useCaseModel = getThreadUseCase.executeAsync(inputModel)
                 listThreadSize = useCaseModel.listThreads.size
@@ -55,11 +57,9 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
 
                 for (num in useCaseModel.listThreads) {
                     try {
-
                         val webmItems =
                                 movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
                         movies.addAll(movieUtils.convertFileItemToMovie(webmItems, board))
-
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break
