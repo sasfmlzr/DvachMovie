@@ -25,11 +25,11 @@ internal class ReportUseCaseTest {
     private val testException = TestException()
 
     private val executorResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
+        override suspend fun onSuccess(useCaseModel: UseCaseModel) {
             Assert.assertEquals("Test", (useCaseModel as DvachReportUseCaseModel).message)
         }
 
-        override fun onFailure(t: Throwable) {
+        override suspend fun onFailure(t: Throwable) {
             Assert.assertEquals(testException, t)
         }
     }

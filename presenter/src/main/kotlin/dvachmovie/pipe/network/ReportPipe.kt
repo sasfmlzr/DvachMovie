@@ -11,9 +11,9 @@ import dvachmovie.usecase.real.DvachReportUseCaseModel
 import dvachmovie.usecase.real.ReportUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ReportPipe @Inject constructor(
@@ -33,25 +33,25 @@ class ReportPipe @Inject constructor(
         }
 
         val executorResult = object : ExecutorResult {
-            override fun onSuccess(useCaseModel: UseCaseModel) {
-                scopeProvider.ioScope.launch(Job()) {
-                    useCaseModel as DvachReportUseCaseModel
-                    broadcastChannel.send(ReportModel(useCaseModel.message))
-                }
+            override suspend fun onSuccess(useCaseModel: UseCaseModel) {
+                useCaseModel as DvachReportUseCaseModel
+                broadcastChannel.send(ReportModel(useCaseModel.message))
             }
 
-            override fun onFailure(t: Throwable) {
-                scopeProvider.ioScope.launch(Job()) {
-                    if (t !is CancellationException) {
-                        broadcastChannel.send(ErrorModel(t))
-                    }
+            override suspend fun onFailure(t: Throwable) {
+                if (t !is CancellationException) {
+                    broadcastChannel.send(ErrorModel(t))
                 }
             }
         }
 
-        scopeProvider.ioScope.launch(Job() + handler) {
-            val inputModel = input.copy(executorResult = executorResult)
-            useCase.executeAsync(inputModel)
+        withContext(handler) {
+            if (input.executorResult==null) {
+                val inputModel = input.copy(executorResult = executorResult)
+                useCase.executeAsync(inputModel)
+            } else {
+                useCase.executeAsync(input)
+            }
         }
     }
 }

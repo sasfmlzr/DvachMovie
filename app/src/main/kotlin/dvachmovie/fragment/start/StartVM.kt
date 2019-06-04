@@ -5,11 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dvachmovie.PresenterModel
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.pipe.AmountRequestsModel
 import dvachmovie.pipe.CountCompletedRequestsModel
 import dvachmovie.pipe.DvachModel
-import dvachmovie.pipe.network.DvachPipe
 import dvachmovie.pipe.ErrorModel
+import dvachmovie.pipe.network.DvachPipe
 import dvachmovie.pipe.settingsstorage.PutBoardPipe
 import dvachmovie.pipe.settingsstorage.PutCookiePipe
 import dvachmovie.storage.local.MovieDBCache
@@ -23,10 +24,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 open class StartVM @Inject constructor(
-        private var broadcastChannel: BroadcastChannel<PresenterModel>,
-        private var dvachPipe: DvachPipe,
+        private val broadcastChannel: BroadcastChannel<PresenterModel>,
+        private val dvachPipe: DvachPipe,
         putCookiePipe: PutCookiePipe,
-        putBoardPipe: PutBoardPipe) : ViewModel() {
+        putBoardPipe: PutBoardPipe,
+        private val scopeProvider: ScopeProvider) : ViewModel() {
+
+    private lateinit var dvachJob: Job
 
     val initText = MutableLiveData<String>("Initialization")
 
@@ -40,11 +44,16 @@ open class StartVM @Inject constructor(
     val amountMovies = MutableLiveData<Int>()
 
     override fun onCleared() {
+        dvachJob.cancel()
         viewModelScope.cancel()
         super.onCleared()
     }
 
-    val onButtonStartClicked = View.OnClickListener { dvachPipe.forceStart() }
+    val onButtonStartClicked = View.OnClickListener {
+        scopeProvider.ioScope.launch {
+            dvachPipe.forceStart()
+        }
+    }
 
     val onButtonRetryClicked = View.OnClickListener {
         viewModelScope.launch(Job()) {
@@ -73,8 +82,8 @@ open class StartVM @Inject constructor(
     fun loadNewMovies() {
         viewRetryBtn.value = false
         progressLoadingMovies.value = 0
-        viewModelScope.launch {
-            dvachPipe.execute(Unit)
+        dvachJob = scopeProvider.ioScope.launch(Job()) {
+            dvachPipe.execute(null)
         }
     }
 

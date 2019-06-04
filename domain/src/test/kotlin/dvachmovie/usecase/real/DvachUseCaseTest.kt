@@ -97,7 +97,7 @@ class DvachUseCaseTest {
     private val resultPartOfModel = DvachUseCaseModel(listOf(movieEntityOne))
 
     private var happyExecutorResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
+        override suspend fun onSuccess(useCaseModel: UseCaseModel) {
             when (useCaseModel) {
                 is DvachAmountRequestsUseCaseModel ->
                     Assert.assertEquals(2, useCaseModel.max)
@@ -105,13 +105,13 @@ class DvachUseCaseTest {
             }
         }
 
-        override fun onFailure(t: Throwable) {
+        override suspend fun onFailure(t: Throwable) {
             Assert.assertEquals(testException, t)
         }
     }
 
     private var partOfSuccessfulyExecutorResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
+        override suspend fun onSuccess(useCaseModel: UseCaseModel) {
             when (useCaseModel) {
                 is DvachAmountRequestsUseCaseModel ->
                     Assert.assertEquals(2, useCaseModel.max)
@@ -119,13 +119,13 @@ class DvachUseCaseTest {
             }
         }
 
-        override fun onFailure(t: Throwable) {
+        override suspend fun onFailure(t: Throwable) {
             Assert.assertEquals(testException, t)
         }
     }
 
     private var zeroExecutorResult = object : ExecutorResult {
-        override fun onSuccess(useCaseModel: UseCaseModel) {
+        override suspend fun onSuccess(useCaseModel: UseCaseModel) {
             when (useCaseModel) {
                 is DvachAmountRequestsUseCaseModel ->
                     Assert.assertEquals(2, useCaseModel.max)
@@ -133,7 +133,7 @@ class DvachUseCaseTest {
             }
         }
 
-        override fun onFailure(t: Throwable) {
+        override suspend fun onFailure(t: Throwable) {
             Assert.assertEquals("This is a private board or internet problem", t.message)
         }
     }

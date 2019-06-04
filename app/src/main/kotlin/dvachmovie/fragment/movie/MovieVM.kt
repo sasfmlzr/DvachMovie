@@ -9,6 +9,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dvachmovie.PresenterModel
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
 import dvachmovie.pipe.CookieModel
 import dvachmovie.pipe.ErrorModel
@@ -23,6 +24,7 @@ import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.usecase.real.ReportUseCase
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
@@ -40,7 +42,8 @@ class MovieVM @Inject constructor(
         private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
         private val getIsAllowGesturePipe: GetIsAllowGesturePipe,
         shuffleMoviesPipe: ShuffleMoviesPipe,
-        reportPipe: ReportPipe) : ViewModel() {
+        reportPipe: ReportPipe,
+        coroutinesProvider: ScopeProvider) : ViewModel() {
 
     val isReportBtnVisible = MutableLiveData<Boolean>()
 
@@ -89,7 +92,7 @@ class MovieVM @Inject constructor(
         currentMovie.value?.let {
             ReportUseCase.Params(it.board, it.thread, it.post)
         }?.let { model ->
-            viewModelScope.launch {
+            coroutinesProvider.ioScope.launch(Job()) {
                 reportPipe.execute(model)
             }
         }

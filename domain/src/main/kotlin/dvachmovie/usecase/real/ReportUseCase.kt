@@ -6,7 +6,7 @@ import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
 import javax.inject.Inject
 
-class ReportUseCase @Inject constructor(private val dvachRepository: DvachRepository) :
+open class ReportUseCase @Inject constructor(private val dvachRepository: DvachRepository) :
         UseCase<ReportUseCase.Params, Unit>() {
 
     private val comment = "Adult content"

@@ -12,7 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
+open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                        private val getLinkFilesFromThreadsUseCase:
                                        GetLinkFilesFromThreadsUseCase,
                                        private val movieUtils: MovieUtils,

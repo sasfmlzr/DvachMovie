@@ -16,24 +16,22 @@ import dvachmovie.usecase.real.DvachUseCaseModel
 import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DvachPipe @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: DvachUseCase,
         private val scopeProvider: ScopeProvider,
-        private val getBoardUseCase: GetBoardUseCase) : PipeAsync<Unit>() {
+        private val getBoardUseCase: GetBoardUseCase) : PipeAsync<ExecutorResult?>() {
 
-    fun forceStart() {
-        scopeProvider.ioScope.launch {
-            useCase.forceStart()
-        }
+    suspend fun forceStart() {
+        useCase.forceStart()
     }
 
-    override suspend fun execute(input: Unit) {
+    override suspend fun execute(input: ExecutorResult?) {
         val handler = CoroutineExceptionHandler { _, throwable ->
             scopeProvider.ioScope.launch {
                 if (throwable !is CancellationException) {
@@ -43,30 +41,31 @@ class DvachPipe @Inject constructor(
         }
 
         val executorResult = object : ExecutorResult {
-            override fun onSuccess(useCaseModel: UseCaseModel) {
-                scopeProvider.ioScope.launch(Job()) {
-                    when (useCaseModel) {
-                        is DvachUseCaseModel ->
-                            broadcastChannel.send(DvachModel(useCaseModel.movies))
-                        is DvachCountRequestUseCaseModel ->
-                            broadcastChannel.send(CountCompletedRequestsModel(useCaseModel.count))
-                        is DvachAmountRequestsUseCaseModel ->
-                            broadcastChannel.send(AmountRequestsModel(useCaseModel.max))
-                    }
+            override suspend fun onSuccess(useCaseModel: UseCaseModel) {
+                when (useCaseModel) {
+                    is DvachUseCaseModel ->
+                        broadcastChannel.send(DvachModel(useCaseModel.movies))
+                    is DvachCountRequestUseCaseModel ->
+                        broadcastChannel.send(CountCompletedRequestsModel(useCaseModel.count))
+                    is DvachAmountRequestsUseCaseModel ->
+                        broadcastChannel.send(AmountRequestsModel(useCaseModel.max))
                 }
             }
 
-            override fun onFailure(t: Throwable) {
-                scopeProvider.ioScope.launch(Job()) {
-                    if (t !is CancellationException) {
-                        broadcastChannel.send(ErrorModel(t))
-                    }
+            override suspend fun onFailure(t: Throwable) {
+                if (t !is CancellationException) {
+                    broadcastChannel.send(ErrorModel(t))
                 }
             }
         }
 
-        scopeProvider.ioScope.launch(Job() + handler) {
-            val inputModel = DvachUseCase.Params(getBoardUseCase.execute(Unit), executorResult)
+        withContext(handler) {
+            val inputModel = if (input == null) {
+                DvachUseCase.Params(getBoardUseCase.execute(Unit), executorResult)
+            } else {
+                DvachUseCase.Params(getBoardUseCase.execute(Unit), input)
+            }
+
             useCase.executeAsync(inputModel)
         }
     }
