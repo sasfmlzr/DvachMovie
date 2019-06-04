@@ -2,7 +2,6 @@ package dvachmovie.usecase.settingsstorage
 
 import dvachmovie.TestException
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -26,7 +25,7 @@ class PutIsLoadingEveryTimeUseCaseTest {
     fun `Happy pass`() {
         runBlocking {
             given(settingsStorage.putLoadingEveryTime(false)).willReturn(CompletableDeferred(Unit))
-            Assert.assertEquals(Unit, useCase.execute(false))
+            Assert.assertEquals(Unit, useCase.executeAsync(false))
         }
     }
 
@@ -34,7 +33,7 @@ class PutIsLoadingEveryTimeUseCaseTest {
     fun `Something was wrong`() {
         runBlocking {
             given(settingsStorage.putLoadingEveryTime(false)).willThrow(TestException())
-            useCase.execute(false)
+            useCase.executeAsync(false)
         }
     }
 }

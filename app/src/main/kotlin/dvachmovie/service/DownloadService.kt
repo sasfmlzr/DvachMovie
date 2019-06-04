@@ -7,29 +7,23 @@ import android.content.Intent
 import android.net.Uri
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import dvachmovie.architecture.ScopeProvider
 import dvachmovie.di.core.Injector
-import dvachmovie.usecase.real.GetCookieUseCase
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
-
-    @Inject
-    lateinit var getCookieUseCase: GetCookieUseCase
-    @Inject
-    lateinit var scopeProvider: ScopeProvider
 
     companion object {
         private const val DOWNLOAD_PATH = "dvachmovie.service_DownloadService_Download_path"
         private const val DESTINATION_PATH = "dvachmovie.service_DownloadService_Destination_path"
+        private const val COOKIE = "dvachmovie.service_DownloadService_Cookie"
 
         fun getDownloadService(@NonNull callingClassContext: Context,
                                @NonNull downloadPath: String,
-                               @NonNull destinationPath: String): Intent {
+                               @NonNull destinationPath: String,
+                               @NonNull cookie: String): Intent {
             return Intent(callingClassContext, DownloadService::class.java)
                     .putExtra(DOWNLOAD_PATH, downloadPath)
                     .putExtra(DESTINATION_PATH, destinationPath)
+                    .putExtra(COOKIE, cookie)
         }
     }
 
@@ -41,22 +35,21 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
     override fun onHandleIntent(@Nullable intent: Intent?) {
         val downloadPath = intent!!.getStringExtra(DOWNLOAD_PATH)
         val destinationPath = intent.getStringExtra(DESTINATION_PATH)
-        startDownload(downloadPath, destinationPath)
+        val cookie = intent.getStringExtra(COOKIE)
+        startDownload(downloadPath, destinationPath, cookie)
     }
 
-    private fun startDownload(downloadPath: String, destinationPath: String) {
+    private fun startDownload(downloadPath: String, destinationPath: String, cookie: String) {
         val uri = Uri.parse(downloadPath)
-        scopeProvider.ioScope.launch {
-            val request = DownloadManager.Request(uri)
-                    .addRequestHeader("Cookie", getCookieUseCase.execute(Unit).toString())
-                    .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or
-                            DownloadManager.Request.NETWORK_WIFI)
-                    .setNotificationVisibility(
-                            DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                    .setTitle(uri.pathSegments.last())
-                    .setVisibleInDownloadsUi(true)
-                    .setDestinationInExternalPublicDir(destinationPath, uri.lastPathSegment)
-            (getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).enqueue(request)
-        }
+        val request = DownloadManager.Request(uri)
+                .addRequestHeader("Cookie", cookie)
+                .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or
+                        DownloadManager.Request.NETWORK_WIFI)
+                .setNotificationVisibility(
+                        DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setTitle(uri.pathSegments.last())
+                .setVisibleInDownloadsUi(true)
+                .setDestinationInExternalPublicDir(destinationPath, uri.lastPathSegment)
+        (getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).enqueue(request)
     }
 }

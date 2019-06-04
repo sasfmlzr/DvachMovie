@@ -2,7 +2,6 @@ package dvachmovie.usecase.settingsstorage
 
 import dvachmovie.TestException
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.settingsStorage.GetBoardUseCase
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -24,18 +23,20 @@ class GetBoardUseCaseTest {
 
     @Test
     fun `Happy pass`() {
+        given(settingsStorage.getBoard()).willReturn("testBoard")
+        Assert.assertEquals("testBoard", useCase.execute(Unit))
         runBlocking {
-            given(settingsStorage.getBoard()).willReturn(CompletableDeferred("testBoard"))
+            given(settingsStorage.getBoardAsync()).willReturn(CompletableDeferred("testBoard"))
 
-            Assert.assertEquals("testBoard", useCase.execute(Unit))
+            Assert.assertEquals("testBoard", useCase.executeAsync(Unit))
         }
     }
 
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
-            given(settingsStorage.getBoard()).willThrow(TestException())
-            useCase.execute(Unit)
+            given(settingsStorage.getBoardAsync()).willThrow(TestException())
+            useCase.executeAsync(Unit)
         }
     }
 }

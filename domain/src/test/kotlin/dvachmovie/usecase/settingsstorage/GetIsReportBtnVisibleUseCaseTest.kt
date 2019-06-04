@@ -2,7 +2,6 @@ package dvachmovie.usecase.settingsstorage
 
 import dvachmovie.TestException
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -24,17 +23,19 @@ class GetIsReportBtnVisibleUseCaseTest {
 
     @Test
     fun `Happy pass`() {
+        given(settingsStorage.isReportBtnVisible()).willReturn(false)
+        Assert.assertEquals(false, useCase.execute(Unit))
         runBlocking {
-            given(settingsStorage.isReportBtnVisible()).willReturn(CompletableDeferred(false))
-            Assert.assertEquals(false, useCase.execute(Unit))
+            given(settingsStorage.isReportBtnVisibleAsync()).willReturn(CompletableDeferred(false))
+            Assert.assertEquals(false, useCase.executeAsync(Unit))
         }
     }
 
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
-            given(settingsStorage.isReportBtnVisible()).willThrow(TestException())
-            useCase.execute(Unit)
+            given(settingsStorage.isReportBtnVisibleAsync()).willThrow(TestException())
+            useCase.executeAsync(Unit)
         }
     }
 }

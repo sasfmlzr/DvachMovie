@@ -1,7 +1,12 @@
 package dvachmovie.fragment.settings
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import dvachmovie.R
@@ -9,11 +14,12 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.usecase.EraseMovieStorageUseCase
-import dvachmovie.usecase.settingsStorage.PutIsAllowGestureUseCase
-import dvachmovie.usecase.settingsStorage.PutIsListBtnVisibleUseCase
-import dvachmovie.usecase.settingsStorage.PutIsLoadingEveryTimeUseCase
-import dvachmovie.usecase.settingsStorage.PutIsReportBtnVisibleUseCase
+import dvachmovie.pipe.android.EraseMovieStoragePipe
+import dvachmovie.pipe.settingsstorage.GetBoardPipe
+import dvachmovie.pipe.settingsstorage.PutIsAllowGesturePipe
+import dvachmovie.pipe.settingsstorage.PutIsListBtnVisiblePipe
+import dvachmovie.pipe.settingsstorage.PutIsLoadingEveryTimePipe
+import dvachmovie.pipe.settingsstorage.PutIsReportBtnVisiblePipe
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
 import kotlinx.coroutines.launch
@@ -23,19 +29,22 @@ class SettingsFragment : BaseFragment<SettingsVM,
         FragmentSettingsBinding>(SettingsVM::class) {
 
     @Inject
-    lateinit var eraseMovieStorageUseCase: EraseMovieStorageUseCase
+    lateinit var eraseMovieStoragePipe: EraseMovieStoragePipe
 
     @Inject
-    lateinit var putLoadingEveryTimeUseCase: PutIsLoadingEveryTimeUseCase
+    lateinit var putLoadingEveryTimePipe: PutIsLoadingEveryTimePipe
 
     @Inject
-    lateinit var putReportBtnVisibleUseCase: PutIsReportBtnVisibleUseCase
+    lateinit var putReportBtnVisiblePipe: PutIsReportBtnVisiblePipe
 
     @Inject
-    lateinit var putListBtnVisibleUseCase: PutIsListBtnVisibleUseCase
+    lateinit var putListBtnVisiblePipe: PutIsListBtnVisiblePipe
 
     @Inject
-    lateinit var putIsAllowGestureUseCase: PutIsAllowGestureUseCase
+    lateinit var putIsAllowGesturePipe: PutIsAllowGesturePipe
+
+    @Inject
+    lateinit var getBoardPipe: GetBoardPipe
 
     override fun getLayoutId() = R.layout.fragment_settings
 
@@ -43,10 +52,15 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
+        super.onCreateView(inflater, container, savedInstanceState).apply {
+            viewModel.addField()
+        }
         binding.viewModel = viewModel
         setHasOptionsMenu(true)
         configureVM()
+        getBoardPipe.execute(Unit)
+
+
         return binding.root
     }
 
@@ -63,19 +77,19 @@ class SettingsFragment : BaseFragment<SettingsVM,
     private fun configureVM() {
         viewModel.prepareLoading.observe(this, Observer {
             scopeUI.launch {
-                putLoadingEveryTimeUseCase.execute(it)
+                putLoadingEveryTimePipe.execute(it)
             }
         })
 
         viewModel.isReportBtnVisible.observe(this, Observer {
             scopeUI.launch {
-                putReportBtnVisibleUseCase.execute(it)
+                putReportBtnVisiblePipe.execute(it)
             }
         })
 
         viewModel.isListBtnVisible.observe(this, Observer {
             scopeUI.launch {
-                putListBtnVisibleUseCase.execute(it)
+                putListBtnVisiblePipe.execute(it)
             }
         })
 
@@ -83,7 +97,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
             if (it) {
                 WorkerManager.deleteAllInDB(this@SettingsFragment) {
                     scopeUI.launch {
-                        eraseMovieStorageUseCase.execute(Unit)
+                        eraseMovieStoragePipe.execute(Unit)
                         router.navigateSettingsToStartFragment()
                     }
                 }
@@ -93,7 +107,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
         viewModel.onChangeBoard.observe(this, Observer {
             if (it) {
                 scopeUI.launch {
-                    eraseMovieStorageUseCase.execute(Unit)
+                    eraseMovieStoragePipe.execute(Unit)
                     router.navigateSettingsToStartFragment()
                 }
             }
@@ -101,7 +115,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.isGestureEnabled.observe(this, Observer {
             scopeUI.launch {
-                putIsAllowGestureUseCase.execute(it)
+                putIsAllowGesturePipe.execute(it)
             }
         })
     }

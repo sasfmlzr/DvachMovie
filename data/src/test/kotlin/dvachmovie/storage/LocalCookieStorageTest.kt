@@ -2,7 +2,6 @@ package dvachmovie.storage
 
 import dvachmovie.TestException
 import dvachmovie.api.Cookie
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -27,7 +26,7 @@ class LocalCookieStorageTest {
     fun `Happy pass`() {
         runBlocking {
             val testCookie = Cookie(header, "test")
-            given(settingsStorage.getCookie()).willReturn(CompletableDeferred("test"))
+            given(settingsStorage.getCookie()).willReturn("test")
 
             Assert.assertEquals(testCookie, localCookieStorage.cookie)
             Assert.assertEquals(testCookie.toString(), localCookieStorage.cookie.toString())

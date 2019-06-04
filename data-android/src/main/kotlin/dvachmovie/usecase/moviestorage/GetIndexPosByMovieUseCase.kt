@@ -6,10 +6,10 @@ import dvachmovie.usecase.base.UseCase
 import dvachmovie.utils.MovieUtils
 import javax.inject.Inject
 
-class GetIndexPosByMovieUseCase @Inject constructor(
+open class GetIndexPosByMovieUseCase @Inject constructor(
         private val movieStorage: MovieStorage,
         private val movieUtils: MovieUtils) : UseCase<Movie, Int>() {
 
-    override suspend fun execute(input: Movie): Int = movieUtils.getIndexPosition(input,
+    override fun execute(input: Movie): Int = movieUtils.getIndexPosition(input,
                 movieStorage.movieList.value)
 }

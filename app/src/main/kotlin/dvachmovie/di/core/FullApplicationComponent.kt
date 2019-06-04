@@ -8,8 +8,7 @@ import javax.inject.Singleton
 @Component(modules = [
     ApplicationModule::class,
     ExoModule::class,
-    ViewModelFactoryModule::class,
-    RootDataModule::class,
-    RootDataAndroidModule::class
+    RootDataAndroidModule::class,
+    RootDataModule::class
 ])
 interface FullApplicationComponent : DemoApplicationComponent

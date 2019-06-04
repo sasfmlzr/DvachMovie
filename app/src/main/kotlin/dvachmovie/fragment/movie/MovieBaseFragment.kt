@@ -27,17 +27,11 @@ import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
-import dvachmovie.usecase.moviestorage.GetIndexPosByMovieUseCase
+import dvachmovie.pipe.android.MarkCurrentMovieAsPlayedPipe
+import dvachmovie.pipe.android.moviestorage.GetIndexPosByMoviePipe
+import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.service.DownloadService
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.usecase.MarkCurrentMovieAsPlayedUseCase
-import dvachmovie.usecase.base.ExecutorResult
-import dvachmovie.usecase.base.UseCaseModel
-import dvachmovie.usecase.real.ReportUseCase
-import dvachmovie.usecase.settingsStorage.GetIsAllowGestureUseCase
-import dvachmovie.usecase.settingsStorage.GetIsListBtnVisibleUseCase
-import dvachmovie.usecase.settingsStorage.GetIsReportBtnVisibleUseCase
-import dvachmovie.usecase.utils.ShuffleMoviesUseCase
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
@@ -49,40 +43,65 @@ import javax.inject.Inject
 abstract class MovieBaseFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
 
+
     @Inject
     lateinit var movieObserver: MovieObserver
 
     @Inject
-    lateinit var getIndexPosUseCase: GetIndexPosByMovieUseCase
+    lateinit var getIndexPosPipe: GetIndexPosByMoviePipe
 
     @Inject
-    lateinit var isAllowGestureUseCase: GetIsAllowGestureUseCase
+    lateinit var markCurrentMovieAsPlayedPipe: MarkCurrentMovieAsPlayedPipe
 
     @Inject
-    lateinit var getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase
-
-    @Inject
-    lateinit var getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase
-
-    @Inject
-    lateinit var reportUseCase: ReportUseCase
-
-    @Inject
-    lateinit var shuffleMoviesUseCase: ShuffleMoviesUseCase
-
-    @Inject
-    lateinit var markCurrentMovieAsPlayedUseCase: MarkCurrentMovieAsPlayedUseCase
+    lateinit var getCookiePipe: GetCookiePipe
 
     private lateinit var ads: InterstitialAd
 
     protected abstract val containsAds: Boolean
 
+    private val routeToSettingsTask = { router.navigateMovieToSettingsFragment() }
+    private val downloadBtnClicked = { runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE) }
+
+    private val copyURLTask = { movieUrl: String ->
+        val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE)
+                as ClipboardManager
+        clipboard.primaryClip = ClipData
+                .newPlainText("Copied Text", movieUrl)
+        extensions.showMessage("URL video copied")!!
+    }
+    private val routeToPreviewTask = { router.navigateMovieToPreviewFragment() }
+
+    private val showMessageTask = { message: String -> extensions.showMessage(message)!! }
+
     override fun getLayoutId() = R.layout.fragment_movie
+
+    private var downloadTask = { download: String, cookie: String ->
+        DirectoryHelper.createDirectory(context!!)
+        activity?.startService(DownloadService.getDownloadService(
+                context!!,
+                download,
+                "${DirectoryHelper.ROOT_DIRECTORY_NAME}/",
+                cookie))
+        Unit
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
+        initAds()
+
         binding.viewModel = viewModel
+        viewModel.downloadBtnClicked = downloadBtnClicked
+        viewModel.downloadTask = downloadTask
+        viewModel.routeToSettingsTask = routeToSettingsTask
+        viewModel.copyURLTask = copyURLTask
+        viewModel.routeToPreviewTask = routeToPreviewTask
+        viewModel.showMessageTask = showMessageTask
+
+        scopeUI.launch {
+            movieObserver.observeDB(viewLifecycleOwner)
+        }
 
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
@@ -90,21 +109,15 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
             }
         })
 
-        scopeUI.launch {
-            movieObserver.observeDB(viewLifecycleOwner)
-        }
-
         if (viewModel.currentPos.value == Pair(0, 0L)) {
             scopeUI.launch {
                 viewModel.currentPos.value = try {
-                    Pair(getIndexPosUseCase.execute(viewModel.currentMovie.value!!), 0)
+                    Pair(getIndexPosPipe.execute(viewModel.currentMovie.value!!), 0)
                 } catch (e: Exception) {
                     Pair(0, 0L)
                 }
             }
         }
-        initAds()
-
         return binding.root
     }
 
@@ -134,12 +147,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        scopeUI.launch {
-            viewModel.isGestureEnabled.value = isAllowGestureUseCase.execute(Unit)
-        }
-
         initPlayer(playerView)
-        configureButtons()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -201,8 +209,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         object : Player.EventListener {
             override fun onPlayerError(error: ExoPlaybackException?) {
                 scopeUI.launch {
-                    if(playerView!=null) {
-                        markCurrentMovieAsPlayedUseCase.execute(playerView.player.currentPeriodIndex)
+                    if (playerView != null) {
+                        markCurrentMovieAsPlayedPipe.execute(playerView.player.currentPeriodIndex)
                     }
                 }
 
@@ -218,7 +226,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                     currentIndex = playerView.player.currentPeriodIndex
                 }
                 scopeUI.launch {
-                    markCurrentMovieAsPlayedUseCase.execute(currentIndex)
+                    markCurrentMovieAsPlayedPipe.execute(currentIndex)
                 }
                 if (containsAds) {
                     showAds()
@@ -232,65 +240,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
         if (PlayerCache.countPlayed % 30 == 0) {
             ads.loadAd(AdRequest.Builder().build())
         }
-    }
-
-    private fun configureButtons() {
-        shuffleButton.setOnClickListener {
-            scopeUI.launch {
-                viewModel.movieList.value =
-                        shuffleMoviesUseCase.execute(viewModel.movieList.value
-                                ?: listOf())
-            }
-        }
-
-        downloadButton.setOnClickListener {
-            runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-
-        settingsButton.setOnClickListener {
-            router.navigateMovieToSettingsFragment()
-        }
-
-        copyURLButton.setOnClickListener {
-            val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE)
-                    as ClipboardManager
-            val clip = ClipData
-                    .newPlainText("Copied Text", viewModel.currentMovie.value?.movieUrl)
-            clipboard.primaryClip = clip
-            extensions.showMessage("URL video copied")
-        }
-
-        listVideosButton.setOnClickListener {
-            router.navigateMovieToPreviewFragment()
-        }
-
-        reportButton.setOnClickListener {
-            val executorResult = object : ExecutorResult {
-                override fun onSuccess(useCaseModel: UseCaseModel) {
-                    extensions.showMessage("Report submitted!")
-                    // extensions.showMessage((useCaseModel as DvachReportModel).message)
-                }
-
-                override fun onFailure(t: Throwable) {
-                    extensions.showMessage("Something went wrong. Please try again")
-                }
-            }
-
-            scopeUI.launch {
-                val inputModel = ReportUseCase.Params(viewModel.currentMovie.value?.board!!,
-                        viewModel.currentMovie.value?.thread!!,
-                        viewModel.currentMovie.value?.post!!,
-                        executorResult)
-                reportUseCase.execute(inputModel)
-            }
-        }
-
-        scopeUI.launch {
-            viewModel.isReportBtnVisible.value = getIsReportBtnVisibleUseCase.execute(Unit)
-
-            viewModel.isListBtnVisible.value = getIsListBtnVisibleUseCase.execute(Unit)
-        }
-
     }
 
     override fun onStart() {
@@ -309,7 +258,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     override fun onStop() {
         val index = playerView.player.currentPeriodIndex
         scopeUI.launch(Job()) {
-            markCurrentMovieAsPlayedUseCase.execute(index)
+            markCurrentMovieAsPlayedPipe.execute(index)
         }
         releasePlayer()
         super.onStop()
@@ -328,12 +277,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
-        DirectoryHelper.createDirectory(context!!)
+        getCookiePipe.execute(Unit)
         viewModel.currentMovie.value =
                 viewModel.movieList.value?.get(playerView.player.currentWindowIndex)
-        activity?.startService(DownloadService.getDownloadService(
-                context!!,
-                viewModel.currentMovie.value?.movieUrl ?: "",
-                DirectoryHelper.ROOT_DIRECTORY_NAME + "/"))
     }
 }

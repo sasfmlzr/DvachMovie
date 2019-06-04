@@ -18,40 +18,59 @@ class LocalSettingsStorage @Inject constructor(
         private const val GESTURE = "gesture"
     }
 
-    override fun isLoadingEveryTime() =
+    override fun isLoadingEveryTimeAsync() =
             scopeProvider.ioScope.async { pref.getBoolean(LOADING_PARAM) ?: false }
+
+    override fun isLoadingEveryTime() =
+            pref.getBoolean(LOADING_PARAM) ?: false
 
     override fun putLoadingEveryTime(value: Boolean) =
             scopeProvider.ioScope.async { pref.putBoolean(LOADING_PARAM, value) }
 
-    override fun isReportBtnVisible() =
+    override fun isReportBtnVisibleAsync() =
             scopeProvider.ioScope.async { pref.getBoolean(REPORT_BTN_VISIBLE) ?: true }
+
+    override fun isReportBtnVisible() =
+            pref.getBoolean(REPORT_BTN_VISIBLE) ?: true
 
     override fun putReportBtnVisible(value: Boolean) =
             scopeProvider.ioScope.async { pref.putBoolean(REPORT_BTN_VISIBLE, value) }
 
-    override fun isListBtnVisible() =
+    override fun isListBtnVisibleAsync() =
             scopeProvider.ioScope.async { pref.getBoolean(LIST_BTN_VISIBLE) ?: true }
+
+    override fun isListBtnVisible() =
+            pref.getBoolean(LIST_BTN_VISIBLE) ?: true
 
     override fun putListBtnVisible(value: Boolean) =
             scopeProvider.ioScope.async { pref.putBoolean(LIST_BTN_VISIBLE, value) }
 
-    override fun getBoard() =
+    override fun getBoardAsync() =
             scopeProvider.ioScope.async {
                 pref.getString(BOARD) ?: Boards.defaultMap.iterator().next().key
             }
 
+    override fun getBoard() =
+            pref.getString(BOARD) ?: Boards.defaultMap.iterator().next().key
+
+
     override fun putBoard(board: String) =
             scopeProvider.ioScope.async { pref.putString(BOARD, board) }
 
-    override fun getCookie() =
+    override fun getCookieAsync() =
             scopeProvider.ioScope.async { pref.getString(COOKIE) ?: "" }
+
+    override fun getCookie() =
+            pref.getString(COOKIE) ?: ""
 
     override fun putCookie(cookie: String) =
             scopeProvider.ioScope.async { pref.putString(COOKIE, cookie) }
 
-    override fun isAllowGesture() =
+    override fun isAllowGestureAsync() =
             scopeProvider.ioScope.async { pref.getBoolean(GESTURE) ?: true }
+
+    override fun isAllowGesture() =
+            pref.getBoolean(GESTURE) ?: true
 
     override fun putIsAllowGesture(value: Boolean) =
             scopeProvider.ioScope.async { pref.putBoolean(GESTURE, value) }

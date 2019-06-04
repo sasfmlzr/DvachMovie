@@ -9,60 +9,74 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dvachmovie.BuildConfig
 import dvachmovie.R
 import dvachmovie.api.Boards
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
-import dvachmovie.usecase.settingsStorage.*
-import kotlinx.coroutines.Dispatchers
+import dvachmovie.pipe.settingsstorage.GetBoardPipe
+import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
+import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe
+import dvachmovie.pipe.settingsstorage.GetIsLoadingEveryTimePipe
+import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
+import dvachmovie.pipe.settingsstorage.PutBoardPipe
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
         private val scopeProvider: ScopeProvider,
-        private val putBoardUseCase: PutBoardUseCase,
-        private val getBoardUseCase: GetBoardUseCase,
-        getIsLoadingEveryTimeUseCase: GetIsLoadingEveryTimeUseCase,
-        getIsReportBtnVisibleUseCase: GetIsReportBtnVisibleUseCase,
-        getIsListBtnVisibleUseCase: GetIsListBtnVisibleUseCase,
-        getIsAllowGestureUseCase: GetIsAllowGestureUseCase,
-        logger: Logger) : ViewModel() {
+        private val putBoardPipe: PutBoardPipe,
+        private val getIsLoadingEveryTimePipe: GetIsLoadingEveryTimePipe,
+        logger: Logger,
+        private val getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
+        private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
+        private val getIsAllowGesturePipe: GetIsAllowGesturePipe,
+        private val getBoardPipe: GetBoardPipe
+) : ViewModel() {
 
     companion object {
         private const val TAG = "SettingsVM"
     }
 
-    val prepareLoading: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+    override fun onCleared() {
+        viewModelScope.cancel()
+        super.onCleared()
     }
 
-    val isReportBtnVisible: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(runBlocking { getIsReportBtnVisibleUseCase.execute(Unit) })
-    }
+    val prepareLoading = MutableLiveData<Boolean>()
 
-    val isListBtnVisible: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(runBlocking { getIsListBtnVisibleUseCase.execute(Unit) })
-    }
+    var board = ""
+    val isReportBtnVisible = MutableLiveData<Boolean>()
+    val isListBtnVisible = MutableLiveData<Boolean>()
+    val isGestureEnabled = MutableLiveData<Boolean>()
 
+    /** onPrepareLoadingClicked unused in the future*/
     init {
-        scopeProvider.uiScope.launch {
-            prepareLoading.value = getIsLoadingEveryTimeUseCase.execute(Unit)
-        }
+        addField()
     }
+
+    fun addField() {
+        board = getBoardPipe.execute(Unit)
+        prepareLoading.value = getIsLoadingEveryTimePipe.execute(Unit)
+
+        isReportBtnVisible.value = getIsReportBtnVisiblePipe.execute(Unit)
+        isListBtnVisible.value = getIsListBtnVisiblePipe.execute(Unit)
+        isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
+    }
+
+    val onPrepareLoadingClicked =
+            CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                prepareLoading.value = isChecked
+            }
 
     val onCleanDB = MutableLiveData<Boolean>(false)
 
     val onChangeBoard = MutableLiveData<Boolean>(false)
 
     val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
-
-    val onPrepareLoadingClicked =
-            CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                prepareLoading.value = isChecked
-            }
 
     val onReportSwitchClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -73,10 +87,6 @@ class SettingsVM @Inject constructor(
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
                 isListBtnVisible.value = isChecked
             }
-
-    val isGestureEnabled: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(runBlocking { getIsAllowGestureUseCase.execute(Unit) })
-    }
 
     val onGestureLoadingClicked =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -140,7 +150,7 @@ class SettingsVM @Inject constructor(
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         scopeProvider.uiScope.launch {
-            var checkedItem = boardMap.keys.indexOf(getBoardUseCase.execute(Unit))
+            var checkedItem = boardMap.keys.indexOf(board)
             AlertDialog.Builder(context, R.style.AlertDialogStyle)
                     .setTitle("Set board")
                     .setSingleChoiceItems(
@@ -151,10 +161,9 @@ class SettingsVM @Inject constructor(
                     }
                     .setPositiveButton("Ok") { _, _ ->
                         if (checkedItem != -1) {
-                            scopeProvider.uiScope.launch {
-                                withContext(Dispatchers.Default) {
-                                    putBoardUseCase.execute(boardMap.keys.elementAt(checkedItem))
-                                }
+                            scopeProvider.ioScope.launch(Job()) {
+                                putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
+
                                 onChangeBoard.value = true
                             }
                         }

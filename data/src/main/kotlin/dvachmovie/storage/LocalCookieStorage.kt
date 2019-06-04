@@ -2,7 +2,6 @@ package dvachmovie.storage
 
 import dvachmovie.api.Cookie
 import dvachmovie.api.CookieStorage
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class LocalCookieStorage @Inject constructor(
@@ -13,8 +12,6 @@ class LocalCookieStorage @Inject constructor(
     }
 
     override val cookie : Cookie by lazy {
-        runBlocking {
-            Cookie(header,  settingsStorage.getCookie().await())
-        }
+            Cookie(header,  settingsStorage.getCookie())
     }
 }

@@ -8,17 +8,17 @@ import javax.inject.Inject
 
 open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository: DvachRepository,
                                                           private val logger: Logger) :
-        UseCase<GetThreadsFromDvachUseCase.Params, GetThreadsFromDvachModel>() {
+        UseCase<GetThreadsFromDvachUseCase.Params, GetThreadsFromDvachUseCaseModel>() {
     companion object {
         private const val TAG = "DvachUseCase"
     }
 
-    override suspend fun execute(input: Params): GetThreadsFromDvachModel =
+    override suspend fun executeAsync(input: Params): GetThreadsFromDvachUseCaseModel =
             try {
                 logger.d(TAG, "connecting to 2.hk...")
                 val numThreads = dvachRepository.getNumThreadsFromCatalog(input.board)
                 logger.d(TAG, "2.hk connected")
-                GetThreadsFromDvachModel(numThreads)
+                GetThreadsFromDvachUseCaseModel(numThreads)
             } catch (e: Exception) {
                 logger.e("GetThreadsFromDvachUseCase", e.message ?: "Something network error")
                 throw e

@@ -1,0 +1,13 @@
+package dvachmovie.pipe.settingsstorage
+
+import dvachmovie.architecture.PipeAsync
+import dvachmovie.usecase.settingsstorage.PutIsLoadingEveryTimeUseCase
+import javax.inject.Inject
+
+class PutIsLoadingEveryTimePipe @Inject constructor(
+        private val useCase: PutIsLoadingEveryTimeUseCase) : PipeAsync<Boolean>() {
+
+    override suspend fun execute(input: Boolean) {
+        useCase.executeAsync(input)
+    }
+}

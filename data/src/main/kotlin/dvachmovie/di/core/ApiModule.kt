@@ -7,7 +7,6 @@ import dvachmovie.AppConfig
 import dvachmovie.api.DvachMovieApi
 import dvachmovie.api.getOwnerContactConverterFactory
 import dvachmovie.storage.SettingsStorage
-import kotlinx.coroutines.runBlocking
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
@@ -39,7 +38,7 @@ internal class ApiModule {
     fun cookieJar(settingsStorage: SettingsStorage) = object : CookieJar {
         private val header = "usercode_auth"
 
-        val cookieValue by lazy { runBlocking { settingsStorage.getCookie().await() } }
+        val cookieValue = settingsStorage.getCookie()
 
         override fun saveFromResponse(url: HttpUrl, cookies: MutableList<okhttp3.Cookie>) {
         }

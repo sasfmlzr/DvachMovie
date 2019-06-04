@@ -13,4 +13,5 @@ class ExoModule {
     internal fun provideExoPlayer(context: Context): SimpleExoPlayer =
             ExoPlayerFactory.newSimpleInstance(context)
 
+
 }

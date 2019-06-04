@@ -10,7 +10,10 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.BDDMockito.*
+import org.mockito.BDDMockito.doNothing
+import org.mockito.BDDMockito.doReturn
+import org.mockito.BDDMockito.doThrow
+import org.mockito.BDDMockito.given
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
@@ -39,7 +42,7 @@ class SettingsStorageTest {
     }
 
     @Before
-    fun `Set up`(){
+    fun `Set up`() {
         given(scopeProvider.ioScope).willReturn(CoroutineScope(Dispatchers.IO))
     }
 
@@ -63,19 +66,21 @@ class SettingsStorageTest {
 
     @Test
     fun `Get LoadingEveryTime is successful`() {
-        runBlocking {
-            doReturn(true).`when`(keyValueStorage).getBoolean(LOADING_PARAM)
+        doReturn(true).`when`(keyValueStorage).getBoolean(LOADING_PARAM)
+        Assert.assertEquals(true, settingsStorage.isLoadingEveryTime())
 
-            Assert.assertEquals(true, settingsStorage.isLoadingEveryTime().await())
+        runBlocking {
+            Assert.assertEquals(true, settingsStorage.isLoadingEveryTimeAsync().await())
         }
     }
 
     @Test
     fun `Get LoadingEveryTime is fault, but return default value`() {
-        runBlocking {
-            doReturn(null).`when`(keyValueStorage).getBoolean(LOADING_PARAM)
+        doReturn(null).`when`(keyValueStorage).getBoolean(LOADING_PARAM)
+        Assert.assertEquals(false, settingsStorage.isLoadingEveryTime())
 
-            Assert.assertEquals(false, settingsStorage.isLoadingEveryTime().await())
+        runBlocking {
+            Assert.assertEquals(false, settingsStorage.isLoadingEveryTimeAsync().await())
         }
     }
 
@@ -99,19 +104,21 @@ class SettingsStorageTest {
 
     @Test
     fun `Get ReportBtnVisible is successful`() {
-        runBlocking {
-            doReturn(false).`when`(keyValueStorage).getBoolean(REPORT_BTN_VISIBLE)
+        doReturn(false).`when`(keyValueStorage).getBoolean(REPORT_BTN_VISIBLE)
+        Assert.assertEquals(false, settingsStorage.isReportBtnVisible())
 
-            Assert.assertEquals(false, settingsStorage.isReportBtnVisible().await())
+        runBlocking {
+            Assert.assertEquals(false, settingsStorage.isReportBtnVisibleAsync().await())
         }
     }
 
     @Test
     fun `Get ReportBtnVisible is fault, but return default value`() {
-        runBlocking {
-            doReturn(null).`when`(keyValueStorage).getBoolean(REPORT_BTN_VISIBLE)
+        doReturn(null).`when`(keyValueStorage).getBoolean(REPORT_BTN_VISIBLE)
+        Assert.assertEquals(true, settingsStorage.isReportBtnVisible())
 
-            Assert.assertEquals(true, settingsStorage.isReportBtnVisible().await())
+        runBlocking {
+            Assert.assertEquals(true, settingsStorage.isReportBtnVisibleAsync().await())
         }
     }
 
@@ -135,19 +142,21 @@ class SettingsStorageTest {
 
     @Test
     fun `Get ListBtnVisible is successful`() {
-        runBlocking {
-            doReturn(false).`when`(keyValueStorage).getBoolean(LIST_BTN_VISIBLE)
+        doReturn(false).`when`(keyValueStorage).getBoolean(LIST_BTN_VISIBLE)
+        Assert.assertEquals(false, settingsStorage.isListBtnVisible())
 
-            Assert.assertEquals(false, settingsStorage.isListBtnVisible().await())
+        runBlocking {
+            Assert.assertEquals(false, settingsStorage.isListBtnVisibleAsync().await())
         }
     }
 
     @Test
     fun `Get ListBtnVisible is fault, but return default value`() {
-        runBlocking {
-            doReturn(null).`when`(keyValueStorage).getBoolean(LIST_BTN_VISIBLE)
+        doReturn(null).`when`(keyValueStorage).getBoolean(LIST_BTN_VISIBLE)
+        Assert.assertEquals(true, settingsStorage.isListBtnVisible())
 
-            Assert.assertEquals(true, settingsStorage.isListBtnVisible().await())
+        runBlocking {
+            Assert.assertEquals(true, settingsStorage.isListBtnVisibleAsync().await())
         }
     }
 
@@ -171,20 +180,24 @@ class SettingsStorageTest {
 
     @Test
     fun `Get Board is successful`() {
+        doReturn("test").`when`(keyValueStorage).getString(BOARD)
+        Assert.assertEquals("test", settingsStorage.getBoard())
+
         runBlocking {
             doReturn("test").`when`(keyValueStorage).getString(BOARD)
-
-            Assert.assertEquals("test", settingsStorage.getBoard().await())
+            Assert.assertEquals("test", settingsStorage.getBoardAsync().await())
         }
     }
 
     @Test
     fun `Get Board is fault, but return default value`() {
-        runBlocking {
-            doReturn(null).`when`(keyValueStorage).getString(BOARD)
+        doReturn(null).`when`(keyValueStorage).getString(BOARD)
+        Assert.assertEquals(Boards.defaultMap.iterator().next().key,
+                settingsStorage.getBoard())
 
+        runBlocking {
             Assert.assertEquals(Boards.defaultMap.iterator().next().key,
-                    settingsStorage.getBoard().await())
+                    settingsStorage.getBoardAsync().await())
         }
     }
 
@@ -208,19 +221,21 @@ class SettingsStorageTest {
 
     @Test
     fun `Get Cookie is successful`() {
-        runBlocking {
-            doReturn("test").`when`(keyValueStorage).getString(COOKIE)
+        doReturn("test").`when`(keyValueStorage).getString(COOKIE)
+        Assert.assertEquals("test", settingsStorage.getCookie())
 
-            Assert.assertEquals("test", settingsStorage.getCookie().await())
+        runBlocking {
+            Assert.assertEquals("test", settingsStorage.getCookieAsync().await())
         }
     }
 
     @Test
     fun `Get Cookie is fault, but return default value`() {
-        runBlocking {
-            doReturn(null).`when`(keyValueStorage).getString(COOKIE)
+        doReturn(null).`when`(keyValueStorage).getString(COOKIE)
+        Assert.assertEquals("", settingsStorage.getCookie())
 
-            Assert.assertEquals("", settingsStorage.getCookie().await())
+        runBlocking {
+            Assert.assertEquals("", settingsStorage.getCookieAsync().await())
         }
     }
 
@@ -244,19 +259,21 @@ class SettingsStorageTest {
 
     @Test
     fun `Get AllowGesture is successful`() {
-        runBlocking {
-            doReturn(false).`when`(keyValueStorage).getBoolean(GESTURE)
+        doReturn(false).`when`(keyValueStorage).getBoolean(GESTURE)
+        Assert.assertEquals(false, settingsStorage.isAllowGesture())
 
-            Assert.assertEquals(false, settingsStorage.isAllowGesture().await())
+        runBlocking {
+            Assert.assertEquals(false, settingsStorage.isAllowGestureAsync().await())
         }
     }
 
     @Test
     fun `Get AllowGesture is fault, but return default value`() {
-        runBlocking {
-            doReturn(null).`when`(keyValueStorage).getBoolean(GESTURE)
+        doReturn(null).`when`(keyValueStorage).getBoolean(GESTURE)
+        Assert.assertEquals(true, settingsStorage.isAllowGesture())
 
-            Assert.assertEquals(true, settingsStorage.isAllowGesture().await())
+        runBlocking {
+            Assert.assertEquals(true, settingsStorage.isAllowGestureAsync().await())
         }
     }
 }
