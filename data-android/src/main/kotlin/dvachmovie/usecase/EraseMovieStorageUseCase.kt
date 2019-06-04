@@ -4,7 +4,7 @@ import dvachmovie.storage.local.MovieStorage
 import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
-class EraseMovieStorageUseCase @Inject constructor(
+open class EraseMovieStorageUseCase @Inject constructor(
         private val movieStorage: MovieStorage) : UseCase<Unit, Unit>() {
 
     override fun execute(input: Unit) {
