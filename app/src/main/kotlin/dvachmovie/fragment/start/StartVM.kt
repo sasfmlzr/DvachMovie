@@ -14,7 +14,6 @@ import dvachmovie.pipe.network.DvachPipe
 import dvachmovie.pipe.settingsstorage.PutBoardPipe
 import dvachmovie.pipe.settingsstorage.PutCookiePipe
 import dvachmovie.storage.local.MovieDBCache
-import dvachmovie.worker.WorkerManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -45,7 +44,7 @@ open class StartVM @Inject constructor(
     val amountMovies = MutableLiveData<Int>()
 
     override fun onCleared() {
-        if (::dvachJob.isInitialized){
+        if (::dvachJob.isInitialized) {
             dvachJob.cancel()
         }
         viewModelScope.cancel()

@@ -30,8 +30,6 @@ import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
@@ -182,9 +180,9 @@ class MovieFragment : BaseFragment<MovieVM,
 
     override fun onStop() {
         val index = playerView.player.currentPeriodIndex
-        scopeUI.launch(Job()) {
-            viewModel.markMovieAsPlayed(index)
-        }
+
+        viewModel.markMovieAsPlayed(index)
+
         releasePlayer()
         super.onStop()
     }

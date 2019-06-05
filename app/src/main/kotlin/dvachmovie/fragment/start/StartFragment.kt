@@ -12,7 +12,6 @@ import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartVM,
@@ -52,12 +51,12 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     private fun prepareData() {
-            movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
-                if (movies.filter { !it.isPlayed }.size < MINIMUM_COUNT_MOVIES) {
-                    viewModel.loadNewMovies()
-                } else {
-                    router.navigateStartToMovieFragment()
-                }
-            })
-        }
+        movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
+            if (movies.filter { !it.isPlayed }.size < MINIMUM_COUNT_MOVIES) {
+                viewModel.loadNewMovies()
+            } else {
+                router.navigateStartToMovieFragment()
+            }
+        })
+    }
 }

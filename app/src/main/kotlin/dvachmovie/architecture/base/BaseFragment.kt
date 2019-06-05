@@ -14,14 +14,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import dvachmovie.PresenterModel
 import dvachmovie.architecture.Extensions
 import dvachmovie.architecture.Navigator
-import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import kotlinx.coroutines.channels.BroadcastChannel
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -36,8 +33,6 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
     lateinit var logger: Logger
-    @Inject
-    lateinit var scopeProvider: ScopeProvider
 
     protected abstract fun inject(component: FragmentComponent)
 
@@ -47,12 +42,6 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
 
     protected lateinit var extensions: Extensions
     protected lateinit var router: Navigator
-
-    protected val scopeUI by lazy { scopeProvider.uiScope }
-    protected val scopeIO by lazy { scopeProvider.ioScope }
-
-    @Inject
-    protected lateinit var broadcastChannel: BroadcastChannel<PresenterModel>
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
