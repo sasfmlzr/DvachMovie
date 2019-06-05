@@ -1,23 +1,16 @@
 package dvachmovie.di.core
 
-import dvachmovie.BuildConfig
 import dvachmovie.di.RoomModule
 
 object Injector {
 
-    private lateinit var component: DemoApplicationComponent
+    private lateinit var component: FullApplicationComponent
 
     fun prepare(application: MainApplication) {
-        when (BuildConfig.FULL_VERSION) {
-            true -> component = DaggerFullApplicationComponent.builder()
-                    .applicationModule(ApplicationModule(application))
-                    .roomModule(RoomModule(application))
-                    .build()
-            false -> component = DaggerDemoApplicationComponent.builder()
-                    .applicationModule(ApplicationModule(application))
-                    .roomModule(RoomModule(application))
-                    .build()
-        }
+        component = DaggerFullApplicationComponent.builder()
+                .applicationModule(ApplicationModule(application))
+                .roomModule(RoomModule(application))
+                .build()
     }
 
     fun applicationComponent() = component

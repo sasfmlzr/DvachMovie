@@ -11,4 +11,10 @@ import javax.inject.Singleton
     RootDataAndroidModule::class,
     RootDataModule::class
 ])
-interface FullApplicationComponent : DemoApplicationComponent
+interface FullApplicationComponent {
+    fun viewComponent(): FragmentComponent
+    fun navigationComponent(): ActivityComponent
+    fun workComponent(): WorkerComponent
+    fun serviceComponent(): ServiceComponent
+    fun inject(mainApplication: MainApplication)
+}
