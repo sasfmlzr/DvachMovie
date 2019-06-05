@@ -51,7 +51,7 @@ class StartFragment : BaseFragment<StartVM,
     private fun prepareData() {
         runBlocking {
             movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
-                if (movies.filter { it.isPlayed }.size < MINIMUM_COUNT_MOVIES) {
+                if (movies.filter { !it.isPlayed }.size < MINIMUM_COUNT_MOVIES) {
                     viewModel.loadNewMovies()
                 } else {
                     router.navigateStartToMovieFragment()
