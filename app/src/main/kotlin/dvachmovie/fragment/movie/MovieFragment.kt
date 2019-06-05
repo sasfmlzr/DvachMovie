@@ -70,16 +70,6 @@ class MovieFragment : BaseFragment<MovieVM,
 
     override fun inject(component: FragmentComponent) = component.inject(this)
 
-    private var downloadTask = { download: String, cookie: String ->
-        DirectoryHelper.createDirectory(context!!)
-        activity?.startService(DownloadService.getDownloadService(
-                context!!,
-                download,
-                "${DirectoryHelper.ROOT_DIRECTORY_NAME}/",
-                cookie))
-        Unit
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -237,11 +227,19 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
-
         viewModel.currentMovie.value =
                 viewModel.movieList.value?.get(playerView.player.currentWindowIndex)
 
-        downloadTask(viewModel.currentMovie.value?.movieUrl
+        downloadMovie(viewModel.currentMovie.value?.movieUrl
                 ?: "", getCookiePipe.execute(Unit).toString())
+    }
+
+    private fun downloadMovie(download: String, cookie: String) {
+        DirectoryHelper.createDirectory(context!!)
+        activity?.startService(DownloadService.getDownloadService(
+                context!!,
+                download,
+                "${DirectoryHelper.ROOT_DIRECTORY_NAME}/",
+                cookie))
     }
 }
