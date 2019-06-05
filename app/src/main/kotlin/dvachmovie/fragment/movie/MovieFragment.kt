@@ -25,9 +25,6 @@ import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
-import dvachmovie.pipe.android.MarkCurrentMovieAsPlayedPipe
-import dvachmovie.pipe.android.moviestorage.GetIndexPosByMoviePipe
-import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.service.DownloadService
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
@@ -42,15 +39,6 @@ class MovieFragment : BaseFragment<MovieVM,
 
     @Inject
     lateinit var movieObserver: MovieObserver
-
-    @Inject
-    lateinit var getIndexPosPipe: GetIndexPosByMoviePipe
-
-    @Inject
-    lateinit var markCurrentMovieAsPlayedPipe: MarkCurrentMovieAsPlayedPipe
-
-    @Inject
-    lateinit var getCookiePipe: GetCookiePipe
 
     private val routeToSettingsTask = { router.navigateMovieToSettingsFragment() }
     private val downloadBtnClicked = { runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE) }
@@ -89,15 +77,7 @@ class MovieFragment : BaseFragment<MovieVM,
             }
         })
 
-        if (viewModel.currentPos.value == Pair(0, 0L)) {
-            scopeUI.launch {
-                viewModel.currentPos.value = try {
-                    Pair(getIndexPosPipe.execute(viewModel.currentMovie.value!!), 0)
-                } catch (e: Exception) {
-                    Pair(0, 0L)
-                }
-            }
-        }
+        viewModel.fillCurrentPos()
 
         viewModel.refreshVM()
         return binding.root
@@ -165,10 +145,8 @@ class MovieFragment : BaseFragment<MovieVM,
     private val playerListener by lazy {
         object : Player.EventListener {
             override fun onPlayerError(error: ExoPlaybackException?) {
-                scopeUI.launch {
-                    if (playerView != null) {
-                        markCurrentMovieAsPlayedPipe.execute(playerView.player.currentPeriodIndex)
-                    }
+                if (playerView != null) {
+                    viewModel.markMovieAsPlayed(playerView.player.currentPeriodIndex)
                 }
 
                 extensions.showMessage("Network error")
@@ -184,9 +162,7 @@ class MovieFragment : BaseFragment<MovieVM,
                 if (playerView != null) {
                     currentIndex = playerView.player.currentPeriodIndex
                 }
-                scopeUI.launch {
-                    markCurrentMovieAsPlayedPipe.execute(currentIndex)
-                }
+                viewModel.markMovieAsPlayed(currentIndex)
             }
         }
     }
@@ -207,7 +183,7 @@ class MovieFragment : BaseFragment<MovieVM,
     override fun onStop() {
         val index = playerView.player.currentPeriodIndex
         scopeUI.launch(Job()) {
-            markCurrentMovieAsPlayedPipe.execute(index)
+            viewModel.markMovieAsPlayed(index)
         }
         releasePlayer()
         super.onStop()
@@ -230,7 +206,7 @@ class MovieFragment : BaseFragment<MovieVM,
                 viewModel.movieList.value?.get(playerView.player.currentWindowIndex)
 
         downloadMovie(viewModel.currentMovie.value?.movieUrl
-                ?: "", getCookiePipe.execute(Unit).toString())
+                ?: "", viewModel.cookie.value ?: "")
     }
 
     private fun downloadMovie(download: String, cookie: String) {

@@ -11,11 +11,12 @@ import androidx.lifecycle.viewModelScope
 import dvachmovie.PresenterModel
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
-import dvachmovie.pipe.CookieModel
 import dvachmovie.pipe.ErrorModel
 import dvachmovie.pipe.ReportModel
 import dvachmovie.pipe.ShuffledMoviesModel
+import dvachmovie.pipe.android.MarkCurrentMovieAsPlayedPipe
 import dvachmovie.pipe.android.moviestorage.GetCurrentMoviePipe
+import dvachmovie.pipe.android.moviestorage.GetIndexPosByMoviePipe
 import dvachmovie.pipe.android.moviestorage.GetMovieListPipe
 import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.pipe.network.ReportPipe
@@ -43,6 +44,8 @@ class MovieVM @Inject constructor(
         private val getIsAllowGesturePipe: GetIsAllowGesturePipe,
         shuffleMoviesPipe: ShuffleMoviesPipe,
         reportPipe: ReportPipe,
+        private val getIndexPosPipe: GetIndexPosByMoviePipe,
+        private val markCurrentMovieAsPlayedPipe: MarkCurrentMovieAsPlayedPipe,
         coroutinesProvider: ScopeProvider) : ViewModel() {
 
     val isReportBtnVisible = MutableLiveData<Boolean>()
@@ -100,6 +103,17 @@ class MovieVM @Inject constructor(
     val movieList by lazy { runBlocking { getMovieListPipe.execute(Unit) } }
     val currentMovie by lazy { runBlocking { getCurrentMoviePipe.execute(Unit) } }
 
+    fun fillCurrentPos() {
+        if (currentPos.value == Pair(0, 0L)) {
+            currentPos.value = try {
+                Pair(getIndexPosPipe.execute(currentMovie.value!!), 0)
+            } catch (e: Exception) {
+                Pair(0, 0L)
+            }
+        }
+    }
+
+
     val currentPos: MutableLiveData<Pair<Int, Long>> by lazy {
         MutableLiveData<Pair<Int, Long>>(Pair(0, 0L))
     }
@@ -122,6 +136,10 @@ class MovieVM @Inject constructor(
     val uriMovies: MutableLiveData<List<Uri>> =
             Transformations.switchMap(movieList, function)
                     as MutableLiveData<List<Uri>>
+
+    fun markMovieAsPlayed(pos: Int) {
+        markCurrentMovieAsPlayedPipe.execute(pos)
+    }
 
     private fun render(model: PresenterModel) {
         when (model) {

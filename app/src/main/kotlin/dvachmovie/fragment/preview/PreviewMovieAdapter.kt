@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(
         private val setCurrentMovieStoragePipe: SetCurrentMovieStoragePipe,
-        private val getCookiePipe: GetCookiePipe,
+        getCookiePipe: GetCookiePipe,
         private val logger: Logger) :
         ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>(PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,10 +35,12 @@ class PreviewMovieAdapter @Inject constructor(
         getItem(position).let { movie ->
             with(holder) {
                 itemView.tag = movie
-                bind(movie, getCookiePipe.execute(Unit), createOnClickListener(movie))
+                bind(movie, cookie, createOnClickListener(movie))
             }
         }
     }
+
+    private val cookie = getCookiePipe.execute(Unit)
 
     private fun createOnClickListener(movie: Movie): View.OnClickListener {
         return View.OnClickListener {
