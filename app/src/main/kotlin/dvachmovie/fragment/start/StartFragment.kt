@@ -28,8 +28,8 @@ class StartFragment : BaseFragment<StartVM,
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
-    private val routeTask = { router.navigateStartToMovieFragment() }
-    private var errorTask = { throwable: Throwable ->
+    private val routeToMovieFragmentTask = { router.navigateStartToMovieFragment() }
+    private var showErrorTask = { throwable: Throwable ->
         extensions.showMessage(throwable.message ?: "Please try again")
         Unit
     }
@@ -39,8 +39,8 @@ class StartFragment : BaseFragment<StartVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
-        viewModel.routeTask = routeTask
-        viewModel.errorTask = errorTask
+        viewModel.routeToMovieFragmentTask = routeToMovieFragmentTask
+        viewModel.showErrorTask = showErrorTask
 
         viewModel.imageId.value = R.raw.cybermilosgif
         prepareData()

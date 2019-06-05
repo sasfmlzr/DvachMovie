@@ -95,11 +95,11 @@ open class StartVM @Inject constructor(
             is DvachModel -> {
                 MovieDBCache.movieList = model.movies
                 WorkerManager.initDB()
-                routeTask()
+                routeToMovieFragmentTask()
             }
 
             is ErrorModel -> {
-                errorTask(model.throwable)
+                showErrorTask(model.throwable)
                 viewRetryBtn.postValue(true)
             }
 
@@ -109,6 +109,6 @@ open class StartVM @Inject constructor(
         }
     }
 
-    lateinit var routeTask: () -> Unit
-    lateinit var errorTask: (throwable: Throwable) -> Unit
+    lateinit var routeToMovieFragmentTask: () -> Unit
+    lateinit var showErrorTask: (throwable: Throwable) -> Unit
 }
