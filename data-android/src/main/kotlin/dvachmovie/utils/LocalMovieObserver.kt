@@ -13,8 +13,8 @@ class LocalMovieObserver @Inject constructor(
         private val movieDBRepository: MovieDBRepository,
         private val settingsStorage: SettingsStorage,
         private val movieUtils: MovieUtils
-) : MovieObserver{
-    override suspend fun observeDB(lifecycleOwner: LifecycleOwner) {
+) : MovieObserver {
+    override fun observeDB(lifecycleOwner: LifecycleOwner) {
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, Observer { dbMovies ->
                     val movieList = movieStorage.movieList.value ?: listOf()
@@ -27,8 +27,8 @@ class LocalMovieObserver @Inject constructor(
                 })
     }
 
-    override suspend fun observeDB(lifecycleOwner: LifecycleOwner,
-                                   observer: Observer<List<Movie>>) {
+    override fun observeDB(lifecycleOwner: LifecycleOwner,
+                           observer: Observer<List<Movie>>) {
         movieDBRepository
                 .getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, observer)

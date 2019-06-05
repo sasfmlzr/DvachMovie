@@ -81,9 +81,7 @@ class MovieFragment : BaseFragment<MovieVM,
         viewModel.routeToPreviewTask = routeToPreviewTask
         viewModel.showMessageTask = showMessageTask
 
-        scopeUI.launch {
-            movieObserver.observeDB(viewLifecycleOwner)
-        }
+        movieObserver.observeDB(viewLifecycleOwner)
 
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
