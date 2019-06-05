@@ -40,6 +40,7 @@ open class StartVM @Inject constructor(
         MutableLiveData<Int>()
     }
 
+
     val progressLoadingMovies = MutableLiveData<Int>()
     val amountMovies = MutableLiveData<Int>()
 

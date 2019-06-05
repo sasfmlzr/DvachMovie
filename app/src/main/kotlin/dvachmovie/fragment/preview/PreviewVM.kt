@@ -15,6 +15,4 @@ class PreviewVM @Inject constructor(getMovieListPipe: GetMovieListPipe,
     val uriMovie = MutableLiveData<List<Movie>>().apply {
         value = movieList.value?.map { it }
     }
-
-    val sdkKey = MutableLiveData("ca-app-pub-3074235676525198~1117408577")
 }

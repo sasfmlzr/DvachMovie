@@ -17,16 +17,13 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
+import dvachmovie.di.core.FragmentComponent
 import dvachmovie.pipe.android.MarkCurrentMovieAsPlayedPipe
 import dvachmovie.pipe.android.moviestorage.GetIndexPosByMoviePipe
 import dvachmovie.pipe.network.GetCookiePipe
@@ -40,9 +37,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-abstract class MovieBaseFragment : BaseFragment<MovieVM,
+class MovieFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
-
 
     @Inject
     lateinit var movieObserver: MovieObserver
@@ -55,10 +51,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     @Inject
     lateinit var getCookiePipe: GetCookiePipe
-
-    private lateinit var ads: InterstitialAd
-
-    protected abstract val containsAds: Boolean
 
     private val routeToSettingsTask = { router.navigateMovieToSettingsFragment() }
     private val downloadBtnClicked = { runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE) }
@@ -76,6 +68,8 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
     override fun getLayoutId() = R.layout.fragment_movie
 
+    override fun inject(component: FragmentComponent) = component.inject(this)
+
     private var downloadTask = { download: String, cookie: String ->
         DirectoryHelper.createDirectory(context!!)
         activity?.startService(DownloadService.getDownloadService(
@@ -89,7 +83,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        initAds()
 
         binding.viewModel = viewModel
         viewModel.downloadBtnClicked = downloadBtnClicked
@@ -121,30 +114,6 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
 
         viewModel.refreshVM()
         return binding.root
-    }
-
-    private fun initAds() {
-        MobileAds.initialize(context,
-                "ca-app-pub-3074235676525198~1117408577")
-        ads = InterstitialAd(context)
-        ads.adUnitId = "ca-app-pub-3074235676525198/4313459697"
-
-        ads.adListener = object : AdListener() {
-            override fun onAdOpened() {
-                super.onAdOpened()
-                playerView.player.playWhenReady = false
-            }
-
-            override fun onAdClosed() {
-                super.onAdClosed()
-                playerView.player.playWhenReady = true
-            }
-
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                ads.show()
-            }
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -230,17 +199,7 @@ abstract class MovieBaseFragment : BaseFragment<MovieVM,
                 scopeUI.launch {
                     markCurrentMovieAsPlayedPipe.execute(currentIndex)
                 }
-                if (containsAds) {
-                    showAds()
-                }
             }
-        }
-    }
-
-    private fun showAds() {
-        PlayerCache.countPlayed += 1
-        if (PlayerCache.countPlayed % 30 == 0) {
-            ads.loadAd(AdRequest.Builder().build())
         }
     }
 

@@ -141,13 +141,6 @@ class SettingsVM @Inject constructor(
                 showChangeBoardDialog(it.context, Boards.japanCultureMap)
             }
 
-    val onGetProVersion =
-            View.OnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse("market://details?id=com.dvachmovie.android.pro")
-                startActivity(it.context, intent, null)
-            }
-
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
             var checkedItem = boardMap.keys.indexOf(board)
             AlertDialog.Builder(context, R.style.AlertDialogStyle)
@@ -170,6 +163,4 @@ class SettingsVM @Inject constructor(
                     .setNegativeButton("Cancel") { _, _ -> }
                     .show()
     }
-
-    val sdkKey = MutableLiveData("ca-app-pub-3074235676525198~1117408577")
 }

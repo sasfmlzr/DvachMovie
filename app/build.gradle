@@ -110,7 +110,4 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
-
-    // Will be delete
-    implementation 'com.google.android.gms:play-services-ads:17.2.1'
 }
