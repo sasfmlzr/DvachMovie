@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -28,7 +29,6 @@ import dvachmovie.pipe.android.MarkCurrentMovieAsPlayedPipe
 import dvachmovie.pipe.android.moviestorage.GetIndexPosByMoviePipe
 import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.service.DownloadService
-import dvachmovie.storage.local.MovieDBCache
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
@@ -134,12 +134,11 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
             override fun onSwipeRight() {
-                previous(playerView.player)
-
+                playerView.player.previous()
             }
 
             override fun onSwipeLeft() {
-                next(playerView.player)
+                playerView.player.next()
             }
         }
     }
@@ -172,9 +171,11 @@ class MovieFragment : BaseFragment<MovieVM,
                     }
                 }
 
-                MovieDBCache.movieList = listOf()
-                viewModel.movieList.value = listOf()
-                activity?.recreate()
+                extensions.showMessage("Network error")
+
+                val player = (playerView.player as ExoPlayer)
+                player.retry()
+                player.next()
             }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?,
