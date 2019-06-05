@@ -10,22 +10,12 @@ class LocalSettingsStorage @Inject constructor(
         private val scopeProvider: ScopeProvider
 ) : SettingsStorage {
     companion object {
-        private const val LOADING_PARAM = "LoadingMoviesOrNot"
         private const val REPORT_BTN_VISIBLE = "ReportBtnVisibleOrNot"
         private const val LIST_BTN_VISIBLE = "ListBtnVisibleOrNot"
         private const val BOARD = "board"
         private const val COOKIE = "cookie"
         private const val GESTURE = "gesture"
     }
-
-    override fun isLoadingEveryTimeAsync() =
-            scopeProvider.ioScope.async { pref.getBoolean(LOADING_PARAM) ?: false }
-
-    override fun isLoadingEveryTime() =
-            pref.getBoolean(LOADING_PARAM) ?: false
-
-    override fun putLoadingEveryTime(value: Boolean) =
-            scopeProvider.ioScope.async { pref.putBoolean(LOADING_PARAM, value) }
 
     override fun isReportBtnVisibleAsync() =
             scopeProvider.ioScope.async { pref.getBoolean(REPORT_BTN_VISIBLE) ?: true }

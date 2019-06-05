@@ -4,12 +4,6 @@ import kotlinx.coroutines.Deferred
 
 interface SettingsStorage {
 
-    fun isLoadingEveryTimeAsync(): Deferred<Boolean>
-
-    fun isLoadingEveryTime(): Boolean
-
-    fun putLoadingEveryTime(value: Boolean): Deferred<Unit>
-
     fun isReportBtnVisibleAsync(): Deferred<Boolean>
 
     fun isReportBtnVisible(): Boolean

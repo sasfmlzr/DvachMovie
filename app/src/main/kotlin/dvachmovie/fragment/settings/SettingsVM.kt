@@ -1,12 +1,9 @@
 package dvachmovie.fragment.settings
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.View
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,7 +15,6 @@ import dvachmovie.architecture.logging.Logger
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
 import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe
-import dvachmovie.pipe.settingsstorage.GetIsLoadingEveryTimePipe
 import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.settingsstorage.PutBoardPipe
 import kotlinx.coroutines.Job
@@ -29,7 +25,6 @@ import javax.inject.Inject
 class SettingsVM @Inject constructor(
         private val scopeProvider: ScopeProvider,
         private val putBoardPipe: PutBoardPipe,
-        private val getIsLoadingEveryTimePipe: GetIsLoadingEveryTimePipe,
         logger: Logger,
         private val getIsReportBtnVisiblePipe: GetIsReportBtnVisiblePipe,
         private val getIsListBtnVisiblePipe: GetIsListBtnVisiblePipe,
@@ -46,8 +41,6 @@ class SettingsVM @Inject constructor(
         super.onCleared()
     }
 
-    val prepareLoading = MutableLiveData<Boolean>()
-
     var board = ""
     val isReportBtnVisible = MutableLiveData<Boolean>()
     val isListBtnVisible = MutableLiveData<Boolean>()
@@ -60,17 +53,11 @@ class SettingsVM @Inject constructor(
 
     fun addField() {
         board = getBoardPipe.execute(Unit)
-        prepareLoading.value = getIsLoadingEveryTimePipe.execute(Unit)
 
         isReportBtnVisible.value = getIsReportBtnVisiblePipe.execute(Unit)
         isListBtnVisible.value = getIsListBtnVisiblePipe.execute(Unit)
         isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
     }
-
-    val onPrepareLoadingClicked =
-            CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                prepareLoading.value = isChecked
-            }
 
     val onCleanDB = MutableLiveData<Boolean>(false)
 
@@ -142,25 +129,25 @@ class SettingsVM @Inject constructor(
             }
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
-            var checkedItem = boardMap.keys.indexOf(board)
-            AlertDialog.Builder(context, R.style.AlertDialogStyle)
-                    .setTitle("Set board")
-                    .setSingleChoiceItems(
-                            boardMap.values.toTypedArray(),
-                            checkedItem
-                    ) { _, which ->
-                        checkedItem = which
-                    }
-                    .setPositiveButton("Ok") { _, _ ->
-                        if (checkedItem != -1) {
-                            scopeProvider.ioScope.launch(Job()) {
-                                putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
+        var checkedItem = boardMap.keys.indexOf(board)
+        AlertDialog.Builder(context, R.style.AlertDialogStyle)
+                .setTitle("Set board")
+                .setSingleChoiceItems(
+                        boardMap.values.toTypedArray(),
+                        checkedItem
+                ) { _, which ->
+                    checkedItem = which
+                }
+                .setPositiveButton("Ok") { _, _ ->
+                    if (checkedItem != -1) {
+                        scopeProvider.ioScope.launch(Job()) {
+                            putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
 
-                                onChangeBoard.postValue(true)
-                            }
+                            onChangeBoard.postValue(true)
                         }
                     }
-                    .setNegativeButton("Cancel") { _, _ -> }
-                    .show()
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
     }
 }

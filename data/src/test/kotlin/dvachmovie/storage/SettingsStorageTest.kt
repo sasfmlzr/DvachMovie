@@ -33,7 +33,6 @@ class SettingsStorageTest {
     private val testException = TestException()
 
     companion object {
-        private const val LOADING_PARAM = "LoadingMoviesOrNot"
         private const val REPORT_BTN_VISIBLE = "ReportBtnVisibleOrNot"
         private const val LIST_BTN_VISIBLE = "ListBtnVisibleOrNot"
         private const val BOARD = "board"
@@ -44,44 +43,6 @@ class SettingsStorageTest {
     @Before
     fun `Set up`() {
         given(scopeProvider.ioScope).willReturn(CoroutineScope(Dispatchers.IO))
-    }
-
-    @Test
-    fun `Put LoadingEveryTime to storage was successful`() {
-        runBlocking {
-            doNothing().`when`(keyValueStorage).putBoolean(LOADING_PARAM, true)
-
-            settingsStorage.putLoadingEveryTime(true).await()
-        }
-    }
-
-    @Test(expected = TestException::class)
-    fun `Put LoadingEveryTime to storage was fault`() {
-        runBlocking {
-            doThrow(testException).`when`(keyValueStorage).putBoolean(LOADING_PARAM, true)
-
-            settingsStorage.putLoadingEveryTime(true).await()
-        }
-    }
-
-    @Test
-    fun `Get LoadingEveryTime is successful`() {
-        doReturn(true).`when`(keyValueStorage).getBoolean(LOADING_PARAM)
-        Assert.assertEquals(true, settingsStorage.isLoadingEveryTime())
-
-        runBlocking {
-            Assert.assertEquals(true, settingsStorage.isLoadingEveryTimeAsync().await())
-        }
-    }
-
-    @Test
-    fun `Get LoadingEveryTime is fault, but return default value`() {
-        doReturn(null).`when`(keyValueStorage).getBoolean(LOADING_PARAM)
-        Assert.assertEquals(false, settingsStorage.isLoadingEveryTime())
-
-        runBlocking {
-            Assert.assertEquals(false, settingsStorage.isLoadingEveryTimeAsync().await())
-        }
     }
 
     @Test

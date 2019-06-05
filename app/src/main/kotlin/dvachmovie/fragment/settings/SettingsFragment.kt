@@ -18,7 +18,6 @@ import dvachmovie.pipe.android.EraseMovieStoragePipe
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
 import dvachmovie.pipe.settingsstorage.PutIsAllowGesturePipe
 import dvachmovie.pipe.settingsstorage.PutIsListBtnVisiblePipe
-import dvachmovie.pipe.settingsstorage.PutIsLoadingEveryTimePipe
 import dvachmovie.pipe.settingsstorage.PutIsReportBtnVisiblePipe
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.include_settings_fragment.*
@@ -30,9 +29,6 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
     @Inject
     lateinit var eraseMovieStoragePipe: EraseMovieStoragePipe
-
-    @Inject
-    lateinit var putLoadingEveryTimePipe: PutIsLoadingEveryTimePipe
 
     @Inject
     lateinit var putReportBtnVisiblePipe: PutIsReportBtnVisiblePipe
@@ -75,11 +71,6 @@ class SettingsFragment : BaseFragment<SettingsVM,
     }
 
     private fun configureVM() {
-        viewModel.prepareLoading.observe(this, Observer {
-            scopeUI.launch {
-                putLoadingEveryTimePipe.execute(it)
-            }
-        })
 
         viewModel.isReportBtnVisible.observe(this, Observer {
             scopeUI.launch {

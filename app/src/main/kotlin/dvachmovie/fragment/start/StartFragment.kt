@@ -10,9 +10,7 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.pipe.settingsstorage.GetIsLoadingEveryTimePipe
 import dvachmovie.utils.MovieObserver
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -25,10 +23,6 @@ class StartFragment : BaseFragment<StartVM,
 
     @Inject
     lateinit var movieObserver: MovieObserver
-
-    // TODO: delete in after sort movies by date
-    @Inject
-    lateinit var getIsLoadingEveryTimePipe: GetIsLoadingEveryTimePipe
 
     override fun getLayoutId() = R.layout.fragment_start
 
@@ -57,13 +51,10 @@ class StartFragment : BaseFragment<StartVM,
     private fun prepareData() {
         runBlocking {
             movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
-                scopeUI.launch {
-                    if (getIsLoadingEveryTimePipe.execute(Unit) ||
-                            movies.size < MINIMUM_COUNT_MOVIES) {
-                        viewModel.loadNewMovies()
-                    } else {
-                        router.navigateStartToMovieFragment()
-                    }
+                if (movies.filter { it.isPlayed }.size < MINIMUM_COUNT_MOVIES) {
+                    viewModel.loadNewMovies()
+                } else {
+                    router.navigateStartToMovieFragment()
                 }
             })
         }
