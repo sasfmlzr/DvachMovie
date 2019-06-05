@@ -86,7 +86,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.onCleanDB.observe(this, Observer {
             if (it) {
-                WorkerManager.deleteAllInDB(this@SettingsFragment) {
+                WorkerManager.deleteAllInDB(context!!, this@SettingsFragment) {
                     scopeUI.launch {
                         eraseMovieStoragePipe.execute(Unit)
                         router.navigateSettingsToStartFragment()

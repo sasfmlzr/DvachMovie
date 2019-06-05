@@ -87,7 +87,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
-                WorkerManager.insertMovieInDB()
+                WorkerManager.insertMovieInDB(context!!)
             }
         })
 

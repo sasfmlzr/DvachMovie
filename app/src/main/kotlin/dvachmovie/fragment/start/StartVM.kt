@@ -94,7 +94,7 @@ open class StartVM @Inject constructor(
         when (model) {
             is DvachModel -> {
                 MovieDBCache.movieList = model.movies
-                WorkerManager.initDB()
+                initDBTask()
                 routeToMovieFragmentTask()
             }
 
@@ -109,6 +109,7 @@ open class StartVM @Inject constructor(
         }
     }
 
+    lateinit var initDBTask: () -> Unit
     lateinit var routeToMovieFragmentTask: () -> Unit
     lateinit var showErrorTask: (throwable: Throwable) -> Unit
 }

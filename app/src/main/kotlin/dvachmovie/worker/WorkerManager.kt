@@ -1,6 +1,7 @@
 package dvachmovie.worker
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -10,24 +11,26 @@ import androidx.work.WorkManager
 
 class WorkerManager {
     companion object {
-        fun initDB() {
+        fun initDB(context: Context) {
             val request = OneTimeWorkRequestBuilder<InitDBWorker>().build()
-            WorkManager.getInstance().enqueue(request)
+            WorkManager.getInstance(context).enqueue(request)
         }
 
-        fun insertMovieInDB() {
+        fun insertMovieInDB(context: Context) {
             val request = OneTimeWorkRequestBuilder<InsertDBWorker>().build()
-            WorkManager.getInstance().enqueue(request)
+            WorkManager.getInstance(context).enqueue(request)
         }
 
         @SuppressLint("RestrictedApi")
-        fun deleteAllInDB(lifecycleOwner: LifecycleOwner, doOnSuccess: () -> Unit) {
+        fun deleteAllInDB(context: Context,
+                          lifecycleOwner: LifecycleOwner,
+                          doOnSuccess: () -> Unit) {
             val request = OneTimeWorkRequestBuilder<DeleteDBWorker>()
                     .build()
 
             val mSavedWorkInfo: LiveData<WorkInfo>
 
-            mSavedWorkInfo = WorkManager.getInstance().getWorkInfoByIdLiveData(request.id)
+            mSavedWorkInfo = WorkManager.getInstance(context).getWorkInfoByIdLiveData(request.id)
 
             mSavedWorkInfo.observe(
                     lifecycleOwner,
@@ -38,7 +41,7 @@ class WorkerManager {
                     }
             )
 
-            WorkManager.getInstance().enqueue(request)
+            WorkManager.getInstance(context).enqueue(request)
         }
     }
 }

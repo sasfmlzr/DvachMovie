@@ -11,6 +11,7 @@ import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.utils.MovieObserver
+import dvachmovie.worker.WorkerManager
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -29,10 +30,11 @@ class StartFragment : BaseFragment<StartVM,
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
     private val routeToMovieFragmentTask = { router.navigateStartToMovieFragment() }
-    private var showErrorTask = { throwable: Throwable ->
+    private val showErrorTask = { throwable: Throwable ->
         extensions.showMessage(throwable.message ?: "Please try again")
         Unit
     }
+    private val initDBTask = { WorkerManager.initDB(context!!) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -41,6 +43,7 @@ class StartFragment : BaseFragment<StartVM,
 
         viewModel.routeToMovieFragmentTask = routeToMovieFragmentTask
         viewModel.showErrorTask = showErrorTask
+        viewModel.initDBTask = initDBTask
 
         viewModel.imageId.value = R.raw.cybermilosgif
         prepareData()
