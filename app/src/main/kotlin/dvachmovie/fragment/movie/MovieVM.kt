@@ -69,7 +69,6 @@ class MovieVM @Inject constructor(
     }
 
     lateinit var downloadBtnClicked: () -> Unit
-    lateinit var downloadTask: (download: String, cookie: String) -> Unit
     lateinit var routeToSettingsTask: () -> Unit
     lateinit var copyURLTask: (movieUrl: String) -> Unit
     lateinit var routeToPreviewTask: () -> Unit
@@ -126,10 +125,6 @@ class MovieVM @Inject constructor(
 
     private fun render(model: PresenterModel) {
         when (model) {
-            is CookieModel -> {
-                downloadTask(currentMovie.value?.movieUrl ?: "", model.cookie.toString())
-            }
-
             is ShuffledMoviesModel -> movieList.postValue(model.movies)
 
             is ReportModel -> {

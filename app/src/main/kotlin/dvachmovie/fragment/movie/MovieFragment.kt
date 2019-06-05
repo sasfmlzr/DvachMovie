@@ -86,7 +86,6 @@ class MovieFragment : BaseFragment<MovieVM,
 
         binding.viewModel = viewModel
         viewModel.downloadBtnClicked = downloadBtnClicked
-        viewModel.downloadTask = downloadTask
         viewModel.routeToSettingsTask = routeToSettingsTask
         viewModel.copyURLTask = copyURLTask
         viewModel.routeToPreviewTask = routeToPreviewTask
@@ -238,8 +237,11 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
-        getCookiePipe.execute(Unit)
+
         viewModel.currentMovie.value =
                 viewModel.movieList.value?.get(playerView.player.currentWindowIndex)
+
+        downloadTask(viewModel.currentMovie.value?.movieUrl
+                ?: "", getCookiePipe.execute(Unit).toString())
     }
 }
