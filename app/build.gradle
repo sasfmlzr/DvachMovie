@@ -64,50 +64,46 @@ android {
     }
 }
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    implementation "com.google.android.material:material:$materialVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "$kotlinSdk"
 
-    // Dagger
-    kapt           "com.google.dagger:dagger-compiler:$daggerVersion"
-    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "$appcompat"
+    implementation "$constraintLayout"
+    implementation "$material"
 
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion"
+    implementation "$dagger.dagger"
+    kapt "$dagger.compiler"
 
-    // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-    kapt           "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+    implementation "$coroutines.core"
+    implementation "$coroutines.android"
 
-    // Glide
-    implementation "com.github.bumptech.glide:glide:$glideVersion"
-    kapt           "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "$exoplayer.core"
+    implementation "$exoplayer.ui"
 
-    // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    implementation "$lifecycle.extensions"
+    implementation "$lifecycle.livedataktx"
+    implementation "$lifecycle.viewmodelktx"
+    kapt "$lifecycle.compiler"
 
-    implementation "androidx.work:work-runtime-ktx:$workVersion"
+    implementation "$glide.glide"
+    kapt "$glide.compiler"
 
-    // Coroutites
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-    implementation "com.jakewharton.timber:timber:$timberVersion"
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "$navigation.fragment"
+    implementation "$navigation.ui"
 
-    implementation "androidx.core:core-ktx:$ktxVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "$workmanager"
+
+    implementation "$timber"
+
+    implementation "$retrofit.retrofit"
+
+    implementation "$ktx"
 
     implementation project(':data')
     implementation project(':domain')
     implementation project(':data-android')
     implementation project(':presenter')
 
-    // Tests
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "$junit"
+    testImplementation "$mockito"
+    testImplementation "$robolectric"
 }

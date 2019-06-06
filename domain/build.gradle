@@ -5,13 +5,13 @@ sourceSets {
 }
 
 dependencies {
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "$kotlinSdk"
+    implementation "$dagger.dagger"
 
-    implementation "joda-time:joda-time:$jodaTimeVersion"
+    implementation "$coroutines.core"
 
-    // Tests
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    implementation "$jodaTime"
+
+    testImplementation "$junit"
+    testImplementation "$mockito"
 }
