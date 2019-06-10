@@ -22,7 +22,7 @@ class LocalMovieObserver @Inject constructor(
                             dbMovies)
 
                     if (diffList.isNotEmpty()) {
-                        movieStorage.movieList.value = diffList + movieList
+                        movieStorage.movieList.value = movieUtils.sortByDate(diffList + movieList)
                     }
                 })
     }

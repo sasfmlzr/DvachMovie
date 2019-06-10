@@ -18,4 +18,6 @@ interface MovieUtils {
     fun convertFileItemToMovie(fileItems: List<FileItem>, board: String): List<Movie>
 
     fun parseDateFromFileItem(fileItem: FileItem): LocalDateTime
+
+    fun sortByDate(movies: List<Movie>): List<Movie>
 }

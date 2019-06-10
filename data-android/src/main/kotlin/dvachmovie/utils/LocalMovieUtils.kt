@@ -48,4 +48,8 @@ class LocalMovieUtils @Inject constructor(private val appConfig: AppConfig) : Mo
                     DateTimeFormat.forPattern
                     ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
                     .plusYears(2000)
+
+    override fun sortByDate(movies: List<Movie>): List<Movie> {
+        return movies.sortedByDescending { it.date }
+    }
 }

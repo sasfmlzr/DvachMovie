@@ -13,8 +13,10 @@ class MovieUtilsTest {
     private val appConfig = AppConfig("whew")
     private val movieUtils = LocalMovieUtils(appConfig)
 
-    private val movieOne = MovieEntity("Whew", isPlayed = true)
-    private val movieTwo = MovieEntity("Test", isPlayed = false)
+    private val movieOne = MovieEntity("Whew", isPlayed = true,
+            date = LocalDateTime().minusYears(1))
+    private val movieTwo = MovieEntity("Test", isPlayed = false,
+            date = LocalDateTime())
     private val movieThree = MovieEntity("TestWhew", isPlayed = false)
     private val movieList = listOf(movieOne, movieTwo)
     private val movieDiffList = listOf(movieOne, movieThree)
@@ -93,5 +95,14 @@ class MovieUtilsTest {
                 DateTimeFormat.forPattern
                 ("dd/MM/YYYY '${fileOne.date.substring(9, 12)}' HH:mm:ss"))
                 .plusYears(2000), resultList)
+    }
+
+
+    @Test
+    fun `Sort movies by date`() {
+        val resultList = movieUtils.sortByDate(movieList)
+
+        Assert.assertEquals(movieList.first(), resultList.last())
+        Assert.assertEquals(movieList.last(), resultList.first())
     }
 }

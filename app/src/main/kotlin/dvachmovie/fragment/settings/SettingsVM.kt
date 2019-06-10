@@ -23,6 +23,7 @@ import dvachmovie.pipe.settingsstorage.PutIsReportBtnVisiblePipe
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SettingsVM @Inject constructor(
@@ -148,8 +149,10 @@ class SettingsVM @Inject constructor(
                 }
                 .setPositiveButton("Ok") { _, _ ->
                     if (checkedItem != -1) {
-                        scopeProvider.ioScope.launch(Job()) {
-                            putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
+                        viewModelScope.launch {
+                            withContext(scopeProvider.ioScope.coroutineContext + Job()) {
+                                putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
+                            }
                             reInitMovies()
                         }
                     }
