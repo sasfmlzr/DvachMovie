@@ -9,14 +9,19 @@
     <fragment
         android:id="@+id/navStartFragment"
         android:name="dvachmovie.fragment.start.StartFragment"
-        android:label="StartFragment" >
+        android:label="StartFragment">
+
+        <argument
+            android:name="refreshMovies"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/actionShowMovieFragment"
             app:destination="@id/navMovieFragment"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popUpTo="@+id/navMovieFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -44,7 +49,7 @@
             android:id="@+id/actionShowSettingsFragment"
             app:destination="@id/navSettingsFragment"
             app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"/>
+            app:popEnterAnim="@anim/fade_in" />
     </fragment>
 
     <fragment
@@ -80,7 +85,7 @@
     <fragment
         android:id="@+id/navSettingsFragment"
         android:name="dvachmovie.fragment.settings.SettingsFragment"
-        android:label="SettingsFragment" >
+        android:label="SettingsFragment">
         <action
             android:id="@+id/actionShowStartFragment"
             app:destination="@+id/navStartFragment"

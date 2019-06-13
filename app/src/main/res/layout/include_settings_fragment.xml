@@ -82,15 +82,26 @@
                         android:text="@string/list_button_visible" />
 
                     <Button
-                        android:id="@+id/buttonRefreshDatabase"
+                        android:id="@+id/buttonCleanDatabase"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onRefreshDatabase}"
+                        android:onClick="@{viewModel.onCleanDatabase}"
                         android:text="@string/clean_movies" />
+
+                    <Button
+                        android:id="@+id/buttonRefreshMovies"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:onClick="@{viewModel.onRefreshMovies}"
+                        android:text="@string/refresh_movies" />
 
                     <include
                         layout="@layout/include_boards"

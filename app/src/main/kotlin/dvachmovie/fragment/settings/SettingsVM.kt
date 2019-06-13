@@ -82,7 +82,7 @@ class SettingsVM @Inject constructor(
 
     val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
 
-    val onRefreshDatabase =
+    val onCleanDatabase =
             View.OnClickListener {
                 AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
                         .setTitle("Confirmation")
@@ -94,12 +94,24 @@ class SettingsVM @Inject constructor(
                         .show()
             }
 
-    lateinit var recreateMoviesDB: () -> Unit
-    lateinit var routeToStartFragment: () -> Unit
+    val onRefreshMovies =
+            View.OnClickListener {
+                AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
+                        .setTitle("Confirmation")
+                        .setMessage("Movies will refresh")
+                        .setPositiveButton("Ok") { _, _ ->
+                            reInitMovies(true)
+                        }
+                        .setNegativeButton("Cancel") { _, _ -> }
+                        .show()
+            }
 
-    fun reInitMovies() {
+    lateinit var recreateMoviesDB: () -> Unit
+    lateinit var routeToStartFragment: (isRefresh: Boolean) -> Unit
+
+    fun reInitMovies(isRefresh: Boolean) {
         eraseMovieStoragePipe.execute(Unit)
-        routeToStartFragment()
+        routeToStartFragment(isRefresh)
     }
 
     val onSetPopularBoard =
@@ -153,7 +165,7 @@ class SettingsVM @Inject constructor(
                             withContext(scopeProvider.ioScope.coroutineContext + Job()) {
                                 putBoardPipe.execute(boardMap.keys.elementAt(checkedItem))
                             }
-                            reInitMovies()
+                            reInitMovies(false)
                         }
                     }
                 }

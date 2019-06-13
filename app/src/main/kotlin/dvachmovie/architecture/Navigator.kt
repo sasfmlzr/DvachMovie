@@ -18,9 +18,9 @@ class Navigator(private val router: NavController,
         navigate(direction)
     }
 
-    fun navigateSettingsToStartFragment() {
+    fun navigateSettingsToStartFragment(isRefresh: Boolean) {
         val direction = SettingsFragmentDirections
-                .actionShowStartFragment()
+                .actionShowStartFragment(isRefresh)
         navigate(direction)
     }
 

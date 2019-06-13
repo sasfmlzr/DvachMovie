@@ -37,13 +37,13 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
     private fun configureVM() {
         viewModel.routeToStartFragment = {
-            router.navigateSettingsToStartFragment()
+            router.navigateSettingsToStartFragment(it)
         }
 
         viewModel.recreateMoviesDB = {
             logger.d(this.javaClass.name, "refresh database")
             WorkerManager.deleteAllInDB(context!!, this) {
-                viewModel.reInitMovies()
+                viewModel.reInitMovies(false)
             }
         }
     }
