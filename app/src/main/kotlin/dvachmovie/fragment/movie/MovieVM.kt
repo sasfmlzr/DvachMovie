@@ -80,7 +80,7 @@ class MovieVM @Inject constructor(
     val onBtnDownloadClicked = View.OnClickListener { downloadBtnClicked() }
     val onBtnShuffleClicked = View.OnClickListener {
         viewModelScope.launch {
-            shuffleMoviesPipe.execute(movieList.value ?: listOf())
+            shuffleMoviesPipe.execute(movieList)
         }
     }
     val onBtnSettingsClicked = View.OnClickListener { routeToSettingsTask() }

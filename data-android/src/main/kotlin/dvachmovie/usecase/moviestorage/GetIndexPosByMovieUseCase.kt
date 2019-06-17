@@ -11,5 +11,5 @@ open class GetIndexPosByMovieUseCase @Inject constructor(
         private val movieUtils: MovieUtils) : UseCase<Movie, Int>() {
 
     override fun execute(input: Movie): Int = movieUtils.getIndexPosition(input,
-                movieStorage.movieList.value)
+                movieStorage.movieList)
 }

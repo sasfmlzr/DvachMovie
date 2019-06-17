@@ -17,12 +17,12 @@ class LocalMovieObserver @Inject constructor(
     override fun observeDB(lifecycleOwner: LifecycleOwner) {
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, Observer { dbMovies ->
-                    val movieList = movieStorage.movieList.value ?: listOf()
+                    val movieList = movieStorage.movieList
                     val diffList = movieUtils.calculateDiff(movieList,
                             dbMovies)
 
                     if (diffList.isNotEmpty()) {
-                        movieStorage.movieList.value = movieUtils.sortByDate(diffList + movieList)
+                        movieStorage.movieList = movieUtils.sortByDate(diffList + movieList)
                     }
                 })
     }

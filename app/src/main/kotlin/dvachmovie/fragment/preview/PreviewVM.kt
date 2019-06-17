@@ -21,6 +21,6 @@ class PreviewVM @Inject constructor(getMovieListPipe: GetMovieListPipe,
 
 
     val uriMovie = MutableLiveData<List<Movie>>().apply {
-        value = movieList.value?.map { it }
+        value = movieList
     }
 }

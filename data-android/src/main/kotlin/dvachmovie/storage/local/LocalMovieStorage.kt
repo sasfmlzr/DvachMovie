@@ -5,6 +5,6 @@ import dvachmovie.db.data.Movie
 import javax.inject.Inject
 
 class LocalMovieStorage @Inject constructor() : MovieStorage {
-    override val movieList: MutableLiveData<List<Movie>> = MutableLiveData()
+    override var movieList: List<Movie> = mutableListOf()
     override val currentMovie: MutableLiveData<Movie> = MutableLiveData()
 }

@@ -9,6 +9,6 @@ open class EraseMovieStorageUseCase @Inject constructor(
 
     override fun execute(input: Unit) {
         movieStorage.currentMovie.value = null
-        movieStorage.movieList.value = listOf()
+        movieStorage.movieList = listOf()
     }
 }
