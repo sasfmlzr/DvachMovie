@@ -21,8 +21,6 @@ class InsertDBWorker(@NonNull context: Context,
     override fun inject(component: WorkerComponent) = component.inject(this)
 
     override fun execute() {
-        getCurrentMoviePipe.execute(Unit).value?.let {
-            insertionMovieToDBPipe.execute(it)
-        }
+        insertionMovieToDBPipe.execute(getCurrentMoviePipe.execute(Unit))
     }
 }

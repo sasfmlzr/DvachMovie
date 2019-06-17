@@ -1,9 +1,21 @@
 package dvachmovie.storage.local
 
-import androidx.lifecycle.MutableLiveData
 import dvachmovie.db.data.Movie
 
 interface MovieStorage {
     var movieList: List<Movie>
-    val currentMovie: MutableLiveData<Movie>
+
+    var onMovieListChangedListener: OnMovieListChangedListener
+
+    var currentMovie: Movie
+
+    var onMovieChangedListener: OnMovieChangedListener
+}
+
+interface OnMovieListChangedListener {
+    fun onListChanged(movies: List<Movie>)
+}
+
+interface OnMovieChangedListener {
+    fun onMovieChanged(movie: Movie)
 }

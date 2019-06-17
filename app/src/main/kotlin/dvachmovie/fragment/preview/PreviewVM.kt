@@ -15,10 +15,7 @@ class PreviewVM @Inject constructor(getMovieListPipe: GetMovieListPipe,
     val currentMovie by lazy { getCurrentMoviePipe.execute(Unit) }
 
     fun getPosCurrentMovie(): Int =
-            currentMovie.value?.let {
-                getIndexPosByMoviePipe.execute(it)
-            } ?: 0
-
+                getIndexPosByMoviePipe.execute(currentMovie)
 
     val uriMovie = MutableLiveData<List<Movie>>().apply {
         value = movieList

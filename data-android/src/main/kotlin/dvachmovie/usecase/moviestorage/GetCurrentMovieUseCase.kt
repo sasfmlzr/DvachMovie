@@ -1,13 +1,12 @@
 package dvachmovie.usecase.moviestorage
 
-import androidx.lifecycle.MutableLiveData
 import dvachmovie.db.data.Movie
 import dvachmovie.storage.local.MovieStorage
 import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
 open class GetCurrentMovieUseCase @Inject constructor(
-        private val movieStorage: MovieStorage) : UseCase<Unit, MutableLiveData<Movie>>() {
+        private val movieStorage: MovieStorage) : UseCase<Unit, Movie>() {
 
-    override fun execute(input: Unit): MutableLiveData<Movie> = movieStorage.currentMovie
+    override fun execute(input: Unit): Movie = movieStorage.currentMovie
 }

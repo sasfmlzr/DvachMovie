@@ -24,6 +24,12 @@ import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
+import dvachmovie.storage.local.OnMovieChangedListener
+import dvachmovie.storage.local.OnMovieListChangedListener
+import dvachmovie.usecase.moviestorage.SetCurrentMovieUseCase
+import dvachmovie.usecase.moviestorage.SetMovieChangedListenerUseCase
+import dvachmovie.usecase.moviestorage.SetMovieListChangedListenerUseCase
+import dvachmovie.usecase.moviestorage.SetMovieListUseCase
 import dvachmovie.usecase.real.ReportUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -31,7 +37,6 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class MovieVM @Inject constructor(
@@ -46,7 +51,11 @@ class MovieVM @Inject constructor(
         reportPipe: ReportPipe,
         private val getIndexPosPipe: GetIndexPosByMoviePipe,
         private val markCurrentMovieAsPlayedPipe: MarkCurrentMovieAsPlayedPipe,
-        coroutinesProvider: ScopeProvider) : ViewModel() {
+        coroutinesProvider: ScopeProvider,
+        setMovieListChangedListenerUseCase: SetMovieListChangedListenerUseCase,
+        setMovieChangedListenerUseCase: SetMovieChangedListenerUseCase,
+        val setCurrentMovieUseCase: SetCurrentMovieUseCase,
+        val setMovieListUseCase: SetMovieListUseCase) : ViewModel() {
 
     val isReportBtnVisible = MutableLiveData<Boolean>()
 
@@ -55,6 +64,18 @@ class MovieVM @Inject constructor(
     val isGestureEnabled = MutableLiveData<Boolean>()
 
     init {
+        setMovieListChangedListenerUseCase.execute(object : OnMovieListChangedListener {
+            override fun onListChanged(movies: List<Movie>) {
+                movieList.value = movies
+            }
+        })
+
+        setMovieChangedListenerUseCase.execute(object : OnMovieChangedListener {
+            override fun onMovieChanged(movie: Movie) {
+                currentMovie.value = movie
+            }
+        })
+
         viewModelScope.launch {
             broadcastChannel.asFlow().collect {
                 render(it)
@@ -80,7 +101,7 @@ class MovieVM @Inject constructor(
     val onBtnDownloadClicked = View.OnClickListener { downloadBtnClicked() }
     val onBtnShuffleClicked = View.OnClickListener {
         viewModelScope.launch {
-            shuffleMoviesPipe.execute(movieList)
+            shuffleMoviesPipe.execute(movieList.value ?: listOf())
         }
     }
     val onBtnSettingsClicked = View.OnClickListener { routeToSettingsTask() }
@@ -100,8 +121,8 @@ class MovieVM @Inject constructor(
         }
     }
 
-    val movieList by lazy { runBlocking { getMovieListPipe.execute(Unit) } }
-    val currentMovie by lazy { runBlocking { getCurrentMoviePipe.execute(Unit) } }
+    val movieList by lazy { MutableLiveData<List<Movie>>(getMovieListPipe.execute(Unit)) }
+    val currentMovie by lazy { MutableLiveData<Movie>(getCurrentMoviePipe.execute(Unit)) }
 
     fun fillCurrentPos() {
         if (currentPos.value == Pair(0, 0L)) {
@@ -143,7 +164,7 @@ class MovieVM @Inject constructor(
 
     private fun render(model: PresenterModel) {
         when (model) {
-            is ShuffledMoviesModel -> movieList.postValue(model.movies)
+            is ShuffledMoviesModel -> setMovieListUseCase.execute(model.movies)
 
             is ReportModel -> {
                 showMessageTask("Report submitted!")
