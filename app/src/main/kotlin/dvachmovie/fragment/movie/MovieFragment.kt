@@ -200,7 +200,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
-        viewModel.setCurrentMovieUseCase.execute(
+        viewModel.setCurrentMoviePipe.execute(
                 viewModel.movieList.value?.get(playerView.player.currentWindowIndex)!!)
 
         downloadMovie(viewModel.currentMovie.value?.movieUrl
