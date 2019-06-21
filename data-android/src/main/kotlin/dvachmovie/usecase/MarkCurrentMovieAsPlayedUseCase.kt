@@ -10,9 +10,8 @@ open class MarkCurrentMovieAsPlayedUseCase @Inject constructor(
 ) : UseCase<Int, Unit>() {
 
     override fun execute(input: Int) {
-        movieStorage.currentMovie =
-                movieStorage.movieList.getOrNull(input).apply {
-                    this?.isPlayed = true
-                } ?: NullMovie()
+        movieStorage.setCurrentMovieAndUpdate(movieStorage.movieList.getOrNull(input).apply {
+            this?.isPlayed = true
+        } ?: NullMovie())
     }
 }

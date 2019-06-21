@@ -4,8 +4,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import dvachmovie.db.data.Movie
 import dvachmovie.repository.MovieDBRepository
-import dvachmovie.storage.SettingsStorage
 import dvachmovie.storage.MovieStorage
+import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
 
 class LocalMovieObserver @Inject constructor(
@@ -22,7 +22,8 @@ class LocalMovieObserver @Inject constructor(
                             dbMovies)
 
                     if (diffList.isNotEmpty()) {
-                        movieStorage.movieList = movieUtils.sortByDate(diffList + movieList)
+                        movieStorage.setMovieListAndUpdate(
+                                movieUtils.sortByDate(diffList + movieList))
                     }
                 })
     }

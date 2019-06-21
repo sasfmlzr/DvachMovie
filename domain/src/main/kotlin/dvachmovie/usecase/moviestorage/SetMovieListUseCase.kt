@@ -9,6 +9,6 @@ class SetMovieListUseCase @Inject constructor(
         private val movieStorage: MovieStorage) : UseCase<List<Movie>, Unit>() {
 
     override fun execute(input: List<Movie>) {
-        movieStorage.movieList = input
+        movieStorage.setMovieListAndUpdate(input)
     }
 }

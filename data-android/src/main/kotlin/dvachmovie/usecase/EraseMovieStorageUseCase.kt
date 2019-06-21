@@ -9,7 +9,7 @@ open class EraseMovieStorageUseCase @Inject constructor(
         private val movieStorage: MovieStorage) : UseCase<Unit, Unit>() {
 
     override fun execute(input: Unit) {
-        movieStorage.currentMovie = NullMovie()
-        movieStorage.movieList = listOf()
+        movieStorage.setCurrentMovieAndUpdate(NullMovie())
+        movieStorage.setMovieListAndUpdate(listOf())
     }
 }

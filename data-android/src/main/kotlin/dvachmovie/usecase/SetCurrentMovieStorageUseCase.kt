@@ -9,6 +9,6 @@ open class SetCurrentMovieStorageUseCase @Inject constructor(
         private val movieStorage: MovieStorage) : UseCase<Movie, Unit>() {
 
     override fun execute(input: Movie) {
-        movieStorage.currentMovie = input
+        movieStorage.setCurrentMovieAndUpdate(input)
     }
 }

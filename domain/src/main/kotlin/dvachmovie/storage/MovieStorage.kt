@@ -3,11 +3,16 @@ package dvachmovie.storage
 import dvachmovie.db.data.Movie
 
 interface MovieStorage {
-    var movieList: List<Movie>
+
+    val movieList: List<Movie>
+
+    fun setMovieListAndUpdate(movies: List<Movie>)
 
     var onMovieListChangedListener: OnMovieListChangedListener
 
-    var currentMovie: Movie
+    val currentMovie: Movie
+
+    fun setCurrentMovieAndUpdate(movie: Movie)
 
     var onMovieChangedListener: OnMovieChangedListener
 }
