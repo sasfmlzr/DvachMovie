@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import dvachmovie.db.data.Movie
 import dvachmovie.repository.MovieDBRepository
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.storage.local.MovieStorage
+import dvachmovie.storage.MovieStorage
 import javax.inject.Inject
 
 class LocalMovieObserver @Inject constructor(

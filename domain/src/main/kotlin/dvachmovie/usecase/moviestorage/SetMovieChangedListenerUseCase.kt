@@ -1,7 +1,7 @@
 package dvachmovie.usecase.moviestorage
 
-import dvachmovie.storage.local.MovieStorage
-import dvachmovie.storage.local.OnMovieChangedListener
+import dvachmovie.storage.MovieStorage
+import dvachmovie.storage.OnMovieChangedListener
 import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 

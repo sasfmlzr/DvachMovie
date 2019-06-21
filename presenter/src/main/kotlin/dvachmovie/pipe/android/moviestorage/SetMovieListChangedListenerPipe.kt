@@ -1,7 +1,7 @@
 package dvachmovie.pipe.android.moviestorage
 
 import dvachmovie.architecture.PipeSync
-import dvachmovie.storage.local.OnMovieListChangedListener
+import dvachmovie.storage.OnMovieListChangedListener
 import dvachmovie.usecase.moviestorage.SetMovieListChangedListenerUseCase
 import javax.inject.Inject
 

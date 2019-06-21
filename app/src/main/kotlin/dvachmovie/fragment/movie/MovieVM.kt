@@ -28,8 +28,8 @@ import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
-import dvachmovie.storage.local.OnMovieChangedListener
-import dvachmovie.storage.local.OnMovieListChangedListener
+import dvachmovie.storage.OnMovieChangedListener
+import dvachmovie.storage.OnMovieListChangedListener
 import dvachmovie.usecase.real.ReportUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel

@@ -7,8 +7,6 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.repository.LocalMovieDBRepository
 import dvachmovie.repository.MovieDBRepository
 import dvachmovie.storage.KeyValueStorage
-import dvachmovie.storage.local.LocalMovieStorage
-import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.local.SharedPreferencesStorage
 import dvachmovie.utils.LocalMovieObserver
 import dvachmovie.utils.LocalMovieUtils
@@ -30,10 +28,6 @@ internal abstract class StorageModule {
     @Binds
     @Singleton
     internal abstract fun scopeProvider(local: LocalScopeProvider): ScopeProvider
-
-    @Binds
-    @Singleton
-    internal abstract fun movieStorage(local: LocalMovieStorage): MovieStorage
 
     @Binds
     @Singleton

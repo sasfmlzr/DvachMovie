@@ -1,7 +1,10 @@
-package dvachmovie.storage.local
+package dvachmovie.storage
 
 import dvachmovie.db.data.Movie
 import dvachmovie.db.data.NullMovie
+import dvachmovie.storage.MovieStorage
+import dvachmovie.storage.OnMovieChangedListener
+import dvachmovie.storage.OnMovieListChangedListener
 import javax.inject.Inject
 
 class LocalMovieStorage @Inject constructor() : MovieStorage {
