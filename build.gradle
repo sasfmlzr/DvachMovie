@@ -7,29 +7,28 @@ buildscript {
         minSdkVersion = 23
         targetSdkVersion = 28
 
-        appcompatVersion = '1.1.0-alpha05'
-        constraintLayoutVersion = '2.0.0-beta1'
+        appcompatVersion = '1.1.0-beta01'
+        constraintLayoutVersion = '2.0.0-beta2'
         coroutinesVersion = '1.2.1'
-        daggerVersion = '2.23.1'
-        detektVersion = '1.0.0-RC12'
-        exoplayerVersion = '2.10.1'
+        daggerVersion = '2.23.2'
+        detektVersion = '1.0.0-RC15'
+        exoplayerVersion = '2.10.2'
         glideVersion = '4.9.0'
         gradleVersion = '3.4.1'
         junitVersion = '4.13-beta-3'
         jodaTimeVersion = '2.10.1'
-        kotlinVersion = '1.3.31'
-        ktxVersion = '1.2.0-alpha01'
+        kotlinVersion = '1.3.40'
+        ktxVersion = '1.2.0-alpha02'
         lifecycleVersion = '2.2.0-alpha01'
         materialVersion = '1.1.0-alpha07'
         mockitoVersion = '2.23.4'
-        navigationVersion = '2.1.0-alpha04'
-        retrofitVersion = '2.5.0'
+        navigationVersion = '2.1.0-alpha05'
+        retrofitVersion = '2.6.0'
         retrofitCoroutinesVersion = '0.9.2'
         robolectricVersion = '4.3'
-        roomVersion = '2.1.0-rc01'
+        roomVersion = '2.1.0'
         timberVersion = '4.7.1'
-        workVersion = '2.1.0-alpha02'
-
+        workVersion = '2.1.0-beta02'
 
         appcompat = "androidx.appcompat:appcompat:$appcompatVersion"
         constraintLayout = "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
