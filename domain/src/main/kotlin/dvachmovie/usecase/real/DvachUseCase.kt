@@ -6,6 +6,7 @@ import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -14,10 +15,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
-                                       private val getLinkFilesFromThreadsUseCase:
+                                            private val getLinkFilesFromThreadsUseCase:
                                        GetLinkFilesFromThreadsUseCase,
-                                       private val movieUtils: MovieUtils,
-                                       private val scopeProvider: ScopeProvider) :
+                                            private val movieUtils: MovieUtils,
+                                            private val movieConverter: MovieConverter,
+                                            private val scopeProvider: ScopeProvider) :
         UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
@@ -59,7 +61,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                     try {
                         val webmItems =
                                 movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
-                        movies.addAll(movieUtils.convertFileItemToMovie(webmItems, board))
+                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board))
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break

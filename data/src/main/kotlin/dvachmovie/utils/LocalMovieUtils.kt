@@ -1,14 +1,10 @@
 package dvachmovie.utils
 
-import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.db.data.Movie
-import dvachmovie.db.model.MovieEntity
-import org.joda.time.LocalDateTime
-import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
-class LocalMovieUtils @Inject constructor(private val appConfig: AppConfig) : MovieUtils {
+class LocalMovieUtils @Inject constructor() : MovieUtils {
 
     override fun shuffleMovies(movies: List<Movie>): List<Movie> =
             deleteIfMoviesIsPlayed(movies).shuffled()
@@ -31,23 +27,6 @@ class LocalMovieUtils @Inject constructor(private val appConfig: AppConfig) : Mo
 
     override fun filterFileItemOnlyAsWebm(fileItems: List<FileItem>): List<FileItem> =
             fileItems.filter { it.path.contains(".webm") }
-
-    override fun convertFileItemToMovie(fileItems: List<FileItem>, board: String): List<Movie> =
-            fileItems.map { fileItem ->
-                MovieEntity(board = board,
-                        movieUrl = appConfig.DVACH_URL + fileItem.path,
-                        previewUrl = appConfig.DVACH_URL + fileItem.thumbnail,
-                        date = parseDateFromFileItem(fileItem),
-                        md5 = fileItem.md5,
-                        thread = fileItem.numThread,
-                        post = fileItem.numPost)
-            }
-
-    override fun parseDateFromFileItem(fileItem: FileItem): LocalDateTime =
-            LocalDateTime.parse(fileItem.date,
-                    DateTimeFormat.forPattern
-                    ("dd/MM/YYYY '${fileItem.date.substring(9, 12)}' HH:mm:ss"))
-                    .plusYears(2000)
 
     override fun sortByDate(movies: List<Movie>): List<Movie> {
         return movies.sortedByDescending { it.date }

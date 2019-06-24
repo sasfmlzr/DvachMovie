@@ -1,47 +1,27 @@
 package dvachmovie.utils
 
-import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
-import dvachmovie.db.model.MovieEntity
+import dvachmovie.db.data.NullMovie
 import org.joda.time.LocalDateTime
-import org.joda.time.format.DateTimeFormat
 import org.junit.Assert
 import org.junit.Test
 
 class MovieUtilsTest {
 
-    private val appConfig = AppConfig("whew")
-    private val movieUtils = LocalMovieUtils(appConfig)
+    private val movieUtils = LocalMovieUtils()
 
-    private val movieOne = MovieEntity("Whew", isPlayed = true,
+    private val movieOne = NullMovie("Whew", isPlayed = true,
             date = LocalDateTime().minusYears(1))
-    private val movieTwo = MovieEntity("Test", isPlayed = false,
+    private val movieTwo = NullMovie("Test", isPlayed = false,
             date = LocalDateTime())
-    private val movieThree = MovieEntity("TestWhew", isPlayed = false)
+    private val movieThree = NullMovie("TestWhew", isPlayed = false)
     private val movieList = listOf(movieOne, movieTwo)
     private val movieDiffList = listOf(movieOne, movieThree)
 
-    private val board = "testBoard"
     private val fileOne = FileItem(path = "one.webm", date = "14/05/19 Втр 21:20:37")
     private val fileTwo = FileItem(path = "two.webm", date = "14/05/19 Втр 21:20:37")
     private val fileThree = FileItem(path = "three", date = "14/05/19 Втр 21:20:37")
     private val fileItems = listOf(fileOne, fileTwo, fileThree)
-
-    private val movieEntityOne = MovieEntity(board = board,
-            movieUrl = appConfig.DVACH_URL + fileOne.path,
-            previewUrl = appConfig.DVACH_URL,
-            date = movieUtils.parseDateFromFileItem(fileOne))
-    private val movieEntityTwo = MovieEntity(board = board,
-            movieUrl = appConfig.DVACH_URL + fileTwo.path,
-            previewUrl = appConfig.DVACH_URL,
-            date = movieUtils.parseDateFromFileItem(fileTwo))
-    private val movieEntityThree = MovieEntity(board = board,
-            movieUrl = appConfig.DVACH_URL + fileThree.path,
-            previewUrl = appConfig.DVACH_URL,
-            date = movieUtils.parseDateFromFileItem(fileThree))
-    private val movieEntities = listOf(movieEntityOne,
-            movieEntityTwo,
-            movieEntityThree)
 
     @Test
     fun `Shuffle movies and delete played movies`() {
@@ -78,23 +58,6 @@ class MovieUtilsTest {
         Assert.assertEquals(false, resultList.contains(fileThree))
         Assert.assertEquals(true, resultList.contains(fileOne))
         Assert.assertEquals(true, resultList.contains(fileTwo))
-    }
-
-    @Test
-    fun `Convert FileItem to MovieItem`() {
-        val resultList = movieUtils.convertFileItemToMovie(fileItems, board)
-
-        Assert.assertEquals(movieEntities, resultList)
-    }
-
-    @Test
-    fun `Convert string date to LocalDateTime`() {
-        val resultList = movieUtils.parseDateFromFileItem(fileOne)
-
-        Assert.assertEquals(LocalDateTime.parse(fileOne.date,
-                DateTimeFormat.forPattern
-                ("dd/MM/YYYY '${fileOne.date.substring(9, 12)}' HH:mm:ss"))
-                .plusYears(2000), resultList)
     }
 
 
