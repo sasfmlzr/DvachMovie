@@ -1,4 +1,4 @@
-package dvachmovie.usecase
+package dvachmovie.usecase.moviestorage
 
 import dvachmovie.db.data.NullMovie
 import dvachmovie.storage.MovieStorage
@@ -10,8 +10,9 @@ open class MarkCurrentMovieAsPlayedUseCase @Inject constructor(
 ) : UseCase<Int, Unit>() {
 
     override fun execute(input: Int) {
-        movieStorage.setCurrentMovieAndUpdate(movieStorage.movieList.getOrNull(input).apply {
+        val movie = movieStorage.movieList.getOrNull(input).apply {
             this?.isPlayed = true
-        } ?: NullMovie())
+        } ?: NullMovie()
+        movieStorage.setCurrentMovieAndUpdate(movie)
     }
 }

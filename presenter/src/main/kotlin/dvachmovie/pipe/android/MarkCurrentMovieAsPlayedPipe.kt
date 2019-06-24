@@ -1,7 +1,7 @@
 package dvachmovie.pipe.android
 
 import dvachmovie.architecture.PipeSync
-import dvachmovie.usecase.MarkCurrentMovieAsPlayedUseCase
+import dvachmovie.usecase.moviestorage.MarkCurrentMovieAsPlayedUseCase
 import javax.inject.Inject
 
 class MarkCurrentMovieAsPlayedPipe @Inject constructor(

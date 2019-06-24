@@ -1,6 +1,6 @@
 package dvachmovie.pipe.android
 
-import dvachmovie.usecase.MarkCurrentMovieAsPlayedUseCase
+import dvachmovie.usecase.moviestorage.MarkCurrentMovieAsPlayedUseCase
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks

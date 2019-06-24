@@ -1,7 +1,7 @@
 package dvachmovie.pipe.android
 
 import dvachmovie.architecture.PipeSync
-import dvachmovie.usecase.EraseMovieStorageUseCase
+import dvachmovie.usecase.moviestorage.EraseMovieStorageUseCase
 import javax.inject.Inject
 
 class EraseMovieStoragePipe @Inject constructor(
