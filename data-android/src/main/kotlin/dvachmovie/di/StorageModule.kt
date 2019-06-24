@@ -7,13 +7,11 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.repository.LocalMovieDBRepository
 import dvachmovie.repository.MovieDBRepository
 import dvachmovie.storage.KeyValueStorage
-import dvachmovie.storage.local.LocalMovieStorage
-import dvachmovie.storage.local.MovieStorage
 import dvachmovie.storage.local.SharedPreferencesStorage
+import dvachmovie.utils.LocalMovieConverter
 import dvachmovie.utils.LocalMovieObserver
-import dvachmovie.utils.LocalMovieUtils
+import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieObserver
-import dvachmovie.utils.MovieUtils
 import javax.inject.Singleton
 
 @Module
@@ -25,15 +23,7 @@ internal abstract class StorageModule {
 
     @Binds
     @Singleton
-    internal abstract fun movieUtils(local: LocalMovieUtils): MovieUtils
-
-    @Binds
-    @Singleton
     internal abstract fun scopeProvider(local: LocalScopeProvider): ScopeProvider
-
-    @Binds
-    @Singleton
-    internal abstract fun movieStorage(local: LocalMovieStorage): MovieStorage
 
     @Binds
     @Singleton
@@ -42,4 +32,8 @@ internal abstract class StorageModule {
     @Binds
     @Singleton
     internal abstract fun movieObserver(local: LocalMovieObserver): MovieObserver
+
+    @Binds
+    @Singleton
+    internal abstract fun movieConverter(local: LocalMovieConverter): MovieConverter
 }

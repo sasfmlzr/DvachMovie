@@ -1,15 +1,14 @@
-package dvachmovie.pipe.android
+package dvachmovie.pipe.moviestorage
 
 import dvachmovie.architecture.PipeSync
 import dvachmovie.db.data.Movie
-import dvachmovie.usecase.SetCurrentMovieStorageUseCase
+import dvachmovie.usecase.moviestorage.SetCurrentMovieUseCase
 import javax.inject.Inject
 
-class SetCurrentMovieStoragePipe @Inject constructor(
-        private val useCase: SetCurrentMovieStorageUseCase
+class SetCurrentMoviePipe @Inject constructor(
+        private val useCase: SetCurrentMovieUseCase
 ) : PipeSync<Movie, Unit>() {
 
     override fun execute(input: Movie): Unit =
             useCase.execute(input)
-
 }

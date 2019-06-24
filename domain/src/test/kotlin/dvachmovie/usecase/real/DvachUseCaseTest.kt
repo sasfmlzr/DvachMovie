@@ -6,6 +6,7 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,9 @@ class DvachUseCaseTest {
 
     @Mock
     lateinit var movieUtils: MovieUtils
+
+    @Mock
+    lateinit var movieConverter: MovieConverter
 
     @Mock
     lateinit var scopeProvider: ScopeProvider
@@ -163,9 +167,9 @@ class DvachUseCaseTest {
             given(movieUtils.filterFileItemOnlyAsWebm(
                     listOf(fileTwo)))
                     .willReturn(listOf(fileTwo))
-            given(movieUtils.convertFileItemToMovie(listOf(fileOne), board))
+            given(movieConverter.convertFileItemToMovie(listOf(fileOne), board))
                     .willReturn(listOf(movieEntityOne))
-            given(movieUtils.convertFileItemToMovie(listOf(fileTwo), board))
+            given(movieConverter.convertFileItemToMovie(listOf(fileTwo), board))
                     .willReturn(listOf(movieEntityTwo))
 
             val dvachInputModel = DvachUseCase.Params(board, happyExecutorResult)
@@ -197,7 +201,7 @@ class DvachUseCaseTest {
                     .executeAsync(linkFilesModelOne)).willReturn(linkOneModel)
             given(movieUtils.filterFileItemOnlyAsWebm(listOf(fileOne)))
                     .willReturn(listOf(fileOne))
-            given(movieUtils.convertFileItemToMovie(listOf(fileOne), board))
+            given(movieConverter.convertFileItemToMovie(listOf(fileOne), board))
                     .willReturn(listOf(movieEntityOne))
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelTwo)).willThrow(testException)

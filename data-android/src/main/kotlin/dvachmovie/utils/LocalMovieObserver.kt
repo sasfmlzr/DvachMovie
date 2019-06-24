@@ -4,8 +4,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import dvachmovie.db.data.Movie
 import dvachmovie.repository.MovieDBRepository
+import dvachmovie.storage.MovieStorage
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.storage.local.MovieStorage
 import javax.inject.Inject
 
 class LocalMovieObserver @Inject constructor(
@@ -17,12 +17,13 @@ class LocalMovieObserver @Inject constructor(
     override fun observeDB(lifecycleOwner: LifecycleOwner) {
         movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
                 .observe(lifecycleOwner, Observer { dbMovies ->
-                    val movieList = movieStorage.movieList.value ?: listOf()
+                    val movieList = movieStorage.movieList
                     val diffList = movieUtils.calculateDiff(movieList,
                             dbMovies)
 
                     if (diffList.isNotEmpty()) {
-                        movieStorage.movieList.value = movieUtils.sortByDate(diffList + movieList)
+                        movieStorage.setMovieListAndUpdate(
+                                movieUtils.sortByDate(diffList + movieList))
                     }
                 })
     }

@@ -1,6 +1,6 @@
 package dvachmovie.pipe.android
 
-import dvachmovie.usecase.EraseMovieStorageUseCase
+import dvachmovie.usecase.moviestorage.EraseMovieStorageUseCase
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks

@@ -19,7 +19,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class SettingsStorageTest {
+class LocalSettingsStorageTest {
 
     @InjectMocks
     lateinit var settingsStorage: LocalSettingsStorage
