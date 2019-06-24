@@ -3,9 +3,9 @@ package dvachmovie.fragment.preview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dvachmovie.db.data.Movie
-import dvachmovie.pipe.android.moviestorage.GetCurrentMoviePipe
-import dvachmovie.pipe.android.moviestorage.GetIndexPosByMoviePipe
-import dvachmovie.pipe.android.moviestorage.GetMovieListPipe
+import dvachmovie.pipe.moviestorage.GetCurrentMoviePipe
+import dvachmovie.pipe.moviestorage.GetIndexPosByMoviePipe
+import dvachmovie.pipe.moviestorage.GetMovieListPipe
 import javax.inject.Inject
 
 class PreviewVM @Inject constructor(getMovieListPipe: GetMovieListPipe,

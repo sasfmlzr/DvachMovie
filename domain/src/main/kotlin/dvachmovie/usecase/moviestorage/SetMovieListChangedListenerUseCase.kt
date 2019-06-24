@@ -5,7 +5,7 @@ import dvachmovie.storage.OnMovieListChangedListener
 import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
-class SetMovieListChangedListenerUseCase @Inject constructor(
+open class SetMovieListChangedListenerUseCase @Inject constructor(
         private val movieStorage: MovieStorage) : UseCase<OnMovieListChangedListener, Unit>() {
 
     override fun execute(input: OnMovieListChangedListener) {

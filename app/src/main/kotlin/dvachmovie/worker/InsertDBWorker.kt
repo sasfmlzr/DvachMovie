@@ -6,7 +6,7 @@ import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
 import dvachmovie.pipe.android.InsertionMovieToDBPipe
-import dvachmovie.pipe.android.moviestorage.GetCurrentMoviePipe
+import dvachmovie.pipe.moviestorage.GetCurrentMoviePipe
 import javax.inject.Inject
 
 class InsertDBWorker(@NonNull context: Context,

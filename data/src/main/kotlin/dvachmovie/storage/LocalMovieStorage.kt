@@ -12,7 +12,7 @@ class LocalMovieStorage @Inject constructor() : MovieStorage {
         get() = innerMovieList
 
     override fun setMovieListAndUpdate(movies: List<Movie>) {
-        innerMovieList = movieList
+        innerMovieList = movies
         onMovieListChangedListener.onListChanged(movies)
     }
 

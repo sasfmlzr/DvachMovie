@@ -13,12 +13,12 @@ import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.Movie
-import dvachmovie.pipe.android.SetCurrentMovieStoragePipe
+import dvachmovie.pipe.moviestorage.SetCurrentMoviePipe
 import dvachmovie.pipe.network.GetCookiePipe
 import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(
-        private val setCurrentMovieStoragePipe: SetCurrentMovieStoragePipe,
+        private val setCurrentMovieStoragePipe: SetCurrentMoviePipe,
         getCookiePipe: GetCookiePipe,
         private val logger: Logger) :
         ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>(PreviewMovieDiffCallback()) {

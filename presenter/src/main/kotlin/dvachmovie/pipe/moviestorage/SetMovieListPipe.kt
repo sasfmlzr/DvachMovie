@@ -1,4 +1,4 @@
-package dvachmovie.pipe.android.moviestorage
+package dvachmovie.pipe.moviestorage
 
 import dvachmovie.architecture.PipeSync
 import dvachmovie.db.data.Movie
