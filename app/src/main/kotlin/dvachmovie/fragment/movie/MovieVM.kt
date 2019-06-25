@@ -55,7 +55,7 @@ class MovieVM @Inject constructor(
         setMovieListChangedListenerPipe: SetMovieListChangedListenerPipe,
         setMovieChangedListenerPipe: SetMovieChangedListenerPipe,
         val setCurrentMoviePipe: SetCurrentMoviePipe,
-        val setMovieListPipe: SetMovieListPipe) : ViewModel() {
+        private val setMovieListPipe: SetMovieListPipe) : ViewModel() {
 
     val isReportBtnVisible = MutableLiveData<Boolean>()
 

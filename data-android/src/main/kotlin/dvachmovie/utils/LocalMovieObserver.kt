@@ -1,11 +1,11 @@
 package dvachmovie.utils
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import dvachmovie.db.data.Movie
 import dvachmovie.repository.MovieDBRepository
 import dvachmovie.storage.MovieStorage
 import dvachmovie.storage.SettingsStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class LocalMovieObserver @Inject constructor(
@@ -14,24 +14,27 @@ class LocalMovieObserver @Inject constructor(
         private val settingsStorage: SettingsStorage,
         private val movieUtils: MovieUtils
 ) : MovieObserver {
-    override fun observeDB(lifecycleOwner: LifecycleOwner) {
-        movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
-                .observe(lifecycleOwner, Observer { dbMovies ->
-                    val movieList = movieStorage.movieList
-                    val diffList = movieUtils.calculateDiff(movieList,
-                            dbMovies)
+    override suspend fun observeDB() {
+        val dbMovies = movieDBRepository.getMoviesFromBoard(settingsStorage.getBoard())
 
-                    if (diffList.isNotEmpty()) {
-                        movieStorage.setMovieListAndUpdate(
-                                movieUtils.sortByDate(diffList + movieList))
-                    }
-                })
+        val movieList = movieStorage.movieList
+        val diffList = movieUtils.calculateDiff(movieList, dbMovies)
+
+        if (diffList.isNotEmpty()) {
+            withContext(Dispatchers.Main) {
+                movieStorage.setMovieListAndUpdate(
+                        movieUtils.sortByDate(diffList + movieList))
+            }
+        }
     }
 
-    override fun observeDB(lifecycleOwner: LifecycleOwner,
-                           observer: Observer<List<Movie>>) {
-        movieDBRepository
+    override fun observeDB(onGetMovie: OnGetMovieListener) {
+        val dbMovies = movieDBRepository
                 .getMoviesFromBoard(settingsStorage.getBoard())
-                .observe(lifecycleOwner, observer)
+        onGetMovie.onGet(dbMovies)
+    }
+
+    interface OnGetMovieListener {
+        fun onGet(movies: List<Movie>)
     }
 }

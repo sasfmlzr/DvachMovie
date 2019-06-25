@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import dvachmovie.R
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
+import dvachmovie.db.data.Movie
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
+import dvachmovie.utils.LocalMovieObserver.OnGetMovieListener
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartVM,
@@ -23,6 +27,9 @@ class StartFragment : BaseFragment<StartVM,
 
     @Inject
     lateinit var movieObserver: MovieObserver
+
+    @Inject
+    lateinit var scopeProvider: ScopeProvider
 
     override fun getLayoutId() = R.layout.fragment_start
 
@@ -51,13 +58,20 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     private fun prepareData() {
-        movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
-            if (movies.filter { !it.isPlayed }.size < MINIMUM_COUNT_MOVIES ||
-                    StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
-                viewModel.loadNewMovies()
-            } else {
-                router.navigateStartToMovieFragment()
-            }
-        })
+        scopeProvider.ioScope.launch(Job()) {
+            movieObserver.observeDB(object : OnGetMovieListener {
+                override fun onGet(movies: List<Movie>) {
+                    logger.d("observe observeDB started")
+                    if (movies.size < MINIMUM_COUNT_MOVIES ||
+                            StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
+                        viewModel.loadNewMovies()
+                    } else {
+                        router.navigateStartToMovieFragment()
+                    }
+                    logger.d("observe observeDB finished")
+                }
+            })
+        }
+
     }
 }

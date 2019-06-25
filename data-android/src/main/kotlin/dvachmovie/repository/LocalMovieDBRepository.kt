@@ -1,6 +1,5 @@
 package dvachmovie.repository
 
-import androidx.lifecycle.LiveData
 import dvachmovie.db.data.Movie
 import dvachmovie.db.model.MovieDao
 import dvachmovie.db.model.MovieEntity
@@ -10,10 +9,8 @@ import javax.inject.Inject
 internal class LocalMovieDBRepository @Inject constructor(
         private val movieDao: MovieDao) : MovieDBRepository {
 
-    override fun getAll() : LiveData<List<Movie>> = movieDao.getAll()  as LiveData<List<Movie>>
-
-    override fun getMoviesFromBoard(boardThread: String): LiveData<List<Movie>> {
-        return movieDao.getMoviesFromBoard(boardThread) as LiveData<List<Movie>>
+    override fun getMoviesFromBoard(boardThread: String): List<Movie> {
+        return movieDao.getMoviesFromBoard(boardThread)
     }
 
     override fun insert(movieEntity: Movie) {

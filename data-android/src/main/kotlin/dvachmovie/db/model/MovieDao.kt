@@ -1,20 +1,17 @@
 package dvachmovie.db.model
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface MovieDao {
-    @Query("SELECT * from movieData")
-    fun getAll(): LiveData<List<MovieEntity>>
+    @Query("SELECT * from movieData where board = :boardThread and isPlayed = 0")
+    fun getMoviesFromBoard(boardThread: String): List<MovieEntity>
 
-    @Query("SELECT * from movieData where board = :boardThread")
-    fun getMoviesFromBoard(boardThread: String): LiveData<List<MovieEntity>>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun insert(movie: MovieEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

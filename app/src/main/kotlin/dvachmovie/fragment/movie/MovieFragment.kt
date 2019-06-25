@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.R
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
@@ -30,6 +31,7 @@ import dvachmovie.utils.DirectoryHelper
 import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
@@ -37,6 +39,9 @@ class MovieFragment : BaseFragment<MovieVM,
 
     @Inject
     lateinit var movieObserver: MovieObserver
+
+    @Inject
+    lateinit var scopeProvider: ScopeProvider
 
     private val routeToSettingsTask = { router.navigateMovieToSettingsFragment() }
     private val downloadBtnClicked = { runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE) }
@@ -67,7 +72,9 @@ class MovieFragment : BaseFragment<MovieVM,
         viewModel.routeToPreviewTask = routeToPreviewTask
         viewModel.showMessageTask = showMessageTask
 
-        movieObserver.observeDB(viewLifecycleOwner)
+        scopeProvider.ioScope.launch {
+            movieObserver.observeDB()
+        }
 
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {

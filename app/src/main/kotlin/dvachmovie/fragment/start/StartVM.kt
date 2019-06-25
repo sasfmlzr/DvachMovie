@@ -82,8 +82,11 @@ open class StartVM @Inject constructor(
     }
 
     fun loadNewMovies() {
-        viewRetryBtn.value = false
-        progressLoadingMovies.value = 0
+        viewModelScope.launch {
+            viewRetryBtn.value = false
+            progressLoadingMovies.value = 0
+        }
+
         dvachJob = scopeProvider.ioScope.launch(Job()) {
             dvachPipe.execute(null)
         }
