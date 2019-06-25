@@ -1,7 +1,8 @@
-package dvachmovie.pipe.android
+package dvachmovie.pipe.db
 
 import dvachmovie.db.data.Movie
 import dvachmovie.usecase.db.InsertionMovieToDBUseCase
+import kotlinx.coroutines.runBlocking
 import org.joda.time.LocalDateTime
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,6 +42,8 @@ class InsertionMovieToDBPipeTest {
 
     @Test
     fun `Happy pass`() {
-        pipe.execute(movieOne)
+        runBlocking {
+            pipe.execute(movieOne)
+        }
     }
 }

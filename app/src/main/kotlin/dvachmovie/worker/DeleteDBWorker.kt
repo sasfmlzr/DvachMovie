@@ -5,7 +5,7 @@ import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
-import dvachmovie.pipe.android.EraseDBPipe
+import dvachmovie.pipe.db.EraseDBPipe
 import javax.inject.Inject
 
 class DeleteDBWorker(@NonNull context: Context,

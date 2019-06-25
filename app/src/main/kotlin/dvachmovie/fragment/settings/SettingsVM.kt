@@ -11,7 +11,7 @@ import dvachmovie.BuildConfig
 import dvachmovie.R
 import dvachmovie.api.Boards
 import dvachmovie.architecture.ScopeProvider
-import dvachmovie.pipe.android.EraseMovieStoragePipe
+import dvachmovie.pipe.moviestorage.EraseMovieStoragePipe
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
 import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe

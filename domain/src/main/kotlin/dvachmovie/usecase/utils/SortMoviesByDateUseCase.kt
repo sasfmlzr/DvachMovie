@@ -5,7 +5,7 @@ import dvachmovie.usecase.base.UseCase
 import dvachmovie.utils.MovieUtils
 import javax.inject.Inject
 
-open class SortMovieByDateUseCase @Inject constructor(
+open class SortMoviesByDateUseCase @Inject constructor(
         private val movieUtils: MovieUtils
 ) : UseCase<List<Movie>, List<Movie>>() {
 

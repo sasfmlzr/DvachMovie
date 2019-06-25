@@ -14,7 +14,7 @@ import dvachmovie.db.data.Movie
 import dvachmovie.pipe.ErrorModel
 import dvachmovie.pipe.ReportModel
 import dvachmovie.pipe.ShuffledMoviesModel
-import dvachmovie.pipe.android.MarkCurrentMovieAsPlayedPipe
+import dvachmovie.pipe.db.MarkCurrentMovieAsPlayedPipe
 import dvachmovie.pipe.moviestorage.GetCurrentMoviePipe
 import dvachmovie.pipe.moviestorage.GetIndexPosByMoviePipe
 import dvachmovie.pipe.moviestorage.GetMovieListPipe

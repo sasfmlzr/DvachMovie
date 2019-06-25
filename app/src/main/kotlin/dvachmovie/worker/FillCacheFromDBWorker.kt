@@ -6,9 +6,9 @@ import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
 import dvachmovie.pipe.moviestorage.SetMovieListPipe
+import dvachmovie.pipe.utils.SortMoviesByDatePipe
 import dvachmovie.usecase.db.GetMoviesFromDBByBoardUseCase
 import dvachmovie.usecase.db.MergeDBandCacheUseCase
-import dvachmovie.usecase.utils.SortMovieByDateUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class FillCacheFromDBWorker(@NonNull context: Context,
     lateinit var setMovieListPipe: SetMovieListPipe
 
     @Inject
-    lateinit var sortMovieByDateUseCase: SortMovieByDateUseCase
+    lateinit var sortMoviesByDatePipe: SortMoviesByDatePipe
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
@@ -39,7 +39,7 @@ class FillCacheFromDBWorker(@NonNull context: Context,
 
         withContext(Dispatchers.Main) {
             val sumMovies = mergeDBandCacheUseCase.execute(dbMovies)
-            setMovieListPipe.execute(sortMovieByDateUseCase.execute(sumMovies))
+            setMovieListPipe.execute(sortMoviesByDatePipe.execute(sumMovies))
         }
     }
 }

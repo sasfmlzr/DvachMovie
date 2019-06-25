@@ -1,4 +1,4 @@
-package dvachmovie.pipe.android
+package dvachmovie.pipe.db
 
 import dvachmovie.architecture.PipeAsync
 import dvachmovie.db.data.Movie

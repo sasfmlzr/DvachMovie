@@ -5,7 +5,7 @@ import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
-import dvachmovie.pipe.android.InsertionMovieListToDBPipe
+import dvachmovie.pipe.db.InsertionMovieListToDBPipe
 import dvachmovie.db.model.MovieDBCache
 import javax.inject.Inject
 

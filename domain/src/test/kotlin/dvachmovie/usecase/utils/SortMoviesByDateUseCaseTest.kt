@@ -13,10 +13,10 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class SortMovieByDateUseCaseTest {
+class SortMoviesByDateUseCaseTest {
 
     @InjectMocks
-    private lateinit var useCase: SortMovieByDateUseCase
+    private lateinit var useCase: SortMoviesByDateUseCase
 
     @Mock
     private lateinit var movieUtils: MovieUtils
