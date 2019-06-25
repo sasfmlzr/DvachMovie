@@ -30,8 +30,8 @@
 
         <ImageView
             android:id="@+id/imageLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:contentDescription="@string/loading_image"
             app:imageFromResource="@{safeUnbox(viewModel.imageId)}"
             app:layout_constraintBottom_toTopOf="@+id/firstInitText"
