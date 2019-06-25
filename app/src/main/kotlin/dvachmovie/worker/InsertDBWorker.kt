@@ -20,7 +20,7 @@ class InsertDBWorker(@NonNull context: Context,
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
-    override fun execute() {
+    override suspend fun execute() {
         insertionMovieToDBPipe.execute(getCurrentMoviePipe.execute(Unit))
     }
 }

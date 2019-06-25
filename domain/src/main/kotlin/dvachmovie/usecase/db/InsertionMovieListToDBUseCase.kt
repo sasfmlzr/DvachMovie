@@ -1,4 +1,4 @@
-package dvachmovie.usecase
+package dvachmovie.usecase.db
 
 import dvachmovie.db.data.Movie
 import dvachmovie.repository.MovieDBRepository
@@ -8,6 +8,6 @@ import javax.inject.Inject
 open class InsertionMovieListToDBUseCase @Inject constructor(
         private val movieDBRepository: MovieDBRepository) : UseCase<List<Movie>, Unit>() {
 
-    override fun execute(input: List<Movie>) =
+    override suspend fun executeAsync(input: List<Movie>) =
         movieDBRepository.insertAll(input)
 }

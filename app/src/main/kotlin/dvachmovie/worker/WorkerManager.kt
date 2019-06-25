@@ -5,15 +5,24 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 
 class WorkerManager {
     companion object {
-        fun initDB(context: Context) {
-            val request = OneTimeWorkRequestBuilder<InitDBWorker>().build()
-            WorkManager.getInstance(context).enqueue(request)
+        fun initDB(context: Context, board: String) {
+            val initRequest = OneTimeWorkRequestBuilder<InitDBWorker>()
+                    .build()
+
+            val fillCacheRequest = OneTimeWorkRequestBuilder<FillCacheFromDBWorker>()
+                    .setInputData(Data.Builder().putString("BOARD", board).build())
+                    .build()
+            WorkManager.getInstance(context)
+                    .beginWith(initRequest)
+                    .then(fillCacheRequest)
+                    .enqueue()
         }
 
         fun insertMovieInDB(context: Context) {

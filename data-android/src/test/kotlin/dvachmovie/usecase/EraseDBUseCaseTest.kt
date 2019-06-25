@@ -2,6 +2,7 @@ package dvachmovie.usecase
 
 import dvachmovie.TestException
 import dvachmovie.repository.MovieDBRepository
+import dvachmovie.usecase.db.EraseDBUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith

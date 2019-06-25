@@ -1,15 +1,15 @@
 package dvachmovie.pipe.android
 
-import dvachmovie.architecture.PipeSync
+import dvachmovie.architecture.PipeAsync
 import dvachmovie.db.data.Movie
-import dvachmovie.usecase.InsertionMovieListToDBUseCase
+import dvachmovie.usecase.db.InsertionMovieListToDBUseCase
 import javax.inject.Inject
 
 class InsertionMovieListToDBPipe @Inject constructor(
         private val useCase: InsertionMovieListToDBUseCase
-) : PipeSync<List<Movie>, Unit>() {
+) : PipeAsync<List<Movie>>() {
 
-    override fun execute(input: List<Movie>): Unit =
-            useCase.execute(input)
+    override suspend fun execute(input: List<Movie>): Unit =
+            useCase.executeAsync(input)
 
 }

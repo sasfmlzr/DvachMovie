@@ -40,12 +40,14 @@ class StartFragment : BaseFragment<StartVM,
         extensions.showMessage(throwable.message ?: "Please try again")
         Unit
     }
-    private val initDBTask = { WorkerManager.initDB(context!!) }
+    private lateinit var initDBTask: () -> Unit
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
+
+        initDBTask = { WorkerManager.initDB(context!!, viewModel.settingsStorage.getBoard()) }
 
         viewModel.routeToMovieFragmentTask = routeToMovieFragmentTask
         viewModel.showErrorTask = showErrorTask

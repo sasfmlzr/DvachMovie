@@ -17,7 +17,7 @@ class DeleteDBWorker(@NonNull context: Context,
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
-    override fun execute() {
+    override suspend fun execute() {
         eraseDBPipe.execute(Unit)
     }
 }

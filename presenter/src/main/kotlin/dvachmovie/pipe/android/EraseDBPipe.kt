@@ -1,14 +1,14 @@
 package dvachmovie.pipe.android
 
-import dvachmovie.architecture.PipeSync
-import dvachmovie.usecase.EraseDBUseCase
+import dvachmovie.architecture.PipeAsync
+import dvachmovie.usecase.db.EraseDBUseCase
 import javax.inject.Inject
 
 class EraseDBPipe @Inject constructor(
         private val useCase: EraseDBUseCase
-) : PipeSync<Unit, Unit>() {
+) : PipeAsync<Unit>() {
 
-    override fun execute(input: Unit): Unit =
-            useCase.execute(input)
+    override suspend fun execute(input: Unit): Unit =
+            useCase.executeAsync(input)
 
 }

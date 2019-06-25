@@ -1,7 +1,7 @@
 package dvachmovie.pipe.android
 
 import dvachmovie.db.data.Movie
-import dvachmovie.usecase.InsertionMovieToDBUseCase
+import dvachmovie.usecase.db.InsertionMovieToDBUseCase
 import org.joda.time.LocalDateTime
 import org.junit.Test
 import org.junit.runner.RunWith

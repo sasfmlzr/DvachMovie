@@ -18,7 +18,7 @@ class InitDBWorker(@NonNull context: Context,
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
-    override fun execute() {
+    override suspend fun execute() {
         insertionMovieListToDBPipe.execute(MovieDBCache.movieList)
     }
 }

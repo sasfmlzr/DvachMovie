@@ -29,6 +29,7 @@ dependencies {
 
     implementation "$room.room"
     kapt "$room.compiler"
+    implementation "androidx.room:room-ktx:$roomVersion"
 
     implementation "$jodaTime"
 
