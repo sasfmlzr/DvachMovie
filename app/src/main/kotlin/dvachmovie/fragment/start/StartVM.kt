@@ -14,7 +14,7 @@ import dvachmovie.pipe.network.DvachPipe
 import dvachmovie.pipe.settingsstorage.PutBoardPipe
 import dvachmovie.pipe.settingsstorage.PutCookiePipe
 import dvachmovie.storage.SettingsStorage
-import dvachmovie.storage.local.MovieDBCache
+import dvachmovie.db.model.MovieDBCache
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel

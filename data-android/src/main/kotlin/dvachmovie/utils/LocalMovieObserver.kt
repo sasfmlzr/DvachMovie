@@ -5,6 +5,7 @@ import dvachmovie.repository.MovieDBRepository
 import dvachmovie.storage.SettingsStorage
 import javax.inject.Inject
 
+@Deprecated("Will be deleted in the future")
 class LocalMovieObserver @Inject constructor(
         private val movieDBRepository: MovieDBRepository,
         private val settingsStorage: SettingsStorage
