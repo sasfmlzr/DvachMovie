@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class EraseDBPipe @Inject constructor(
         private val useCase: EraseDBUseCase
-) : PipeAsync<Unit>() {
+) : PipeAsync<Unit, Unit>() {
 
     override suspend fun execute(input: Unit): Unit =
             useCase.executeAsync(input)

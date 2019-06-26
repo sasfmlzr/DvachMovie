@@ -20,7 +20,7 @@ class ReportPipe @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: ReportUseCase,
         private val scopeProvider: ScopeProvider
-) : PipeAsync<ReportUseCase.Params>() {
+) : PipeAsync<ReportUseCase.Params, Unit>() {
 
     override suspend fun execute(input: ReportUseCase.Params) {
 

@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class InsertionMovieListToDBPipe @Inject constructor(
         private val useCase: InsertionMovieListToDBUseCase
-) : PipeAsync<List<Movie>>() {
+) : PipeAsync<List<Movie>, Unit>() {
 
     override suspend fun execute(input: List<Movie>): Unit =
             useCase.executeAsync(input)

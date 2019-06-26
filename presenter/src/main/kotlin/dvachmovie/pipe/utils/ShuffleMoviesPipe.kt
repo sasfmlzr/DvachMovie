@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class ShuffleMoviesPipe @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
-        private val useCase: ShuffleMoviesUseCase) : PipeAsync<List<Movie>>() {
+        private val useCase: ShuffleMoviesUseCase) : PipeAsync<List<Movie>, Unit>() {
 
     override suspend fun execute(input: List<Movie>) {
         broadcastChannel.send(ShuffledMoviesModel(useCase.executeAsync(input)))

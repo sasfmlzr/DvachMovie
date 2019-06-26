@@ -5,7 +5,7 @@ import dvachmovie.usecase.settingsstorage.PutCookieUseCase
 import javax.inject.Inject
 
 class PutCookiePipe @Inject constructor(
-        private val useCase: PutCookieUseCase) : PipeAsync<String>() {
+        private val useCase: PutCookieUseCase) : PipeAsync<String, Unit>() {
 
     override suspend fun execute(input: String) {
         useCase.executeAsync(input)
