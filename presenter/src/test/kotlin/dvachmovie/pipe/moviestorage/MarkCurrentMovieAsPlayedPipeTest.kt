@@ -1,4 +1,4 @@
-package dvachmovie.pipe.db
+package dvachmovie.pipe.moviestorage
 
 import dvachmovie.usecase.moviestorage.MarkCurrentMovieAsPlayedUseCase
 import org.junit.Test

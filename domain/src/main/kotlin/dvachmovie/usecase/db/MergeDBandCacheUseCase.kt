@@ -6,7 +6,7 @@ import dvachmovie.usecase.base.UseCase
 import dvachmovie.utils.MovieUtils
 import javax.inject.Inject
 
-class MergeDBandCacheUseCase @Inject constructor(
+open class MergeDBandCacheUseCase @Inject constructor(
         private val movieStorage: MovieStorage,
         private val movieUtils: MovieUtils) : UseCase<List<Movie>, List<Movie>>() {
 

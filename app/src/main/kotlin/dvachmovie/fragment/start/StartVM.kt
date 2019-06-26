@@ -15,6 +15,7 @@ import dvachmovie.pipe.settingsstorage.PutBoardPipe
 import dvachmovie.pipe.settingsstorage.PutCookiePipe
 import dvachmovie.storage.SettingsStorage
 import dvachmovie.db.model.MovieDBCache
+import dvachmovie.pipe.settingsstorage.GetBoardPipe
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -29,7 +30,7 @@ open class StartVM @Inject constructor(
         putCookiePipe: PutCookiePipe,
         putBoardPipe: PutBoardPipe,
         private val scopeProvider: ScopeProvider,
-        val settingsStorage: SettingsStorage) : ViewModel() {
+        val getBoardPipe: GetBoardPipe) : ViewModel() {
 
     private lateinit var dvachJob: Job
 

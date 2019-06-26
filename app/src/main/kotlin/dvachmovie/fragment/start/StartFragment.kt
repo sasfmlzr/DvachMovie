@@ -47,7 +47,7 @@ class StartFragment : BaseFragment<StartVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
-        initDBTask = { WorkerManager.initDB(context!!, viewModel.settingsStorage.getBoard()) }
+        initDBTask = { WorkerManager.initDB(context!!, viewModel.getBoardPipe.execute(Unit)) }
 
         viewModel.routeToMovieFragmentTask = routeToMovieFragmentTask
         viewModel.showErrorTask = showErrorTask

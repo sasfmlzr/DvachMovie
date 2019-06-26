@@ -1,4 +1,4 @@
-package dvachmovie.pipe.db
+package dvachmovie.pipe.moviestorage
 
 import dvachmovie.architecture.PipeSync
 import dvachmovie.usecase.moviestorage.MarkCurrentMovieAsPlayedUseCase

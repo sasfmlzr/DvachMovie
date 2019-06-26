@@ -5,10 +5,10 @@ import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
+import dvachmovie.pipe.db.GetMoviesFromDBByBoardPipe
+import dvachmovie.pipe.db.MergeDBandCachePipe
 import dvachmovie.pipe.moviestorage.SetMovieListPipe
 import dvachmovie.pipe.utils.SortMoviesByDatePipe
-import dvachmovie.usecase.db.GetMoviesFromDBByBoardUseCase
-import dvachmovie.usecase.db.MergeDBandCacheUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,10 +18,10 @@ class FillCacheFromDBWorker(@NonNull context: Context,
 ) : BaseDBWorker(context, workerParams) {
 
     @Inject
-    lateinit var getMoviesFromDBByBoardUseCase: GetMoviesFromDBByBoardUseCase
+    lateinit var getMoviesFromDBByBoardPipe: GetMoviesFromDBByBoardPipe
 
     @Inject
-    lateinit var mergeDBandCacheUseCase: MergeDBandCacheUseCase
+    lateinit var mergeDBandCachePipe: MergeDBandCachePipe
 
     @Inject
     lateinit var setMovieListPipe: SetMovieListPipe
@@ -35,10 +35,10 @@ class FillCacheFromDBWorker(@NonNull context: Context,
         val inputData = inputData.getString("BOARD")
                 ?: throw RuntimeException("board cannot be null")
 
-        val dbMovies = getMoviesFromDBByBoardUseCase.executeAsync(inputData)
+        val dbMovies = getMoviesFromDBByBoardPipe.execute(inputData)
 
         withContext(Dispatchers.Main) {
-            val sumMovies = mergeDBandCacheUseCase.execute(dbMovies)
+            val sumMovies = mergeDBandCachePipe.execute(dbMovies)
             setMovieListPipe.execute(sortMoviesByDatePipe.execute(sumMovies))
         }
     }
