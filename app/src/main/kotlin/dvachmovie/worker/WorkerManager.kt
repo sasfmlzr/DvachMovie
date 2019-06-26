@@ -52,5 +52,12 @@ class WorkerManager {
 
             WorkManager.getInstance(context).enqueue(request)
         }
+
+        fun fillCacheFromDB(context: Context, board: String) {
+            val fillCacheRequest = OneTimeWorkRequestBuilder<FillCacheFromDBWorker>()
+                    .setInputData(Data.Builder().putString("BOARD", board).build())
+                    .build()
+            WorkManager.getInstance(context).enqueue(fillCacheRequest)
+        }
     }
 }

@@ -9,9 +9,7 @@ import dvachmovie.repository.MovieDBRepository
 import dvachmovie.storage.KeyValueStorage
 import dvachmovie.storage.local.SharedPreferencesStorage
 import dvachmovie.utils.LocalMovieConverter
-import dvachmovie.utils.LocalMovieObserver
 import dvachmovie.utils.MovieConverter
-import dvachmovie.utils.MovieObserver
 import javax.inject.Singleton
 
 @Module
@@ -28,10 +26,6 @@ internal abstract class StorageModule {
     @Binds
     @Singleton
     internal abstract fun movieRepository(local: LocalMovieDBRepository): MovieDBRepository
-
-    @Binds
-    @Singleton
-    internal abstract fun movieObserver(local: LocalMovieObserver): MovieObserver
 
     @Binds
     @Singleton

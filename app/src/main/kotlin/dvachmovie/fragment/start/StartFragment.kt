@@ -8,11 +8,8 @@ import dvachmovie.R
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
-import dvachmovie.db.data.Movie
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.utils.LocalMovieObserver.OnGetMovieListener
-import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -24,9 +21,6 @@ class StartFragment : BaseFragment<StartVM,
     companion object {
         private const val MINIMUM_COUNT_MOVIES = 100
     }
-
-    @Inject
-    lateinit var movieObserver: MovieObserver
 
     @Inject
     lateinit var scopeProvider: ScopeProvider
@@ -61,19 +55,15 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun prepareData() {
         scopeProvider.ioScope.launch(Job()) {
-            movieObserver.observeDB(object : OnGetMovieListener {
-                override fun onGet(movies: List<Movie>) {
-                    logger.d("observe observeDB started")
-                    if (movies.size < MINIMUM_COUNT_MOVIES ||
-                            StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
-                        viewModel.loadNewMovies()
-                    } else {
-                        router.navigateStartToMovieFragment()
-                    }
-                    logger.d("observe observeDB finished")
-                }
-            })
+            val movies = viewModel.getMoviesFromDBByBoardPipe
+                    .execute(viewModel.getBoardPipe.execute(Unit))
+            if (movies.size < MINIMUM_COUNT_MOVIES ||
+                    StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
+                viewModel.loadNewMovies()
+            } else {
+                WorkerManager.fillCacheFromDB(context!!, viewModel.getBoardPipe.execute(Unit))
+                router.navigateStartToMovieFragment()
+            }
         }
-
     }
 }
