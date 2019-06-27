@@ -5,7 +5,7 @@ import dvachmovie.usecase.settingsstorage.PutIsAllowGestureUseCase
 import javax.inject.Inject
 
 class PutIsAllowGesturePipe @Inject constructor(
-        private val useCase: PutIsAllowGestureUseCase) : PipeAsync<Boolean>() {
+        private val useCase: PutIsAllowGestureUseCase) : PipeAsync<Boolean, Unit>() {
 
     override suspend fun execute(input: Boolean) {
         useCase.executeAsync(input)

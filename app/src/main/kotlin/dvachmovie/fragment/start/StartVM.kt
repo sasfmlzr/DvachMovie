@@ -6,14 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dvachmovie.PresenterModel
 import dvachmovie.architecture.ScopeProvider
+import dvachmovie.db.model.MovieDBCache
 import dvachmovie.pipe.AmountRequestsModel
 import dvachmovie.pipe.CountCompletedRequestsModel
 import dvachmovie.pipe.DvachModel
 import dvachmovie.pipe.ErrorModel
+import dvachmovie.pipe.db.GetMoviesFromDBByBoardPipe
 import dvachmovie.pipe.network.DvachPipe
+import dvachmovie.pipe.settingsstorage.GetBoardPipe
 import dvachmovie.pipe.settingsstorage.PutBoardPipe
 import dvachmovie.pipe.settingsstorage.PutCookiePipe
-import dvachmovie.storage.local.MovieDBCache
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -27,7 +29,9 @@ open class StartVM @Inject constructor(
         private val dvachPipe: DvachPipe,
         putCookiePipe: PutCookiePipe,
         putBoardPipe: PutBoardPipe,
-        private val scopeProvider: ScopeProvider) : ViewModel() {
+        private val scopeProvider: ScopeProvider,
+        val getBoardPipe: GetBoardPipe,
+        val getMoviesFromDBByBoardPipe: GetMoviesFromDBByBoardPipe) : ViewModel() {
 
     private lateinit var dvachJob: Job
 
@@ -38,7 +42,6 @@ open class StartVM @Inject constructor(
     val imageId by lazy {
         MutableLiveData<Int>()
     }
-
 
     val progressLoadingMovies = MutableLiveData<Int>()
     val amountMovies = MutableLiveData<Int>()
@@ -82,8 +85,11 @@ open class StartVM @Inject constructor(
     }
 
     fun loadNewMovies() {
-        viewRetryBtn.value = false
-        progressLoadingMovies.value = 0
+        viewModelScope.launch {
+            viewRetryBtn.value = false
+            progressLoadingMovies.value = 0
+        }
+
         dvachJob = scopeProvider.ioScope.launch(Job()) {
             dvachPipe.execute(null)
         }

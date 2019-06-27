@@ -1,4 +1,4 @@
-package dvachmovie.pipe.android
+package dvachmovie.pipe.moviestorage
 
 import dvachmovie.usecase.moviestorage.MarkCurrentMovieAsPlayedUseCase
 import org.junit.Test

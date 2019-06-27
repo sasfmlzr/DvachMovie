@@ -14,7 +14,7 @@ class LocalMovieUtils @Inject constructor() : MovieUtils {
 
     override fun calculateDiff(localList: List<Movie>,
                                dbList: List<Movie>): List<Movie> =
-            dbList.filter { !localList.contains(it) && !it.isPlayed }
+            dbList.filter {!localList.contains(it)}
 
     override fun getIndexPosition(currentMovie: Movie?, movieList: List<Movie>?): Int {
         if (currentMovie == null) throw RuntimeException("Current movie cannot be null")

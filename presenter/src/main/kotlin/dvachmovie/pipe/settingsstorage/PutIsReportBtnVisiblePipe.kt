@@ -5,7 +5,7 @@ import dvachmovie.usecase.settingsstorage.PutIsReportBtnVisibleUseCase
 import javax.inject.Inject
 
 class PutIsReportBtnVisiblePipe @Inject constructor(
-        private val useCase: PutIsReportBtnVisibleUseCase) : PipeAsync<Boolean>() {
+        private val useCase: PutIsReportBtnVisibleUseCase) : PipeAsync<Boolean, Unit>() {
 
     override suspend fun execute(input: Boolean) {
         useCase.executeAsync(input)

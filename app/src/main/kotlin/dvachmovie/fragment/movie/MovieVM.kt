@@ -14,7 +14,7 @@ import dvachmovie.db.data.Movie
 import dvachmovie.pipe.ErrorModel
 import dvachmovie.pipe.ReportModel
 import dvachmovie.pipe.ShuffledMoviesModel
-import dvachmovie.pipe.android.MarkCurrentMovieAsPlayedPipe
+import dvachmovie.pipe.moviestorage.MarkCurrentMovieAsPlayedPipe
 import dvachmovie.pipe.moviestorage.GetCurrentMoviePipe
 import dvachmovie.pipe.moviestorage.GetIndexPosByMoviePipe
 import dvachmovie.pipe.moviestorage.GetMovieListPipe
@@ -55,7 +55,7 @@ class MovieVM @Inject constructor(
         setMovieListChangedListenerPipe: SetMovieListChangedListenerPipe,
         setMovieChangedListenerPipe: SetMovieChangedListenerPipe,
         val setCurrentMoviePipe: SetCurrentMoviePipe,
-        val setMovieListPipe: SetMovieListPipe) : ViewModel() {
+        private val setMovieListPipe: SetMovieListPipe) : ViewModel() {
 
     val isReportBtnVisible = MutableLiveData<Boolean>()
 

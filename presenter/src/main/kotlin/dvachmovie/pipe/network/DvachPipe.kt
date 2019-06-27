@@ -25,7 +25,7 @@ class DvachPipe @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val useCase: DvachUseCase,
         private val scopeProvider: ScopeProvider,
-        private val getBoardUseCase: GetBoardUseCase) : PipeAsync<ExecutorResult?>() {
+        private val getBoardUseCase: GetBoardUseCase) : PipeAsync<ExecutorResult?, Unit>() {
 
     suspend fun forceStart() {
         useCase.forceStart()

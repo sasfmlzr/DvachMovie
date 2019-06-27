@@ -1,6 +1,7 @@
-package dvachmovie.pipe.android
+package dvachmovie.pipe.db
 
-import dvachmovie.usecase.EraseDBUseCase
+import dvachmovie.usecase.db.EraseDBUseCase
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -18,6 +19,8 @@ class EraseDBPipeTest {
 
     @Test
     fun `Happy pass`() {
-        pipe.execute(Unit)
+        runBlocking {
+            pipe.execute(Unit)
+        }
     }
 }

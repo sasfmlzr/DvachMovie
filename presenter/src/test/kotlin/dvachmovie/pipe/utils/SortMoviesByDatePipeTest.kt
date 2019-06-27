@@ -1,22 +1,24 @@
-package dvachmovie.pipe.android
+package dvachmovie.pipe.utils
 
 import dvachmovie.db.data.Movie
-import dvachmovie.usecase.InsertionMovieListToDBUseCase
+import dvachmovie.usecase.utils.SortMoviesByDateUseCase
 import org.joda.time.LocalDateTime
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.BDDMockito.given
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class InsertionMovieListToDBPipeTest {
+class SortMoviesByDatePipeTest {
 
     @InjectMocks
-    lateinit var pipe: InsertionMovieListToDBPipe
+    lateinit var pipe: SortMoviesByDatePipe
 
     @Mock
-    lateinit var useCase: InsertionMovieListToDBUseCase
+    lateinit var useCase: SortMoviesByDateUseCase
 
     private val movieOne = object : Movie {
         override val movieUrl: String
@@ -61,9 +63,11 @@ class InsertionMovieListToDBPipeTest {
     }
 
     private val testList = listOf(movieOne, movieTwo)
+    private val resultList = listOf(movieTwo, movieOne)
 
     @Test
     fun `Happy pass`() {
-        pipe.execute(testList)
+        given(useCase.execute(testList)).willReturn(resultList)
+        Assert.assertEquals(resultList, pipe.execute(testList))
     }
 }

@@ -1,4 +1,4 @@
-package dvachmovie.pipe.android
+package dvachmovie.pipe.moviestorage
 
 import dvachmovie.architecture.PipeSync
 import dvachmovie.usecase.moviestorage.EraseMovieStorageUseCase

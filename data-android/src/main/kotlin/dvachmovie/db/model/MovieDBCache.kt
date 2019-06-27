@@ -1,4 +1,4 @@
-package dvachmovie.storage.local
+package dvachmovie.db.model
 
 import dvachmovie.db.data.Movie
 

@@ -1,7 +1,6 @@
-package dvachmovie.usecase
+package dvachmovie.usecase.db
 
 import dvachmovie.TestException
-import dvachmovie.db.data.Movie
 import dvachmovie.repository.MovieDBRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -13,31 +12,27 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class InsertionMovieListToDBUseCaseTest {
+class EraseDBUseCaseTest {
 
     @InjectMocks
-    lateinit var insertionMovieListToDBUseCase: InsertionMovieListToDBUseCase
+    lateinit var useCase: EraseDBUseCase
 
     @Mock
     lateinit var movieDBRepository: MovieDBRepository
 
-    private val movieList = listOf<Movie>()
-
     @Test
     fun `Happy pass`() {
         runBlocking {
-            doNothing().`when`(movieDBRepository).insertAll(movieList)
-
-            insertionMovieListToDBUseCase.execute(movieList)
+            useCase.executeAsync(Unit)
         }
     }
 
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
-            given(movieDBRepository.insertAll(movieList)).willThrow(TestException())
+            given(movieDBRepository.deleteAll()).willThrow(TestException())
 
-            insertionMovieListToDBUseCase.execute(movieList)
+            useCase.executeAsync(Unit)
         }
     }
 }

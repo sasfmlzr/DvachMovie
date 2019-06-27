@@ -5,8 +5,8 @@ import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
-import dvachmovie.pipe.android.InsertionMovieListToDBPipe
-import dvachmovie.storage.local.MovieDBCache
+import dvachmovie.pipe.db.InsertionMovieListToDBPipe
+import dvachmovie.db.model.MovieDBCache
 import javax.inject.Inject
 
 class InitDBWorker(@NonNull context: Context,
@@ -18,7 +18,7 @@ class InitDBWorker(@NonNull context: Context,
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
-    override fun execute() {
+    override suspend fun execute() {
         insertionMovieListToDBPipe.execute(MovieDBCache.movieList)
     }
 }

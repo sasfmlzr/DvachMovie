@@ -5,7 +5,7 @@ import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
-import dvachmovie.pipe.android.EraseDBPipe
+import dvachmovie.pipe.db.EraseDBPipe
 import javax.inject.Inject
 
 class DeleteDBWorker(@NonNull context: Context,
@@ -17,7 +17,7 @@ class DeleteDBWorker(@NonNull context: Context,
 
     override fun inject(component: WorkerComponent) = component.inject(this)
 
-    override fun execute() {
+    override suspend fun execute() {
         eraseDBPipe.execute(Unit)
     }
 }

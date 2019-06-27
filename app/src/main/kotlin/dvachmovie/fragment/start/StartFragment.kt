@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import dvachmovie.R
+import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
-import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartVM,
@@ -22,7 +23,7 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     @Inject
-    lateinit var movieObserver: MovieObserver
+    lateinit var scopeProvider: ScopeProvider
 
     override fun getLayoutId() = R.layout.fragment_start
 
@@ -33,12 +34,14 @@ class StartFragment : BaseFragment<StartVM,
         extensions.showMessage(throwable.message ?: "Please try again")
         Unit
     }
-    private val initDBTask = { WorkerManager.initDB(context!!) }
+    private lateinit var initDBTask: () -> Unit
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
+
+        initDBTask = { WorkerManager.initDB(context!!, viewModel.getBoardPipe.execute(Unit)) }
 
         viewModel.routeToMovieFragmentTask = routeToMovieFragmentTask
         viewModel.showErrorTask = showErrorTask
@@ -51,13 +54,16 @@ class StartFragment : BaseFragment<StartVM,
     }
 
     private fun prepareData() {
-        movieObserver.observeDB(viewLifecycleOwner, Observer { movies ->
-            if (movies.filter { !it.isPlayed }.size < MINIMUM_COUNT_MOVIES ||
+        scopeProvider.ioScope.launch(Job()) {
+            val movies = viewModel.getMoviesFromDBByBoardPipe
+                    .execute(viewModel.getBoardPipe.execute(Unit))
+            if (movies.size < MINIMUM_COUNT_MOVIES ||
                     StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
                 viewModel.loadNewMovies()
             } else {
+                WorkerManager.fillCacheFromDB(context!!, viewModel.getBoardPipe.execute(Unit))
                 router.navigateStartToMovieFragment()
             }
-        })
+        }
     }
 }

@@ -27,16 +27,11 @@ import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.service.DownloadService
 import dvachmovie.utils.DirectoryHelper
-import dvachmovie.utils.MovieObserver
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
-import javax.inject.Inject
 
 class MovieFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
-
-    @Inject
-    lateinit var movieObserver: MovieObserver
 
     private val routeToSettingsTask = { router.navigateMovieToSettingsFragment() }
     private val downloadBtnClicked = { runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE) }
@@ -66,8 +61,6 @@ class MovieFragment : BaseFragment<MovieVM,
         viewModel.copyURLTask = copyURLTask
         viewModel.routeToPreviewTask = routeToPreviewTask
         viewModel.showMessageTask = showMessageTask
-
-        movieObserver.observeDB(viewLifecycleOwner)
 
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
