@@ -138,13 +138,13 @@ class MovieFragment : BaseFragment<MovieVM,
             override fun onPlayerError(error: ExoPlaybackException?) {
                 if (playerView != null) {
                     viewModel.markMovieAsPlayed(playerView.player.currentPeriodIndex)
+
+                    extensions.showMessage("Network error")
+
+                    val player = (playerView.player as ExoPlayer)
+                    player.retry()
+                    player.next()
                 }
-
-                extensions.showMessage("Network error")
-
-                val player = (playerView.player as ExoPlayer)
-                player.retry()
-                player.next()
             }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray?,
