@@ -94,5 +94,27 @@
             android:layout_marginBottom="8dp"
             android:onClick="@{viewModel.onSetJapanBoard}"
             android:text="@string/set_japan_board" />
+
+        <Button
+            android:id="@+id/buttonAdultBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetAdultBoard}"
+            android:text="@string/set_adult_board" />
+
+        <Button
+            android:id="@+id/buttonOtherAdultBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{viewModel.onSetAdultOtherBoard}"
+            android:text="@string/set_adult_otherboard" />
     </LinearLayout>
 </layout>

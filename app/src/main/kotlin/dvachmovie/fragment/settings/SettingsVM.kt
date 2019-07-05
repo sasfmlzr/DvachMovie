@@ -149,6 +149,16 @@ class SettingsVM @Inject constructor(
                 showChangeBoardDialog(it.context, Boards.japanCultureMap)
             }
 
+    val onSetAdultBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.adultMap)
+            }
+
+    val onSetAdultOtherBoard =
+            View.OnClickListener {
+                showChangeBoardDialog(it.context, Boards.adultOtherMap)
+            }
+
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         var checkedItem = boardMap.keys.indexOf(board)
         AlertDialog.Builder(context, R.style.AlertDialogStyle)
