@@ -13,18 +13,18 @@ import retrofit2.http.Path
 
 interface DvachMovieApi {
     @GET("/{board}/catalog.json")
-    fun getCatalog(@Path("board") board: String): Deferred<Response<DvachCatalogRequest>>
+    suspend fun getCatalog(@Path("board") board: String): DvachCatalogRequest
 
     @GET("/{board}/res/{numThread}.json")
-    fun getThread(@Path("board") board: String,
-                  @Path("numThread") numThread: String): Deferred<Response<DvachThreadRequest>>
+    suspend fun getThread(@Path("board") board: String,
+                  @Path("numThread") numThread: String): DvachThreadRequest
 
     @POST("/makaba/makaba.fcgi")
     @FormUrlEncoded
-    fun reportPost(@Field("task") task: String,
+    suspend fun reportPost(@Field("task") task: String,
                    @Field("board") board: String,
                    @Field("thread") thread: Long,
                    @Field("comment") comment: String,
                    @Field("post") post: Long,
-                   @Field("json") json: String = "1"): Deferred<Response<DvachReportRequest>>
+                   @Field("json") json: String = "1"): DvachReportRequest
 }

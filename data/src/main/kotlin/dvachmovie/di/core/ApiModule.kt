@@ -1,6 +1,5 @@
 package dvachmovie.di.core
 
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dvachmovie.AppConfig
@@ -11,6 +10,7 @@ import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -21,6 +21,8 @@ internal class ApiModule {
     fun dvachRetrofitService(cookieJar: CookieJar,
                              appConfig: AppConfig): DvachMovieApi {
         val httpClient = OkHttpClient.Builder()
+                .connectTimeout(3, TimeUnit.SECONDS)
+                .readTimeout(3, TimeUnit.SECONDS)
                 .cookieJar(cookieJar)
                 .build()
 
@@ -28,7 +30,6 @@ internal class ApiModule {
                 .baseUrl(appConfig.DVACH_URL)
                 .client(httpClient)
                 .addConverterFactory(getOwnerContactConverterFactory())
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()
         return retrofit.create(DvachMovieApi::class.java)
     }
@@ -40,7 +41,7 @@ internal class ApiModule {
 
         val cookieValue = settingsStorage.getCookie()
 
-        override fun saveFromResponse(url: HttpUrl, cookies: MutableList<okhttp3.Cookie>) {
+        override fun saveFromResponse(url: HttpUrl, cookies: List<okhttp3.Cookie>) {
         }
 
         override fun loadForRequest(url: HttpUrl): MutableList<okhttp3.Cookie> {

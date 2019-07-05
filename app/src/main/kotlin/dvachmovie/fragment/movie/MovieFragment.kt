@@ -193,11 +193,13 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
-        viewModel.setCurrentMoviePipe.execute(
-                viewModel.movieList.value?.get(playerView.player.currentWindowIndex)!!)
+        if (permissions.isNotEmpty()) {
+            viewModel.setCurrentMoviePipe.execute(
+                    viewModel.movieList.value?.get(playerView.player.currentWindowIndex)!!)
 
-        downloadMovie(viewModel.currentMovie.value?.movieUrl
-                ?: "", viewModel.cookie.value ?: "")
+            downloadMovie(viewModel.currentMovie.value?.movieUrl
+                    ?: "", viewModel.cookie.value ?: "")
+        }
     }
 
     private fun downloadMovie(download: String, cookie: String) {
