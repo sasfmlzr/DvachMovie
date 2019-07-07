@@ -53,6 +53,7 @@
                 android:background="@null"
                 android:contentDescription="@string/shuffle"
                 android:elevation="1dp"
+                android:focusableInTouchMode="true"
                 android:onClick="@{viewModel.onBtnShuffleClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -63,7 +64,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/downloadButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:foreground="?attr/selectableItemBackground"/>
 
             <ImageButton
                 android:id="@+id/downloadButton"
@@ -73,6 +75,7 @@
                 android:background="@null"
                 android:contentDescription="@string/download"
                 android:elevation="1dp"
+                android:focusableInTouchMode="true"
                 android:onClick="@{viewModel.onBtnDownloadClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -83,7 +86,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/shuffleButton"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/settingsButton"
-                app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
+                app:layout_constraintTop_toTopOf="@+id/shuffleButton"
+                android:foreground="?attr/selectableItemBackground"/>
 
             <ImageButton
                 android:id="@+id/settingsButton"
@@ -93,6 +97,7 @@
                 android:background="@null"
                 android:contentDescription="@string/settings_button"
                 android:elevation="1dp"
+                android:focusableInTouchMode="true"
                 android:onClick="@{viewModel.onBtnSettingsClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -103,7 +108,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/downloadButton"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/copyURLButton"
-                app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
+                app:layout_constraintTop_toTopOf="@+id/shuffleButton"
+                android:foreground="?attr/selectableItemBackground"/>
 
             <ImageButton
                 android:id="@+id/copyURLButton"
@@ -113,6 +119,7 @@
                 android:background="@null"
                 android:contentDescription="@string/copy_url_button"
                 android:elevation="1dp"
+                android:focusableInTouchMode="true"
                 android:onClick="@{viewModel.onBtnCopyURLClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -123,7 +130,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/settingsButton"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/reportButton"
-                app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
+                app:layout_constraintTop_toTopOf="@+id/shuffleButton"
+                android:foreground="?attr/selectableItemBackground"/>
 
             <ImageButton
                 android:id="@+id/reportButton"
@@ -133,6 +141,7 @@
                 android:background="@null"
                 android:contentDescription="@string/report"
                 android:elevation="1dp"
+                android:focusableInTouchMode="true"
                 android:onClick="@{viewModel.onBtnReportClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -143,7 +152,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/copyURLButton"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/listVideosButton"
-                app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
+                app:layout_constraintTop_toTopOf="@+id/shuffleButton"
+                android:foreground="?attr/selectableItemBackground"/>
 
             <ImageButton
                 android:id="@+id/listVideosButton"
@@ -154,6 +164,7 @@
                 android:background="@null"
                 android:contentDescription="@string/list_videos"
                 android:elevation="1dp"
+                android:focusableInTouchMode="true"
                 android:onClick="@{viewModel.onBtnListVideosClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -164,7 +175,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/reportButton"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
+                app:layout_constraintTop_toTopOf="@+id/shuffleButton"
+                android:foreground="?attr/selectableItemBackground"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
