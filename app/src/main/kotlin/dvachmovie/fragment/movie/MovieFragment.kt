@@ -89,7 +89,18 @@ class MovieFragment : BaseFragment<MovieVM,
                 playerView.setOnTouchListener(defaultGestureListener)
             }
         })
+
+        playerView.setControllerVisibilityListener {
+            viewModel.isPlayerControlVisibility.value = it == 0
+        }
+
         playerView.player.addListener(playerListener)
+
+        binding.playerView.setOnFocusChangeListener { _, _ ->
+            viewModel.isPlayerControlVisibility.value = playerView.isControllerVisible
+        }
+
+        binding.playerView.setOnClickListener {}
     }
 
     private val specificGestureListener by lazy {
