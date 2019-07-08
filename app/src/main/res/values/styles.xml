@@ -31,6 +31,7 @@
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">?attr/colorBackgroundFloating</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="AlertDialogStyle" parent="Theme.MaterialComponents.Dialog.Alert">
@@ -38,5 +39,22 @@
         <item name="colorPrimary">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:checkedTextViewStyle">@style/CheckedTextViewStyle</item>
+        <item name="materialButtonStyle">@style/MaterialButtonStyle</item>
+        <item name="android:listViewStyle">@style/ListViewStyle</item>
+    </style>
+
+    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="CheckedTextViewStyle" parent="Widget.MaterialComponents.CheckedTextView">
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:selectableItemBackground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="ListViewStyle" parent="Widget.AppCompat.ListView.Menu">
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
     </style>
 </resources>
