@@ -105,14 +105,14 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private val specificGestureListener by lazy {
         object : OnSwipeTouchListener(context!!) {
-            override fun onEventTouch(event: MotionEvent) {
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    viewModel.isPlayerControlVisibility.value = toggleControlsVisibility()
-                }
-            }
+            override fun onEventTouch(event: MotionEvent) {}
 
             override fun onSwipeTop() {
                 router.navigateMovieToPreviewFragment()
+            }
+
+            override fun onSwipeBottom() {
+                viewModel.isPlayerControlVisibility.value = toggleControlsVisibility()
             }
 
             override fun onSwipeRight() {
