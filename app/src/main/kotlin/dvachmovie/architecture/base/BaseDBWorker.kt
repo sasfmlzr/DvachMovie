@@ -3,7 +3,6 @@ package dvachmovie.architecture.base
 import android.content.Context
 import androidx.annotation.NonNull
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import dvachmovie.di.core.Injector
 import dvachmovie.di.core.WorkerComponent

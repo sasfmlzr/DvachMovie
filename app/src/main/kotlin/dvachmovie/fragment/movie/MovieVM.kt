@@ -14,10 +14,10 @@ import dvachmovie.db.data.Movie
 import dvachmovie.pipe.ErrorModel
 import dvachmovie.pipe.ReportModel
 import dvachmovie.pipe.ShuffledMoviesModel
-import dvachmovie.pipe.moviestorage.MarkCurrentMovieAsPlayedPipe
 import dvachmovie.pipe.moviestorage.GetCurrentMoviePipe
 import dvachmovie.pipe.moviestorage.GetIndexPosByMoviePipe
 import dvachmovie.pipe.moviestorage.GetMovieListPipe
+import dvachmovie.pipe.moviestorage.MarkCurrentMovieAsPlayedPipe
 import dvachmovie.pipe.moviestorage.SetCurrentMoviePipe
 import dvachmovie.pipe.moviestorage.SetMovieChangedListenerPipe
 import dvachmovie.pipe.moviestorage.SetMovieListChangedListenerPipe
