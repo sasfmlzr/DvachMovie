@@ -5,7 +5,6 @@
     <string name="download">Download</string>
     <string name="shuffle">Shuffle</string>
     <string name="clean_movies">Clean movies</string>
-    <string name="prepare_each_times">Prepare each times</string>
     <string name="change_to_default_board">Change to default board</string>
     <string name="retry">Retry</string>
     <string name="loading_image">Loading image</string>
@@ -18,9 +17,6 @@
     <string name="set_creation_board">Set creation board</string>
     <string name="set_theme_board">Set theme board</string>
     <string name="set_popular_board">Set popular board</string>
-    <string name="get_pro_version">Get pro version</string>
-    <string name="allow_unmoderated_content">Allow unmoderated content</string>
-    <string name="unmoderated_content_warning">By unlocking unmoderated boards, you agree that you are over 18 years old. The developer is not responsible for the content provided by users - these are only links to the boards received from 2ch.hk.</string>
     <string name="settings_button">Settings</string>
     <string name="copy_url_button">Copy url</string>
     <string name="list_videos">List videos</string>
@@ -29,9 +25,6 @@
     <string name="promote">Promote</string>
     <string name="list_button_visible">List button visible</string>
     <string name="report_button_visible">Report button visible</string>
-    <string name="set_proxy">Set proxy</string>
-    <string name="_127_0_0_1_8080">127.0.0.1:8080</string>
-    <string name="proxy">Proxy</string>
     <string name="start">Start</string>
     <string name="refresh_movies">Refresh movies</string>
 </resources>

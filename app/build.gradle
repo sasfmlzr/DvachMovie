@@ -90,8 +90,8 @@ dependencies {
     implementation "$navigation.fragment"
     implementation "$navigation.ui"
 
-    implementation "$workmanager"
-    implementation "androidx.work:work-runtime-ktx:$workVersion"
+    implementation "$workmanager.workmanager"
+    implementation "$workmanager.ktx"
 
     implementation "$timber"
 

@@ -175,8 +175,7 @@ class SettingsVM @Inject constructor(
                     (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).isPressed = true
                     dialog.getButton(DialogInterface.BUTTON_POSITIVE).requestFocus()
                 }
-
-                .setOnKeyListener { dialog, keyCode, event ->
+                .setOnKeyListener { dialog, keyCode, _ ->
                     val btnNegative = (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEGATIVE)
                     val btnPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
                     if (keyCode == KEYCODE_DPAD_RIGHT && !btnNegative.isFocused && !btnPositive.isFocused) {
@@ -194,7 +193,6 @@ class SettingsVM @Inject constructor(
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         view?.isPressed = true
                     }
-
                 })
                 .setPositiveButton("Ok") { _, _ ->
                     if (checkedItem != -1) {

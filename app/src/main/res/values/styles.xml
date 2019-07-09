@@ -1,15 +1,4 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Base.V14.Theme.MaterialComponents">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-    </style>
-
     <style name="MyToolBarStyle" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:title">false</item>

@@ -17,7 +17,7 @@ class LocalDvachRepository @Inject constructor(
         val listFiles = mutableListOf<FileItem>()
         val request =  dvachApi.getThread(board, numThread)
              //   errorMessage = "getConcreteThreadByNum return error")
-        logger.d("getConcreteThreadByNum", "parsing started for ${request?.title}")
+        logger.d("getConcreteThreadByNum", "parsing started for ${request.title}")
         request.threads?.forEach { thread ->
             thread.posts?.forEach { post ->
                 if (post.banned == 0) {
@@ -32,7 +32,7 @@ class LocalDvachRepository @Inject constructor(
                 }
             }
         }
-        logger.d("getConcreteThreadByNum", "parsing finished for ${request?.title}")
+        logger.d("getConcreteThreadByNum", "parsing finished for ${request.title}")
         return listFiles
     }
 
