@@ -13,7 +13,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragment.movie.MovieFragment">
@@ -53,6 +53,7 @@
                 android:background="@null"
                 android:contentDescription="@string/shuffle"
                 android:elevation="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:onClick="@{viewModel.onBtnShuffleClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -73,6 +74,7 @@
                 android:background="@null"
                 android:contentDescription="@string/download"
                 android:elevation="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:onClick="@{viewModel.onBtnDownloadClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -93,6 +95,7 @@
                 android:background="@null"
                 android:contentDescription="@string/settings_button"
                 android:elevation="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:onClick="@{viewModel.onBtnSettingsClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -113,6 +116,7 @@
                 android:background="@null"
                 android:contentDescription="@string/copy_url_button"
                 android:elevation="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:onClick="@{viewModel.onBtnCopyURLClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -133,6 +137,7 @@
                 android:background="@null"
                 android:contentDescription="@string/report"
                 android:elevation="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:onClick="@{viewModel.onBtnReportClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"
@@ -154,6 +159,7 @@
                 android:background="@null"
                 android:contentDescription="@string/list_videos"
                 android:elevation="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:onClick="@{viewModel.onBtnListVideosClicked}"
                 android:padding="10dp"
                 android:scaleX="1.2"

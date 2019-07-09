@@ -54,6 +54,8 @@
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="20dp"
                         android:checked="@{safeUnbox(viewModel.isGestureEnabled)}"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         android:onCheckedChanged="@{viewModel.onGestureLoadingClicked}"
                         android:text="@string/gesture" />
 
@@ -66,6 +68,7 @@
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="20dp"
                         android:checked="@{safeUnbox(viewModel.isReportBtnVisible)}"
+                        android:foreground="?attr/selectableItemBackground"
                         android:onCheckedChanged="@{viewModel.onReportSwitchClicked}"
                         android:text="@string/report_button_visible" />
 
@@ -78,6 +81,7 @@
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="20dp"
                         android:checked="@{safeUnbox(viewModel.isListBtnVisible)}"
+                        android:foreground="?attr/selectableItemBackground"
                         android:onCheckedChanged="@{viewModel.onListSwitchClicked}"
                         android:text="@string/list_button_visible" />
 

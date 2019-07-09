@@ -1,7 +1,10 @@
 package dvachmovie.fragment.settings
 
 import android.content.Context
+import android.content.DialogInterface
+import android.view.KeyEvent.KEYCODE_DPAD_RIGHT
 import android.view.View
+import android.widget.AdapterView
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
@@ -161,14 +164,38 @@ class SettingsVM @Inject constructor(
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         var checkedItem = boardMap.keys.indexOf(board)
+
         AlertDialog.Builder(context, R.style.AlertDialogStyle)
                 .setTitle("Set board")
                 .setSingleChoiceItems(
                         boardMap.values.toTypedArray(),
                         checkedItem
-                ) { _, which ->
+                ) { dialog, which ->
                     checkedItem = which
+                    (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).isPressed = true
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).requestFocus()
                 }
+
+                .setOnKeyListener { dialog, keyCode, event ->
+                    val btnNegative = (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+                    val btnPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                    if (keyCode == KEYCODE_DPAD_RIGHT && !btnNegative.isFocused && !btnPositive.isFocused) {
+                        btnNegative.isPressed = true
+                        btnNegative.requestFocus()
+                        true
+                    } else {
+                        false
+                    }
+                }
+                .setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
+
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        view?.isPressed = true
+                    }
+
+                })
                 .setPositiveButton("Ok") { _, _ ->
                     if (checkedItem != -1) {
                         viewModelScope.launch {
