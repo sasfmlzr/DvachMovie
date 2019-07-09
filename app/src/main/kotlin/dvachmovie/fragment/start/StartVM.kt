@@ -35,9 +35,9 @@ open class StartVM @Inject constructor(
 
     private lateinit var dvachJob: Job
 
-    val initText = MutableLiveData<String>("Initialization")
+    val initText = MutableLiveData("Initialization")
 
-    val viewRetryBtn = MutableLiveData<Boolean>(false)
+    val viewRetryBtn = MutableLiveData(false)
 
     val imageId by lazy {
         MutableLiveData<Int>()

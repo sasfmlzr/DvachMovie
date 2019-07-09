@@ -6,6 +6,6 @@ import dvachmovie.BuildConfig
 import javax.inject.Inject
 
 class StartActivityVM @Inject constructor() : ViewModel() {
-    val initText = MutableLiveData<String>("Preparing...")
-    val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
+    val initText = MutableLiveData("Preparing...")
+    val version = MutableLiveData(BuildConfig.VERSION_NAME)
 }

@@ -2,7 +2,6 @@ package dvachmovie.utils
 
 import dvachmovie.api.FileItem
 import dvachmovie.db.data.Movie
-import org.joda.time.LocalDateTime
 
 interface MovieUtils {
 

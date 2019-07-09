@@ -23,7 +23,6 @@ dependencies {
     implementation "$appcompat"
 
     implementation "$dagger.dagger"
-    kapt "$dagger.compiler"
 
     implementation "$coroutines.core"
 

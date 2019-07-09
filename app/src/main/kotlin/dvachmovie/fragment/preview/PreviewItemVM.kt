@@ -8,6 +8,6 @@ import javax.inject.Inject
 
 class PreviewItemVM @Inject constructor(movie: Movie,
                                         cookie: Cookie) : ViewModel() {
-    var imageUrl = MutableLiveData<Movie>(movie)
-    var cookie = MutableLiveData<Cookie>(cookie)
+    var imageUrl = MutableLiveData(movie)
+    var cookie = MutableLiveData(cookie)
 }

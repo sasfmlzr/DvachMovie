@@ -136,14 +136,14 @@ class MovieVM @Inject constructor(
 
 
     val currentPos: MutableLiveData<Pair<Int, Long>> by lazy {
-        MutableLiveData<Pair<Int, Long>>(Pair(0, 0L))
+        MutableLiveData(Pair(0, 0L))
     }
 
     val cookie: MutableLiveData<String> by lazy {
-        MutableLiveData<String>(getCookiePipe.execute(Unit).toString())
+        MutableLiveData(getCookiePipe.execute(Unit).toString())
     }
 
-    val isPlayerControlVisibility = MutableLiveData<Boolean>(true)
+    val isPlayerControlVisibility = MutableLiveData(true)
 
 
     private val function = Function<List<Movie>, LiveData<List<Uri>>> { values ->
@@ -151,7 +151,7 @@ class MovieVM @Inject constructor(
         if (urlVideo.isNotEmpty()) {
             cookie.value = getCookiePipe.execute(Unit).toString()
         }
-        MutableLiveData<List<Uri>>(urlVideo)
+        MutableLiveData(urlVideo)
     }
 
     val uriMovies: MutableLiveData<List<Uri>> =

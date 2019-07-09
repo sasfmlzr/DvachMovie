@@ -83,7 +83,7 @@ class SettingsVM @Inject constructor(
                 }
             }
 
-    val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
+    val version = MutableLiveData(BuildConfig.VERSION_NAME)
 
     val onCleanDatabase =
             View.OnClickListener {

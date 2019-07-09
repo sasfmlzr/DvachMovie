@@ -3,8 +3,6 @@ package dvachmovie.api
 import dvachmovie.api.model.DvachReportRequest
 import dvachmovie.api.model.gson.dvach.catalog.DvachCatalogRequest
 import dvachmovie.api.model.gson.dvach.thread.DvachThreadRequest
-import kotlinx.coroutines.Deferred
-import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -17,14 +15,14 @@ interface DvachMovieApi {
 
     @GET("/{board}/res/{numThread}.json")
     suspend fun getThread(@Path("board") board: String,
-                  @Path("numThread") numThread: String): DvachThreadRequest
+                          @Path("numThread") numThread: String): DvachThreadRequest
 
     @POST("/makaba/makaba.fcgi")
     @FormUrlEncoded
     suspend fun reportPost(@Field("task") task: String,
-                   @Field("board") board: String,
-                   @Field("thread") thread: Long,
-                   @Field("comment") comment: String,
-                   @Field("post") post: Long,
-                   @Field("json") json: String = "1"): DvachReportRequest
+                           @Field("board") board: String,
+                           @Field("thread") thread: Long,
+                           @Field("comment") comment: String,
+                           @Field("post") post: Long,
+                           @Field("json") json: String = "1"): DvachReportRequest
 }

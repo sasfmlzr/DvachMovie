@@ -11,8 +11,8 @@ import javax.inject.Inject
 class PreviewVM @Inject constructor(getMovieListPipe: GetMovieListPipe,
                                     getCurrentMoviePipe: GetCurrentMoviePipe,
                                     private val getIndexPosByMoviePipe: GetIndexPosByMoviePipe) : ViewModel() {
-    val movieList by lazy { getMovieListPipe.execute(Unit) }
-    val currentMovie by lazy { getCurrentMoviePipe.execute(Unit) }
+    private val movieList by lazy { getMovieListPipe.execute(Unit) }
+    private val currentMovie by lazy { getCurrentMoviePipe.execute(Unit) }
 
     fun getPosCurrentMovie(): Int =
                 getIndexPosByMoviePipe.execute(currentMovie)
