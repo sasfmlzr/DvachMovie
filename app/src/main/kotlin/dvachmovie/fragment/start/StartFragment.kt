@@ -1,5 +1,7 @@
 package dvachmovie.fragment.start
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
+import dvachmovie.slices.DeepLink
 import dvachmovie.worker.WorkerManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -48,9 +51,35 @@ class StartFragment : BaseFragment<StartVM,
         viewModel.initDBTask = initDBTask
 
         viewModel.imageId.value = R.raw.cybermilosgif
-        prepareData()
+       // prepareData()
+
+        if (activity?.intent?.action == Intent.ACTION_VIEW) {
+            val data = activity?.intent?.data
+            viewModel.initText.value = data?.toString()?:"PPPPPPPPPPPP"
+            handleDeepLink(data)
+        }
 
         return binding.root
+    }
+
+
+    private fun handleDeepLink(data: Uri?) {
+
+        when (data?.path) {
+            DeepLink.STATS -> {
+                viewModel.initText.value = "STATS"
+            }
+            DeepLink.START -> {
+                viewModel.initText.value = "START"
+            }
+            DeepLink.FLEX -> {
+                viewModel.initText.value = "FLEX"
+            }
+            else -> {
+                // path is not supported or invalid, start normal flow.
+                viewModel.initText.value = "WTF"
+            }
+        }
     }
 
     private fun prepareData() {

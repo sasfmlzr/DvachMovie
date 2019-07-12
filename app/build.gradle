@@ -71,6 +71,8 @@ dependencies {
     implementation "$material"
 
     implementation "$dagger.dagger"
+    implementation 'androidx.annotation:annotation:1.0.2'
+    implementation 'androidx.slice:slice-builders:1.0.0'
     kapt "$dagger.compiler"
 
     implementation "$coroutines.core"
@@ -98,6 +100,9 @@ dependencies {
     implementation "$retrofit.retrofit"
 
     implementation "$ktx"
+
+    // AppActions and Slices
+    implementation "androidx.slice:slice-builders-ktx:1.0.0-alpha6"
 
     implementation project(':data')
     implementation project(':domain')
