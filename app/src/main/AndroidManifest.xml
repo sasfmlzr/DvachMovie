@@ -67,8 +67,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="fit-actions.firebaseapp.com"
-                    android:scheme="https" />
+                    android:host="com.dvachmovie.android.pro"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <!-- Required to support search action intents from Google Search -->
@@ -91,8 +91,9 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.app.slice.category.SLICE" />
                 <data
-                    android:scheme="https"
-                    android:host="fit-actions.firebaseapp.com"/>
+                    android:scheme="http"
+                    android:pathPrefix="/wtf"
+                    android:host="com.dvachmovie.android.pro"/>
             </intent-filter>
         </provider>
 
