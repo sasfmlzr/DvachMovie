@@ -19,6 +19,7 @@ android {
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
     compileSdkVersion rootProject.compileSdkVersion
+    kotlinOptions { jvmTarget = "1.8" }
     defaultConfig {
         applicationId 'com.sasfmlzr.dvachmovie.android'
         minSdkVersion rootProject.minSdkVersion
