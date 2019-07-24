@@ -15,6 +15,7 @@ class LocalSettingsStorage @Inject constructor(
         private const val BOARD = "board"
         private const val COOKIE = "cookie"
         private const val GESTURE = "gesture"
+        private const val COOKIE_DEFAULT_VALUE = "92ea293bf47456479e25b11ba67bb17a"
     }
 
     override fun isReportBtnVisibleAsync() =
@@ -48,10 +49,10 @@ class LocalSettingsStorage @Inject constructor(
             scopeProvider.ioScope.async { pref.putString(BOARD, board) }
 
     override fun getCookieAsync() =
-            scopeProvider.ioScope.async { pref.getString(COOKIE) ?: "" }
+            scopeProvider.ioScope.async { pref.getString(COOKIE) ?: COOKIE_DEFAULT_VALUE }
 
     override fun getCookie() =
-            pref.getString(COOKIE) ?: ""
+            pref.getString(COOKIE) ?: COOKIE_DEFAULT_VALUE
 
     override fun putCookie(cookie: String) =
             scopeProvider.ioScope.async { pref.putString(COOKIE, cookie) }

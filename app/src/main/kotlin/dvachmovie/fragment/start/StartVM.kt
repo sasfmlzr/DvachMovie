@@ -15,7 +15,6 @@ import dvachmovie.pipe.db.GetMoviesFromDBByBoardPipe
 import dvachmovie.pipe.network.DvachPipe
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
 import dvachmovie.pipe.settingsstorage.PutBoardPipe
-import dvachmovie.pipe.settingsstorage.PutCookiePipe
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -27,7 +26,6 @@ import javax.inject.Inject
 open class StartVM @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val dvachPipe: DvachPipe,
-        putCookiePipe: PutCookiePipe,
         putBoardPipe: PutBoardPipe,
         private val scopeProvider: ScopeProvider,
         val getBoardPipe: GetBoardPipe,
@@ -75,9 +73,6 @@ open class StartVM @Inject constructor(
 
     init {
         viewModelScope.launch {
-            //In the future move
-            putCookiePipe.execute("92ea293bf47456479e25b11ba67bb17a")
-
             broadcastChannel.asFlow().collect {
                 render(it)
             }
