@@ -3,7 +3,6 @@ package dvachmovie.api
 import dvachmovie.api.model.DvachReportRequest
 import dvachmovie.api.model.gson.dvach.catalog.DvachCatalogRequest
 import dvachmovie.api.model.gson.dvach.newthread.DvachGetThreadRequestDTO
-import dvachmovie.api.model.gson.dvach.thread.DvachThreadRequest
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -13,14 +12,6 @@ import retrofit2.http.Path
 interface DvachMovieApi {
     @GET("/{board}/catalog.json")
     suspend fun getCatalog(@Path("board") board: String): DvachCatalogRequest
-
-    @GET("/{board}/res/{numThread}.json")
-    suspend fun getThread(@Path("board") board: String,
-                          @Path("numThread") numThread: String): DvachThreadRequest
-
-    @POST("/makaba/mobile.fcgi")
-    @FormUrlEncoded
-    suspend fun getCatalogNew(@Field("board") board: String): DvachCatalogRequest
 
     @POST("/makaba/mobile.fcgi")
     @FormUrlEncoded
