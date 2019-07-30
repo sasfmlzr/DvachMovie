@@ -14,9 +14,28 @@ class LocalDvachRepository @Inject constructor(
             throw RuntimeException("getThreadsFromCatalog return error")
 
     override suspend fun getConcreteThreadByNum(board: String, numThread: String): List<FileItem> {
+        val request =  dvachApi.getThreadNew(board, numThread,numThread)
+        val listFiles = mutableListOf<FileItem>()
+        request.forEach { post ->
+                if (post.banned == 0) {
+                    listFiles.addAll(post.files.map {
+                        FileItem(path = it.path,
+                                thumbnail = it.thumbnail,
+                                md5 = it.md5,
+                                numThread = numThread.toLong(),
+                                numPost = post.num.toLong(),
+                                date = post.date)
+                    } ?: listOf())
+                }
+            }
+        return listFiles
+    }
+
+    @Deprecated("This is old version")
+    private suspend fun getConcreteThreadByNumOld(board: String, numThread: String) : List<FileItem>{
         val listFiles = mutableListOf<FileItem>()
         val request =  dvachApi.getThread(board, numThread)
-             //   errorMessage = "getConcreteThreadByNum return error")
+        //   errorMessage = "getConcreteThreadByNum return error")
         logger.d("getConcreteThreadByNum", "parsing started for ${request.title}")
         request.threads?.forEach { thread ->
             thread.posts?.forEach { post ->
