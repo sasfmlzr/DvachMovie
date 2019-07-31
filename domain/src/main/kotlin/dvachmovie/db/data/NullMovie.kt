@@ -9,4 +9,5 @@ data class NullMovie(override val movieUrl: String = "",
                      override var date: LocalDateTime = LocalDateTime.parse("2000"),
                      override val md5: String = "",
                      override val post: Long = 0,
-                     override val thread: Long = 0) : Movie
+                     override val thread: Long = 0,
+                     override val baseUrl: String = "") : Movie

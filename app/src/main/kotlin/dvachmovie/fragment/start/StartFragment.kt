@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseFragment
@@ -24,6 +25,9 @@ class StartFragment : BaseFragment<StartVM,
 
     @Inject
     lateinit var scopeProvider: ScopeProvider
+
+    @Inject
+    lateinit var appConfig: AppConfig
 
     override fun getLayoutId() = R.layout.fragment_start
 
@@ -56,7 +60,7 @@ class StartFragment : BaseFragment<StartVM,
     private fun prepareData() {
         scopeProvider.ioScope.launch(Job()) {
             val movies = viewModel.getMoviesFromDBByBoardPipe
-                    .execute(viewModel.getBoardPipe.execute(Unit))
+                    .execute(Pair(viewModel.getBoardPipe.execute(Unit), appConfig.DVACH_URL))
             if (movies.size < MINIMUM_COUNT_MOVIES ||
                     StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
                 viewModel.loadNewMovies()

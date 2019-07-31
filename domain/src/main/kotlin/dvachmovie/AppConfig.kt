@@ -1,3 +1,3 @@
 package dvachmovie
 
-data class AppConfig(val DVACH_URL: String)
+open class AppConfig(val DVACH_URL: String)

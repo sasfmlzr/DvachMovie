@@ -9,8 +9,8 @@ import javax.inject.Inject
 internal class LocalMovieDBRepository @Inject constructor(
         private val movieDao: MovieDao) : MovieDBRepository {
 
-    override suspend fun getMoviesFromBoard(boardThread: String): List<Movie> {
-        return movieDao.getMoviesFromBoard(boardThread)
+    override suspend fun getMoviesFromBoard(baseUrl: String, boardThread: String): List<Movie> {
+        return movieDao.getMoviesFromBoard(boardThread, baseUrl)
     }
 
     override suspend fun insert(movieEntity: Movie) {

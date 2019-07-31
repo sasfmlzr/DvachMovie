@@ -1,5 +1,6 @@
 package dvachmovie.usecase.real
 
+import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
@@ -19,7 +20,8 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                                        GetLinkFilesFromThreadsUseCase,
                                             private val movieUtils: MovieUtils,
                                             private val movieConverter: MovieConverter,
-                                            private val scopeProvider: ScopeProvider) :
+                                            private val scopeProvider: ScopeProvider,
+                                            private val appConfig: AppConfig) :
         UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
@@ -61,7 +63,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                     try {
                         val webmItems =
                                 movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
-                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board))
+                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, appConfig.DVACH_URL))
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break

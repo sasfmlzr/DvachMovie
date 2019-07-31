@@ -22,7 +22,7 @@ object Boards {
     val adultMap = hashMapOf<String, String>() // Взрослым 18+
 
     init {
-        defaultMap["b"] = "Бред"
+        defaultMap["kpop"] = "K-pop"
 
         popularMap["b"] = "Бред"
         popularMap["vg"] = "Video Games General"

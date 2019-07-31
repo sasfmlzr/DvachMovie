@@ -29,13 +29,19 @@ class RoomModule(private val application: Application) {
                 database.execSQL("ALTER TABLE movieData ADD COLUMN post INTEGER DEFAULT '0' NOT NULL")
             }
         }
+
+        private val MIGRATION_1_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE baseUrl ADD COLUMN baseUrl TEXT DEFAULT 'https://2ch.hk' NOT NULL")
+            }
+        }
     }
 
     @Singleton
     @Provides
     internal fun providesMovieDatabase(): MovieDatabase =
             Room.databaseBuilder(application, MovieDatabase::class.java, "movieData")
-                    .addMigrations(MIGRATION_1_2, MIGRATION_1_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_1_3, MIGRATION_1_4)
                     .build()
 
     @Singleton

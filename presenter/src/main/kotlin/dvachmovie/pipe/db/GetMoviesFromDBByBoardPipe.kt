@@ -7,9 +7,9 @@ import javax.inject.Inject
 
 class GetMoviesFromDBByBoardPipe @Inject constructor(
         private val useCase: GetMoviesFromDBByBoardUseCase
-) : PipeAsync<String, List<Movie>>() {
+) : PipeAsync<Pair<String, String>, List<Movie>>() {
 
-    override suspend fun execute(input: String): List<Movie> =
+    override suspend fun execute(input: Pair<String, String>): List<Movie> =
             useCase.executeAsync(input)
 
 }

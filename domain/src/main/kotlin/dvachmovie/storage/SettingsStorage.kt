@@ -16,6 +16,12 @@ interface SettingsStorage {
 
     fun putListBtnVisible(value: Boolean): Deferred<Unit>
 
+    fun getCurrentBaseUrlAsync(): Deferred<String>
+
+    fun getCurrentBaseUrl(): String
+
+    fun putCurrentBaseUrl(baseUrl: String): Deferred<Unit>
+
     fun getBoardAsync(): Deferred<String>
 
     fun getBoard(): String
