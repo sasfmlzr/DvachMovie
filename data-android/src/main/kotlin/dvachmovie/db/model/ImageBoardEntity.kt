@@ -7,7 +7,6 @@ import androidx.room.TypeConverters
 import dvachmovie.db.data.ImageBoard
 
 @Entity(tableName = "imageBoardData")
-@TypeConverters(Converters::class)
 data class ImageBoardEntity(@PrimaryKey @ColumnInfo(name = "baseUrl") override val baseUrl: String,
                             @ColumnInfo(name = "cookie") override val cookie: String,
                             @ColumnInfo(name = "currentBoard") override val currentBoard: String

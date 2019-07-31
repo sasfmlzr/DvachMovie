@@ -32,7 +32,7 @@ class RoomModule(private val application: Application) {
 
         private val MIGRATION_1_4 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE baseUrl ADD COLUMN baseUrl TEXT DEFAULT 'https://2ch.hk' NOT NULL")
+                database.execSQL("ALTER TABLE movieData ADD COLUMN baseUrl TEXT DEFAULT 'https://2ch.hk' NOT NULL")
             }
         }
     }

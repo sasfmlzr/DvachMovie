@@ -1,11 +1,6 @@
 package dvachmovie.db.model
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
-import dvachmovie.db.data.ImageBoard
+import androidx.room.*
 
 @Dao
 interface ImageBoardDao {
