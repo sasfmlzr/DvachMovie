@@ -17,11 +17,10 @@ import javax.inject.Inject
 
 open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                             private val getLinkFilesFromThreadsUseCase:
-                                       GetLinkFilesFromThreadsUseCase,
+                                            GetLinkFilesFromThreadsUseCase,
                                             private val movieUtils: MovieUtils,
                                             private val movieConverter: MovieConverter,
-                                            private val scopeProvider: ScopeProvider,
-                                            private val appConfig: AppConfig) :
+                                            private val scopeProvider: ScopeProvider) :
         UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
@@ -52,7 +51,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
         executorResult = input.executorResult!!
         val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
 
-        networkJob = scopeProvider.ioScope.async (Job()) {
+        networkJob = scopeProvider.ioScope.async(Job()) {
             try {
                 val useCaseModel = getThreadUseCase.executeAsync(inputModel)
                 listThreadSize = useCaseModel.listThreads.size
@@ -63,7 +62,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                     try {
                         val webmItems =
                                 movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
-                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, appConfig.DVACH_URL))
+                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.DVACH_URL))
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break

@@ -1,6 +1,5 @@
 package dvachmovie.usecase.real
 
-import dvachmovie.AppConfig
 import dvachmovie.TestException
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
@@ -40,9 +39,6 @@ class DvachUseCaseTest {
 
     @Mock
     lateinit var scopeProvider: ScopeProvider
-
-    @Mock
-    lateinit var appConfig: AppConfig
 
     private val board = "testBoard"
     private val baseUrl = "testBaseUrl"

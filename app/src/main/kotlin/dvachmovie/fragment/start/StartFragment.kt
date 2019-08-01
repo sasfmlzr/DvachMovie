@@ -26,9 +26,6 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var scopeProvider: ScopeProvider
 
-    @Inject
-    lateinit var appConfig: AppConfig
-
     override fun getLayoutId() = R.layout.fragment_start
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
@@ -60,7 +57,7 @@ class StartFragment : BaseFragment<StartVM,
     private fun prepareData() {
         scopeProvider.ioScope.launch(Job()) {
             val movies = viewModel.getMoviesFromDBByBoardPipe
-                    .execute(Pair(viewModel.getBoardPipe.execute(Unit), appConfig.DVACH_URL))
+                    .execute(Pair(viewModel.getBoardPipe.execute(Unit), AppConfig.DVACH_URL))
             if (movies.size < MINIMUM_COUNT_MOVIES ||
                     StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
                 viewModel.loadNewMovies()

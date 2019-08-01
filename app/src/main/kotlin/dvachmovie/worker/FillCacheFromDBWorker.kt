@@ -30,16 +30,13 @@ class FillCacheFromDBWorker(@NonNull context: Context,
     @Inject
     lateinit var sortMoviesByDatePipe: SortMoviesByDatePipe
 
-    @Inject
-    lateinit var appConfig: AppConfig
-
     override fun inject(component: WorkerComponent) = component.inject(this)
 
     override suspend fun execute() {
         val inputData = inputData.getString("BOARD")
                 ?: throw RuntimeException("board cannot be null")
 
-        val dbMovies = getMoviesFromDBByBoardPipe.execute(Pair(inputData, appConfig.DVACH_URL))
+        val dbMovies = getMoviesFromDBByBoardPipe.execute(Pair(inputData, AppConfig.DVACH_URL))
 
         withContext(Dispatchers.Main) {
             val sumMovies = mergeDBandCachePipe.execute(dbMovies)

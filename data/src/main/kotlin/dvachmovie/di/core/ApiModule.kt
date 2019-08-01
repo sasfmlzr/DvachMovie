@@ -18,8 +18,7 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun dvachRetrofitService(cookieJar: CookieJar,
-                             appConfig: AppConfig): DvachMovieApi {
+    fun dvachRetrofitService(cookieJar: CookieJar): DvachMovieApi {
         val httpClient = OkHttpClient.Builder()
                 .connectTimeout(3, TimeUnit.SECONDS)
                 .readTimeout(3, TimeUnit.SECONDS)
@@ -27,7 +26,7 @@ internal class ApiModule {
                 .build()
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(appConfig.DVACH_URL)
+                .baseUrl(AppConfig.DVACH_URL)
                 .client(httpClient)
                 .addConverterFactory(getOwnerContactConverterFactory())
                 .build()

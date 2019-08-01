@@ -8,8 +8,7 @@ import javax.inject.Inject
 
 class LocalSettingsStorage @Inject constructor(
         private val pref: KeyValueStorage,
-        private val scopeProvider: ScopeProvider,
-        private val appConfig: AppConfig
+        private val scopeProvider: ScopeProvider
 ) : SettingsStorage {
     companion object {
         private const val REPORT_BTN_VISIBLE = "ReportBtnVisibleOrNot"
@@ -41,11 +40,11 @@ class LocalSettingsStorage @Inject constructor(
 
     override fun getCurrentBaseUrlAsync() =
             scopeProvider.ioScope.async {
-                pref.getString(CURRENT_BASE_URL) ?: appConfig.DVACH_URL
+                pref.getString(CURRENT_BASE_URL) ?: AppConfig.DVACH_URL
             }
 
     override fun getCurrentBaseUrl() =
-            pref.getString(CURRENT_BASE_URL) ?: appConfig.DVACH_URL
+            pref.getString(CURRENT_BASE_URL) ?: AppConfig.DVACH_URL
 
     override fun putCurrentBaseUrl(baseUrl: String) =
             scopeProvider.ioScope.async { pref.putString(CURRENT_BASE_URL, baseUrl) }

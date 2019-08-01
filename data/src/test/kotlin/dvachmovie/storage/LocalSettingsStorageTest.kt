@@ -11,7 +11,10 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.BDDMockito.*
+import org.mockito.BDDMockito.doNothing
+import org.mockito.BDDMockito.doReturn
+import org.mockito.BDDMockito.doThrow
+import org.mockito.BDDMockito.given
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
@@ -27,9 +30,6 @@ class LocalSettingsStorageTest {
 
     @Mock
     lateinit var scopeProvider: ScopeProvider
-
-    @Mock
-    lateinit var appConfig: AppConfig
 
     private val testException = TestException()
 
@@ -157,10 +157,10 @@ class LocalSettingsStorageTest {
     fun `Get CurrentBaseUrl is fault, but return default value`() {
         doReturn(null).`when`(keyValueStorage).getString(CURRENT_BASE_URL)
 
-        Assert.assertEquals(null, settingsStorage.getCurrentBaseUrl())
+        Assert.assertEquals(AppConfig.DVACH_URL, settingsStorage.getCurrentBaseUrl())
 
         runBlocking {
-            Assert.assertEquals(null, settingsStorage.getCurrentBaseUrlAsync().await())
+            Assert.assertEquals(AppConfig.DVACH_URL, settingsStorage.getCurrentBaseUrlAsync().await())
         }
     }
 

@@ -1,3 +1,6 @@
 package dvachmovie
 
-open class AppConfig(val DVACH_URL: String)
+object AppConfig {
+    var currentBaseUrl: String = ""
+    const val DVACH_URL: String = "https://2ch.hk"
+}
