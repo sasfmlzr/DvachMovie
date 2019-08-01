@@ -57,7 +57,7 @@ class StartFragment : BaseFragment<StartVM,
     private fun prepareData() {
         scopeProvider.ioScope.launch(Job()) {
             val movies = viewModel.getMoviesFromDBByBoardPipe
-                    .execute(Pair(viewModel.getBoardPipe.execute(Unit), AppConfig.DVACH_URL))
+                    .execute(Pair(viewModel.getBoardPipe.execute(Unit), AppConfig.currentBaseUrl))
             if (movies.size < MINIMUM_COUNT_MOVIES ||
                     StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
                 viewModel.loadNewMovies()

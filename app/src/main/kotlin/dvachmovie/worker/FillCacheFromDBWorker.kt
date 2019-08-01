@@ -36,7 +36,7 @@ class FillCacheFromDBWorker(@NonNull context: Context,
         val inputData = inputData.getString("BOARD")
                 ?: throw RuntimeException("board cannot be null")
 
-        val dbMovies = getMoviesFromDBByBoardPipe.execute(Pair(inputData, AppConfig.DVACH_URL))
+        val dbMovies = getMoviesFromDBByBoardPipe.execute(Pair(inputData, AppConfig.currentBaseUrl))
 
         withContext(Dispatchers.Main) {
             val sumMovies = mergeDBandCachePipe.execute(dbMovies)
