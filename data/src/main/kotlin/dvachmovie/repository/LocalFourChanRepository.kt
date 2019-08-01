@@ -10,7 +10,7 @@ class LocalFourChanRepository @Inject constructor(
         private val api: FourchanApi,
         private val logger: Logger) : FourChanRepository {
 
-    override suspend fun getNumThreadsFromCatalog(board: String) : List<Int> =
+    override suspend fun getNumThreadsFromCatalog(board: String): List<Int> =
             api.getCatalog(board).flatMap { it.threads.map { it.no } }
 
     override suspend fun getConcreteThreadByNum(board: String, numThread: String): List<FileItem> {
@@ -18,10 +18,10 @@ class LocalFourChanRepository @Inject constructor(
         val request = api.getThread(board, numThread)
 
         logger.d("getConcreteThreadByNum", "parsing started for $numThread")
-        request.posts.forEach { post ->
+        request.posts.filter { it.tim != 0L }.forEach { post ->
             listFiles.add(
                     FileItem(path = "${AppConfig.FOURCHAN_WEBM_URL}/$board/${post.tim}${post.ext}",
-                            thumbnail = "${AppConfig.FOURCHAN_THUMBNAIL_URL}/$board/${post.tim}s",
+                            thumbnail = "${AppConfig.FOURCHAN_THUMBNAIL_URL}/$board/${post.tim}s.jpg",
                             md5 = post.md5,
                             numThread = numThread.toLong(),
                             numPost = post.no.toLong(),

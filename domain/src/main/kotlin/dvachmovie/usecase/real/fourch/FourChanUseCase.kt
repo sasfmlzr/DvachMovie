@@ -6,10 +6,10 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
-import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.DvachAmountRequestsUseCaseModel
 import dvachmovie.usecase.real.DvachCountRequestUseCaseModel
 import dvachmovie.usecase.real.DvachUseCaseModel
+import dvachmovie.usecase.real.dvach.DvachUseCase
 import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CancellationException
@@ -24,7 +24,7 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
                                                private val movieUtils: MovieUtils,
                                                private val movieConverter: MovieConverter,
                                                private val scopeProvider: ScopeProvider) :
-        UseCase<FourChanUseCase.Params, Unit>() {
+        UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
     private lateinit var executorResult: ExecutorResult
@@ -47,7 +47,7 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
         }
     }
 
-    override suspend fun executeAsync(input: Params) {
+    override suspend fun executeAsync(input: DvachUseCase.Params) {
         returnJob?.cancel()
         var listThreadSize: Int
         board = input.board
@@ -63,13 +63,13 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
 
                 for (num in useCaseModel.listThreads) {
                     try {
+                        val list = executeLinkFilesUseCase(num)
                         val webmItems =
-                                movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
-                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.DVACH_URL))
+                                movieUtils.filterFileItemOnlyAsWebm(list)
+                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.FOURCHAN_URL))
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break
-
                         } else {
                             executorResult.onFailure(e)
                         }
@@ -115,7 +115,4 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
         }
         returnJob!!.join()
     }
-
-    data class Params(val board: String,
-                      val executorResult: ExecutorResult? = null) : UseCaseModel
 }

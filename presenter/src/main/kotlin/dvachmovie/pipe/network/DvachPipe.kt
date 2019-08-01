@@ -1,5 +1,6 @@
 package dvachmovie.pipe.network
 
+import dvachmovie.AppConfig
 import dvachmovie.PresenterModel
 import dvachmovie.architecture.PipeAsync
 import dvachmovie.architecture.ScopeProvider
@@ -11,9 +12,11 @@ import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.DvachAmountRequestsUseCaseModel
 import dvachmovie.usecase.real.DvachCountRequestUseCaseModel
-import dvachmovie.usecase.real.dvach.DvachUseCase
 import dvachmovie.usecase.real.DvachUseCaseModel
+import dvachmovie.usecase.real.dvach.DvachUseCase
+import dvachmovie.usecase.real.fourch.FourChanUseCase
 import dvachmovie.usecase.settingsstorage.GetBoardUseCase
+import dvachmovie.usecase.settingsstorage.GetCurrentBaseUrlUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -23,12 +26,17 @@ import javax.inject.Inject
 
 class DvachPipe @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
-        private val useCase: DvachUseCase,
+        private val dvachUseCase: DvachUseCase,
+        private val fourChanUseCase: FourChanUseCase,
         private val scopeProvider: ScopeProvider,
-        private val getBoardUseCase: GetBoardUseCase) : PipeAsync<ExecutorResult?, Unit>() {
+        private val getBoardUseCase: GetBoardUseCase,
+        private val currentBaseUrlUseCase: GetCurrentBaseUrlUseCase) : PipeAsync<ExecutorResult?, Unit>() {
 
     suspend fun forceStart() {
-        useCase.forceStart()
+        when (currentBaseUrlUseCase.execute(Unit)) {
+            AppConfig.DVACH_URL -> dvachUseCase.forceStart()
+            AppConfig.FOURCHAN_URL -> fourChanUseCase.forceStart()
+        }
     }
 
     override suspend fun execute(input: ExecutorResult?) {
@@ -66,7 +74,10 @@ class DvachPipe @Inject constructor(
                 DvachUseCase.Params(getBoardUseCase.execute(Unit), input)
             }
 
-            useCase.executeAsync(inputModel)
+            when (currentBaseUrlUseCase.execute(Unit)) {
+                AppConfig.DVACH_URL -> dvachUseCase.executeAsync(inputModel)
+                AppConfig.FOURCHAN_URL -> fourChanUseCase.executeAsync(inputModel)
+            }
         }
     }
 }
