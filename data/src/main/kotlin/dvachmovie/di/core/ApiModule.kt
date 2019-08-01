@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dvachmovie.AppConfig
 import dvachmovie.api.DvachMovieApi
+import dvachmovie.api.FourchanApi
 import dvachmovie.api.getOwnerContactConverterFactory
 import dvachmovie.storage.SettingsStorage
 import okhttp3.CookieJar
@@ -31,6 +32,21 @@ internal class ApiModule {
                 .addConverterFactory(getOwnerContactConverterFactory())
                 .build()
         return retrofit.create(DvachMovieApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun fourchanRetrofitService(): FourchanApi {
+        val httpClient = OkHttpClient.Builder()
+                .connectTimeout(3, TimeUnit.SECONDS)
+                .readTimeout(3, TimeUnit.SECONDS)
+                .build()
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(AppConfig.FOURCHAN_URL)
+                .client(httpClient)
+                .build()
+        return retrofit.create(FourchanApi::class.java)
     }
 
     @Provides
