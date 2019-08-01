@@ -11,7 +11,7 @@ import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.DvachAmountRequestsUseCaseModel
 import dvachmovie.usecase.real.DvachCountRequestUseCaseModel
-import dvachmovie.usecase.real.DvachUseCase
+import dvachmovie.usecase.real.dvach.DvachUseCase
 import dvachmovie.usecase.real.DvachUseCaseModel
 import dvachmovie.usecase.settingsstorage.GetBoardUseCase
 import kotlinx.coroutines.CancellationException

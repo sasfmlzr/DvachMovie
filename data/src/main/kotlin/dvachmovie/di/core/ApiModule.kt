@@ -11,6 +11,7 @@ import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -45,6 +46,7 @@ internal class ApiModule {
         val retrofit = Retrofit.Builder()
                 .baseUrl(AppConfig.FOURCHAN_URL)
                 .client(httpClient)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
         return retrofit.create(FourchanApi::class.java)
     }

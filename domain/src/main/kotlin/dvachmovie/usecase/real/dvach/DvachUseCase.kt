@@ -1,4 +1,4 @@
-package dvachmovie.usecase.real
+package dvachmovie.usecase.real.dvach
 
 import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
@@ -7,6 +7,9 @@ import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.DvachAmountRequestsUseCaseModel
+import dvachmovie.usecase.real.DvachCountRequestUseCaseModel
+import dvachmovie.usecase.real.DvachUseCaseModel
 import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CancellationException

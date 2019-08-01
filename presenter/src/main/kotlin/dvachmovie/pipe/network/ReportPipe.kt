@@ -8,7 +8,7 @@ import dvachmovie.pipe.ReportModel
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.DvachReportUseCaseModel
-import dvachmovie.usecase.real.ReportUseCase
+import dvachmovie.usecase.real.dvach.ReportUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.BroadcastChannel

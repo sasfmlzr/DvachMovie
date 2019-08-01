@@ -30,7 +30,7 @@ import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.storage.OnMovieChangedListener
 import dvachmovie.storage.OnMovieListChangedListener
-import dvachmovie.usecase.real.ReportUseCase
+import dvachmovie.usecase.real.dvach.ReportUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel

@@ -6,6 +6,9 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.NullMovie
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.dvach.DvachUseCase
+import dvachmovie.usecase.real.fourch.GetLinkFilesFromThreadsFourchUseCase
+import dvachmovie.usecase.real.fourch.GetThreadsFromDvachUseCase
 import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +32,7 @@ class DvachUseCaseTest {
     lateinit var getThreadUseCase: GetThreadsFromDvachUseCase
     @Mock
     lateinit var getLinkFilesFromThreadsUseCase:
-            GetLinkFilesFromThreadsUseCase
+            GetLinkFilesFromThreadsFourchUseCase
 
     @Mock
     lateinit var movieUtils: MovieUtils
@@ -114,8 +117,8 @@ class DvachUseCaseTest {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.executeAsync(threadModel)).willReturn(model)
 
-            val linkFilesModelOne = GetLinkFilesFromThreadsUseCase.Params(board, numOne)
-            val linkFilesModelTwo = GetLinkFilesFromThreadsUseCase.Params(board, numTwo)
+            val linkFilesModelOne = GetLinkFilesFromThreadsFourchUseCase.Params(board, numOne)
+            val linkFilesModelTwo = GetLinkFilesFromThreadsFourchUseCase.Params(board, numTwo)
 
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelOne)).willReturn(linkOneModel)
@@ -151,8 +154,8 @@ class DvachUseCaseTest {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.executeAsync(threadModel)).willReturn(model)
 
-            val linkFilesModelOne = GetLinkFilesFromThreadsUseCase.Params(board, numOne)
-            val linkFilesModelTwo = GetLinkFilesFromThreadsUseCase.Params(board, numTwo)
+            val linkFilesModelOne = GetLinkFilesFromThreadsFourchUseCase.Params(board, numOne)
+            val linkFilesModelTwo = GetLinkFilesFromThreadsFourchUseCase.Params(board, numTwo)
 
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelOne)).willReturn(linkOneModel)
@@ -172,8 +175,8 @@ class DvachUseCaseTest {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.executeAsync(threadModel)).willReturn(model)
 
-            val linkFilesModelOne = GetLinkFilesFromThreadsUseCase.Params(board, numOne)
-            val linkFilesModelTwo = GetLinkFilesFromThreadsUseCase.Params(board, numTwo)
+            val linkFilesModelOne = GetLinkFilesFromThreadsFourchUseCase.Params(board, numOne)
+            val linkFilesModelTwo = GetLinkFilesFromThreadsFourchUseCase.Params(board, numTwo)
 
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelOne)).willReturn(linkNullModel)

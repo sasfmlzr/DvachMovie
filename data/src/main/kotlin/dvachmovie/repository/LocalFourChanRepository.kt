@@ -10,8 +10,8 @@ class LocalFourChanRepository @Inject constructor(
         private val api: FourchanApi,
         private val logger: Logger) : FourChanRepository {
 
-    override suspend fun getNumThreadsFromCatalog(board: String) =
-            api.getCatalog(board).threads.map { it.no }
+    override suspend fun getNumThreadsFromCatalog(board: String) : List<Int> =
+            api.getCatalog(board).flatMap { it.threads.map { it.no } }
 
     override suspend fun getConcreteThreadByNum(board: String, numThread: String): List<FileItem> {
         val listFiles = mutableListOf<FileItem>()

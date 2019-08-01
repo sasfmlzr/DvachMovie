@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface FourchanApi {
     @GET("/{board}/catalog.json")
-    suspend fun getCatalog(@Path("board") board: String): FourChanCatalogDTO
+    suspend fun getCatalog(@Path("board") board: String): List<FourChanCatalogDTO>
 
     @GET("/{board}/thread/{threadNumber}.json")
     suspend fun getThread(@Path("board") board: String,

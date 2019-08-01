@@ -3,6 +3,7 @@ package dvachmovie.usecase.real
 import dvachmovie.TestException
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.repository.DvachRepository
+import dvachmovie.usecase.real.fourch.GetThreadsFromDvachUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
