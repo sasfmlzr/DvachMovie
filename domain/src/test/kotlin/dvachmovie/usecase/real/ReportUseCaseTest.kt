@@ -4,6 +4,7 @@ import dvachmovie.TestException
 import dvachmovie.repository.DvachRepository
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.dvach.ReportUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test

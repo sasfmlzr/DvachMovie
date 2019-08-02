@@ -1,6 +1,7 @@
 package dvachmovie.storage
 
-import dvachmovie.api.Boards
+import dvachmovie.AppConfig
+import dvachmovie.api.DvachBoards
 import dvachmovie.architecture.ScopeProvider
 import kotlinx.coroutines.async
 import javax.inject.Inject
@@ -12,6 +13,7 @@ class LocalSettingsStorage @Inject constructor(
     companion object {
         private const val REPORT_BTN_VISIBLE = "ReportBtnVisibleOrNot"
         private const val LIST_BTN_VISIBLE = "ListBtnVisibleOrNot"
+        private const val CURRENT_BASE_URL = "currentBaseUrl"
         private const val BOARD = "board"
         private const val COOKIE = "cookie"
         private const val GESTURE = "gesture"
@@ -36,14 +38,24 @@ class LocalSettingsStorage @Inject constructor(
     override fun putListBtnVisible(value: Boolean) =
             scopeProvider.ioScope.async { pref.putBoolean(LIST_BTN_VISIBLE, value) }
 
+    override fun getCurrentBaseUrlAsync() =
+            scopeProvider.ioScope.async {
+                pref.getString(CURRENT_BASE_URL) ?: AppConfig.DVACH_URL
+            }
+
+    override fun getCurrentBaseUrl() =
+            pref.getString(CURRENT_BASE_URL) ?: AppConfig.DVACH_URL
+
+    override fun putCurrentBaseUrl(baseUrl: String) =
+            scopeProvider.ioScope.async { pref.putString(CURRENT_BASE_URL, baseUrl) }
+
     override fun getBoardAsync() =
             scopeProvider.ioScope.async {
-                pref.getString(BOARD) ?: Boards.defaultMap.iterator().next().key
+                pref.getString(BOARD) ?: DvachBoards.defaultMap.iterator().next().key
             }
 
     override fun getBoard() =
-            pref.getString(BOARD) ?: Boards.defaultMap.iterator().next().key
-
+            pref.getString(BOARD) ?: DvachBoards.defaultMap.iterator().next().key
 
     override fun putBoard(board: String) =
             scopeProvider.ioScope.async { pref.putString(BOARD, board) }

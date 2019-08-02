@@ -7,10 +7,6 @@
         <variable
             name="viewModel"
             type="dvachmovie.fragment.settings.SettingsVM" />
-
-        <variable
-            name="view"
-            type="android.view.View" />
     </data>
 
     <LinearLayout
@@ -26,7 +22,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetPopularBoard}"
+            android:onClick="@{viewModel.onSetDvachPopularBoard}"
             android:text="@string/set_popular_board" />
 
         <Button
@@ -37,7 +33,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetThemeBoard}"
+            android:onClick="@{viewModel.onSetDvachThemeBoard}"
             android:text="@string/set_theme_board" />
 
         <Button
@@ -48,7 +44,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetGamesBoard}"
+            android:onClick="@{viewModel.onSetDvachGamesBoard}"
             android:text="@string/set_games_board" />
 
         <Button
@@ -59,7 +55,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetTechSoftBoard}"
+            android:onClick="@{viewModel.onSetDvachTechSoftBoard}"
             android:text="@string/set_tech_and_soft_board" />
 
         <Button
@@ -70,7 +66,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetPolNewsBoard}"
+            android:onClick="@{viewModel.onSetDvachPolNewsBoard}"
             android:text="@string/set_politics_and_news_board" />
 
         <Button
@@ -81,7 +77,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetCreationBoard}"
+            android:onClick="@{viewModel.onSetDvachCreationBoard}"
             android:text="@string/set_creation_board" />
 
         <Button
@@ -92,7 +88,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetJapanBoard}"
+            android:onClick="@{viewModel.onSetDvachJapanBoard}"
             android:text="@string/set_japan_board" />
 
         <Button
@@ -103,7 +99,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetAdultBoard}"
+            android:onClick="@{viewModel.onSetDvachAdultBoard}"
             android:text="@string/set_adult_board" />
 
         <Button
@@ -114,7 +110,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetAdultOtherBoard}"
+            android:onClick="@{viewModel.onSetDvachAdultOtherBoard}"
             android:text="@string/set_adult_otherboard" />
     </LinearLayout>
 </layout>

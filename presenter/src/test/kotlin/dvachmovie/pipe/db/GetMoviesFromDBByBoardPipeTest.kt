@@ -23,9 +23,10 @@ class GetMoviesFromDBByBoardPipeTest {
     @Test
     fun `Happy pass`() {
         val resultList = listOf(NullMovie("aaa"), NullMovie("bbb"))
+        val testValue = Pair("testOne", "testTwo")
         runBlocking {
-            given(useCase.executeAsync("test")).willReturn(resultList)
-            Assert.assertEquals(resultList, pipe.execute("test"))
+            given(useCase.executeAsync(testValue)).willReturn(resultList)
+            Assert.assertEquals(resultList, pipe.execute(testValue))
         }
     }
 }

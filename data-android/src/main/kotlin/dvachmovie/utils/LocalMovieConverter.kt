@@ -4,20 +4,37 @@ import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.db.data.Movie
 import dvachmovie.db.model.MovieEntity
+import org.joda.time.Instant
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
-class LocalMovieConverter @Inject constructor(private val appConfig: AppConfig) : MovieConverter {
-    override fun convertFileItemToMovie(fileItems: List<FileItem>, board: String): List<Movie> =
+class LocalMovieConverter @Inject constructor() : MovieConverter {
+    override fun convertFileItemToMovie(fileItems: List<FileItem>, board: String, baseUrl: String): List<Movie> =
             fileItems.map { fileItem ->
-                MovieEntity(board = board,
-                        movieUrl = appConfig.DVACH_URL + fileItem.path,
-                        previewUrl = appConfig.DVACH_URL + fileItem.thumbnail,
-                        date = parseDateFromFileItem(fileItem),
-                        md5 = fileItem.md5,
-                        thread = fileItem.numThread,
-                        post = fileItem.numPost)
+                when (baseUrl) {
+                    AppConfig.DVACH_URL ->
+                        MovieEntity(board = board,
+                                movieUrl = baseUrl + fileItem.path,
+                                previewUrl = baseUrl + fileItem.thumbnail,
+                                date = parseDateFromFileItem(fileItem),
+                                md5 = fileItem.md5,
+                                thread = fileItem.numThread,
+                                post = fileItem.numPost,
+                                baseUrl = baseUrl)
+                    AppConfig.FOURCHAN_URL ->
+                        MovieEntity(board = board,
+                                movieUrl = fileItem.path,
+                                previewUrl = fileItem.thumbnail,
+                                date = Instant.ofEpochSecond(fileItem.date.toLong())
+                                        .toDateTime()
+                                        .toLocalDateTime(),
+                                md5 = fileItem.md5,
+                                thread = fileItem.numThread,
+                                post = fileItem.numPost,
+                                baseUrl = baseUrl)
+                    else -> throw RuntimeException("I don't know such imageboard")
+                }
             }
 
     private fun parseDateFromFileItem(fileItem: FileItem): LocalDateTime =

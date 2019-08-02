@@ -24,13 +24,14 @@ import dvachmovie.pipe.moviestorage.SetMovieListChangedListenerPipe
 import dvachmovie.pipe.moviestorage.SetMovieListPipe
 import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.pipe.network.ReportPipe
+import dvachmovie.pipe.settingsstorage.GetCurrentBaseUrlPipe
 import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.storage.OnMovieChangedListener
 import dvachmovie.storage.OnMovieListChangedListener
-import dvachmovie.usecase.real.ReportUseCase
+import dvachmovie.usecase.real.dvach.ReportUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -55,7 +56,8 @@ class MovieVM @Inject constructor(
         setMovieListChangedListenerPipe: SetMovieListChangedListenerPipe,
         setMovieChangedListenerPipe: SetMovieChangedListenerPipe,
         val setCurrentMoviePipe: SetCurrentMoviePipe,
-        private val setMovieListPipe: SetMovieListPipe) : ViewModel() {
+        private val setMovieListPipe: SetMovieListPipe,
+        private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe) : ViewModel() {
 
     val isReportBtnVisible = MutableLiveData<Boolean>()
 
@@ -91,6 +93,8 @@ class MovieVM @Inject constructor(
 
         isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
     }
+
+    fun getCurrentBaseUrl() = getCurrentBaseUrlPipe.execute(Unit)
 
     lateinit var downloadBtnClicked: () -> Unit
     lateinit var routeToSettingsTask: () -> Unit

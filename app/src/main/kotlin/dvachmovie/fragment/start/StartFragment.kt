@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseFragment
@@ -55,8 +56,9 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun prepareData() {
         scopeProvider.ioScope.launch(Job()) {
+            AppConfig.currentBaseUrl = viewModel.getCurrentBaseUrl()
             val movies = viewModel.getMoviesFromDBByBoardPipe
-                    .execute(viewModel.getBoardPipe.execute(Unit))
+                    .execute(Pair(viewModel.getBoardPipe.execute(Unit), AppConfig.currentBaseUrl))
             if (movies.size < MINIMUM_COUNT_MOVIES ||
                     StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
                 viewModel.loadNewMovies()

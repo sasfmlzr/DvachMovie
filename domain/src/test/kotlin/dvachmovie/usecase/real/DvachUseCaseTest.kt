@@ -3,15 +3,17 @@ package dvachmovie.usecase.real
 import dvachmovie.TestException
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
-import dvachmovie.db.data.Movie
+import dvachmovie.db.data.NullMovie
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.dvach.DvachUseCase
+import dvachmovie.usecase.real.fourch.GetLinkFilesFromThreadsFourchUseCase
+import dvachmovie.usecase.real.fourch.GetThreadsFromDvachUseCase
 import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.joda.time.LocalDateTime
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +32,7 @@ class DvachUseCaseTest {
     lateinit var getThreadUseCase: GetThreadsFromDvachUseCase
     @Mock
     lateinit var getLinkFilesFromThreadsUseCase:
-            GetLinkFilesFromThreadsUseCase
+            GetLinkFilesFromThreadsFourchUseCase
 
     @Mock
     lateinit var movieUtils: MovieUtils
@@ -42,6 +44,7 @@ class DvachUseCaseTest {
     lateinit var scopeProvider: ScopeProvider
 
     private val board = "testBoard"
+    private val baseUrl = "testBaseUrl"
     private val fileOne = FileItem(path = "one.webm", date = "14/05/19 Втр 21:20:37")
     private val fileTwo = FileItem(path = "two.webm", date = "14/05/19 Втр 21:20:37")
 
@@ -55,47 +58,8 @@ class DvachUseCaseTest {
 
     private val testException = TestException()
 
-    private val movieEntityOne = object : Movie {
-        override val movieUrl: String
-            get() = "testOne.webm"
-        override val previewUrl: String
-            get() = ""
-        override val board: String
-            get() = ""
-        override var isPlayed: Boolean
-            get() = false
-            set(value) {}
-        override var date: LocalDateTime
-            get() = LocalDateTime()
-            set(value) {}
-        override val md5: String
-            get() = ""
-        override val post: Long
-            get() = 0
-        override val thread: Long
-            get() = 0
-    }
-
-    private val movieEntityTwo = object : Movie {
-        override val movieUrl: String
-            get() = "testTwo.webm"
-        override val previewUrl: String
-            get() = ""
-        override val board: String
-            get() = ""
-        override var isPlayed: Boolean
-            get() = false
-            set(value) {}
-        override var date: LocalDateTime
-            get() = LocalDateTime()
-            set(value) {}
-        override val md5: String
-            get() = ""
-        override val post: Long
-            get() = 0
-        override val thread: Long
-            get() = 0
-    }
+    private val movieEntityOne = NullMovie("one")
+    private val movieEntityTwo = NullMovie("two")
 
     private val resultHappyModel = DvachUseCaseModel(listOf(movieEntityOne, movieEntityTwo))
     private val resultPartOfModel = DvachUseCaseModel(listOf(movieEntityOne))
@@ -153,8 +117,8 @@ class DvachUseCaseTest {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.executeAsync(threadModel)).willReturn(model)
 
-            val linkFilesModelOne = GetLinkFilesFromThreadsUseCase.Params(board, numOne)
-            val linkFilesModelTwo = GetLinkFilesFromThreadsUseCase.Params(board, numTwo)
+            val linkFilesModelOne = GetLinkFilesFromThreadsFourchUseCase.Params(board, numOne)
+            val linkFilesModelTwo = GetLinkFilesFromThreadsFourchUseCase.Params(board, numTwo)
 
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelOne)).willReturn(linkOneModel)
@@ -167,10 +131,6 @@ class DvachUseCaseTest {
             given(movieUtils.filterFileItemOnlyAsWebm(
                     listOf(fileTwo)))
                     .willReturn(listOf(fileTwo))
-            given(movieConverter.convertFileItemToMovie(listOf(fileOne), board))
-                    .willReturn(listOf(movieEntityOne))
-            given(movieConverter.convertFileItemToMovie(listOf(fileTwo), board))
-                    .willReturn(listOf(movieEntityTwo))
 
             val dvachInputModel = DvachUseCase.Params(board, happyExecutorResult)
             dvachUseCase.executeAsync(dvachInputModel)
@@ -194,15 +154,13 @@ class DvachUseCaseTest {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.executeAsync(threadModel)).willReturn(model)
 
-            val linkFilesModelOne = GetLinkFilesFromThreadsUseCase.Params(board, numOne)
-            val linkFilesModelTwo = GetLinkFilesFromThreadsUseCase.Params(board, numTwo)
+            val linkFilesModelOne = GetLinkFilesFromThreadsFourchUseCase.Params(board, numOne)
+            val linkFilesModelTwo = GetLinkFilesFromThreadsFourchUseCase.Params(board, numTwo)
 
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelOne)).willReturn(linkOneModel)
             given(movieUtils.filterFileItemOnlyAsWebm(listOf(fileOne)))
                     .willReturn(listOf(fileOne))
-            given(movieConverter.convertFileItemToMovie(listOf(fileOne), board))
-                    .willReturn(listOf(movieEntityOne))
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelTwo)).willThrow(testException)
 
@@ -217,8 +175,8 @@ class DvachUseCaseTest {
             val threadModel = GetThreadsFromDvachUseCase.Params(board)
             given(getThreadUseCase.executeAsync(threadModel)).willReturn(model)
 
-            val linkFilesModelOne = GetLinkFilesFromThreadsUseCase.Params(board, numOne)
-            val linkFilesModelTwo = GetLinkFilesFromThreadsUseCase.Params(board, numTwo)
+            val linkFilesModelOne = GetLinkFilesFromThreadsFourchUseCase.Params(board, numOne)
+            val linkFilesModelTwo = GetLinkFilesFromThreadsFourchUseCase.Params(board, numTwo)
 
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelOne)).willReturn(linkNullModel)

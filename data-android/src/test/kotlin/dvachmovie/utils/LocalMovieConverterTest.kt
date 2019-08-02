@@ -1,6 +1,5 @@
 package dvachmovie.utils
 
-import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.db.model.MovieEntity
 import org.joda.time.LocalDateTime
@@ -10,34 +9,37 @@ import org.junit.Test
 
 class LocalMovieConverterTest {
 
-    private val appConfig = AppConfig("whew")
-    private val movieConverter = LocalMovieConverter(appConfig)
+    private val movieConverter = LocalMovieConverter()
 
     private val board = "testBoard"
+    private val baseUrl = "testBaseUrl"
     private val fileOne = FileItem(path = "one.webm", date = "14/05/19 Втр 21:20:37")
     private val fileTwo = FileItem(path = "two.webm", date = "14/05/19 Втр 21:20:37")
     private val fileThree = FileItem(path = "three", date = "14/05/19 Втр 21:20:37")
     private val fileItems = listOf(fileOne, fileTwo, fileThree)
 
     private val movieEntityOne = MovieEntity(board = board,
-            movieUrl = appConfig.DVACH_URL + fileOne.path,
-            previewUrl = appConfig.DVACH_URL,
-            date = parseDateFromFileItem(fileOne))
+            movieUrl = baseUrl + fileOne.path,
+            previewUrl = baseUrl,
+            date = parseDateFromFileItem(fileOne),
+            baseUrl = baseUrl)
     private val movieEntityTwo = MovieEntity(board = board,
-            movieUrl = appConfig.DVACH_URL + fileTwo.path,
-            previewUrl = appConfig.DVACH_URL,
-            date = parseDateFromFileItem(fileTwo))
+            movieUrl = baseUrl + fileTwo.path,
+            previewUrl = baseUrl,
+            date = parseDateFromFileItem(fileTwo),
+            baseUrl = baseUrl)
     private val movieEntityThree = MovieEntity(board = board,
-            movieUrl = appConfig.DVACH_URL + fileThree.path,
-            previewUrl = appConfig.DVACH_URL,
-            date = parseDateFromFileItem(fileThree))
+            movieUrl = baseUrl + fileThree.path,
+            previewUrl = baseUrl,
+            date = parseDateFromFileItem(fileThree),
+            baseUrl = baseUrl)
     private val movieEntities = listOf(movieEntityOne,
             movieEntityTwo,
             movieEntityThree)
 
     @Test
     fun `Convert FileItem to MovieItem was successful`() {
-        val resultList = movieConverter.convertFileItemToMovie(fileItems, board)
+        val resultList = movieConverter.convertFileItemToMovie(fileItems, board, baseUrl)
 
         Assert.assertEquals(movieEntities, resultList)
     }

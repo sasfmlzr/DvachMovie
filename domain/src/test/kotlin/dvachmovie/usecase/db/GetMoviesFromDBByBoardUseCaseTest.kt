@@ -21,23 +21,24 @@ class GetMoviesFromDBByBoardUseCaseTest {
     @Mock
     lateinit var movieDBRepository: MovieDBRepository
 
+    private val testBaseUrl = "testBaseUrl"
     private val testBoard = "test"
 
     @Test
     fun `Happy pass`() {
         runBlocking {
             val testList = listOf(NullMovie(), NullMovie("test"))
-            given(movieDBRepository.getMoviesFromBoard(testBoard)).willReturn(testList)
-            Assert.assertEquals(testList, useCase.executeAsync(testBoard))
+            given(movieDBRepository.getMoviesFromBoard(testBaseUrl, testBoard)).willReturn(testList)
+            Assert.assertEquals(testList, useCase.executeAsync(Pair(testBaseUrl, testBoard)))
         }
     }
 
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
-            given(movieDBRepository.getMoviesFromBoard(testBoard)).willThrow(TestException())
+            given(movieDBRepository.getMoviesFromBoard(testBaseUrl, testBoard)).willThrow(TestException())
 
-            useCase.executeAsync(testBoard)
+            useCase.executeAsync(Pair(testBaseUrl, testBoard))
         }
     }
 }

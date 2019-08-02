@@ -6,9 +6,9 @@ import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
 open class GetMoviesFromDBByBoardUseCase @Inject constructor(
-        private val movieDBRepository: MovieDBRepository) : UseCase<String, List<Movie>>() {
+        private val movieDBRepository: MovieDBRepository) : UseCase<Pair<String, String>, List<Movie>>() {
 
-    override suspend fun executeAsync(input: String): List<Movie> {
-        return movieDBRepository.getMoviesFromBoard(input)
+    override suspend fun executeAsync(input: Pair<String, String>): List<Movie> {
+        return movieDBRepository.getMoviesFromBoard(input.first, input.second)
     }
 }

@@ -4,5 +4,5 @@ import dvachmovie.api.FileItem
 import dvachmovie.db.data.Movie
 
 interface MovieConverter {
-    fun convertFileItemToMovie(fileItems: List<FileItem>, board: String): List<Movie>
+    fun convertFileItemToMovie(fileItems: List<FileItem>, board: String, baseUrl: String): List<Movie>
 }

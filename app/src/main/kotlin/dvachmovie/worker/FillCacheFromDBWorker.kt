@@ -3,6 +3,7 @@ package dvachmovie.worker
 import android.content.Context
 import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
+import dvachmovie.AppConfig
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
 import dvachmovie.pipe.db.GetMoviesFromDBByBoardPipe
@@ -35,7 +36,7 @@ class FillCacheFromDBWorker(@NonNull context: Context,
         val inputData = inputData.getString("BOARD")
                 ?: throw RuntimeException("board cannot be null")
 
-        val dbMovies = getMoviesFromDBByBoardPipe.execute(inputData)
+        val dbMovies = getMoviesFromDBByBoardPipe.execute(Pair(inputData, AppConfig.currentBaseUrl))
 
         withContext(Dispatchers.Main) {
             val sumMovies = mergeDBandCachePipe.execute(dbMovies)

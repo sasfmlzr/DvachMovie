@@ -1,9 +1,10 @@
-package dvachmovie.usecase.real
+package dvachmovie.usecase.real.dvach
 
 import dvachmovie.repository.DvachRepository
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.DvachReportUseCaseModel
 import javax.inject.Inject
 
 open class ReportUseCase @Inject constructor(private val dvachRepository: DvachRepository) :
@@ -18,7 +19,8 @@ open class ReportUseCase @Inject constructor(private val dvachRepository: DvachR
                     input.thread,
                     input.post,
                     comment)
-            input.executorResult?.onSuccess(DvachReportUseCaseModel(response ?: ""))
+            input.executorResult?.onSuccess(DvachReportUseCaseModel(response
+                    ?: ""))
         } catch (e: Exception) {
             input.executorResult?.onFailure(e)
         }

@@ -8,8 +8,8 @@ import androidx.room.Update
 
 @Dao
 interface MovieDao {
-    @Query("SELECT * from movieData where board = :boardThread and isPlayed = 0")
-    fun getMoviesFromBoard(boardThread: String): List<MovieEntity>
+    @Query("SELECT * from movieData where board = :boardThread and isPlayed = 0 and baseUrl = :baseUrl")
+    fun getMoviesFromBoard(baseUrl: String, boardThread: String): List<MovieEntity>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun insert(movie: MovieEntity)

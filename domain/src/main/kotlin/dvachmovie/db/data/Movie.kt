@@ -11,4 +11,5 @@ interface Movie {
     val md5: String
     val post: Long
     val thread: Long
+    val baseUrl: String
 }

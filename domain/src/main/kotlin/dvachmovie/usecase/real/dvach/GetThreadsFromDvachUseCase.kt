@@ -1,9 +1,10 @@
-package dvachmovie.usecase.real
+package dvachmovie.usecase.real.dvach
 
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.repository.DvachRepository
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.GetThreadsFromDvachUseCaseModel
 import javax.inject.Inject
 
 open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository: DvachRepository,

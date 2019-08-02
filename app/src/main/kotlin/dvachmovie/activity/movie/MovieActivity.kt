@@ -25,6 +25,7 @@ class MovieActivity : BaseActivity<MovieActivityVM,
         super.onCreate(savedInstanceState)
 
         binding.viewModel = viewModel
+        viewModel.initCurrentBaseUrl()
     }
 
     override fun onSupportNavigateUp() =

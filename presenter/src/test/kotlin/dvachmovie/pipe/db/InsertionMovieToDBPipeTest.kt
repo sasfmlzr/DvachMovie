@@ -1,9 +1,8 @@
 package dvachmovie.pipe.db
 
-import dvachmovie.db.data.Movie
+import dvachmovie.db.data.NullMovie
 import dvachmovie.usecase.db.InsertionMovieToDBUseCase
 import kotlinx.coroutines.runBlocking
-import org.joda.time.LocalDateTime
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -19,26 +18,7 @@ class InsertionMovieToDBPipeTest {
     @Mock
     lateinit var useCase: InsertionMovieToDBUseCase
 
-    private val movieOne = object : Movie {
-        override val movieUrl: String
-            get() = "testOne"
-        override val previewUrl: String
-            get() = "testOne"
-        override val board: String
-            get() = "testOne"
-        override var isPlayed: Boolean
-            get() = false
-            set(value) {}
-        override var date: LocalDateTime
-            get() = LocalDateTime()
-            set(value) {}
-        override val md5: String
-            get() = "testOne"
-        override val post: Long
-            get() = 0
-        override val thread: Long
-            get() = 0
-    }
+    private val movieOne = NullMovie("testOne")
 
     @Test
     fun `Happy pass`() {

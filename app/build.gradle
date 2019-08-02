@@ -27,8 +27,6 @@ android {
         versionName project["versionName"]
         versionCode project["versionCode"].toInteger()
         signingConfig signingConfigs.releaseConfig
-
-        buildConfigField "String", "DVACH_URL", "\"https://2ch.hk\""
     }
     dataBinding {
         enabled = true

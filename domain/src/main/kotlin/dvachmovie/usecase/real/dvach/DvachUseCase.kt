@@ -1,11 +1,15 @@
-package dvachmovie.usecase.real
+package dvachmovie.usecase.real.dvach
 
+import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
+import dvachmovie.usecase.real.DvachAmountRequestsUseCaseModel
+import dvachmovie.usecase.real.DvachCountRequestUseCaseModel
+import dvachmovie.usecase.real.DvachUseCaseModel
 import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import kotlinx.coroutines.CancellationException
@@ -16,7 +20,7 @@ import javax.inject.Inject
 
 open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
                                             private val getLinkFilesFromThreadsUseCase:
-                                       GetLinkFilesFromThreadsUseCase,
+                                            GetLinkFilesFromThreadsUseCase,
                                             private val movieUtils: MovieUtils,
                                             private val movieConverter: MovieConverter,
                                             private val scopeProvider: ScopeProvider) :
@@ -50,7 +54,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
         executorResult = input.executorResult!!
         val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
 
-        networkJob = scopeProvider.ioScope.async (Job()) {
+        networkJob = scopeProvider.ioScope.async(Job()) {
             try {
                 val useCaseModel = getThreadUseCase.executeAsync(inputModel)
                 listThreadSize = useCaseModel.listThreads.size
@@ -61,7 +65,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                     try {
                         val webmItems =
                                 movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
-                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board))
+                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.DVACH_URL))
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break
