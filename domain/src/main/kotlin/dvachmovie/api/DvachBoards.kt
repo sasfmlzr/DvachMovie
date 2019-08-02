@@ -1,6 +1,19 @@
 package dvachmovie.api
 
 object DvachBoards {
+
+    fun isBoardExists(board: String): Boolean =
+            defaultMap.containsKey(board) ||
+                    popularMap.containsKey(board) ||
+                    themeMap.containsKey(board) ||
+                    creationMap.containsKey(board) ||
+                    politicsAndNewsMap.containsKey(board) ||
+                    techniqueAndSoftwareMap.containsKey(board) ||
+                    gamesMap.containsKey(board) ||
+                    japanCultureMap.containsKey(board) ||
+                    adultOtherMap.containsKey(board) ||
+                    adultMap.containsKey(board)
+
     val defaultMap = linkedMapOf<String, String>()
 
     val popularMap = hashMapOf<String, String>()
@@ -9,7 +22,7 @@ object DvachBoards {
 
     val creationMap = hashMapOf<String, String>() // Творчество
 
-    val politycsAndNewsMap = hashMapOf<String, String>() // Политика и новости
+    val politicsAndNewsMap = hashMapOf<String, String>() // Политика и новости
 
     val techniqueAndSoftwareMap = hashMapOf<String, String>() // Техника и софт
 
@@ -22,7 +35,7 @@ object DvachBoards {
     val adultMap = hashMapOf<String, String>() // Взрослым 18+
 
     init {
-        defaultMap["kpop"] = "/kpop/ - K-pop"
+        defaultMap["b"] = "/b/ - Бред"
 
         popularMap["b"] = "/b/ - Бред"
         popularMap["vg"] = "/vg/ - Video Games General"
@@ -78,10 +91,10 @@ object DvachBoards {
         creationMap["wrk"] = "/wrk/ - Работа"
         creationMap["trv"] = "/trv/ - Путешествия и отдых"
 
-        politycsAndNewsMap["po"] = "/po/ - Политика"
-        politycsAndNewsMap["news"] = "/news/ - Новости"
-        politycsAndNewsMap["int"] = "/int/ - International"
-        politycsAndNewsMap["hry"] = "/hry/ - Х Р Ю"
+        politicsAndNewsMap["po"] = "/po/ - Политика"
+        politicsAndNewsMap["news"] = "/news/ - Новости"
+        politicsAndNewsMap["int"] = "/int/ - International"
+        politicsAndNewsMap["hry"] = "/hry/ - Х Р Ю"
 
         techniqueAndSoftwareMap["gd"] = "/gd/ - Gamedev"
         techniqueAndSoftwareMap["hw"] = "/hw/ - Комп. железо"

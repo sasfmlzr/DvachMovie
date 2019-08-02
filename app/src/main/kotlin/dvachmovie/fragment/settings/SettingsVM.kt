@@ -134,7 +134,7 @@ class SettingsVM @Inject constructor(
 
     val onSetPolNewsBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.politycsAndNewsMap)
+                showChangeBoardDialog(it.context, DvachBoards.politicsAndNewsMap)
             }
 
     val onSetTechSoftBoard =
