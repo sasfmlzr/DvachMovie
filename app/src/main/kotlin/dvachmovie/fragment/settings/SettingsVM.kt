@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dvachmovie.AppConfig
 import dvachmovie.BuildConfig
 import dvachmovie.R
 import dvachmovie.api.DvachBoards
@@ -17,6 +18,7 @@ import dvachmovie.api.FourChanBoards
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.pipe.moviestorage.EraseMovieStoragePipe
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
+import dvachmovie.pipe.settingsstorage.GetCurrentBaseUrlPipe
 import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
@@ -40,13 +42,18 @@ class SettingsVM @Inject constructor(
         private val putReportBtnVisiblePipe: PutIsReportBtnVisiblePipe,
         private val putIsListBtnVisiblePipe: PutIsListBtnVisiblePipe,
         private val putIsAllowGesturePipe: PutIsAllowGesturePipe,
-        private val eraseMovieStoragePipe: EraseMovieStoragePipe
+        private val eraseMovieStoragePipe: EraseMovieStoragePipe,
+        private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe
 ) : ViewModel() {
 
     private lateinit var board: String
     val isReportBtnVisible = MutableLiveData<Boolean>()
-    val isListBtnVisible = MutableLiveData<Boolean>()
+    val isReportBtnShow = MutableLiveData<Boolean>()
+    val isListBtnShow= MutableLiveData<Boolean>()
     val isGestureEnabled = MutableLiveData<Boolean>()
+
+    val isDvachBoardsVisible = MutableLiveData<Boolean>()
+    val isFourChanBoardsVisible = MutableLiveData<Boolean>()
 
     init {
         addFields()
@@ -55,20 +62,28 @@ class SettingsVM @Inject constructor(
     fun addFields() {
         board = getBoardPipe.execute(Unit)
 
-        isReportBtnVisible.value = getIsReportBtnVisiblePipe.execute(Unit)
-        isListBtnVisible.value = getIsListBtnVisiblePipe.execute(Unit)
+        isReportBtnShow.value = getIsReportBtnVisiblePipe.execute(Unit)
+        isListBtnShow.value = getIsListBtnVisiblePipe.execute(Unit)
         isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
     }
 
+    fun setReportBtnVisible(){
+        when (getCurrentBaseUrl()) {
+            AppConfig.DVACH_URL -> isReportBtnVisible.value = true
+        }
+    }
+
+    fun getCurrentBaseUrl() = getCurrentBaseUrlPipe.execute(Unit)
+
     val onReportSwitchClicked = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-        isReportBtnVisible.value = isChecked
+        isReportBtnShow.value = isChecked
         viewModelScope.launch {
             putReportBtnVisiblePipe.execute(isChecked)
         }
     }
 
     val onListSwitchClicked = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-        isListBtnVisible.value = isChecked
+        isListBtnShow.value = isChecked
         viewModelScope.launch {
             putIsListBtnVisiblePipe.execute(isChecked)
         }
@@ -118,40 +133,40 @@ class SettingsVM @Inject constructor(
                 showChangeBoardDialog(it.context, boardMap)
             }
 
-    //------------Dvach boards started------------//
-    val onSetDvachPopularBoard = createClickListenerForSetBoards( DvachBoards.popularMap)
+    //------------2ch.hk boards started------------//
+    val onSetDvachPopularBoard = createClickListenerForSetBoards(DvachBoards.popularMap)
 
-    val onSetDvachThemeBoard = createClickListenerForSetBoards( DvachBoards.themeMap)
+    val onSetDvachThemeBoard = createClickListenerForSetBoards(DvachBoards.themeMap)
 
-    val onSetDvachCreationBoard = createClickListenerForSetBoards( DvachBoards.creationMap)
+    val onSetDvachCreationBoard = createClickListenerForSetBoards(DvachBoards.creationMap)
 
-    val onSetDvachPolNewsBoard = createClickListenerForSetBoards( DvachBoards.politicsAndNewsMap)
+    val onSetDvachPolNewsBoard = createClickListenerForSetBoards(DvachBoards.politicsAndNewsMap)
 
-    val onSetDvachTechSoftBoard = createClickListenerForSetBoards( DvachBoards.techniqueAndSoftwareMap)
+    val onSetDvachTechSoftBoard = createClickListenerForSetBoards(DvachBoards.techniqueAndSoftwareMap)
 
-    val onSetDvachGamesBoard = createClickListenerForSetBoards( DvachBoards.gamesMap)
+    val onSetDvachGamesBoard = createClickListenerForSetBoards(DvachBoards.gamesMap)
 
-    val onSetDvachJapanBoard = createClickListenerForSetBoards( DvachBoards.japanCultureMap)
+    val onSetDvachJapanBoard = createClickListenerForSetBoards(DvachBoards.japanCultureMap)
 
-    val onSetDvachAdultBoard = createClickListenerForSetBoards( DvachBoards.adultMap)
+    val onSetDvachAdultBoard = createClickListenerForSetBoards(DvachBoards.adultMap)
 
-    val onSetDvachAdultOtherBoard = createClickListenerForSetBoards( DvachBoards.adultOtherMap)
-    //------------Dvach boards finished------------//
+    val onSetDvachAdultOtherBoard = createClickListenerForSetBoards(DvachBoards.adultOtherMap)
+    //------------2ch.hk boards finished------------//
 
     //------------4chan.org boards started------------//
-    val onSetFourChanJapanCultureBoard = createClickListenerForSetBoards( FourChanBoards.japanCultureMap)
+    val onSetFourChanJapanCultureBoard = createClickListenerForSetBoards(FourChanBoards.japanCultureMap)
 
-    val onSetFourChanVideoGamesBoard = createClickListenerForSetBoards( FourChanBoards.videoGamesMap)
+    val onSetFourChanVideoGamesBoard = createClickListenerForSetBoards(FourChanBoards.videoGamesMap)
 
-    val onSetFourChanInterestsBoard = createClickListenerForSetBoards( FourChanBoards.interestsMap)
+    val onSetFourChanInterestsBoard = createClickListenerForSetBoards(FourChanBoards.interestsMap)
 
-    val onSetFourChanCreativeBoard = createClickListenerForSetBoards( FourChanBoards.creativeMap)
+    val onSetFourChanCreativeBoard = createClickListenerForSetBoards(FourChanBoards.creativeMap)
 
-    val onSetFourChanOtherBoard = createClickListenerForSetBoards( FourChanBoards.otherMap)
+    val onSetFourChanOtherBoard = createClickListenerForSetBoards(FourChanBoards.otherMap)
 
-    val onSetFourChanMiscBoard = createClickListenerForSetBoards( FourChanBoards.miscMap)
+    val onSetFourChanMiscBoard = createClickListenerForSetBoards(FourChanBoards.miscMap)
 
-    val onSetFourChanAdultBoard = createClickListenerForSetBoards( FourChanBoards.adultMap)
+    val onSetFourChanAdultBoard = createClickListenerForSetBoards(FourChanBoards.adultMap)
     //------------4chan.org boards finished------------//
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {

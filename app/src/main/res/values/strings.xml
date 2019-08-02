@@ -27,4 +27,11 @@
     <string name="report_button_visible">Report button visible</string>
     <string name="start">Start</string>
     <string name="refresh_movies">Refresh movies</string>
+    <string name="adult_nsfw">Adult NSFW</string>
+    <string name="misc_nsfw">Misc NSFW</string>
+    <string name="other">Other</string>
+    <string name="creative">Creative</string>
+    <string name="interests">Interests</string>
+    <string name="video_games">Video games</string>
+    <string name="japan_culture">Japan culture</string>
 </resources>

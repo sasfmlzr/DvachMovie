@@ -25,7 +25,7 @@ object FourChanBoards {
 
     val otherMap = hashMapOf<String, String>() // Other
 
-    val miscMap = hashMapOf<String, String>() // misc NSFW 18+
+    val miscMap = hashMapOf<String, String>() // Misc NSFW 18+
 
     val adultMap = hashMapOf<String, String>() // Adult NSFW 18+
 

@@ -18,6 +18,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
+import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
@@ -71,6 +72,12 @@ class MovieFragment : BaseFragment<MovieVM,
         viewModel.fillCurrentPos()
 
         viewModel.refreshVM()
+
+        when (viewModel.getCurrentBaseUrl()) {
+            AppConfig.FOURCHAN_URL -> {
+                viewModel.isReportBtnVisible.value = false
+            }
+        }
         return binding.root
     }
 

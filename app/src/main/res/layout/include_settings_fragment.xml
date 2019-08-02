@@ -8,6 +8,8 @@
         <variable
             name="viewModel"
             type="dvachmovie.fragment.settings.SettingsVM" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,8 +69,9 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="20dp"
-                        android:checked="@{safeUnbox(viewModel.isReportBtnVisible)}"
+                        android:checked="@{safeUnbox(viewModel.isReportBtnShow)}"
                         android:foreground="?attr/selectableItemBackground"
+                        android:visibility="@{safeUnbox(viewModel.isReportBtnVisible)? View.VISIBLE : View.GONE}"
                         android:onCheckedChanged="@{viewModel.onReportSwitchClicked}"
                         android:text="@string/report_button_visible" />
 
@@ -80,7 +83,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="20dp"
-                        android:checked="@{safeUnbox(viewModel.isListBtnVisible)}"
+                        android:checked="@{safeUnbox(viewModel.isListBtnShow)}"
                         android:foreground="?attr/selectableItemBackground"
                         android:onCheckedChanged="@{viewModel.onListSwitchClicked}"
                         android:text="@string/list_button_visible" />
@@ -109,6 +112,12 @@
 
                     <include
                         layout="@layout/include_dvach_boards"
+                        android:visibility="@{safeUnbox(viewModel.isDvachBoardsVisible)? View.VISIBLE : View.GONE}"
+                        bind:viewModel="@{viewModel}" />
+
+                    <include
+                        layout="@layout/include_fourchan_boards"
+                        android:visibility="@{safeUnbox(viewModel.isFourChanBoardsVisible)? View.VISIBLE : View.GONE}"
                         bind:viewModel="@{viewModel}" />
                 </LinearLayout>
             </ScrollView>

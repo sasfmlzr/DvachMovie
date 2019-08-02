@@ -15,102 +15,80 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/buttonPopularBoard"
+            android:id="@+id/btnFourChanJapanCultureBoard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetDvachPopularBoard}"
-            android:text="@string/set_popular_board" />
+            android:onClick="@{viewModel.onSetFourChanJapanCultureBoard}"
+            android:text="@string/japan_culture" />
 
         <Button
-            android:id="@+id/buttonThemeBoard"
+            android:id="@+id/btnFourChanVideoGamesBoard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetDvachThemeBoard}"
-            android:text="@string/set_theme_board" />
+            android:onClick="@{viewModel.onSetFourChanVideoGamesBoard}"
+            android:text="@string/video_games" />
 
         <Button
-            android:id="@+id/buttonGamesBoard"
+            android:id="@+id/btnFourChanInterestsBoard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetDvachGamesBoard}"
-            android:text="@string/set_games_board" />
+            android:onClick="@{viewModel.onSetFourChanInterestsBoard}"
+            android:text="@string/interests" />
 
         <Button
-            android:id="@+id/buttonTechSoftBoard"
+            android:id="@+id/btnFourChanCreativeBoard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetDvachTechSoftBoard}"
-            android:text="@string/set_tech_and_soft_board" />
+            android:onClick="@{viewModel.onSetFourChanCreativeBoard}"
+            android:text="@string/creative" />
 
         <Button
-            android:id="@+id/buttonPolNewsBoard"
+            android:id="@+id/btnFourChanOtherBoard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetDvachPolNewsBoard}"
-            android:text="@string/set_politics_and_news_board" />
+            android:onClick="@{viewModel.onSetFourChanOtherBoard}"
+            android:text="@string/other" />
 
         <Button
-            android:id="@+id/buttonCreationBoard"
+            android:id="@+id/btnFourChanMiscBoard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetDvachCreationBoard}"
-            android:text="@string/set_creation_board" />
+            android:onClick="@{viewModel.onSetFourChanMiscBoard}"
+            android:text="@string/misc_nsfw" />
 
         <Button
-            android:id="@+id/buttonJapanBoard"
+            android:id="@+id/btnFourChanAdultBoard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetDvachJapanBoard}"
-            android:text="@string/set_japan_board" />
-
-        <Button
-            android:id="@+id/buttonAdultBoard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetDvachAdultBoard}"
-            android:text="@string/set_adult_board" />
-
-        <Button
-            android:id="@+id/buttonOtherAdultBoard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:onClick="@{viewModel.onSetDvachAdultOtherBoard}"
-            android:text="@string/set_adult_otherboard" />
+            android:onClick="@{viewModel.onSetFourChanAdultBoard}"
+            android:text="@string/adult_nsfw" />
     </LinearLayout>
 </layout>

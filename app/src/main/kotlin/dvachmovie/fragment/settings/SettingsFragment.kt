@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentSettingsBinding
@@ -36,6 +37,17 @@ class SettingsFragment : BaseFragment<SettingsVM,
     }
 
     private fun configureVM() {
+        when (viewModel.getCurrentBaseUrl()) {
+            AppConfig.DVACH_URL -> {
+                viewModel.isDvachBoardsVisible.value = true
+                viewModel.isFourChanBoardsVisible.value = false
+            }
+            AppConfig.FOURCHAN_URL -> {
+                viewModel.isDvachBoardsVisible.value = false
+                viewModel.isFourChanBoardsVisible.value = true
+            }
+        }
+
         viewModel.routeToStartFragment = {
             router.navigateSettingsToStartFragment(it)
         }
@@ -46,6 +58,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
                 viewModel.reInitMovies(false)
             }
         }
+        viewModel.setReportBtnVisible()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
