@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import dvachmovie.BuildConfig
 import dvachmovie.R
 import dvachmovie.api.DvachBoards
+import dvachmovie.api.FourChanBoards
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.pipe.moviestorage.EraseMovieStoragePipe
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
@@ -59,55 +60,50 @@ class SettingsVM @Inject constructor(
         isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
     }
 
-    val onReportSwitchClicked =
-            CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                isReportBtnVisible.value = isChecked
-                viewModelScope.launch {
-                    putReportBtnVisiblePipe.execute(isChecked)
-                }
-            }
+    val onReportSwitchClicked = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+        isReportBtnVisible.value = isChecked
+        viewModelScope.launch {
+            putReportBtnVisiblePipe.execute(isChecked)
+        }
+    }
 
-    val onListSwitchClicked =
-            CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                isListBtnVisible.value = isChecked
-                viewModelScope.launch {
-                    putIsListBtnVisiblePipe.execute(isChecked)
-                }
-            }
+    val onListSwitchClicked = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+        isListBtnVisible.value = isChecked
+        viewModelScope.launch {
+            putIsListBtnVisiblePipe.execute(isChecked)
+        }
+    }
 
-    val onGestureLoadingClicked =
-            CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                isGestureEnabled.value = isChecked
-                viewModelScope.launch {
-                    putIsAllowGesturePipe.execute(isChecked)
-                }
-            }
+    val onGestureLoadingClicked = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+        isGestureEnabled.value = isChecked
+        viewModelScope.launch {
+            putIsAllowGesturePipe.execute(isChecked)
+        }
+    }
 
     val version = MutableLiveData(BuildConfig.VERSION_NAME)
 
-    val onCleanDatabase =
-            View.OnClickListener {
-                AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
-                        .setTitle("Confirmation")
-                        .setMessage("Database will clean")
-                        .setPositiveButton("Ok") { _, _ ->
-                            recreateMoviesDB()
-                        }
-                        .setNegativeButton("Cancel") { _, _ -> }
-                        .show()
-            }
+    val onCleanDatabase = View.OnClickListener {
+        AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
+                .setTitle("Confirmation")
+                .setMessage("Database will clean")
+                .setPositiveButton("Ok") { _, _ ->
+                    recreateMoviesDB()
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
+    }
 
-    val onRefreshMovies =
-            View.OnClickListener {
-                AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
-                        .setTitle("Confirmation")
-                        .setMessage("Movies will refresh")
-                        .setPositiveButton("Ok") { _, _ ->
-                            reInitMovies(true)
-                        }
-                        .setNegativeButton("Cancel") { _, _ -> }
-                        .show()
-            }
+    val onRefreshMovies = View.OnClickListener {
+        AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
+                .setTitle("Confirmation")
+                .setMessage("Movies will refresh")
+                .setPositiveButton("Ok") { _, _ ->
+                    reInitMovies(true)
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
+    }
 
     lateinit var recreateMoviesDB: () -> Unit
     lateinit var routeToStartFragment: (isRefresh: Boolean) -> Unit
@@ -117,50 +113,46 @@ class SettingsVM @Inject constructor(
         routeToStartFragment(isRefresh)
     }
 
-    val onSetPopularBoard =
+    fun createClickListenerForSetBoards(boardMap: HashMap<String, String>) =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.popularMap)
+                showChangeBoardDialog(it.context, boardMap)
             }
 
-    val onSetThemeBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.themeMap)
-            }
+    //------------Dvach boards started------------//
+    val onSetDvachPopularBoard = createClickListenerForSetBoards( DvachBoards.popularMap)
 
-    val onSetCreationBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.creationMap)
-            }
+    val onSetDvachThemeBoard = createClickListenerForSetBoards( DvachBoards.themeMap)
 
-    val onSetPolNewsBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.politicsAndNewsMap)
-            }
+    val onSetDvachCreationBoard = createClickListenerForSetBoards( DvachBoards.creationMap)
 
-    val onSetTechSoftBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.techniqueAndSoftwareMap)
-            }
+    val onSetDvachPolNewsBoard = createClickListenerForSetBoards( DvachBoards.politicsAndNewsMap)
 
-    val onSetGamesBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.gamesMap)
-            }
+    val onSetDvachTechSoftBoard = createClickListenerForSetBoards( DvachBoards.techniqueAndSoftwareMap)
 
-    val onSetJapanBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.japanCultureMap)
-            }
+    val onSetDvachGamesBoard = createClickListenerForSetBoards( DvachBoards.gamesMap)
 
-    val onSetAdultBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.adultMap)
-            }
+    val onSetDvachJapanBoard = createClickListenerForSetBoards( DvachBoards.japanCultureMap)
 
-    val onSetAdultOtherBoard =
-            View.OnClickListener {
-                showChangeBoardDialog(it.context, DvachBoards.adultOtherMap)
-            }
+    val onSetDvachAdultBoard = createClickListenerForSetBoards( DvachBoards.adultMap)
+
+    val onSetDvachAdultOtherBoard = createClickListenerForSetBoards( DvachBoards.adultOtherMap)
+    //------------Dvach boards finished------------//
+
+    //------------4chan.org boards started------------//
+    val onSetFourChanJapanCultureBoard = createClickListenerForSetBoards( FourChanBoards.japanCultureMap)
+
+    val onSetFourChanVideoGamesBoard = createClickListenerForSetBoards( FourChanBoards.videoGamesMap)
+
+    val onSetFourChanInterestsBoard = createClickListenerForSetBoards( FourChanBoards.interestsMap)
+
+    val onSetFourChanCreativeBoard = createClickListenerForSetBoards( FourChanBoards.creativeMap)
+
+    val onSetFourChanOtherBoard = createClickListenerForSetBoards( FourChanBoards.otherMap)
+
+    val onSetFourChanMiscBoard = createClickListenerForSetBoards( FourChanBoards.miscMap)
+
+    val onSetFourChanAdultBoard = createClickListenerForSetBoards( FourChanBoards.adultMap)
+    //------------4chan.org boards finished------------//
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         var checkedItem = boardMap.keys.indexOf(board)
