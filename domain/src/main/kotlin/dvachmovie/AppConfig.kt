@@ -6,4 +6,7 @@ object AppConfig {
     const val FOURCHAN_URL: String = "http://a.4cdn.org"
     const val FOURCHAN_WEBM_URL: String = "http://is2.4chan.org"
     const val FOURCHAN_THUMBNAIL_URL: String = "http://i.4cdn.org"
+
+    val imageboards = hashMapOf(DVACH_URL to "2ch.hk",
+            FOURCHAN_URL to "4chan.org")
 }

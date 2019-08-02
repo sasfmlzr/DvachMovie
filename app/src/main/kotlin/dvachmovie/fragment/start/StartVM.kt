@@ -14,6 +14,7 @@ import dvachmovie.pipe.ErrorModel
 import dvachmovie.pipe.db.GetMoviesFromDBByBoardPipe
 import dvachmovie.pipe.network.DvachPipe
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
+import dvachmovie.pipe.settingsstorage.GetCurrentBaseUrlPipe
 import dvachmovie.pipe.settingsstorage.PutBoardPipe
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -29,7 +30,8 @@ open class StartVM @Inject constructor(
         putBoardPipe: PutBoardPipe,
         private val scopeProvider: ScopeProvider,
         val getBoardPipe: GetBoardPipe,
-        val getMoviesFromDBByBoardPipe: GetMoviesFromDBByBoardPipe) : ViewModel() {
+        val getMoviesFromDBByBoardPipe: GetMoviesFromDBByBoardPipe,
+        private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe) : ViewModel() {
 
     private lateinit var dvachJob: Job
 
@@ -43,6 +45,8 @@ open class StartVM @Inject constructor(
 
     val progressLoadingMovies = MutableLiveData<Int>()
     val amountMovies = MutableLiveData<Int>()
+
+    fun getCurrentBaseUrl() = getCurrentBaseUrlPipe.execute(Unit)
 
     override fun onCleared() {
         if (::dvachJob.isInitialized) {

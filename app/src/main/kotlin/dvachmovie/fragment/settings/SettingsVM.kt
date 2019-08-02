@@ -23,6 +23,7 @@ import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
 import dvachmovie.pipe.settingsstorage.GetIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsstorage.GetIsReportBtnVisiblePipe
 import dvachmovie.pipe.settingsstorage.PutBoardPipe
+import dvachmovie.pipe.settingsstorage.PutCurrentBaseUrlPipe
 import dvachmovie.pipe.settingsstorage.PutIsAllowGesturePipe
 import dvachmovie.pipe.settingsstorage.PutIsListBtnVisiblePipe
 import dvachmovie.pipe.settingsstorage.PutIsReportBtnVisiblePipe
@@ -43,13 +44,14 @@ class SettingsVM @Inject constructor(
         private val putIsListBtnVisiblePipe: PutIsListBtnVisiblePipe,
         private val putIsAllowGesturePipe: PutIsAllowGesturePipe,
         private val eraseMovieStoragePipe: EraseMovieStoragePipe,
-        private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe
+        private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe,
+        private val putCurrentBaseUrlPipe: PutCurrentBaseUrlPipe
 ) : ViewModel() {
 
     private lateinit var board: String
     val isReportBtnVisible = MutableLiveData<Boolean>()
     val isReportBtnShow = MutableLiveData<Boolean>()
-    val isListBtnShow= MutableLiveData<Boolean>()
+    val isListBtnShow = MutableLiveData<Boolean>()
     val isGestureEnabled = MutableLiveData<Boolean>()
 
     val isDvachBoardsVisible = MutableLiveData<Boolean>()
@@ -67,7 +69,7 @@ class SettingsVM @Inject constructor(
         isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
     }
 
-    fun setReportBtnVisible(){
+    fun setReportBtnVisible() {
         when (getCurrentBaseUrl()) {
             AppConfig.DVACH_URL -> isReportBtnVisible.value = true
         }
@@ -128,7 +130,54 @@ class SettingsVM @Inject constructor(
         routeToStartFragment(isRefresh)
     }
 
-    fun createClickListenerForSetBoards(boardMap: HashMap<String, String>) =
+    val onSetImageBoard = View.OnClickListener {
+            var checkedItem = AppConfig.imageboards.keys.indexOf(getCurrentBaseUrl())
+
+            AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
+                    .setTitle("Set board")
+                    .setSingleChoiceItems(
+                            AppConfig.imageboards.values.toTypedArray(),
+                            checkedItem
+                    ) { dialog, which ->
+                        checkedItem = which
+                        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).isPressed = true
+                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).requestFocus()
+                    }
+                    .setOnKeyListener { dialog, keyCode, _ ->
+                        val btnNegative = (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+                        val btnPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                        if (keyCode == KEYCODE_DPAD_RIGHT && !btnNegative.isFocused && !btnPositive.isFocused) {
+                            btnNegative.isPressed = true
+                            btnNegative.requestFocus()
+                            true
+                        } else {
+                            false
+                        }
+                    }
+                    .setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                        }
+
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                            view?.isPressed = true
+                        }
+                    })
+                    .setPositiveButton("Ok") { _, _ ->
+                        if (checkedItem != -1) {
+                            viewModelScope.launch {
+                                withContext(scopeProvider.ioScope.coroutineContext + Job()) {
+                                    putCurrentBaseUrlPipe.execute(AppConfig.imageboards.keys.elementAt(checkedItem))
+                                    putBoardPipe.execute(DvachBoards.defaultMap.iterator().next().key)
+                                }
+                                reInitMovies(false)
+                            }
+                        }
+                    }
+                    .setNegativeButton("Cancel") { _, _ -> }
+                    .show()
+    }
+
+    private fun createClickListenerForSetBoards(boardMap: HashMap<String, String>) =
             View.OnClickListener {
                 showChangeBoardDialog(it.context, boardMap)
             }

@@ -56,6 +56,7 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun prepareData() {
         scopeProvider.ioScope.launch(Job()) {
+            AppConfig.currentBaseUrl = viewModel.getCurrentBaseUrl()
             val movies = viewModel.getMoviesFromDBByBoardPipe
                     .execute(Pair(viewModel.getBoardPipe.execute(Unit), AppConfig.currentBaseUrl))
             if (movies.size < MINIMUM_COUNT_MOVIES ||

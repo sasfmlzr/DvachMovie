@@ -110,6 +110,17 @@
                         android:onClick="@{viewModel.onRefreshMovies}"
                         android:text="@string/refresh_movies" />
 
+                    <Button
+                        android:id="@+id/buttonImageBoard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:onClick="@{viewModel.onSetImageBoard}"
+                        android:text="@string/set_imageboard" />
+
                     <include
                         layout="@layout/include_dvach_boards"
                         android:visibility="@{safeUnbox(viewModel.isDvachBoardsVisible)? View.VISIBLE : View.GONE}"
