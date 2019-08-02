@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dvachmovie.BuildConfig
 import dvachmovie.R
-import dvachmovie.api.Boards
+import dvachmovie.api.DvachBoards
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.pipe.moviestorage.EraseMovieStoragePipe
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
@@ -119,47 +119,47 @@ class SettingsVM @Inject constructor(
 
     val onSetPopularBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.popularMap)
+                showChangeBoardDialog(it.context, DvachBoards.popularMap)
             }
 
     val onSetThemeBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.themeMap)
+                showChangeBoardDialog(it.context, DvachBoards.themeMap)
             }
 
     val onSetCreationBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.creationMap)
+                showChangeBoardDialog(it.context, DvachBoards.creationMap)
             }
 
     val onSetPolNewsBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.politycsAndNewsMap)
+                showChangeBoardDialog(it.context, DvachBoards.politycsAndNewsMap)
             }
 
     val onSetTechSoftBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.techniqueAndSoftwareMap)
+                showChangeBoardDialog(it.context, DvachBoards.techniqueAndSoftwareMap)
             }
 
     val onSetGamesBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.gamesMap)
+                showChangeBoardDialog(it.context, DvachBoards.gamesMap)
             }
 
     val onSetJapanBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.japanCultureMap)
+                showChangeBoardDialog(it.context, DvachBoards.japanCultureMap)
             }
 
     val onSetAdultBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.adultMap)
+                showChangeBoardDialog(it.context, DvachBoards.adultMap)
             }
 
     val onSetAdultOtherBoard =
             View.OnClickListener {
-                showChangeBoardDialog(it.context, Boards.adultOtherMap)
+                showChangeBoardDialog(it.context, DvachBoards.adultOtherMap)
             }
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {

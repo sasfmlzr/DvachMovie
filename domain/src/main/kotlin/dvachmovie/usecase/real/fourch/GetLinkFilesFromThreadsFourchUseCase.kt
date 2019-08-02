@@ -11,7 +11,7 @@ open class GetLinkFilesFromThreadsFourchUseCase @Inject constructor(private val 
                                                                     private val logger: Logger) :
         UseCase<GetLinkFilesFromThreadsFourchUseCase.Params, GetLinkFilesFromThreadsUseCaseModel>() {
     companion object {
-        private const val TAG = "GetLinkFilesFromThreadsUseCase"
+        private const val TAG = "GetLinkFilesFromThreadsFourchUseCase"
     }
 
     override suspend fun executeAsync(input: Params): GetLinkFilesFromThreadsUseCaseModel =

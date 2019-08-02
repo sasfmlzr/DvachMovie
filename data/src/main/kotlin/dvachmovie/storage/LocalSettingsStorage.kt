@@ -1,7 +1,7 @@
 package dvachmovie.storage
 
 import dvachmovie.AppConfig
-import dvachmovie.api.Boards
+import dvachmovie.api.DvachBoards
 import dvachmovie.architecture.ScopeProvider
 import kotlinx.coroutines.async
 import javax.inject.Inject
@@ -51,11 +51,11 @@ class LocalSettingsStorage @Inject constructor(
 
     override fun getBoardAsync() =
             scopeProvider.ioScope.async {
-                pref.getString(BOARD) ?: Boards.defaultMap.iterator().next().key
+                pref.getString(BOARD) ?: DvachBoards.defaultMap.iterator().next().key
             }
 
     override fun getBoard() =
-            pref.getString(BOARD) ?: Boards.defaultMap.iterator().next().key
+            pref.getString(BOARD) ?: DvachBoards.defaultMap.iterator().next().key
 
     override fun putBoard(board: String) =
             scopeProvider.ioScope.async { pref.putString(BOARD, board) }

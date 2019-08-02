@@ -2,7 +2,7 @@ package dvachmovie.storage
 
 import dvachmovie.AppConfig
 import dvachmovie.TestException
-import dvachmovie.api.Boards
+import dvachmovie.api.DvachBoards
 import dvachmovie.architecture.ScopeProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -196,11 +196,11 @@ class LocalSettingsStorageTest {
     @Test
     fun `Get Board is fault, but return default value`() {
         doReturn(null).`when`(keyValueStorage).getString(BOARD)
-        Assert.assertEquals(Boards.defaultMap.iterator().next().key,
+        Assert.assertEquals(DvachBoards.defaultMap.iterator().next().key,
                 settingsStorage.getBoard())
 
         runBlocking {
-            Assert.assertEquals(Boards.defaultMap.iterator().next().key,
+            Assert.assertEquals(DvachBoards.defaultMap.iterator().next().key,
                     settingsStorage.getBoardAsync().await())
         }
     }
