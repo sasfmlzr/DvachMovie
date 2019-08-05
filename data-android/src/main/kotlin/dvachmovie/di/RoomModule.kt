@@ -46,7 +46,7 @@ class RoomModule(private val application: Application) {
 
         private val MIGRATION_1_6 = object : Migration(5, 6) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS threadData (thread INTEGER PRIMARY KEY NOT NULL, date TEXT, isHidden INTEGER, nameThread TEXT)")
+                database.execSQL("CREATE TABLE IF NOT EXISTS threadData (thread INTEGER PRIMARY KEY NOT NULL, date TEXT NOT NULL, isHidden INTEGER NOT NULL, nameThread TEXT NOT NULL)")
             }
         }
     }
