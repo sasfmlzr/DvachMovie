@@ -65,6 +65,8 @@ class MovieVM @Inject constructor(
 
     val isGestureEnabled = MutableLiveData<Boolean>()
 
+    val isHideThreadBtnVisible = MutableLiveData<Boolean>(true)
+
     init {
         setMovieListChangedListenerPipe.execute(object : OnMovieListChangedListener {
             override fun onListChanged(movies: List<Movie>) {
@@ -114,6 +116,8 @@ class MovieVM @Inject constructor(
         copyURLTask(currentMovie.value?.movieUrl ?: "")
     }
     val onBtnListVideosClicked = View.OnClickListener { routeToPreviewTask() }
+
+    val onBtnHideThreadClicked = View.OnClickListener { routeToSettingsTask() }
 
     val onBtnReportClicked = View.OnClickListener {
         currentMovie.value?.let {
