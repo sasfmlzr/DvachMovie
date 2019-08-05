@@ -35,13 +35,26 @@ class RoomModule(private val application: Application) {
                 database.execSQL("ALTER TABLE movieData ADD COLUMN baseUrl TEXT DEFAULT 'https://2ch.hk' NOT NULL")
             }
         }
+
+        private val MIGRATION_1_5 = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE movieData ADD COLUMN isHidden INTEGER DEFAULT '0' NOT NULL")
+                database.execSQL("ALTER TABLE movieData ADD COLUMN nameThread TEXT DEFAULT 'Old thread' NOT NULL")
+            }
+        }
+
+        private val MIGRATION_1_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS threadData (thread INTEGER PRIMARY KEY NOT NULL, date TEXT, isHidden INTEGER, nameThread TEXT)")
+            }
+        }
     }
 
     @Singleton
     @Provides
     internal fun providesMovieDatabase(): MovieDatabase =
             Room.databaseBuilder(application, MovieDatabase::class.java, "movieData")
-                    .addMigrations(MIGRATION_1_2, MIGRATION_1_3, MIGRATION_1_4)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_1_3, MIGRATION_1_4, MIGRATION_1_5, MIGRATION_1_6)
                     .build()
 
     @Singleton

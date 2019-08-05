@@ -65,7 +65,9 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                     try {
                         val webmItems =
                                 movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
-                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.DVACH_URL))
+                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems,
+                                board,
+                                AppConfig.DVACH_URL))
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break
