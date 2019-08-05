@@ -10,7 +10,7 @@ internal class LocalThreadDBRepository @Inject constructor(
         private val threadDao: ThreadDao) : ThreadDBRepository {
 
     override suspend fun getThreadsByNumThread(boardThread: String): List<Thread> {
-        return threadDao.getMoviesFromBoard(boardThread)
+        return threadDao.getThreadsFromThreadNum(boardThread)
     }
 
     override suspend fun insert(threadEntity: Thread) {

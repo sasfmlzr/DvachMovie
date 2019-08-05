@@ -9,7 +9,7 @@ import androidx.room.Update
 @Dao
 interface ThreadDao {
     @Query("SELECT * from threadData where thread = :boardThread")
-    fun getMoviesFromBoard(boardThread: String): List<ThreadEntity>
+    fun getThreadsFromThreadNum(boardThread: String): List<ThreadEntity>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun insert(thread: ThreadEntity)
