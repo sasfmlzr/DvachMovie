@@ -4,6 +4,8 @@ import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
+import dvachmovie.repository.MovieDBRepository
+import dvachmovie.repository.ThreadDBRepository
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
@@ -23,7 +25,9 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                                             GetLinkFilesFromThreadsUseCase,
                                             private val movieUtils: MovieUtils,
                                             private val movieConverter: MovieConverter,
-                                            private val scopeProvider: ScopeProvider) :
+                                            private val scopeProvider: ScopeProvider,
+                                            private val movieDBRepository: MovieDBRepository,
+                                            private val threadDBRepository: ThreadDBRepository) :
         UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String

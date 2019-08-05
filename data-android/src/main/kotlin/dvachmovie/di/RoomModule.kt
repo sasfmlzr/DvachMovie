@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dvachmovie.db.MovieDatabase
 import dvachmovie.db.model.MovieDao
+import dvachmovie.db.model.ThreadDao
 import org.joda.time.LocalDateTime
 import javax.inject.Singleton
 
@@ -55,10 +56,16 @@ class RoomModule(private val application: Application) {
     internal fun providesMovieDatabase(): MovieDatabase =
             Room.databaseBuilder(application, MovieDatabase::class.java, "movieData")
                     .addMigrations(MIGRATION_1_2, MIGRATION_1_3, MIGRATION_1_4, MIGRATION_1_5, MIGRATION_1_6)
+                    .allowMainThreadQueries()
                     .build()
 
     @Singleton
     @Provides
     internal fun providesMovieDao(movieDatabase: MovieDatabase): MovieDao =
             movieDatabase.movieDao()
+
+    @Singleton
+    @Provides
+    internal fun providesThreadDao(movieDatabase: MovieDatabase): ThreadDao =
+            movieDatabase.threadDao()
 }

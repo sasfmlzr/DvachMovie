@@ -5,7 +5,9 @@ import dagger.Module
 import dvachmovie.LocalScopeProvider
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.repository.LocalMovieDBRepository
+import dvachmovie.repository.LocalThreadDBRepository
 import dvachmovie.repository.MovieDBRepository
+import dvachmovie.repository.ThreadDBRepository
 import dvachmovie.storage.KeyValueStorage
 import dvachmovie.storage.local.SharedPreferencesStorage
 import dvachmovie.utils.LocalMovieConverter
@@ -26,6 +28,10 @@ internal abstract class StorageModule {
     @Binds
     @Singleton
     internal abstract fun movieRepository(local: LocalMovieDBRepository): MovieDBRepository
+
+    @Binds
+    @Singleton
+    internal abstract fun threadRepository(local: LocalThreadDBRepository): ThreadDBRepository
 
     @Binds
     @Singleton

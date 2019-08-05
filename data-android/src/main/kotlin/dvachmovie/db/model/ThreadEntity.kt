@@ -9,7 +9,9 @@ import androidx.room.TypeConverters
 import dvachmovie.db.data.Thread
 import org.joda.time.LocalDateTime
 
-@Entity(tableName = "threadData", foreignKeys = [ForeignKey(entity = MovieEntity::class, parentColumns = ["thread"], childColumns = ["thread"], onDelete = CASCADE)])
+@Entity(tableName = "threadData"//,
+        //foreignKeys = [ForeignKey(entity = MovieEntity::class, parentColumns = ["thread"], childColumns = ["thread"], onDelete = CASCADE)]
+         )
 @TypeConverters(Converters::class)
 data class ThreadEntity(@PrimaryKey @ColumnInfo(name = "thread") override val thread: Long,
                         @ColumnInfo(name = "date") override var date: LocalDateTime = LocalDateTime(),
