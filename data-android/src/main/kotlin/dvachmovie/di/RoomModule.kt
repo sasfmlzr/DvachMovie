@@ -56,7 +56,6 @@ class RoomModule(private val application: Application) {
     internal fun providesMovieDatabase(): MovieDatabase =
             Room.databaseBuilder(application, MovieDatabase::class.java, "movieData")
                     .addMigrations(MIGRATION_1_2, MIGRATION_1_3, MIGRATION_1_4, MIGRATION_1_5, MIGRATION_1_6)
-                    .allowMainThreadQueries()
                     .build()
 
     @Singleton
