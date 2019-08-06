@@ -2,6 +2,7 @@ package dvachmovie.fragment.movie
 
 import android.net.Uri
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.arch.core.util.Function
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,11 +10,14 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dvachmovie.PresenterModel
+import dvachmovie.R
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
+import dvachmovie.db.data.Thread
 import dvachmovie.pipe.ErrorModel
 import dvachmovie.pipe.ReportModel
 import dvachmovie.pipe.ShuffledMoviesModel
+import dvachmovie.pipe.db.GetThreadsFromDBByNumPipe
 import dvachmovie.pipe.moviestorage.GetCurrentMoviePipe
 import dvachmovie.pipe.moviestorage.GetIndexPosByMoviePipe
 import dvachmovie.pipe.moviestorage.GetMovieListPipe
@@ -33,12 +37,14 @@ import dvachmovie.storage.OnMovieChangedListener
 import dvachmovie.storage.OnMovieListChangedListener
 import dvachmovie.usecase.real.dvach.ReportUseCase
 import dvachmovie.worker.WorkerManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MovieVM @Inject constructor(
@@ -58,7 +64,8 @@ class MovieVM @Inject constructor(
         setMovieChangedListenerPipe: SetMovieChangedListenerPipe,
         val setCurrentMoviePipe: SetCurrentMoviePipe,
         private val setMovieListPipe: SetMovieListPipe,
-        private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe) : ViewModel() {
+        private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe,
+        private val getThreadsFromDBByNumPipe: GetThreadsFromDBByNumPipe) : ViewModel() {
 
     val isReportBtnVisible = MutableLiveData<Boolean>()
 
@@ -119,7 +126,20 @@ class MovieVM @Inject constructor(
     val onBtnListVideosClicked = View.OnClickListener { routeToPreviewTask() }
 
     val onBtnHideThreadClicked = View.OnClickListener {
-        WorkerManager.markThreadAsHiddenInDB(it.context, currentMovie.value!!.thread)
+        viewModelScope.launch {
+            val currentThread = mutableListOf<Thread>()
+            withContext(Dispatchers.IO){
+                currentThread.addAll(getThreadsFromDBByNumPipe.execute(currentMovie.value!!.thread))
+            }
+            AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
+                    .setTitle("Confirmation")
+                    .setMessage("${currentThread.first().nameThread} will be hidden")
+                    .setPositiveButton("Ok") { _, _ ->
+                        WorkerManager.markThreadAsHiddenInDB(it.context, currentMovie.value!!.thread)
+                    }
+                    .setNegativeButton("Cancel") { _, _ -> }
+                    .show()
+        }
     }
 
     val onBtnReportClicked = View.OnClickListener {

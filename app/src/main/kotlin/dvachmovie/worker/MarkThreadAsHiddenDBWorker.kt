@@ -14,7 +14,6 @@ import dvachmovie.pipe.moviestorage.GetCurrentMoviePipe
 import dvachmovie.pipe.moviestorage.GetMovieListPipe
 import dvachmovie.pipe.moviestorage.SetMovieListPipe
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -75,7 +74,7 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
         }
     }
 
-    private fun findNewPosNextMovie(movies: List<Movie>){
+    private fun findNewPosNextMovie(movies: List<Movie>) {
 
 
         val currentMovie = getCurrentMoviePipe.execute(Unit)
