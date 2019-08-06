@@ -128,17 +128,21 @@ class MovieVM @Inject constructor(
     val onBtnHideThreadClicked = View.OnClickListener {
         viewModelScope.launch {
             val currentThread = mutableListOf<Thread>()
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 currentThread.addAll(getThreadsFromDBByNumPipe.execute(currentMovie.value!!.thread))
             }
-            AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
-                    .setTitle("Confirmation")
-                    .setMessage("${currentThread.first().nameThread} will be hidden")
-                    .setPositiveButton("Ok") { _, _ ->
-                        WorkerManager.markThreadAsHiddenInDB(it.context, currentMovie.value!!.thread)
-                    }
-                    .setNegativeButton("Cancel") { _, _ -> }
-                    .show()
+            if (currentThread.isEmpty()) {
+                showMessageTask("Please refresh your movies")
+            } else {
+                AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
+                        .setTitle("Confirmation")
+                        .setMessage("${currentThread.first().nameThread} will be hidden")
+                        .setPositiveButton("Ok") { _, _ ->
+                            WorkerManager.markThreadAsHiddenInDB(it.context, currentMovie.value!!.thread)
+                        }
+                        .setNegativeButton("Cancel") { _, _ -> }
+                        .show()
+            }
         }
     }
 
@@ -156,7 +160,7 @@ class MovieVM @Inject constructor(
     val currentMovie by lazy { MutableLiveData<Movie>(getCurrentMoviePipe.execute(Unit)) }
 
     fun fillCurrentPos() {
-        if (currentPos.value == Pair(0, 0L)) {
+        if (currentPos.value == Pair(0, 0L) || PlayerCache.isHideMovieByThreadTask) {
             currentPos.value = try {
                 Pair(getIndexPosPipe.execute(currentMovie.value!!), 0)
             } catch (e: Exception) {

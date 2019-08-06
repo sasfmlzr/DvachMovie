@@ -67,6 +67,11 @@ class MovieFragment : BaseFragment<MovieVM,
             if (it?.isPlayed == true) {
                 WorkerManager.insertMovieInDB(context!!)
             }
+            if (PlayerCache.isHideMovieByThreadTask) {
+                viewModel.fillCurrentPos()
+                initializePlayer()
+                PlayerCache.isHideMovieByThreadTask = false
+            }
         })
 
         viewModel.fillCurrentPos()
