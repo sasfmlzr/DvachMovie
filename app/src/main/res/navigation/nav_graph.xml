@@ -50,6 +50,12 @@
             app:destination="@id/navSettingsFragment"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in" />
+        <action
+            android:id="@+id/actionShowMovieFragmentSelf"
+            app:destination="@id/navMovieFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navMovieFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
