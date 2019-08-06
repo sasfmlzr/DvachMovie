@@ -9,6 +9,10 @@ import javax.inject.Inject
 internal class LocalThreadDBRepository @Inject constructor(
         private val threadDao: ThreadDao) : ThreadDBRepository {
 
+    override suspend fun getThreads(): List<Thread> {
+        return threadDao.getThreads()
+    }
+
     override suspend fun getThreadsByNumThread(boardThread: String): List<Thread> {
         return threadDao.getThreadsFromThreadNum(boardThread)
     }

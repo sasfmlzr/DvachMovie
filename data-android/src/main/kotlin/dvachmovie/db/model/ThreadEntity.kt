@@ -15,7 +15,7 @@ import org.joda.time.LocalDateTime
 @TypeConverters(Converters::class)
 data class ThreadEntity(@PrimaryKey @ColumnInfo(name = "thread") override val thread: Long,
                         @ColumnInfo(name = "date") override var date: LocalDateTime = LocalDateTime(),
-                        @ColumnInfo(name = "isHidden") override val isHidden: Boolean = false,
+                        @ColumnInfo(name = "isHidden") override var isHidden: Boolean = false,
                         @ColumnInfo(name = "nameThread") override val nameThread: String
 ) : Thread {
 

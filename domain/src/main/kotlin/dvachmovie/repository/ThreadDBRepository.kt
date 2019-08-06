@@ -3,6 +3,7 @@ package dvachmovie.repository
 import dvachmovie.db.data.Thread
 
 interface ThreadDBRepository {
+    suspend fun getThreads(): List<Thread>
     suspend fun getThreadsByNumThread(boardThread: String): List<Thread>
     suspend fun insert(threadEntity: Thread)
     suspend fun insertAll(threadEntity: List<Thread>)

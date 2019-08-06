@@ -59,5 +59,12 @@ class WorkerManager {
                     .build()
             WorkManager.getInstance(context).enqueue(fillCacheRequest)
         }
+
+        fun markThreadAsHiddenInDB(context: Context, numThread: Long) {
+            val fillCacheRequest = OneTimeWorkRequestBuilder<MarkThreadAsHiddenDBWorker>()
+                    .setInputData(Data.Builder().putLong("NUM_THREAD", numThread).build())
+                    .build()
+            WorkManager.getInstance(context).enqueue(fillCacheRequest)
+        }
     }
 }

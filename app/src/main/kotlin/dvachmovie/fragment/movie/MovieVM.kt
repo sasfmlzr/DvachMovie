@@ -32,6 +32,7 @@ import dvachmovie.pipe.utils.ShuffleMoviesPipe
 import dvachmovie.storage.OnMovieChangedListener
 import dvachmovie.storage.OnMovieListChangedListener
 import dvachmovie.usecase.real.dvach.ReportUseCase
+import dvachmovie.worker.WorkerManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -65,7 +66,7 @@ class MovieVM @Inject constructor(
 
     val isGestureEnabled = MutableLiveData<Boolean>()
 
-    val isHideThreadBtnVisible = MutableLiveData<Boolean>(true)
+    val isHideThreadBtnVisible = MutableLiveData(true)
 
     init {
         setMovieListChangedListenerPipe.execute(object : OnMovieListChangedListener {
@@ -117,7 +118,9 @@ class MovieVM @Inject constructor(
     }
     val onBtnListVideosClicked = View.OnClickListener { routeToPreviewTask() }
 
-    val onBtnHideThreadClicked = View.OnClickListener { routeToSettingsTask() }
+    val onBtnHideThreadClicked = View.OnClickListener {
+        WorkerManager.markThreadAsHiddenInDB(it.context, currentMovie.value!!.thread)
+    }
 
     val onBtnReportClicked = View.OnClickListener {
         currentMovie.value?.let {
@@ -141,7 +144,6 @@ class MovieVM @Inject constructor(
             }
         }
     }
-
 
     val currentPos: MutableLiveData<Pair<Int, Long>> by lazy {
         MutableLiveData(Pair(0, 0L))

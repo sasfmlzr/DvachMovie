@@ -8,6 +8,9 @@ import androidx.room.Update
 
 @Dao
 interface ThreadDao {
+    @Query("SELECT * from threadData")
+    fun getThreads(): List<ThreadEntity>
+
     @Query("SELECT * from threadData where thread = :boardThread")
     fun getThreadsFromThreadNum(boardThread: String): List<ThreadEntity>
 
