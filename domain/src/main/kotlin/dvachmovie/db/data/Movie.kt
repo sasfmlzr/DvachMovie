@@ -12,6 +12,4 @@ interface Movie {
     val post: Long
     val thread: Long
     val baseUrl: String
-    val isHidden: Boolean
-    val nameThread: String
 }

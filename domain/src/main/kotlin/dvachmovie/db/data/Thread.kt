@@ -7,4 +7,5 @@ interface Thread {
     val thread: Long
     var isHidden: Boolean
     val nameThread: String
+    val baseUrl: String
 }

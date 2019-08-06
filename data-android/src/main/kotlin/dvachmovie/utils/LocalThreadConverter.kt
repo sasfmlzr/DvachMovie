@@ -19,7 +19,8 @@ class LocalThreadConverter @Inject constructor() : ThreadConverter {
                                 date = parseDateFromFileItem(fileItem),
                                 thread = fileItem.numThread,
                                 nameThread = fileItem.threadName,
-                                isHidden = false)
+                                isHidden = false,
+                                baseUrl = baseUrl)
                     AppConfig.FOURCHAN_URL ->
                         ThreadEntity(
                                 date = Instant.ofEpochSecond(fileItem.date.toLong())
@@ -27,7 +28,8 @@ class LocalThreadConverter @Inject constructor() : ThreadConverter {
                                         .toLocalDateTime(),
                                 thread = fileItem.numThread,
                                 nameThread = fileItem.threadName,
-                                isHidden = false)
+                                isHidden = false,
+                                baseUrl = baseUrl)
                     else -> throw RuntimeException("I don't know such imageboard")
                 }
             }

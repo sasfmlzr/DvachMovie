@@ -17,9 +17,7 @@ data class MovieEntity(@PrimaryKey @ColumnInfo(name = "movieUrl") override val m
                        @ColumnInfo(name = "md5") override val md5: String = "",
                        @ColumnInfo(name = "thread") override val thread: Long = 0,
                        @ColumnInfo(name = "post") override val post: Long = 0,
-                       @ColumnInfo(name = "baseUrl") override val baseUrl: String,
-                       @ColumnInfo(name = "isHidden") override val isHidden: Boolean = false,
-                       @ColumnInfo(name = "nameThread") override val nameThread: String
+                       @ColumnInfo(name = "baseUrl") override val baseUrl: String
 ) : Movie {
 
     override fun equals(other: Any?) =

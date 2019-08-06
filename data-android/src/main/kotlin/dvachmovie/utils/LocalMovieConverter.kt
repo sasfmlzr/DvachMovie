@@ -23,8 +23,7 @@ class LocalMovieConverter @Inject constructor() : MovieConverter {
                                 md5 = fileItem.md5,
                                 thread = fileItem.numThread,
                                 post = fileItem.numPost,
-                                baseUrl = baseUrl,
-                                nameThread = fileItem.threadName)
+                                baseUrl = baseUrl)
                     AppConfig.FOURCHAN_URL ->
                         MovieEntity(board = board,
                                 movieUrl = fileItem.path,
@@ -35,8 +34,7 @@ class LocalMovieConverter @Inject constructor() : MovieConverter {
                                 md5 = fileItem.md5,
                                 thread = fileItem.numThread,
                                 post = fileItem.numPost,
-                                baseUrl = baseUrl,
-                                nameThread = fileItem.threadName)
+                                baseUrl = baseUrl)
                     else -> throw RuntimeException("I don't know such imageboard")
                 }
             }

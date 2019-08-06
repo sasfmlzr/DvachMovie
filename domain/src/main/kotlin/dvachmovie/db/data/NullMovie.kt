@@ -10,6 +10,4 @@ data class NullMovie(override val movieUrl: String = "",
                      override val md5: String = "",
                      override val post: Long = 0,
                      override val thread: Long = 0,
-                     override val baseUrl: String = "",
-                     override val isHidden: Boolean = false,
-                     override val nameThread: String = "") : Movie
+                     override val baseUrl: String = "") : Movie

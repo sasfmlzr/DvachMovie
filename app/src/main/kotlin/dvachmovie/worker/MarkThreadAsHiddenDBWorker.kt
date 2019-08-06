@@ -78,7 +78,5 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
 
 
         val currentMovie = getCurrentMoviePipe.execute(Unit)
-
-        currentMovie.nameThread
     }
 }
