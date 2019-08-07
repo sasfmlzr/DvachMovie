@@ -4,7 +4,7 @@ import dvachmovie.TestException
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.repository.DvachRepository
-import dvachmovie.usecase.real.fourch.GetLinkFilesFromThreadsFourchUseCase
+import dvachmovie.usecase.real.dvach.GetLinkFilesFromThreadsUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -18,7 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner
 internal class GetLinkFilesFromThreadsUseCaseTest {
 
     @InjectMocks
-    private lateinit var useCase: GetLinkFilesFromThreadsFourchUseCase
+    private lateinit var useCase: GetLinkFilesFromThreadsUseCase
 
     @Mock
     private lateinit var logger: Logger
@@ -30,7 +30,7 @@ internal class GetLinkFilesFromThreadsUseCaseTest {
 
     private val testException = TestException()
 
-    private val model = GetLinkFilesFromThreadsFourchUseCase.Params("test", "test")
+    private val model = GetLinkFilesFromThreadsUseCase.Params("test", "test")
     @Test
     fun `Happy pass`() {
         runBlocking {

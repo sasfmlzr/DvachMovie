@@ -2,6 +2,7 @@ package dvachmovie.usecase.db
 
 import dvachmovie.TestException
 import dvachmovie.repository.MovieDBRepository
+import dvachmovie.repository.ThreadDBRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,6 +19,9 @@ class EraseDBUseCaseTest {
 
     @Mock
     lateinit var movieDBRepository: MovieDBRepository
+
+    @Mock
+    lateinit var threadDBRepository: ThreadDBRepository
 
     @Test
     fun `Happy pass`() {
