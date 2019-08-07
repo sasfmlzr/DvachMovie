@@ -42,7 +42,7 @@ class FillCacheFromDBWorker(@NonNull context: Context,
 
         val dbMovies = getMoviesFromDBByBoardPipe.execute(Pair(inputData, AppConfig.currentBaseUrl))
 
-        val hiddenThreads = getHiddenThreadsPipe.execute(Unit)
+        val hiddenThreads = getHiddenThreadsPipe.execute(AppConfig.currentBaseUrl)
         val sumMovies = mergeDBandCachePipe.execute(dbMovies).filter { movie ->
             var isThreadNotEqual = true
             hiddenThreads.forEach { thread ->

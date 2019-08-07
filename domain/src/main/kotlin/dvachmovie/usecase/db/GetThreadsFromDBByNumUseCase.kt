@@ -6,9 +6,9 @@ import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
 open class GetThreadsFromDBByNumUseCase @Inject constructor(
-        private val threadDBRepository: ThreadDBRepository) : UseCase<Long, List<Thread>>() {
+        private val threadDBRepository: ThreadDBRepository) : UseCase<Pair<Long, String>, List<Thread>>() {
 
-    override suspend fun executeAsync(input: Long): List<Thread> {
-        return threadDBRepository.getThreadsByNumThread(input.toString())
+    override suspend fun executeAsync(input: Pair<Long, String>): List<Thread> {
+        return threadDBRepository.getThreadsByNumThread(input.first.toString(), input.second)
     }
 }

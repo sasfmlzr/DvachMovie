@@ -8,9 +8,9 @@ import javax.inject.Inject
 
 class GetHiddenThreadsPipe @Inject constructor(
         private val useCase: GetThreadsUseCase
-) : PipeAsync<Unit, List<Thread>>() {
+) : PipeAsync<String, List<Thread>>() {
 
-    override suspend fun execute(input: Unit): List<Thread> {
+    override suspend fun execute(input: String): List<Thread> {
         return useCase.executeAsync(input).filter {
             it.isHidden
         }

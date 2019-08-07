@@ -3,6 +3,7 @@ package dvachmovie.worker
 import android.content.Context
 import androidx.annotation.NonNull
 import androidx.work.WorkerParameters
+import dvachmovie.AppConfig
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.db.data.Movie
 import dvachmovie.db.data.Thread
@@ -49,7 +50,7 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
     override suspend fun execute() {
         val numThread = inputData.getLong("NUM_THREAD", 0)
 
-        val threads = getThreadsFromDBByNumPipe.execute(numThread)
+        val threads = getThreadsFromDBByNumPipe.execute(Pair(numThread, AppConfig.currentBaseUrl))
         try {
             val currentThread: Thread = threads.first().apply {
                 isHidden = true
@@ -58,7 +59,7 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
 
             val movies = getMovieListPipe.execute(Unit)
 
-            val hiddenThreads = getHiddenThreadsPipe.execute(Unit)
+            val hiddenThreads = getHiddenThreadsPipe.execute(AppConfig.currentBaseUrl)
 
             val result = removeMoviesByThread(movies,
                     getCurrentMoviePipe.execute(Unit),

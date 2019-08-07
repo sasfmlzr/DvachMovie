@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dvachmovie.AppConfig
 import dvachmovie.PresenterModel
 import dvachmovie.R
 import dvachmovie.architecture.ScopeProvider
@@ -129,7 +130,7 @@ class MovieVM @Inject constructor(
         viewModelScope.launch {
             val currentThread = mutableListOf<Thread>()
             withContext(Dispatchers.IO) {
-                currentThread.addAll(getThreadsFromDBByNumPipe.execute(currentMovie.value!!.thread))
+                currentThread.addAll(getThreadsFromDBByNumPipe.execute(Pair(currentMovie.value!!.thread, AppConfig.currentBaseUrl)))
             }
             if (currentThread.isEmpty()) {
                 showMessageTask("Please refresh your movies")

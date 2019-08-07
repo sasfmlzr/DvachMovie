@@ -72,7 +72,7 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
                                 movieUtils.filterFileItemOnlyAsWebm(list)
 
                         movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.FOURCHAN_URL))
-                        threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.DVACH_URL))
+                        threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.FOURCHAN_URL))
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break
