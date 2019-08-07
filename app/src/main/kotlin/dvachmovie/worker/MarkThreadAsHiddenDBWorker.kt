@@ -86,6 +86,9 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
         val newPlaylist = movies.filterNot { movie ->
             threads.map { it.thread }.contains(movie.thread)
         }
-        return Pair(newPlaylist[newIndex], newPlaylist)
+        return if (newPlaylist.size<=newIndex) {
+            Pair(newPlaylist[0], newPlaylist)
+        } else
+            Pair(newPlaylist[newIndex], newPlaylist)
     }
 }

@@ -10,10 +10,11 @@ class LocalFourChanRepository @Inject constructor(
         private val api: FourchanApi,
         private val logger: Logger) : FourChanRepository {
 
-    override suspend fun getNumThreadsFromCatalog(board: String): List<Int> =
-            api.getCatalog(board).flatMap { it.threads.map { it.no } }
+    override suspend fun getNumThreadsFromCatalog(board: String): List<Pair<Int, String>> {
+        return api.getCatalog(board).flatMap { it.threads.map { Pair(it.no, it.com) } }
+    }
 
-    override suspend fun getConcreteThreadByNum(board: String, numThread: String): List<FileItem> {
+    override suspend fun getConcreteThreadByNum(board: String, numThread: String, nameThread: String): List<FileItem> {
         val listFiles = mutableListOf<FileItem>()
         val request = api.getThread(board, numThread)
 
@@ -25,7 +26,8 @@ class LocalFourChanRepository @Inject constructor(
                             md5 = post.md5,
                             numThread = numThread.toLong(),
                             numPost = post.no.toLong(),
-                            date = post.time.toString()))
+                            date = post.time.toString(),
+                            threadName = nameThread))
         }
 
         logger.d("getConcreteThreadByNum", "parsing finished for $numThread")

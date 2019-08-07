@@ -65,9 +65,10 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
 
                 executorResult.onSuccess(DvachAmountRequestsUseCaseModel(listThreadSize))
 
-                for (num in useCaseModel.listThreads) {
+                for (threadParam in useCaseModel.listThreads) {
                     try {
-                        val list = executeLinkFilesUseCase(num)
+                        val list = executeLinkFilesUseCase(threadParam.first.toString(),
+                                threadParam.second)
                         val webmItems =
                                 movieUtils.filterFileItemOnlyAsWebm(list)
 
@@ -92,9 +93,9 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
         networkJob.join()
     }
 
-    private suspend fun executeLinkFilesUseCase(num: String): List<FileItem> {
+    private suspend fun executeLinkFilesUseCase(num: String, nameThread: String): List<FileItem> {
         return try {
-            val inputModel = GetLinkFilesFromThreadsFourchUseCase.Params(board, num)
+            val inputModel = GetLinkFilesFromThreadsFourchUseCase.Params(board, num, nameThread)
             val useCaseLinkFilesModel = getLinkFilesFromThreadsUseCase
                     .executeAsync(inputModel)
             useCaseLinkFilesModel.fileItems

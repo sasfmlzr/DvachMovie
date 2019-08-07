@@ -17,12 +17,12 @@ open class GetLinkFilesFromThreadsFourchUseCase @Inject constructor(private val 
     override suspend fun executeAsync(input: Params): GetLinkFilesFromThreadsUseCaseModel =
             try {
                 val listFiles =
-                        fourChanRepository.getConcreteThreadByNum(input.board, input.numThread)
+                        fourChanRepository.getConcreteThreadByNum(input.board, input.numThread, input.nameThread)
                 GetLinkFilesFromThreadsUseCaseModel(listFiles)
             } catch (e: Exception) {
                 logger.e(TAG, e.message ?: "Something network error")
                 throw e
             }
 
-    data class Params(val board: String, val numThread: String) : UseCaseModel
+    data class Params(val board: String, val numThread: String, val nameThread: String) : UseCaseModel
 }
