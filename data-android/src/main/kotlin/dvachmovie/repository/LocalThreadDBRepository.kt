@@ -13,8 +13,8 @@ internal class LocalThreadDBRepository @Inject constructor(
         return threadDao.getThreads(baseUrl)
     }
 
-    override suspend fun getThreadsByNumThread(boardThread: String, baseUrl: String): List<Thread> {
-        return threadDao.getThreadsFromThreadNum(boardThread, baseUrl)
+    override suspend fun getThreadByNum(boardThread: String, baseUrl: String): Thread {
+        return threadDao.getThreadByNum(boardThread, baseUrl)
     }
 
     override suspend fun insert(threadEntity: Thread) {

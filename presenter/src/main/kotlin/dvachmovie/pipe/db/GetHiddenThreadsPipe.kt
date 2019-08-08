@@ -2,7 +2,6 @@ package dvachmovie.pipe.db
 
 import dvachmovie.architecture.PipeAsync
 import dvachmovie.db.data.Thread
-import dvachmovie.usecase.db.GetThreadsFromDBByNumUseCase
 import dvachmovie.usecase.db.GetThreadsUseCase
 import javax.inject.Inject
 

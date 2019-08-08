@@ -18,7 +18,7 @@ import dvachmovie.db.data.Thread
 import dvachmovie.pipe.ErrorModel
 import dvachmovie.pipe.ReportModel
 import dvachmovie.pipe.ShuffledMoviesModel
-import dvachmovie.pipe.db.GetThreadsFromDBByNumPipe
+import dvachmovie.pipe.db.GetThreadFromDBByNumPipe
 import dvachmovie.pipe.moviestorage.GetCurrentMoviePipe
 import dvachmovie.pipe.moviestorage.GetIndexPosByMoviePipe
 import dvachmovie.pipe.moviestorage.GetMovieListPipe
@@ -66,7 +66,7 @@ class MovieVM @Inject constructor(
         val setCurrentMoviePipe: SetCurrentMoviePipe,
         private val setMovieListPipe: SetMovieListPipe,
         private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe,
-        private val getThreadsFromDBByNumPipe: GetThreadsFromDBByNumPipe) : ViewModel() {
+        private val getThreadsFromDBByNumPipe: GetThreadFromDBByNumPipe) : ViewModel() {
 
     val isReportBtnVisible = MutableLiveData<Boolean>()
 
@@ -130,7 +130,8 @@ class MovieVM @Inject constructor(
         viewModelScope.launch {
             val currentThread = mutableListOf<Thread>()
             withContext(Dispatchers.IO) {
-                currentThread.addAll(getThreadsFromDBByNumPipe.execute(Pair(currentMovie.value!!.thread, AppConfig.currentBaseUrl)))
+                val thread = getThreadsFromDBByNumPipe.execute(Pair(currentMovie.value!!.thread, AppConfig.currentBaseUrl))
+                currentThread.add(thread)
             }
             if (currentThread.isEmpty()) {
                 showMessageTask("Please refresh your movies")

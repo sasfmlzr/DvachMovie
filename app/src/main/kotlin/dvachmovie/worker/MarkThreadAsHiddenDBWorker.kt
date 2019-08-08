@@ -10,7 +10,7 @@ import dvachmovie.db.data.Thread
 import dvachmovie.di.core.WorkerComponent
 import dvachmovie.fragment.movie.PlayerCache
 import dvachmovie.pipe.db.GetHiddenThreadsPipe
-import dvachmovie.pipe.db.GetThreadsFromDBByNumPipe
+import dvachmovie.pipe.db.GetThreadFromDBByNumPipe
 import dvachmovie.pipe.db.InsertionThreadToDBPipe
 import dvachmovie.pipe.moviestorage.GetCurrentMoviePipe
 import dvachmovie.pipe.moviestorage.GetMovieListPipe
@@ -28,7 +28,7 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
     lateinit var insertionThreadToDBPipe: InsertionThreadToDBPipe
 
     @Inject
-    lateinit var getThreadsFromDBByNumPipe: GetThreadsFromDBByNumPipe
+    lateinit var getThreadsFromDBByNumPipe: GetThreadFromDBByNumPipe
 
     @Inject
     lateinit var getMovieListPipe: GetMovieListPipe
@@ -50,30 +50,24 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
     override suspend fun execute() {
         val numThread = inputData.getLong("NUM_THREAD", 0)
 
-        val threads = getThreadsFromDBByNumPipe.execute(Pair(numThread, AppConfig.currentBaseUrl))
-        try {
-            val currentThread: Thread = threads.first().apply {
-                isHidden = true
-            }
-            insertionThreadToDBPipe.execute(currentThread)
+        val thread = getThreadsFromDBByNumPipe.execute(Pair(numThread, AppConfig.currentBaseUrl)).apply {
+            isHidden = true
+        }
 
-            val movies = getMovieListPipe.execute(Unit)
+        insertionThreadToDBPipe.execute(thread)
 
-            val hiddenThreads = getHiddenThreadsPipe.execute(AppConfig.currentBaseUrl)
+        val movies = getMovieListPipe.execute(Unit)
 
-            val result = removeMoviesByThread(movies,
-                    getCurrentMoviePipe.execute(Unit),
-                    hiddenThreads)
+        val hiddenThreads = getHiddenThreadsPipe.execute(AppConfig.currentBaseUrl)
 
-            withContext(Dispatchers.Main) {
-                PlayerCache.isHideMovieByThreadTask = true
-                setMovieListPipe.execute(result.second)
-                setCurrentMoviePipe.execute(result.first)
-            }
+        val result = removeMoviesByThread(movies,
+                getCurrentMoviePipe.execute(Unit),
+                hiddenThreads)
 
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw e
+        withContext(Dispatchers.Main) {
+            PlayerCache.isHideMovieByThreadTask = true
+            setMovieListPipe.execute(result.second)
+            setCurrentMoviePipe.execute(result.first)
         }
     }
 
@@ -86,7 +80,7 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
         val newPlaylist = movies.filterNot { movie ->
             threads.map { it.thread }.contains(movie.thread)
         }
-        return if (newPlaylist.size<=newIndex) {
+        return if (newPlaylist.size <= newIndex) {
             Pair(newPlaylist[0], newPlaylist)
         } else
             Pair(newPlaylist[newIndex], newPlaylist)
