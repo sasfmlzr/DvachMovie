@@ -1,4 +1,4 @@
-package dvachmovie.usecase.real
+package dvachmovie.usecase.real.dvach
 
 import dvachmovie.TestException
 import dvachmovie.api.FileItem
@@ -6,9 +6,10 @@ import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.NullMovie
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
-import dvachmovie.usecase.real.dvach.DvachUseCase
-import dvachmovie.usecase.real.dvach.GetLinkFilesFromThreadsUseCase
-import dvachmovie.usecase.real.dvach.GetThreadsFromDvachUseCase
+import dvachmovie.usecase.real.DvachAmountRequestsUseCaseModel
+import dvachmovie.usecase.real.DvachUseCaseModel
+import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCaseModel
+import dvachmovie.usecase.real.GetThreadsFromDvachUseCaseModel
 import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import dvachmovie.utils.ThreadConverter

@@ -1,10 +1,9 @@
-package dvachmovie.usecase.real
+package dvachmovie.usecase.real.fourch
 
 import dvachmovie.TestException
-import dvachmovie.api.FileItem
 import dvachmovie.architecture.logging.Logger
-import dvachmovie.repository.DvachRepository
-import dvachmovie.usecase.real.dvach.GetLinkFilesFromThreadsUseCase
+import dvachmovie.repository.FourChanRepository
+import dvachmovie.usecase.real.GetThreadsFromFourchUseCaseModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -15,36 +14,37 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-internal class GetLinkFilesFromThreadsUseCaseTest {
+internal class GetThreadsFromFourchUseCaseTest {
 
     @InjectMocks
-    private lateinit var useCase: GetLinkFilesFromThreadsUseCase
+    private lateinit var useCase: GetThreadsFromFourchUseCase
 
     @Mock
     private lateinit var logger: Logger
 
     @Mock
-    private lateinit var dvachRepository: DvachRepository
+    private lateinit var fourChanRepository: FourChanRepository
 
-    private val listFiles = listOf(FileItem())
+    private val testValue = "test"
 
     private val testException = TestException()
 
-    private val model = GetLinkFilesFromThreadsUseCase.Params("test", "test")
+    private val model = GetThreadsFromFourchUseCase.Params("test")
+
     @Test
     fun `Happy pass`() {
+        val expectedValue = listOf(Pair(1, testValue))
         runBlocking {
-            given(dvachRepository.getConcreteThreadByNum("test", "test")).willReturn(listFiles)
-            Assert.assertEquals(GetLinkFilesFromThreadsUseCaseModel(listFiles),
+            given(fourChanRepository.getNumThreadsFromCatalog("test")).willReturn(expectedValue)
+            Assert.assertEquals(GetThreadsFromFourchUseCaseModel(expectedValue),
                     useCase.executeAsync(model))
-
         }
     }
 
     @Test(expected = TestException::class)
     fun `Error send to callback`() {
         runBlocking {
-            given(dvachRepository.getConcreteThreadByNum("test", "test")).willThrow(testException)
+            given(fourChanRepository.getNumThreadsFromCatalog("test")).willThrow(testException)
             useCase.executeAsync(model)
         }
     }

@@ -1,9 +1,10 @@
-package dvachmovie.usecase.real
+package dvachmovie.usecase.real.dvach
 
 import dvachmovie.TestException
+import dvachmovie.api.FileItem
 import dvachmovie.architecture.logging.Logger
 import dvachmovie.repository.DvachRepository
-import dvachmovie.usecase.real.dvach.GetThreadsFromDvachUseCase
+import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCaseModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -14,10 +15,10 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-internal class GetThreadsFromDvachUseCaseTest {
+internal class GetLinkFilesFromThreadsUseCaseTest {
 
     @InjectMocks
-    private lateinit var useCase: GetThreadsFromDvachUseCase
+    private lateinit var useCase: GetLinkFilesFromThreadsUseCase
 
     @Mock
     private lateinit var logger: Logger
@@ -25,25 +26,25 @@ internal class GetThreadsFromDvachUseCaseTest {
     @Mock
     private lateinit var dvachRepository: DvachRepository
 
-    private val listNumThreads = listOf("Test")
+    private val listFiles = listOf(FileItem())
 
     private val testException = TestException()
 
-    private val model = GetThreadsFromDvachUseCase.Params("test")
-
+    private val model = GetLinkFilesFromThreadsUseCase.Params("test", "test")
     @Test
     fun `Happy pass`() {
         runBlocking {
-            given(dvachRepository.getNumThreadsFromCatalog("test")).willReturn(listNumThreads)
-            Assert.assertEquals(GetThreadsFromDvachUseCaseModel(listNumThreads),
+            given(dvachRepository.getConcreteThreadByNum("test", "test")).willReturn(listFiles)
+            Assert.assertEquals(GetLinkFilesFromThreadsUseCaseModel(listFiles),
                     useCase.executeAsync(model))
+
         }
     }
 
     @Test(expected = TestException::class)
     fun `Error send to callback`() {
         runBlocking {
-            given(dvachRepository.getNumThreadsFromCatalog("test")).willThrow(testException)
+            given(dvachRepository.getConcreteThreadByNum("test", "test")).willThrow(testException)
             useCase.executeAsync(model)
         }
     }
