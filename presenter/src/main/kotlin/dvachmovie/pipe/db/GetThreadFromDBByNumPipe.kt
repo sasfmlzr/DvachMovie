@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class GetThreadFromDBByNumPipe @Inject constructor(
         private val useCase: GetThreadFromDBByNumUseCase
-) : PipeAsync<Pair<Long, String>, Thread>() {
+) : PipeAsync<Pair<Long, String>, Thread?>() {
 
-    override suspend fun execute(input: Pair<Long, String>): Thread =
+    override suspend fun execute(input: Pair<Long, String>): Thread? =
             useCase.executeAsync(input)
 }

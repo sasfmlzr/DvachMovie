@@ -128,17 +128,15 @@ class MovieVM @Inject constructor(
 
     val onBtnHideThreadClicked = View.OnClickListener {
         viewModelScope.launch {
-            val currentThread = mutableListOf<Thread>()
-            withContext(Dispatchers.IO) {
-                val thread = getThreadsFromDBByNumPipe.execute(Pair(currentMovie.value!!.thread, AppConfig.currentBaseUrl))
-                currentThread.add(thread)
+            val thread: Thread? = withContext(Dispatchers.IO) {
+                getThreadsFromDBByNumPipe.execute(Pair(currentMovie.value!!.thread, AppConfig.currentBaseUrl))
             }
-            if (currentThread.isEmpty()) {
+            if (thread == null) {
                 showMessageTask("Please refresh your movies")
             } else {
                 AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
                         .setTitle("Confirmation")
-                        .setMessage("${currentThread.first().nameThread} will be hidden")
+                        .setMessage("Thread: \"${thread.nameThread}\" will be hidden")
                         .setPositiveButton("Ok") { _, _ ->
                             WorkerManager.markThreadAsHiddenInDB(it.context, currentMovie.value!!.thread)
                         }

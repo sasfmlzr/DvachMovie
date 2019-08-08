@@ -51,8 +51,9 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
         val numThread = inputData.getLong("NUM_THREAD", 0)
 
         val thread = getThreadsFromDBByNumPipe.execute(Pair(numThread, AppConfig.currentBaseUrl)).apply {
-            isHidden = true
+            this?.isHidden = true
         }
+                ?: throw RuntimeException("Current thread doesn't exist in the database. Please refresh movies.")
 
         insertionThreadToDBPipe.execute(thread)
 

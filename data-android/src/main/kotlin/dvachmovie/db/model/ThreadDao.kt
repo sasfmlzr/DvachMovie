@@ -12,7 +12,7 @@ interface ThreadDao {
     fun getThreads(baseUrl: String): List<ThreadEntity>
 
     @Query("SELECT * from threadData where thread = :boardThread AND baseUrl = :baseUrl")
-    fun getThreadByNum(boardThread: String, baseUrl: String): ThreadEntity
+    fun getThreadByNum(boardThread: String, baseUrl: String): ThreadEntity?
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun insert(thread: ThreadEntity)
