@@ -10,7 +10,9 @@ import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
 class LocalMovieConverter @Inject constructor() : MovieConverter {
-    override fun convertFileItemToMovie(fileItems: List<FileItem>, board: String, baseUrl: String): List<Movie> =
+    override fun convertFileItemToMovie(fileItems: List<FileItem>,
+                                        board: String,
+                                        baseUrl: String): List<Movie> =
             fileItems.map { fileItem ->
                 when (baseUrl) {
                     AppConfig.DVACH_URL ->

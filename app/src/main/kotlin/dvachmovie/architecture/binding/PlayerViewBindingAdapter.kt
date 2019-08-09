@@ -16,7 +16,9 @@ import dvachmovie.architecture.binding.BindingCache.pos
 @BindingAdapter("cookie")
 fun PlayerView.bindCookie(cookies: String) {
     BindingCache.cookie = cookies
-    bindPlayer(this)
+    if (BindingCache.media != BindingCache.defaultMediaSource) {
+        bindPlayer(this)
+    }
 }
 
 @BindingAdapter("movie")

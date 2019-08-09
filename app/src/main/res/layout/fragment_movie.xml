@@ -62,7 +62,6 @@
                 android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
                 app:barrierAllowsGoneWidgets="false"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/downloadButton"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,7 +82,6 @@
                 android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
                 app:barrierAllowsGoneWidgets="false"
                 app:layout_constraintEnd_toStartOf="@+id/shuffleButton"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/settingsButton"
                 app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
@@ -104,7 +102,6 @@
                 android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
                 app:barrierAllowsGoneWidgets="false"
                 app:layout_constraintEnd_toStartOf="@+id/downloadButton"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/copyURLButton"
                 app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
@@ -125,7 +122,6 @@
                 android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility)? View.VISIBLE : View.GONE}"
                 app:barrierAllowsGoneWidgets="false"
                 app:layout_constraintEnd_toStartOf="@+id/settingsButton"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/reportButton"
                 app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
@@ -146,11 +142,31 @@
                 android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility) &amp; safeUnbox(viewModel.isReportBtnVisible())? View.VISIBLE : View.GONE}"
                 app:barrierAllowsGoneWidgets="false"
                 app:layout_constraintEnd_toStartOf="@+id/copyURLButton"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/hideThreadButton"
+                app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
+
+            <ImageButton
+                android:id="@+id/hideThreadButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:alpha="1"
+                android:background="@null"
+                android:contentDescription="@string/hide_thread"
+                android:elevation="1dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="@{viewModel.onBtnHideThreadClicked}"
+                android:padding="10dp"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
+                android:src="@drawable/outline_not_interested_24"
+                android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility) &amp; safeUnbox(viewModel.isHideThreadBtnVisible())? View.VISIBLE : View.GONE}"
+                app:barrierAllowsGoneWidgets="false"
+                app:layout_constraintEnd_toStartOf="@+id/reportButton"
                 app:layout_constraintStart_toEndOf="@+id/listVideosButton"
                 app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
 
             <ImageButton
+
                 android:id="@+id/listVideosButton"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
@@ -167,8 +183,7 @@
                 android:src="@drawable/outline_list_24"
                 android:visibility="@{safeUnbox(viewModel.isPlayerControlVisibility) &amp; safeUnbox(viewModel.isListBtnVisible)? View.VISIBLE : View.GONE}"
                 app:barrierAllowsGoneWidgets="false"
-                app:layout_constraintEnd_toStartOf="@+id/reportButton"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/hideThreadButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/shuffleButton" />
         </androidx.constraintlayout.widget.ConstraintLayout>

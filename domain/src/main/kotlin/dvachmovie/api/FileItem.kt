@@ -6,4 +6,5 @@ data class FileItem(
                     val date: String = "",
                     val md5: String = "",
                     val numThread: Long = 0,
-                    val numPost: Long = 0)
+                    val numPost: Long = 0,
+                    val threadName: String = "")

@@ -52,7 +52,7 @@ class DvachPipe @Inject constructor(
             override suspend fun onSuccess(useCaseModel: UseCaseModel) {
                 when (useCaseModel) {
                     is DvachUseCaseModel ->
-                        broadcastChannel.send(DvachModel(useCaseModel.movies))
+                        broadcastChannel.send(DvachModel(useCaseModel.movies, useCaseModel.threads))
                     is DvachCountRequestUseCaseModel ->
                         broadcastChannel.send(CountCompletedRequestsModel(useCaseModel.count))
                     is DvachAmountRequestsUseCaseModel ->

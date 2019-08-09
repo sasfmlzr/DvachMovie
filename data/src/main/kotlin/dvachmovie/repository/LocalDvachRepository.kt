@@ -27,7 +27,8 @@ class LocalDvachRepository @Inject constructor(
                                 md5 = it.md5,
                                 numThread = request.currentThread.toLong(),
                                 numPost = post.num.toLong(),
-                                date = post.date)
+                                date = post.date,
+                                threadName = request.title)
                     } ?: listOf())
                 }
             }

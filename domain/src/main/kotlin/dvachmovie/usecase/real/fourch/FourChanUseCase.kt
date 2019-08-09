@@ -4,6 +4,7 @@ import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
+import dvachmovie.db.data.Thread
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.real.DvachAmountRequestsUseCaseModel
@@ -12,6 +13,7 @@ import dvachmovie.usecase.real.DvachUseCaseModel
 import dvachmovie.usecase.real.dvach.DvachUseCase
 import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
+import dvachmovie.utils.ThreadConverter
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -23,7 +25,8 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
                                                GetLinkFilesFromThreadsFourchUseCase,
                                                private val movieUtils: MovieUtils,
                                                private val movieConverter: MovieConverter,
-                                               private val scopeProvider: ScopeProvider) :
+                                               private val scopeProvider: ScopeProvider,
+                                               private val threadConverter: ThreadConverter) :
         UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
@@ -32,6 +35,7 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
     private var count = 0
 
     private val movies = mutableListOf<Movie>()
+    private val threads = mutableListOf<Thread>()
 
     private lateinit var networkJob: Job
     private var returnJob: Job? = null
@@ -61,12 +65,15 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
 
                 executorResult.onSuccess(DvachAmountRequestsUseCaseModel(listThreadSize))
 
-                for (num in useCaseModel.listThreads) {
+                for (threadParam in useCaseModel.listThreads) {
                     try {
-                        val list = executeLinkFilesUseCase(num)
+                        val list = executeLinkFilesUseCase(threadParam.first.toString(),
+                                threadParam.second)
                         val webmItems =
                                 movieUtils.filterFileItemOnlyAsWebm(list)
+
                         movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.FOURCHAN_URL))
+                        threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.FOURCHAN_URL))
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break
@@ -86,9 +93,9 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
         networkJob.join()
     }
 
-    private suspend fun executeLinkFilesUseCase(num: String): List<FileItem> {
+    private suspend fun executeLinkFilesUseCase(num: String, nameThread: String): List<FileItem> {
         return try {
-            val inputModel = GetLinkFilesFromThreadsFourchUseCase.Params(board, num)
+            val inputModel = GetLinkFilesFromThreadsFourchUseCase.Params(board, num, nameThread)
             val useCaseLinkFilesModel = getLinkFilesFromThreadsUseCase
                     .executeAsync(inputModel)
             useCaseLinkFilesModel.fileItems
@@ -106,7 +113,7 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
                 if (movies.isEmpty()) {
                     executorResult.onFailure(RuntimeException("This is a private board or internet problem"))
                 } else {
-                    executorResult.onSuccess(DvachUseCaseModel(movies))
+                    executorResult.onSuccess(DvachUseCaseModel(movies, threads))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

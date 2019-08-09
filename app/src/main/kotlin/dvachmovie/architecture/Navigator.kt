@@ -48,6 +48,12 @@ class Navigator(private val router: NavController,
         navigate(direction)
     }
 
+    fun navigateMovieToSelf() {
+        val direction = MovieFragmentDirections
+                .actionShowMovieFragmentSelf()
+        navigate(direction)
+    }
+
     fun navigateBackToMovieFragment() {
         val direction = BackFragmentDirections
                 .actionShowMovieFragment()

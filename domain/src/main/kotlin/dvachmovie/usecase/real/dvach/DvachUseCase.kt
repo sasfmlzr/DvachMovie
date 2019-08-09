@@ -4,6 +4,7 @@ import dvachmovie.AppConfig
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
+import dvachmovie.db.data.Thread
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCase
 import dvachmovie.usecase.base.UseCaseModel
@@ -12,6 +13,7 @@ import dvachmovie.usecase.real.DvachCountRequestUseCaseModel
 import dvachmovie.usecase.real.DvachUseCaseModel
 import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
+import dvachmovie.utils.ThreadConverter
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -23,7 +25,8 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                                             GetLinkFilesFromThreadsUseCase,
                                             private val movieUtils: MovieUtils,
                                             private val movieConverter: MovieConverter,
-                                            private val scopeProvider: ScopeProvider) :
+                                            private val scopeProvider: ScopeProvider,
+                                            private val threadConverter: ThreadConverter) :
         UseCase<DvachUseCase.Params, Unit>() {
 
     private lateinit var board: String
@@ -32,6 +35,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
     private var count = 0
 
     private val movies = mutableListOf<Movie>()
+    private val threads = mutableListOf<Thread>()
 
     private lateinit var networkJob: Job
     private var returnJob: Job? = null
@@ -65,7 +69,12 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                     try {
                         val webmItems =
                                 movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
-                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.DVACH_URL))
+
+                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems,
+                                board,
+                                AppConfig.DVACH_URL))
+                        threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.DVACH_URL))
+
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             break
@@ -106,7 +115,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                 if (movies.isEmpty()) {
                     executorResult.onFailure(RuntimeException("This is a private board or internet problem"))
                 } else {
-                    executorResult.onSuccess(DvachUseCaseModel(movies))
+                    executorResult.onSuccess(DvachUseCaseModel(movies, threads))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -1,10 +1,10 @@
-package dvachmovie.usecase.real
+package dvachmovie.usecase.real.dvach
 
 import dvachmovie.TestException
 import dvachmovie.repository.DvachRepository
 import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
-import dvachmovie.usecase.real.dvach.ReportUseCase
+import dvachmovie.usecase.real.DvachReportUseCaseModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test

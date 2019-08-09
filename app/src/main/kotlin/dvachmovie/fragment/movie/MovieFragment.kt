@@ -22,10 +22,12 @@ import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
+import dvachmovie.architecture.binding.BindingCache
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
+import dvachmovie.fragment.movie.PlayerCache.isRecreatedAfterHidden
 import dvachmovie.service.DownloadService
 import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
@@ -66,6 +68,13 @@ class MovieFragment : BaseFragment<MovieVM,
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
                 WorkerManager.insertMovieInDB(context!!)
+            }
+
+            if (PlayerCache.isHideMovieByThreadTask) {
+                (playerView.player as ExoPlayer).release()
+                router.navigateMovieToSelf()
+                isRecreatedAfterHidden = true
+                PlayerCache.isHideMovieByThreadTask = false
             }
         })
 
@@ -199,7 +208,10 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun releasePlayer() {
-        playerView.player.stop()
+        if (!isRecreatedAfterHidden) {
+            playerView.player.stop()
+        }
+        isRecreatedAfterHidden = false
         updateStartPosition()
         PlayerCache.shouldAutoPlay = playerView.player.playWhenReady
     }

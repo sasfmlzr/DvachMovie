@@ -98,6 +98,7 @@ open class StartVM @Inject constructor(
         when (model) {
             is DvachModel -> {
                 MovieDBCache.movieList = model.movies
+                MovieDBCache.threadList = model.threads
                 initDBTask()
                 routeToMovieFragmentTask()
             }

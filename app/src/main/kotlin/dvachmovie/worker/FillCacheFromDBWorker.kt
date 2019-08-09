@@ -6,6 +6,7 @@ import androidx.work.WorkerParameters
 import dvachmovie.AppConfig
 import dvachmovie.architecture.base.BaseDBWorker
 import dvachmovie.di.core.WorkerComponent
+import dvachmovie.pipe.db.GetHiddenThreadsPipe
 import dvachmovie.pipe.db.GetMoviesFromDBByBoardPipe
 import dvachmovie.pipe.db.MergeDBandCachePipe
 import dvachmovie.pipe.moviestorage.SetMovieListPipe
@@ -30,6 +31,9 @@ class FillCacheFromDBWorker(@NonNull context: Context,
     @Inject
     lateinit var sortMoviesByDatePipe: SortMoviesByDatePipe
 
+    @Inject
+    lateinit var getHiddenThreadsPipe: GetHiddenThreadsPipe
+
     override fun inject(component: WorkerComponent) = component.inject(this)
 
     override suspend fun execute() {
@@ -38,8 +42,18 @@ class FillCacheFromDBWorker(@NonNull context: Context,
 
         val dbMovies = getMoviesFromDBByBoardPipe.execute(Pair(inputData, AppConfig.currentBaseUrl))
 
+        val hiddenThreads = getHiddenThreadsPipe.execute(AppConfig.currentBaseUrl)
+        val sumMovies = mergeDBandCachePipe.execute(dbMovies).filter { movie ->
+            var isThreadNotEqual = true
+            hiddenThreads.forEach { thread ->
+                if (thread.thread == movie.thread) {
+                    isThreadNotEqual = false
+                }
+            }
+            isThreadNotEqual
+        }
+
         withContext(Dispatchers.Main) {
-            val sumMovies = mergeDBandCachePipe.execute(dbMovies)
             setMovieListPipe.execute(sortMoviesByDatePipe.execute(sumMovies))
         }
     }
