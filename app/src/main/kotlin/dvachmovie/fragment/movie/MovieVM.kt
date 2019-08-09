@@ -136,7 +136,7 @@ class MovieVM @Inject constructor(
             } else {
                 AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
                         .setTitle("Confirmation")
-                        .setMessage("Thread: \"${thread.nameThread}\" will be hidden")
+                        .setMessage("Thread: \"${thread.nameThread}\" will be hidden.")
                         .setPositiveButton("Ok") { _, _ ->
                             WorkerManager.markThreadAsHiddenInDB(it.context, currentMovie.value!!.thread)
                         }
@@ -147,12 +147,17 @@ class MovieVM @Inject constructor(
     }
 
     val onBtnReportClicked = View.OnClickListener {
-        currentMovie.value?.let {
-            ReportUseCase.Params(it.board, it.thread, it.post)
-        }?.let { model ->
-            coroutinesProvider.ioScope.launch(Job()) {
-                reportPipe.execute(model)
-            }
+        currentMovie.value?.let { movie ->
+            AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
+                    .setTitle("Confirmation")
+                    .setMessage("This video will be reported as adult content.")
+                    .setPositiveButton("Ok") { _, _ ->
+                        coroutinesProvider.ioScope.launch(Job()) {
+                            reportPipe.execute(ReportUseCase.Params(movie.board, movie.thread, movie.post))
+                        }
+                    }
+                    .setNegativeButton("Cancel") { _, _ -> }
+                    .show()
         }
     }
 
