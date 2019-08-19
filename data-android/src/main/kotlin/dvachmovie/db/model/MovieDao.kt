@@ -1,6 +1,7 @@
 package dvachmovie.db.model
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -19,4 +20,7 @@ interface MovieDao {
 
     @Query("DELETE from movieData")
     fun deleteAll()
+
+    @Delete
+    fun deleteMovies(movies: List<MovieEntity>)
 }

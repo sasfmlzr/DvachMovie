@@ -24,4 +24,8 @@ internal class LocalMovieDBRepository @Inject constructor(
     override suspend fun deleteAll() {
         movieDao.deleteAll()
     }
+
+    override suspend fun deleteMovies(movies: List<Movie>) {
+        movieDao.deleteMovies(movies as List<MovieEntity>)
+    }
 }

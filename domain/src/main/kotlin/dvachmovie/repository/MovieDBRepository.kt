@@ -7,4 +7,5 @@ interface MovieDBRepository {
     suspend fun insert(movieEntity: Movie)
     suspend fun insertAll(moviesEntity: List<Movie>)
     suspend fun deleteAll()
+    suspend fun deleteMovies(movies: List<Movie>)
 }
