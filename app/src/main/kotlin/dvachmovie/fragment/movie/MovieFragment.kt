@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
@@ -22,7 +23,6 @@ import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
-import dvachmovie.architecture.binding.BindingCache
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
@@ -87,6 +87,8 @@ class MovieFragment : BaseFragment<MovieVM,
                 viewModel.isReportBtnVisible.value = false
             }
         }
+
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         return binding.root
     }
 
@@ -204,6 +206,8 @@ class MovieFragment : BaseFragment<MovieVM,
         viewModel.markMovieAsPlayed(index)
 
         releasePlayer()
+
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         super.onStop()
     }
 
