@@ -12,4 +12,5 @@ interface Movie {
     val post: Long
     val thread: Long
     val baseUrl: String
+    var dateAddedToDB: LocalDateTime
 }

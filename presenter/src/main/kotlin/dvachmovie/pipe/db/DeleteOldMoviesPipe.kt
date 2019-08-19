@@ -12,11 +12,12 @@ class DeleteOldMoviesPipe @Inject constructor(
 ) : PipeAsync<Unit, Unit>() {
 
     override suspend fun execute(input: Unit) {
-        val notPlayedMovies = getMoviesFromDBUseCase.executeAsync(Unit)
+        val movies = getMoviesFromDBUseCase.executeAsync(Unit)
 
-        val s= notPlayedMovies.filter { movie ->
-            !movie.isPlayed && movie.date < LocalDateTime().minusDays(7)
+        val notPlayedMovies = movies.filter { movie ->
+            !movie.isPlayed && movie.dateAddedToDB < LocalDateTime().minusDays(7)
         }
-        useCase.executeAsync(s)
+
+        useCase.executeAsync(notPlayedMovies)
     }
 }
