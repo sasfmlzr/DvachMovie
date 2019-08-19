@@ -9,6 +9,9 @@ import androidx.room.Update
 
 @Dao
 interface MovieDao {
+    @Query("SELECT * from movieData")
+    fun getMovies(): List<MovieEntity>
+
     @Query("SELECT * from movieData where board = :boardThread and isPlayed = 0 and baseUrl = :baseUrl")
     fun getMoviesFromBoard(baseUrl: String, boardThread: String): List<MovieEntity>
 
