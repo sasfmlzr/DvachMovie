@@ -42,13 +42,20 @@ class RoomModule(private val application: Application) {
                 database.execSQL("CREATE TABLE IF NOT EXISTS threadData (thread INTEGER PRIMARY KEY NOT NULL, date TEXT NOT NULL, isHidden INTEGER NOT NULL, nameThread TEXT NOT NULL, baseUrl TEXT NOT NULL)")
             }
         }
+
+        private val MIGRATION_1_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE movieData ADD COLUMN dateAddedToDB TEXT DEFAULT '' NOT NULL")
+                database.execSQL("UPDATE movieData SET dateAddedToDB = date")
+            }
+        }
     }
 
     @Singleton
     @Provides
     internal fun providesMovieDatabase(): MovieDatabase =
             Room.databaseBuilder(application, MovieDatabase::class.java, "movieData")
-                    .addMigrations(MIGRATION_1_2, MIGRATION_1_3, MIGRATION_1_4, MIGRATION_1_5, MIGRATION_1_5)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_1_3, MIGRATION_1_4, MIGRATION_1_5, MIGRATION_1_5, MIGRATION_1_6)
                     .build()
 
     @Singleton

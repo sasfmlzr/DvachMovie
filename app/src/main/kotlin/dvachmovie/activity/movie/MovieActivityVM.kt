@@ -10,7 +10,7 @@ class MovieActivityVM @Inject constructor() : ViewModel() {
     @Inject
     lateinit var getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe
 
-    fun initCurrentBaseUrl(){
+    fun initCurrentBaseUrl() {
         AppConfig.currentBaseUrl = getCurrentBaseUrlPipe.execute(Unit)
     }
 }

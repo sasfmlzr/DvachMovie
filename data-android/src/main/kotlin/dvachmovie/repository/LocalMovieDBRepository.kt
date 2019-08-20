@@ -9,6 +9,10 @@ import javax.inject.Inject
 internal class LocalMovieDBRepository @Inject constructor(
         private val movieDao: MovieDao) : MovieDBRepository {
 
+    override suspend fun getMovies(): List<Movie> {
+        return movieDao.getMovies()
+    }
+
     override suspend fun getMoviesFromBoard(baseUrl: String, boardThread: String): List<Movie> {
         return movieDao.getMoviesFromBoard(boardThread, baseUrl)
     }
@@ -23,5 +27,9 @@ internal class LocalMovieDBRepository @Inject constructor(
 
     override suspend fun deleteAll() {
         movieDao.deleteAll()
+    }
+
+    override suspend fun deleteMovies(movies: List<Movie>) {
+        movieDao.deleteMovies(movies as List<MovieEntity>)
     }
 }

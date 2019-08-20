@@ -40,6 +40,7 @@ class StartActivity : BaseActivity<StartActivityVM,
     private fun initializeApp() {
         coroutineScope.launch {
             delay(MIN_SHOW_TIME)
+            viewModel.removeOldMovies()
             loadingMainActivity()
         }
     }
