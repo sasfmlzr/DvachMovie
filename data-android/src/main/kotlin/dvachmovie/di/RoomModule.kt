@@ -45,7 +45,7 @@ class RoomModule(private val application: Application) {
 
         private val MIGRATION_1_6 = object : Migration(5, 6) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE movieData ADD COLUMN dateAddedInDB TEXT DEFAULT '' NOT NULL")
+                database.execSQL("ALTER TABLE movieData ADD COLUMN dateAddedToDB TEXT DEFAULT '' NOT NULL")
                 database.execSQL("UPDATE movieData SET dateAddedToDB = date")
             }
         }
