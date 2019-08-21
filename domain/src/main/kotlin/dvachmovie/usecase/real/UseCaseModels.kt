@@ -9,6 +9,8 @@ data class GetThreadsFromDvachUseCaseModel(val listThreads: List<String>) : UseC
 
 data class GetThreadsFromFourchUseCaseModel(val listThreads: List<Pair<Int, String>>) : UseCaseModel
 
+data class GetThreadsFromNeoChanUseCaseModel(val listThreads: List<Pair<Int, String>>) : UseCaseModel
+
 data class GetLinkFilesFromThreadsUseCaseModel(val fileItems: List<FileItem>) : UseCaseModel
 
 data class DvachReportUseCaseModel(val message: String) : UseCaseModel

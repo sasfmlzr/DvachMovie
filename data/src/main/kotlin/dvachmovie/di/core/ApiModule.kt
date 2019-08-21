@@ -5,6 +5,7 @@ import dagger.Provides
 import dvachmovie.AppConfig
 import dvachmovie.api.DvachMovieApi
 import dvachmovie.api.FourchanApi
+import dvachmovie.api.NeoChanApi
 import dvachmovie.api.getOwnerContactConverterFactory
 import dvachmovie.storage.SettingsStorage
 import okhttp3.CookieJar
@@ -37,7 +38,7 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun fourchanRetrofitService(): FourchanApi {
+    fun fourChanRetrofitService(): FourchanApi {
         val httpClient = OkHttpClient.Builder()
                 .connectTimeout(3, TimeUnit.SECONDS)
                 .readTimeout(3, TimeUnit.SECONDS)
@@ -49,6 +50,22 @@ internal class ApiModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         return retrofit.create(FourchanApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun neoChanRetrofitService(): NeoChanApi {
+        val httpClient = OkHttpClient.Builder()
+                .connectTimeout(3, TimeUnit.SECONDS)
+                .readTimeout(3, TimeUnit.SECONDS)
+                .build()
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(AppConfig.NEOCHAN_URL)
+                .client(httpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        return retrofit.create(NeoChanApi::class.java)
     }
 
     @Provides

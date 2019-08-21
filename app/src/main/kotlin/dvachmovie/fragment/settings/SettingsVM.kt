@@ -15,6 +15,7 @@ import dvachmovie.BuildConfig
 import dvachmovie.R
 import dvachmovie.api.DvachBoards
 import dvachmovie.api.FourChanBoards
+import dvachmovie.api.NeoChanBoards
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.pipe.moviestorage.EraseMovieStoragePipe
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
@@ -56,6 +57,7 @@ class SettingsVM @Inject constructor(
 
     val isDvachBoardsVisible = MutableLiveData<Boolean>()
     val isFourChanBoardsVisible = MutableLiveData<Boolean>()
+    val isNeoChanBoardsVisible = MutableLiveData<Boolean>()
 
     init {
         addFields()
@@ -131,50 +133,50 @@ class SettingsVM @Inject constructor(
     }
 
     val onSetImageBoard = View.OnClickListener {
-            var checkedItem = AppConfig.imageboards.keys.indexOf(getCurrentBaseUrl())
+        var checkedItem = AppConfig.imageboards.keys.indexOf(getCurrentBaseUrl())
 
-            AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
-                    .setTitle("Set board")
-                    .setSingleChoiceItems(
-                            AppConfig.imageboards.values.toTypedArray(),
-                            checkedItem
-                    ) { dialog, which ->
-                        checkedItem = which
-                        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).isPressed = true
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).requestFocus()
+        AlertDialog.Builder(it.context, R.style.AlertDialogStyle)
+                .setTitle("Set board")
+                .setSingleChoiceItems(
+                        AppConfig.imageboards.values.toTypedArray(),
+                        checkedItem
+                ) { dialog, which ->
+                    checkedItem = which
+                    (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).isPressed = true
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).requestFocus()
+                }
+                .setOnKeyListener { dialog, keyCode, _ ->
+                    val btnNegative = (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+                    val btnPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                    if (keyCode == KEYCODE_DPAD_RIGHT && !btnNegative.isFocused && !btnPositive.isFocused) {
+                        btnNegative.isPressed = true
+                        btnNegative.requestFocus()
+                        true
+                    } else {
+                        false
                     }
-                    .setOnKeyListener { dialog, keyCode, _ ->
-                        val btnNegative = (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEGATIVE)
-                        val btnPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                        if (keyCode == KEYCODE_DPAD_RIGHT && !btnNegative.isFocused && !btnPositive.isFocused) {
-                            btnNegative.isPressed = true
-                            btnNegative.requestFocus()
-                            true
-                        } else {
-                            false
-                        }
+                }
+                .setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
-                    .setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
-                        }
 
-                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                            view?.isPressed = true
-                        }
-                    })
-                    .setPositiveButton("Ok") { _, _ ->
-                        if (checkedItem != -1) {
-                            viewModelScope.launch {
-                                withContext(scopeProvider.ioScope.coroutineContext + Job()) {
-                                    putCurrentBaseUrlPipe.execute(AppConfig.imageboards.keys.elementAt(checkedItem))
-                                    putBoardPipe.execute(DvachBoards.defaultMap.iterator().next().key)
-                                }
-                                reInitMovies(false)
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        view?.isPressed = true
+                    }
+                })
+                .setPositiveButton("Ok") { _, _ ->
+                    if (checkedItem != -1) {
+                        viewModelScope.launch {
+                            withContext(scopeProvider.ioScope.coroutineContext + Job()) {
+                                putCurrentBaseUrlPipe.execute(AppConfig.imageboards.keys.elementAt(checkedItem))
+                                putBoardPipe.execute(DvachBoards.defaultMap.iterator().next().key)
                             }
+                            reInitMovies(false)
                         }
                     }
-                    .setNegativeButton("Cancel") { _, _ -> }
-                    .show()
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
     }
 
     private fun createClickListenerForSetBoards(boardMap: HashMap<String, String>) =
@@ -217,6 +219,10 @@ class SettingsVM @Inject constructor(
 
     val onSetFourChanAdultBoard = createClickListenerForSetBoards(FourChanBoards.adultMap)
     //------------4chan.org boards finished------------//
+
+    //------------neoChan.net boards started------------//
+    val onSetNeoChanBoard = createClickListenerForSetBoards(NeoChanBoards.popularMap)
+    //------------neoChan.net boards finished------------//
 
     private fun showChangeBoardDialog(context: Context, boardMap: HashMap<String, String>) {
         var checkedItem = boardMap.keys.indexOf(board)

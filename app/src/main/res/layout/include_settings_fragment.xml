@@ -130,6 +130,11 @@
                         layout="@layout/include_fourchan_boards"
                         android:visibility="@{safeUnbox(viewModel.isFourChanBoardsVisible)? View.VISIBLE : View.GONE}"
                         bind:viewModel="@{viewModel}" />
+
+                    <include
+                        layout="@layout/include_neochan_boards"
+                        android:visibility="@{safeUnbox(viewModel.isNeoChanBoardsVisible)? View.VISIBLE : View.GONE}"
+                        bind:viewModel="@{viewModel}" />
                 </LinearLayout>
             </ScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,6 +30,15 @@ class LocalThreadConverter @Inject constructor() : ThreadConverter {
                                 nameThread = fileItem.threadName,
                                 isHidden = false,
                                 baseUrl = baseUrl)
+                    AppConfig.NEOCHAN_URL ->
+                        ThreadEntity(
+                                date = Instant.ofEpochSecond(fileItem.date.toLong())
+                                        .toDateTime()
+                                        .toLocalDateTime(),
+                                thread = fileItem.numThread,
+                                nameThread = fileItem.threadName,
+                                isHidden = false,
+                                baseUrl = baseUrl)
                     else -> throw RuntimeException("I don't know such imageboard")
                 }
             }
