@@ -47,8 +47,13 @@ class StartFragment : BaseFragment<StartVM,
         viewModel.routeToMovieFragmentTask = routeToMovieFragmentTask
         viewModel.showErrorTask = showErrorTask
         viewModel.initDBTask = initDBTask
+        AppConfig.currentBaseUrl = viewModel.getCurrentBaseUrl()
 
-        viewModel.imageId.value = R.raw.cybermilosgif
+        when (AppConfig.currentBaseUrl) {
+            AppConfig.NEOCHAN_URL -> viewModel.imageId.value = R.raw.neochangif
+            else -> viewModel.imageId.value = R.raw.cybermilosgif
+        }
+
         prepareData()
 
         return binding.root
@@ -56,7 +61,6 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun prepareData() {
         scopeProvider.ioScope.launch(Job()) {
-            AppConfig.currentBaseUrl = viewModel.getCurrentBaseUrl()
             val movies = viewModel.getMoviesFromDBByBoardPipe
                     .execute(Pair(viewModel.getBoardPipe.execute(Unit), AppConfig.currentBaseUrl))
             if (movies.size < MINIMUM_COUNT_MOVIES ||
