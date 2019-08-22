@@ -27,6 +27,7 @@ android {
         versionName project["versionName"]
         versionCode project["versionCode"].toInteger()
         signingConfig signingConfigs.releaseConfig
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     dataBinding {
         enabled = true
@@ -89,7 +90,6 @@ dependencies {
     implementation "$navigation.fragment"
     implementation "$navigation.ui"
 
-    implementation "$workmanager.workmanager"
     implementation "$workmanager.ktx"
 
     implementation "$timber"
@@ -104,6 +104,15 @@ dependencies {
     implementation project(':presenter')
 
     testImplementation "$junit"
-    testImplementation "$mockito"
     testImplementation "$robolectric"
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    androidTestImplementation "$workmanager.testing"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation "$mockito"
+    androidTestImplementation "$jodaTime"
+    kaptAndroidTest "$dagger.compiler"
+
 }

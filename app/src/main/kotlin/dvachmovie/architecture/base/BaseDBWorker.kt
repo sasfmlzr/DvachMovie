@@ -21,6 +21,7 @@ abstract class BaseDBWorker(@NonNull context: Context,
             execute()
             Result.success()
         } catch (ex: RuntimeException) {
+            ex.printStackTrace()
             Result.failure()
         }
     }

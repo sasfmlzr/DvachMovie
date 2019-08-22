@@ -4,7 +4,7 @@ import dvachmovie.di.RoomModule
 
 object Injector {
 
-    private lateinit var component: FullApplicationComponent
+    lateinit var component: FullApplicationComponent
 
     fun prepare(application: MainApplication) {
         component = DaggerFullApplicationComponent.builder()

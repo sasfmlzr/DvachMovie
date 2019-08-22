@@ -74,8 +74,8 @@ buildscript {
         ]
         timber = "com.jakewharton.timber:timber:$timberVersion"
         workmanager = [
-                workmanager: "androidx.work:work-runtime-ktx:$workVersion",
-                ktx        : "androidx.work:work-runtime-ktx:$workVersion"
+                ktx        : "androidx.work:work-runtime-ktx:$workVersion",
+                testing    : "androidx.work:work-testing:$workVersion"
         ]
     }
     repositories {
