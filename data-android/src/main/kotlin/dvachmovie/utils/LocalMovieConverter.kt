@@ -35,6 +35,17 @@ class LocalMovieConverter @Inject constructor() : MovieConverter {
                                 thread = fileItem.numThread,
                                 post = fileItem.numPost,
                                 baseUrl = baseUrl)
+                    AppConfig.NEOCHAN_URL ->
+                        MovieEntity(board = board,
+                                movieUrl = fileItem.path,
+                                previewUrl = fileItem.thumbnail,
+                                date = Instant.ofEpochSecond(fileItem.date.toLong())
+                                        .toDateTime()
+                                        .toLocalDateTime(),
+                                md5 = fileItem.md5,
+                                thread = fileItem.numThread,
+                                post = fileItem.numPost,
+                                baseUrl = baseUrl)
                     else -> throw RuntimeException("I don't know such imageboard")
                 }
             }

@@ -15,6 +15,7 @@ import dvachmovie.usecase.real.DvachCountRequestUseCaseModel
 import dvachmovie.usecase.real.DvachUseCaseModel
 import dvachmovie.usecase.real.dvach.DvachUseCase
 import dvachmovie.usecase.real.fourch.FourChanUseCase
+import dvachmovie.usecase.real.neochan.NeoChanUseCase
 import dvachmovie.usecase.settingsstorage.GetBoardUseCase
 import dvachmovie.usecase.settingsstorage.GetCurrentBaseUrlUseCase
 import kotlinx.coroutines.CancellationException
@@ -28,6 +29,7 @@ class DvachPipe @Inject constructor(
         private val broadcastChannel: BroadcastChannel<PresenterModel>,
         private val dvachUseCase: DvachUseCase,
         private val fourChanUseCase: FourChanUseCase,
+        private val neoChanUseCase: NeoChanUseCase,
         private val scopeProvider: ScopeProvider,
         private val getBoardUseCase: GetBoardUseCase,
         private val currentBaseUrlUseCase: GetCurrentBaseUrlUseCase) : PipeAsync<ExecutorResult?, Unit>() {
@@ -36,6 +38,7 @@ class DvachPipe @Inject constructor(
         when (currentBaseUrlUseCase.execute(Unit)) {
             AppConfig.DVACH_URL -> dvachUseCase.forceStart()
             AppConfig.FOURCHAN_URL -> fourChanUseCase.forceStart()
+            AppConfig.NEOCHAN_URL -> neoChanUseCase.forceStart()
         }
     }
 
@@ -77,6 +80,7 @@ class DvachPipe @Inject constructor(
             when (currentBaseUrlUseCase.execute(Unit)) {
                 AppConfig.DVACH_URL -> dvachUseCase.executeAsync(inputModel)
                 AppConfig.FOURCHAN_URL -> fourChanUseCase.executeAsync(inputModel)
+                AppConfig.NEOCHAN_URL -> neoChanUseCase.executeAsync(inputModel)
             }
         }
     }

@@ -8,6 +8,7 @@ import dvachmovie.usecase.base.ExecutorResult
 import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.dvach.DvachUseCase
 import dvachmovie.usecase.real.fourch.FourChanUseCase
+import dvachmovie.usecase.real.neochan.NeoChanUseCase
 import dvachmovie.usecase.settingsstorage.GetBoardUseCase
 import dvachmovie.usecase.settingsstorage.GetCurrentBaseUrlUseCase
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -42,6 +43,9 @@ class DvachPipeTest {
 
     @Mock
     lateinit var fourChanUseCase: FourChanUseCase
+
+    @Mock
+    lateinit var neoChanUseCase: NeoChanUseCase
 
     private val executorResult = object : ExecutorResult {
         override suspend fun onSuccess(useCaseModel: UseCaseModel) {
@@ -89,6 +93,26 @@ class DvachPipeTest {
             given(currentBaseUrlUseCase.execute(Unit)).willReturn(AppConfig.FOURCHAN_URL)
             given(getBoardUseCase.execute(Unit)).willReturn("test")
             given(fourChanUseCase.executeAsync(params)).willThrow(TestException())
+            pipe.execute(executorResult)
+        }
+    }
+
+    @Test
+    fun `Happy pass for neo chan`() {
+        runBlocking {
+            given(currentBaseUrlUseCase.execute(Unit)).willReturn(AppConfig.NEOCHAN_URL)
+            given(getBoardUseCase.execute(Unit)).willReturn("test")
+            given(neoChanUseCase.executeAsync(params)).willReturn(Unit)
+            pipe.execute(executorResult)
+        }
+    }
+
+    @Test(expected = TestException::class)
+    fun `Something was wrong but pipe emitted error for neo chan`() {
+        runBlocking {
+            given(currentBaseUrlUseCase.execute(Unit)).willReturn(AppConfig.NEOCHAN_URL)
+            given(getBoardUseCase.execute(Unit)).willReturn("test")
+            given(neoChanUseCase.executeAsync(params)).willThrow(TestException())
             pipe.execute(executorResult)
         }
     }

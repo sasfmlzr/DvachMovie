@@ -41,10 +41,18 @@ class SettingsFragment : BaseFragment<SettingsVM,
             AppConfig.DVACH_URL -> {
                 viewModel.isDvachBoardsVisible.value = true
                 viewModel.isFourChanBoardsVisible.value = false
+                viewModel.isNeoChanBoardsVisible.value = false
             }
             AppConfig.FOURCHAN_URL -> {
                 viewModel.isDvachBoardsVisible.value = false
                 viewModel.isFourChanBoardsVisible.value = true
+                viewModel.isNeoChanBoardsVisible.value = false
+            }
+
+            AppConfig.NEOCHAN_URL -> {
+                viewModel.isDvachBoardsVisible.value = false
+                viewModel.isFourChanBoardsVisible.value = false
+                viewModel.isNeoChanBoardsVisible.value = true
             }
         }
 
