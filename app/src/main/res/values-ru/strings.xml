@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DvachMovie</string>
+    <string name="adult_nsfw">Взрослым</string>
+    <string name="change_to_default_board">Изменить на борду поумолчанию</string>
+    <string name="clean_movies">Очистить список видео</string>
+    <string name="copy_url_button">Копировать ссылку</string>
+    <string name="creative">Творчество</string>
+    <string name="download">Загрузить</string>
+    <string name="gesture">Жесты</string>
+    <string name="hide_thread">Скрыть тред</string>
+    <string name="interests">Тематика</string>
+    <string name="japan_culture">Японская культура</string>
+    <string name="list_button_visible">Кнопка списка</string>
+    <string name="loading_image">Загрузка изображения</string>
+    <string name="misc_nsfw">Прочий 18+</string>
+    <string name="other">Разное</string>
+    <string name="set_adult_board">Взрослым</string>
+    <string name="set_adult_otherboard">Прочий 18+</string>
+    <string name="retry">Повторить</string>
+    <string name="refresh_movies">Обновить список видео</string>
+    <string name="report">Репортнуть</string>
+    <string name="set_board">Выбрать борду</string>
+    <string name="set_creation_board">Творчество</string>
+    <string name="set_games_board">Игры</string>
+    <string name="set_imageboard">Выбрать имиджборду</string>
+    <string name="set_japan_board">Япония</string>
+    <string name="set_politics_and_news_board">Политика и новости</string>
+    <string name="set_popular_board">Популярное</string>
+    <string name="set_tech_and_soft_board">Техника и новости</string>
+    <string name="set_theme_board">Тематика</string>
+    <string name="settings_button">Настройки</string>
+    <string name="shuffle">Переместить</string>
+    <string name="start">Старт</string>
+    <string name="video_games">Видео игры</string>
+    <string name="promote">Поддержать</string>
+</resources>
