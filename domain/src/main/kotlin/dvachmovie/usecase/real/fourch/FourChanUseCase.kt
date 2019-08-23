@@ -15,9 +15,11 @@ import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import dvachmovie.utils.ThreadConverter
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 open class FourChanUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromFourchUseCase,
@@ -65,20 +67,27 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
 
                 executorResult.onSuccess(DvachAmountRequestsUseCaseModel(listThreadSize))
 
-                for (threadParam in useCaseModel.listThreads) {
-                    try {
-                        val list = executeLinkFilesUseCase(threadParam.first.toString(),
-                                threadParam.second)
-                        val webmItems =
-                                movieUtils.filterFileItemOnlyAsMovie(list)
+                var isCancellationException = false
+                withContext(Dispatchers.IO) {
+                    for (threadParam in useCaseModel.listThreads) {
+                        if (!isCancellationException) {
+                            launch {
+                                try {
+                                    val list = executeLinkFilesUseCase(threadParam.first.toString(),
+                                            threadParam.second)
+                                    val webmItems =
+                                            movieUtils.filterFileItemOnlyAsMovie(list)
 
-                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.FOURCHAN_URL))
-                        threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.FOURCHAN_URL))
-                    } catch (e: Exception) {
-                        if (e is CancellationException) {
-                            break
-                        } else {
-                            executorResult.onFailure(e)
+                                    movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.FOURCHAN_URL))
+                                    threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.FOURCHAN_URL))
+                                } catch (e: Exception) {
+                                    if (e is CancellationException) {
+                                        isCancellationException = true
+                                    } else {
+                                        executorResult.onFailure(e)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
