@@ -70,7 +70,7 @@ open class FourChanUseCase @Inject constructor(private val getThreadUseCase: Get
                         val list = executeLinkFilesUseCase(threadParam.first.toString(),
                                 threadParam.second)
                         val webmItems =
-                                movieUtils.filterFileItemOnlyAsWebm(list)
+                                movieUtils.filterFileItemOnlyAsMovie(list)
 
                         movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.FOURCHAN_URL))
                         threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.FOURCHAN_URL))

@@ -70,7 +70,7 @@ open class NeoChanUseCase @Inject constructor(private val getThreadUseCase: GetT
                         val list = executeLinkFilesUseCase(threadParam.first.toString(),
                                 threadParam.second)
                         val webmItems =
-                                movieUtils.filterFileItemOnlyAsWebm(list)
+                                movieUtils.filterFileItemOnlyAsMovie(list)
 
                         movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.NEOCHAN_URL))
                         threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.NEOCHAN_URL))

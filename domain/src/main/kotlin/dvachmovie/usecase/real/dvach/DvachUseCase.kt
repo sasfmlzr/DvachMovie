@@ -68,7 +68,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
                 for (num in useCaseModel.listThreads) {
                     try {
                         val webmItems =
-                                movieUtils.filterFileItemOnlyAsWebm(executeLinkFilesUseCase(num))
+                                movieUtils.filterFileItemOnlyAsMovie(executeLinkFilesUseCase(num))
 
                         movies.addAll(movieConverter.convertFileItemToMovie(webmItems,
                                 board,

@@ -52,7 +52,7 @@ class MovieUtilsTest {
 
     @Test
     fun `Filter file as only webm file`() {
-        val resultList = movieUtils.filterFileItemOnlyAsWebm(fileItems)
+        val resultList = movieUtils.filterFileItemOnlyAsMovie(fileItems)
 
         Assert.assertEquals(2, resultList.size)
         Assert.assertEquals(false, resultList.contains(fileThree))

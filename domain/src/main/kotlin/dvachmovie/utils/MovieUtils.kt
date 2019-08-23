@@ -12,7 +12,7 @@ interface MovieUtils {
 
     fun getIndexPosition(currentMovie: Movie?, movieList: List<Movie>?): Int
 
-    fun filterFileItemOnlyAsWebm(fileItems: List<FileItem>): List<FileItem>
+    fun filterFileItemOnlyAsMovie(fileItems: List<FileItem>): List<FileItem>
 
     fun sortByDate(movies: List<Movie>): List<Movie>
 }
