@@ -15,9 +15,11 @@ import dvachmovie.utils.MovieConverter
 import dvachmovie.utils.MovieUtils
 import dvachmovie.utils.ThreadConverter
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThreadsFromDvachUseCase,
@@ -58,6 +60,7 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
         executorResult = input.executorResult!!
         val inputModel = GetThreadsFromDvachUseCase.Params(input.board)
 
+
         networkJob = scopeProvider.ioScope.async(Job()) {
             try {
                 val useCaseModel = getThreadUseCase.executeAsync(inputModel)
@@ -65,26 +68,31 @@ open class DvachUseCase @Inject constructor(private val getThreadUseCase: GetThr
 
                 executorResult.onSuccess(DvachAmountRequestsUseCaseModel(listThreadSize))
 
-                for (num in useCaseModel.listThreads) {
-                    try {
-                        val webmItems =
-                                movieUtils.filterFileItemOnlyAsMovie(executeLinkFilesUseCase(num))
+                var isCancellationException = false
+                withContext(Dispatchers.IO) {
+                    for (num in useCaseModel.listThreads) {
+                        if (!isCancellationException) {
+                            launch {
+                                try {
+                                    val webmItems =
+                                            movieUtils.filterFileItemOnlyAsMovie(executeLinkFilesUseCase(num))
 
-                        movies.addAll(movieConverter.convertFileItemToMovie(webmItems,
-                                board,
-                                AppConfig.DVACH_URL))
-                        threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.DVACH_URL))
+                                    movies.addAll(movieConverter.convertFileItemToMovie(webmItems,
+                                            board,
+                                            AppConfig.DVACH_URL))
+                                    threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.DVACH_URL))
 
-                    } catch (e: Exception) {
-                        if (e is CancellationException) {
-                            break
-
-                        } else {
-                            executorResult.onFailure(e)
+                                } catch (e: Exception) {
+                                    if (e is CancellationException) {
+                                        isCancellationException = true
+                                    } else {
+                                        executorResult.onFailure(e)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-
                 if (networkJob.isActive) {
                     returnMovies()
                 }
