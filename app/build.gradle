@@ -59,7 +59,7 @@ android {
     productFlavors {
         pro {
             dimension "environment"
-            applicationId "com.dvachmovie.android.parallel"
+            applicationId "com.dvachmovie.android.pro"
         }
     }
 }
