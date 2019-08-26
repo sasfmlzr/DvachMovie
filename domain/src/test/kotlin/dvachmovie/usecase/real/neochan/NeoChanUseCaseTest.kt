@@ -68,7 +68,12 @@ internal class NeoChanUseCaseTest {
             when (useCaseModel) {
                 is DvachAmountRequestsUseCaseModel ->
                     Assert.assertEquals(2, useCaseModel.max)
-                is DvachUseCaseModel -> Assert.assertEquals(resultHappyModel, useCaseModel)
+                is DvachUseCaseModel -> {
+                    Assert.assertTrue(resultHappyModel.movies.containsAll(useCaseModel.movies))
+                    Assert.assertTrue(resultHappyModel.threads.containsAll(useCaseModel.threads))
+                    Assert.assertEquals(resultHappyModel.movies.size, useCaseModel.movies.size)
+                    Assert.assertEquals(resultHappyModel.threads.size, useCaseModel.threads.size)
+                }
             }
         }
 

@@ -1,5 +1,6 @@
 package dvachmovie.usecase.real.dvach
 
+import dvachmovie.AppConfig
 import dvachmovie.TestException
 import dvachmovie.api.FileItem
 import dvachmovie.architecture.ScopeProvider
@@ -74,7 +75,12 @@ class DvachUseCaseTest {
             when (useCaseModel) {
                 is DvachAmountRequestsUseCaseModel ->
                     Assert.assertEquals(2, useCaseModel.max)
-                is DvachUseCaseModel -> Assert.assertEquals(resultHappyModel, useCaseModel)
+                is DvachUseCaseModel -> {
+                    Assert.assertTrue(resultHappyModel.movies.containsAll(useCaseModel.movies))
+                    Assert.assertTrue(resultHappyModel.threads.containsAll(useCaseModel.threads))
+                    Assert.assertEquals(resultHappyModel.movies.size, useCaseModel.movies.size)
+                    Assert.assertEquals(resultHappyModel.threads.size, useCaseModel.threads.size)
+                }
             }
         }
 
@@ -130,12 +136,20 @@ class DvachUseCaseTest {
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelTwo)).willReturn(linkTwoModel)
 
-            given(movieUtils.filterFileItemOnlyAsWebm(
+            given(movieUtils.filterFileItemOnlyAsMovie(
                     listOf(fileOne)))
                     .willReturn(listOf(fileOne))
-            given(movieUtils.filterFileItemOnlyAsWebm(
+            given(movieUtils.filterFileItemOnlyAsMovie(
                     listOf(fileTwo)))
                     .willReturn(listOf(fileTwo))
+
+            given(movieConverter.convertFileItemToMovie(listOf(fileOne),
+                    board,
+                    AppConfig.DVACH_URL)).willReturn(listOf(movieEntityOne))
+
+            given(movieConverter.convertFileItemToMovie(listOf(fileTwo),
+                    board,
+                    AppConfig.DVACH_URL)).willReturn(listOf(movieEntityTwo))
 
             val dvachInputModel = DvachUseCase.Params(board, happyExecutorResult)
             dvachUseCase.executeAsync(dvachInputModel)
@@ -164,8 +178,11 @@ class DvachUseCaseTest {
 
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelOne)).willReturn(linkOneModel)
-            given(movieUtils.filterFileItemOnlyAsWebm(listOf(fileOne)))
+            given(movieUtils.filterFileItemOnlyAsMovie(listOf(fileOne)))
                     .willReturn(listOf(fileOne))
+            given(movieConverter.convertFileItemToMovie(listOf(fileOne),
+                    board,
+                    AppConfig.DVACH_URL)).willReturn(listOf(movieEntityOne))
             given(getLinkFilesFromThreadsUseCase
                     .executeAsync(linkFilesModelTwo)).willThrow(testException)
 
