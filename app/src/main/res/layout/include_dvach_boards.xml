@@ -1,145 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="dvachmovie.fragment.settings.SettingsVM" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <Button
+            android:id="@+id/buttonPopularBoard"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:onClick="@{viewModel.onSetDvachPopularBoard}"
+            android:singleLine="false"
+            android:text="@string/set_popular_board"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonThemeBoard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/buttonPopularBoard"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:onClick="@{viewModel.onSetDvachPopularBoard}"
-                android:text="@string/set_popular_board" />
+        <Button
+            android:id="@+id/buttonThemeBoard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="@{viewModel.onSetDvachThemeBoard}"
+            android:text="@string/set_theme_board"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonPopularBoard"
+            app:layout_constraintEnd_toStartOf="@+id/buttonGamesBoard"
+            app:layout_constraintStart_toEndOf="@id/buttonPopularBoard"
+            app:layout_constraintTop_toTopOf="@+id/buttonPopularBoard" />
 
-            <Button
-                android:id="@+id/buttonThemeBoard"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:onClick="@{viewModel.onSetDvachThemeBoard}"
-                android:text="@string/set_theme_board" />
+        <Button
+            android:id="@+id/buttonGamesBoard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:onClick="@{viewModel.onSetDvachGamesBoard}"
+            android:text="@string/set_games_board"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonThemeBoard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/buttonThemeBoard"
+            app:layout_constraintTop_toTopOf="@+id/buttonThemeBoard" />
 
-            <Button
-                android:id="@+id/buttonGamesBoard"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:onClick="@{viewModel.onSetDvachGamesBoard}"
-                android:text="@string/set_games_board" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/buttonPolNewsBoard"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="8dp"
+            android:onClick="@{viewModel.onSetDvachPolNewsBoard}"
+            android:text="@string/set_politics_and_news_board"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonTechSoftBoard"
+            app:layout_constraintStart_toStartOf="@+id/buttonPopularBoard"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPopularBoard" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <Button
+            android:id="@+id/buttonTechSoftBoard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="@{viewModel.onSetDvachTechSoftBoard}"
+            android:text="@string/set_tech_and_soft_board"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonPolNewsBoard"
+            app:layout_constraintEnd_toStartOf="@+id/buttonOtherAdultBoard"
+            app:layout_constraintStart_toEndOf="@id/buttonPolNewsBoard"
+            app:layout_constraintTop_toTopOf="@+id/buttonPolNewsBoard" />
 
-            <Button
-                android:id="@+id/buttonPolNewsBoard"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:onClick="@{viewModel.onSetDvachPolNewsBoard}"
-                android:text="@string/set_politics_and_news_board" />
+        <Button
+            android:id="@+id/buttonOtherAdultBoard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:onClick="@{viewModel.onSetDvachAdultOtherBoard}"
+            android:text="@string/set_adult_otherboard"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonTechSoftBoard"
+            app:layout_constraintEnd_toEndOf="@+id/buttonGamesBoard"
+            app:layout_constraintStart_toEndOf="@id/buttonTechSoftBoard"
+            app:layout_constraintTop_toTopOf="@+id/buttonTechSoftBoard" />
 
-            <Button
-                android:id="@+id/buttonTechSoftBoard"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:onClick="@{viewModel.onSetDvachTechSoftBoard}"
-                android:text="@string/set_tech_and_soft_board" />
+        <Button
+            android:id="@+id/buttonJapanBoard"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="8dp"
+            android:onClick="@{viewModel.onSetDvachJapanBoard}"
+            android:text="@string/set_japan_board"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonCreationBoard"
+            app:layout_constraintStart_toStartOf="@+id/buttonPolNewsBoard"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPolNewsBoard" />
 
-            <Button
-                android:id="@+id/buttonOtherAdultBoard"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:onClick="@{viewModel.onSetDvachAdultOtherBoard}"
-                android:text="@string/set_adult_otherboard" />
+        <Button
+            android:id="@+id/buttonCreationBoard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="@{viewModel.onSetDvachCreationBoard}"
+            android:text="@string/set_creation_board"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonJapanBoard"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAdultBoard"
+            app:layout_constraintStart_toEndOf="@id/buttonJapanBoard"
+            app:layout_constraintTop_toTopOf="@+id/buttonJapanBoard" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/buttonJapanBoard"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:onClick="@{viewModel.onSetDvachJapanBoard}"
-                android:text="@string/set_japan_board" />
-
-            <Button
-                android:id="@+id/buttonCreationBoard"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:onClick="@{viewModel.onSetDvachCreationBoard}"
-                android:text="@string/set_creation_board" />
-
-            <Button
-                android:id="@+id/buttonAdultBoard"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:onClick="@{viewModel.onSetDvachAdultBoard}"
-                android:text="@string/set_adult_board" />
-        </LinearLayout>
-
-    </LinearLayout>
+        <Button
+            android:id="@+id/buttonAdultBoard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:onClick="@{viewModel.onSetDvachAdultBoard}"
+            android:text="@string/set_adult_board"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonCreationBoard"
+            app:layout_constraintEnd_toEndOf="@+id/buttonOtherAdultBoard"
+            app:layout_constraintStart_toEndOf="@id/buttonCreationBoard"
+            app:layout_constraintTop_toTopOf="@+id/buttonCreationBoard" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

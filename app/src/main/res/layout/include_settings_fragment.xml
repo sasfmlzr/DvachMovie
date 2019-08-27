@@ -54,7 +54,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="16dp"
                         android:checked="@{safeUnbox(viewModel.isGestureEnabled)}"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
@@ -66,23 +66,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="16dp"
                         android:checked="@{safeUnbox(viewModel.isReportBtnShow)}"
                         android:foreground="?attr/selectableItemBackground"
-                        android:visibility="@{safeUnbox(viewModel.isReportBtnVisible)? View.VISIBLE : View.GONE}"
                         android:onCheckedChanged="@{viewModel.onReportSwitchClicked}"
-                        android:text="@string/report_button_visible" />
+                        android:text="@string/report_button_visible"
+                        android:visibility="@{safeUnbox(viewModel.isReportBtnVisible)? View.VISIBLE : View.GONE}" />
 
                     <Switch
                         android:id="@+id/list_btn_visibility_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="16dp"
                         android:checked="@{safeUnbox(viewModel.isListBtnShow)}"
                         android:foreground="?attr/selectableItemBackground"
                         android:onCheckedChanged="@{viewModel.onListSwitchClicked}"
@@ -96,26 +96,25 @@
                         <Button
                             android:id="@+id/buttonCleanDatabase"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="70dp"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginEnd="8dp"
                             android:layout_weight="1"
                             android:onClick="@{viewModel.onCleanDatabase}"
-                            android:text="@string/clean_movies" />
+                            android:text="@string/clean_movies"
+                            android:textSize="12sp" />
 
                         <Button
                             android:id="@+id/buttonRefreshMovies"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
+                            android:layout_height="70dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="8dp"
                             android:layout_weight="1"
                             android:onClick="@{viewModel.onRefreshMovies}"
-                            android:text="@string/refresh_movies" />
+                            android:text="@string/refresh_movies"
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <Button
@@ -127,7 +126,8 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{viewModel.onSetImageBoard}"
-                        android:text="@string/set_imageboard" />
+                        android:text="@string/set_imageboard"
+                        android:textSize="12sp" />
 
                     <include
                         layout="@layout/include_dvach_boards"
