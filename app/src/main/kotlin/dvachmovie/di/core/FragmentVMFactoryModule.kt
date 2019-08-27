@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import dvachmovie.activity.movie.MovieActivityVM
 import dvachmovie.activity.start.StartActivityVM
-import dvachmovie.architecture.ViewModelFactory
+import dvachmovie.architecture.AndroidViewModelFactory
 import dvachmovie.architecture.ViewModelKey
 import dvachmovie.di.base.FragmentScope
 import dvachmovie.fragment.back.BackVM
@@ -20,7 +20,8 @@ import dvachmovie.fragment.start.StartVM
 internal abstract class FragmentVMFactoryModule {
     @Binds
     @FragmentScope
-    internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+    internal abstract fun bindViewModelAndroidFactory(factory: AndroidViewModelFactory):
+            ViewModelProvider.AndroidViewModelFactory
 
     @Binds
     @IntoMap

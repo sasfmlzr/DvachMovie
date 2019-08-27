@@ -12,7 +12,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import dvachmovie.architecture.Extensions
 import dvachmovie.architecture.Navigator
@@ -30,7 +29,8 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     }
 
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
+
     @Inject
     lateinit var logger: Logger
 
@@ -57,9 +57,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
         binding.lifecycleOwner = this
-        viewModel = ViewModelProviders
-                .of(this, viewModelFactory)
-                .get(viewModelClass.java)
+        viewModel = viewModelFactory.create(viewModelClass.java)
 
         return view
     }

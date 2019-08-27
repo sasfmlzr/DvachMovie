@@ -1,5 +1,6 @@
 package dvachmovie.architecture
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.MapKey
@@ -8,9 +9,10 @@ import javax.inject.Provider
 import kotlin.reflect.KClass
 
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory @Inject constructor(
+class AndroidViewModelFactory @Inject constructor(
         private val viewModels: MutableMap<Class<out ViewModel>,
-                Provider<ViewModel>>) : ViewModelProvider.Factory {
+                Provider<ViewModel>>,
+        application: Application) : ViewModelProvider.AndroidViewModelFactory(application) {
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
             viewModels[modelClass]?.get() as T
 }

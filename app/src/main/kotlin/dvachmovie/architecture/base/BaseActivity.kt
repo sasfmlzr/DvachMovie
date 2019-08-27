@@ -17,7 +17,7 @@ abstract class BaseActivity<VM : ViewModel, B : ViewDataBinding>
 protected constructor(private val viewModelClass: KClass<VM>) : AppCompatActivity() {
 
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
 
     protected abstract fun inject(component: ActivityComponent)
     protected abstract val layoutId: Int
@@ -31,8 +31,6 @@ protected constructor(private val viewModelClass: KClass<VM>) : AppCompatActivit
         inject(Injector.navigationComponent())
         binding = DataBindingUtil.setContentView(this, layoutId)
         binding.lifecycleOwner = this
-        viewModel = ViewModelProviders
-                .of(this, viewModelFactory)
-                .get(viewModelClass.java)
+        viewModel = viewModelFactory.create(viewModelClass.java)
     }
 }
