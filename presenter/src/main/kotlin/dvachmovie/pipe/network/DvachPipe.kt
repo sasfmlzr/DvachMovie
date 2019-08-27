@@ -21,6 +21,8 @@ import dvachmovie.usecase.settingsstorage.GetCurrentBaseUrlUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -32,7 +34,7 @@ class DvachPipe @Inject constructor(
         private val neoChanUseCase: NeoChanUseCase,
         private val scopeProvider: ScopeProvider,
         private val getBoardUseCase: GetBoardUseCase,
-        private val currentBaseUrlUseCase: GetCurrentBaseUrlUseCase) : PipeAsync<ExecutorResult?, Unit>() {
+        private val currentBaseUrlUseCase: GetCurrentBaseUrlUseCase) : PipeAsync<ExecutorResult?, Flow<PresenterModel>>() {
 
     suspend fun forceStart() {
         when (currentBaseUrlUseCase.execute(Unit)) {
@@ -42,11 +44,11 @@ class DvachPipe @Inject constructor(
         }
     }
 
-    override suspend fun execute(input: ExecutorResult?) {
+    override suspend fun execute(input: ExecutorResult?) = channelFlow {
         val handler = CoroutineExceptionHandler { _, throwable ->
             scopeProvider.ioScope.launch {
                 if (throwable !is CancellationException) {
-                    broadcastChannel.send(ErrorModel(throwable))
+                    send(ErrorModel(throwable))
                 }
             }
         }
@@ -55,17 +57,17 @@ class DvachPipe @Inject constructor(
             override suspend fun onSuccess(useCaseModel: UseCaseModel) {
                 when (useCaseModel) {
                     is DvachUseCaseModel ->
-                        broadcastChannel.send(DvachModel(useCaseModel.movies, useCaseModel.threads))
+                        send(DvachModel(useCaseModel.movies, useCaseModel.threads))
                     is DvachCountRequestUseCaseModel ->
-                        broadcastChannel.send(CountCompletedRequestsModel(useCaseModel.count))
+                        send(CountCompletedRequestsModel(useCaseModel.count))
                     is DvachAmountRequestsUseCaseModel ->
-                        broadcastChannel.send(AmountRequestsModel(useCaseModel.max))
+                        send(AmountRequestsModel(useCaseModel.max))
                 }
             }
 
             override suspend fun onFailure(t: Throwable) {
                 if (t !is CancellationException) {
-                    broadcastChannel.send(ErrorModel(t))
+                    send(ErrorModel(t))
                 }
             }
         }

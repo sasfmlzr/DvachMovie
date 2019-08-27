@@ -87,10 +87,14 @@ open class StartVM @Inject constructor(
         viewModelScope.launch {
             viewRetryBtn.value = false
             progressLoadingMovies.value = 0
-        }
 
-        dvachJob = scopeProvider.ioScope.launch(Job()) {
-            dvachPipe.execute(null)
+
+            dvachJob = scopeProvider.ioScope.launch(Job()) {
+                val dvachPipe = dvachPipe.execute(null)
+                dvachPipe.collect {
+                    render(it)
+                }
+            }
         }
     }
 
