@@ -7,8 +7,9 @@ import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.GetThreadsFromDvachUseCaseModel
 import javax.inject.Inject
 
-open class GetThreadsFromDvachUseCase @Inject constructor(private val dvachRepository: DvachRepository,
-                                                          private val logger: Logger) :
+open class GetThreadsFromDvachUseCase @Inject constructor(
+        private val dvachRepository: DvachRepository,
+        private val logger: Logger) :
         UseCase<GetThreadsFromDvachUseCase.Params, GetThreadsFromDvachUseCaseModel>() {
     companion object {
         private const val TAG = "DvachUseCase"

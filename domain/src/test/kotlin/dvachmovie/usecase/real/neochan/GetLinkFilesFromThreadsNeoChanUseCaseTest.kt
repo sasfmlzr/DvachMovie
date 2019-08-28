@@ -34,12 +34,14 @@ internal class GetLinkFilesFromThreadsNeoChanUseCaseTest {
 
     private val testBoard = "testBoard"
 
-    private val model = GetLinkFilesFromThreadsNeoChanUseCase.Params(testBoard, "numThread", "nameThread")
+    private val model = GetLinkFilesFromThreadsNeoChanUseCase.Params(
+            testBoard, "numThread", "nameThread")
 
     @Test
     fun `Happy pass`() {
         runBlocking {
-            given(neoChanRepository.getConcreteThreadByNum(testBoard, "numThread", "nameThread")).willReturn(listNumThreads)
+            given(neoChanRepository.getConcreteThreadByNum(
+                    testBoard, "numThread", "nameThread")).willReturn(listNumThreads)
             Assert.assertEquals(GetLinkFilesFromThreadsUseCaseModel(listNumThreads),
                     useCase.executeAsync(model))
         }
@@ -48,7 +50,8 @@ internal class GetLinkFilesFromThreadsNeoChanUseCaseTest {
     @Test(expected = TestException::class)
     fun `Get concrete thread by num throw exception`() {
         runBlocking {
-            given(neoChanRepository.getConcreteThreadByNum(testBoard, "numThread", "nameThread")).willThrow(testException)
+            given(neoChanRepository.getConcreteThreadByNum(
+                    testBoard, "numThread", "nameThread")).willThrow(testException)
             useCase.executeAsync(model)
         }
     }

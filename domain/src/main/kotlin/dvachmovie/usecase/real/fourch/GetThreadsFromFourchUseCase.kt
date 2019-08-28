@@ -7,8 +7,9 @@ import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.GetThreadsFromFourchUseCaseModel
 import javax.inject.Inject
 
-open class GetThreadsFromFourchUseCase @Inject constructor(private val fourChanRepository: FourChanRepository,
-                                                           private val logger: Logger) :
+open class GetThreadsFromFourchUseCase @Inject constructor(
+        private val fourChanRepository: FourChanRepository,
+        private val logger: Logger) :
         UseCase<GetThreadsFromFourchUseCase.Params, GetThreadsFromFourchUseCaseModel>() {
     companion object {
         private const val TAG = "GetLinkFilesFromThreadsFourchUseCase"

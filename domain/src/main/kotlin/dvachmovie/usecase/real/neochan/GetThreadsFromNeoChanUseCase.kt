@@ -7,8 +7,9 @@ import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.GetThreadsFromNeoChanUseCaseModel
 import javax.inject.Inject
 
-open class GetThreadsFromNeoChanUseCase @Inject constructor(private val neoChanRepository: NeoChanRepository,
-                                                            private val logger: Logger) :
+open class GetThreadsFromNeoChanUseCase @Inject constructor(
+        private val neoChanRepository: NeoChanRepository,
+        private val logger: Logger) :
         UseCase<GetThreadsFromNeoChanUseCase.Params, GetThreadsFromNeoChanUseCaseModel>() {
     companion object {
         private const val TAG = "GetLinkFilesFromThreadsNeoChanUseCase"

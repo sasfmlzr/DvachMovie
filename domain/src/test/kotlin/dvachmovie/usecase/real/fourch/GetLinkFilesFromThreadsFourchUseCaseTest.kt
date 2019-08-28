@@ -34,12 +34,14 @@ internal class GetLinkFilesFromThreadsFourchUseCaseTest {
 
     private val testBoard = "testBoard"
 
-    private val model = GetLinkFilesFromThreadsFourchUseCase.Params(testBoard, "numThread", "nameThread")
+    private val model = GetLinkFilesFromThreadsFourchUseCase.Params(
+            testBoard, "numThread", "nameThread")
 
     @Test
     fun `Happy pass`() {
         runBlocking {
-            given(fourChanRepository.getConcreteThreadByNum(testBoard, "numThread", "nameThread")).willReturn(listNumThreads)
+            given(fourChanRepository.getConcreteThreadByNum(
+                    testBoard, "numThread", "nameThread")).willReturn(listNumThreads)
             Assert.assertEquals(GetLinkFilesFromThreadsUseCaseModel(listNumThreads),
                     useCase.executeAsync(model))
         }
@@ -48,7 +50,8 @@ internal class GetLinkFilesFromThreadsFourchUseCaseTest {
     @Test(expected = TestException::class)
     fun `Get concrete thread by num throw exception`() {
         runBlocking {
-            given(fourChanRepository.getConcreteThreadByNum(testBoard, "numThread", "nameThread")).willThrow(testException)
+            given(fourChanRepository.getConcreteThreadByNum(
+                    testBoard, "numThread", "nameThread")).willThrow(testException)
             useCase.executeAsync(model)
         }
     }

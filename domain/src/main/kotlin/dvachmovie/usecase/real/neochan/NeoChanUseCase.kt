@@ -78,8 +78,10 @@ open class NeoChanUseCase @Inject constructor(private val getThreadUseCase: GetT
                                     val webmItems =
                                             movieUtils.filterFileItemOnlyAsMovie(list)
 
-                                    movies.addAll(movieConverter.convertFileItemToMovie(webmItems, board, AppConfig.NEOCHAN_URL))
-                                    threads.addAll(threadConverter.convertFileItemToThread(webmItems, AppConfig.NEOCHAN_URL))
+                                    movies.addAll(movieConverter.
+                                            convertFileItemToMovie(webmItems, board, AppConfig.NEOCHAN_URL))
+                                    threads.addAll(threadConverter.
+                                            convertFileItemToThread(webmItems, AppConfig.NEOCHAN_URL))
                                 } catch (e: Exception) {
                                     if (e is CancellationException) {
                                         isCancellationException = true

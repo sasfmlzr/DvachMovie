@@ -72,7 +72,8 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
         }
     }
 
-    private fun removeMoviesByThread(movies: List<Movie>, currentMovie: Movie, threads: List<Thread>): Pair<Movie, List<Movie>> {
+    private fun removeMoviesByThread(
+            movies: List<Movie>, currentMovie: Movie, threads: List<Thread>): Pair<Movie, List<Movie>> {
         val playedPart = movies.take(movies.indexOf(currentMovie)).filterNot { movie ->
             threads.map { it.thread }.contains(movie.thread)
         }

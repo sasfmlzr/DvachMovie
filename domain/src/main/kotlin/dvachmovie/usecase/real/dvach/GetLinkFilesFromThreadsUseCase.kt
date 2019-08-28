@@ -7,8 +7,9 @@ import dvachmovie.usecase.base.UseCaseModel
 import dvachmovie.usecase.real.GetLinkFilesFromThreadsUseCaseModel
 import javax.inject.Inject
 
-open class GetLinkFilesFromThreadsUseCase @Inject constructor(private val dvachRepository: DvachRepository,
-                                                              private val logger: Logger) :
+open class GetLinkFilesFromThreadsUseCase @Inject constructor(
+        private val dvachRepository: DvachRepository,
+        private val logger: Logger) :
         UseCase<GetLinkFilesFromThreadsUseCase.Params, GetLinkFilesFromThreadsUseCaseModel>() {
     companion object {
         private const val TAG = "GetLinkFilesFromThreadsUseCase"
