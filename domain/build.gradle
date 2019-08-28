@@ -12,6 +12,6 @@ dependencies {
 
     implementation "$jodaTime"
 
-    testImplementation "$junit"
-    testImplementation "$mockito"
+    testImplementation "$testing.junit"
+    testImplementation "$testing.mockito"
 }

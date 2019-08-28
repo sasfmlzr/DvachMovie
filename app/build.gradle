@@ -88,7 +88,7 @@ dependencies {
     implementation "$navigation.fragment"
     implementation "$navigation.ui"
 
-    implementation "$workmanager.ktx"
+    implementation "$workmanager"
 
     implementation "$timber"
 
@@ -101,16 +101,15 @@ dependencies {
     implementation project(':data-android')
     implementation project(':presenter')
 
-    testImplementation "$junit"
-    testImplementation "$robolectric"
+    testImplementation "$testing.junit"
+    testImplementation "$testing.robolectric"
 
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-    androidTestImplementation "$workmanager.testing"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation "$mockito"
+    androidTestImplementation "$testing.runner"
+    androidTestImplementation "$testing.espresso"
+    androidTestImplementation "$testing.uiautomator"
+    androidTestImplementation "$testing.workmanager"
+    androidTestImplementation "$testing.junitExtension"
+    androidTestImplementation "$testing.mockito"
     androidTestImplementation "$jodaTime"
     kaptAndroidTest "$dagger.compiler"
-
 }

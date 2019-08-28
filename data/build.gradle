@@ -21,6 +21,6 @@ dependencies {
 
     implementation project(':domain')
 
-    testImplementation "$junit"
-    testImplementation "$mockito"
+    testImplementation "$testing.junit"
+    testImplementation "$testing.mockito"
 }
