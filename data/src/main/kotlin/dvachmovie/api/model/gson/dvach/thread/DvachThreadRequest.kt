@@ -29,7 +29,7 @@ data class DvachThreadRequest(@SerializedName("enable_names")
                               @SerializedName("Board")
                               val board: String = "",
                               @SerializedName("top")
-                              val top: List<TopItem>?,
+                              val top: List<TopItem> = listOf(),
                               @SerializedName("advert_mobile_image")
                               val advertMobileImage: String = "",
                               @SerializedName("enable_icons")
@@ -43,7 +43,7 @@ data class DvachThreadRequest(@SerializedName("enable_names")
                               @SerializedName("is_closed")
                               val isClosed: Int = 0,
                               @SerializedName("news_abu")
-                              val newsAbu: List<NewsAbuItem>?,
+                              val newsAbu: List<NewsAbuItem> = listOf(),
                               @SerializedName("is_index")
                               val isIndex: Int = 0,
                               @SerializedName("files_count")
@@ -59,7 +59,7 @@ data class DvachThreadRequest(@SerializedName("enable_names")
                               @SerializedName("enable_flags")
                               val enableFlags: Int = 0,
                               @SerializedName("threads")
-                              val threads: List<ThreadsItem>?,
+                              val threads: List<ThreadsItem> = listOf(),
                               @SerializedName("is_board")
                               val isBoard: Int = 0,
                               @SerializedName("enable_subject")

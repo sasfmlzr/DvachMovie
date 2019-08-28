@@ -16,7 +16,7 @@ dependencies {
 
     implementation "$retrofit.retrofit"
     implementation "$retrofit.gsonConverter"
-    implementation "com.squareup.okhttp3:okhttp:4.0.0"
+    implementation "$okhttp"
     implementation "$jodaTime"
 
     implementation project(':domain')

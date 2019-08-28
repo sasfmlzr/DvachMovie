@@ -29,7 +29,7 @@ data class ThreadsItem(@SerializedName("date")
                        @SerializedName("closed")
                        val closed: Int = 0,
                        @SerializedName("files")
-                       val files: List<FilesItem>?,
+                       val files: List<FilesItem> = listOf(),
                        @SerializedName("comment")
                        val comment: String = "",
                        @SerializedName("banned")

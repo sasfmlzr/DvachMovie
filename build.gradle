@@ -9,7 +9,7 @@ buildscript {
 
         appcompatVersion = '1.1.0-rc01'
         constraintLayoutVersion = '2.0.0-beta1'
-        coroutinesVersion = '1.2.1'
+        coroutinesVersion = '1.3.0'
         daggerVersion = '2.24'
         detektVersion = '1.0.0-RC15'
         exoplayerVersion = '2.10.2'
@@ -23,6 +23,7 @@ buildscript {
         materialVersion = '1.1.0-alpha09'
         mockitoVersion = '2.23.4'
         navigationVersion = '2.2.0-alpha01'
+        okhttpVersion = '4.0.0'
         retrofitVersion = '2.6.1'
         robolectricVersion = '4.3'
         roomVersion = '2.1.0'
@@ -63,6 +64,7 @@ buildscript {
                 fragment: "androidx.navigation:navigation-fragment-ktx:$navigationVersion",
                 ui      : "androidx.navigation:navigation-ui-ktx:$navigationVersion"
         ]
+        okhttp = "com.squareup.okhttp3:okhttp:$okhttpVersion"
         retrofit = [
                 retrofit     : "com.squareup.retrofit2:retrofit:$retrofitVersion",
                 gsonConverter: "com.squareup.retrofit2:converter-gson:$retrofitVersion"

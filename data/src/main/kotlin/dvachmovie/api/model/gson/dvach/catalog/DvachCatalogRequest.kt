@@ -23,7 +23,7 @@ data class DvachCatalogRequest(@SerializedName("enable_names")
                                @SerializedName("Board")
                                val board: String = "",
                                @SerializedName("top")
-                               val top: List<TopItem>?,
+                               val top: List<TopItem> = listOf(),
                                @SerializedName("advert_mobile_image")
                                val advertMobileImage: String = "",
                                @SerializedName("enable_icons")
@@ -35,7 +35,7 @@ data class DvachCatalogRequest(@SerializedName("enable_names")
                                @SerializedName("advert_top_image")
                                val advertTopImage: String = "",
                                @SerializedName("news_abu")
-                               val newsAbu: List<NewsAbuItem>?,
+                               val newsAbu: List<NewsAbuItem> = listOf(),
                                @SerializedName("BoardInfo")
                                val boardInfo: String = "",
                                @SerializedName("enable_posting")
@@ -47,7 +47,7 @@ data class DvachCatalogRequest(@SerializedName("enable_names")
                                @SerializedName("enable_flags")
                                val enableFlags: Int = 0,
                                @SerializedName("threads")
-                               val threads: List<ThreadsItem>?,
+                               val threads: List<ThreadsItem> = listOf(),
                                @SerializedName("enable_subject")
                                val enableSubject: Int = 0,
                                @SerializedName("filter")

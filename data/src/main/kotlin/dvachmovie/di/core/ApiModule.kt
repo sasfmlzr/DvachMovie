@@ -21,16 +21,10 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun dvachRetrofitService(cookieJar: CookieJar): DvachMovieApi {
-        val httpClient = OkHttpClient.Builder()
-                .connectTimeout(3, TimeUnit.SECONDS)
-                .readTimeout(3, TimeUnit.SECONDS)
-                .cookieJar(cookieJar)
-                .build()
-
+    fun dvachRetrofitService(cookieJar: CookieJar, okHttpClient: OkHttpClient): DvachMovieApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(AppConfig.DVACH_URL)
-                .client(httpClient)
+                .client(okHttpClient)
                 .addConverterFactory(getOwnerContactConverterFactory())
                 .build()
         return retrofit.create(DvachMovieApi::class.java)
@@ -38,15 +32,10 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun fourChanRetrofitService(): FourchanApi {
-        val httpClient = OkHttpClient.Builder()
-                .connectTimeout(3, TimeUnit.SECONDS)
-                .readTimeout(3, TimeUnit.SECONDS)
-                .build()
-
+    fun fourChanRetrofitService(okHttpClient: OkHttpClient): FourchanApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(AppConfig.FOURCHAN_URL)
-                .client(httpClient)
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         return retrofit.create(FourchanApi::class.java)
@@ -54,19 +43,21 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun neoChanRetrofitService(): NeoChanApi {
-        val httpClient = OkHttpClient.Builder()
-                .connectTimeout(3, TimeUnit.SECONDS)
-                .readTimeout(3, TimeUnit.SECONDS)
-                .build()
-
+    fun neoChanRetrofitService(okHttpClient: OkHttpClient): NeoChanApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(AppConfig.NEOCHAN_URL)
-                .client(httpClient)
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         return retrofit.create(NeoChanApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun okHttp() = OkHttpClient.Builder()
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(3, TimeUnit.SECONDS)
+            .build()
 
     @Provides
     @Singleton

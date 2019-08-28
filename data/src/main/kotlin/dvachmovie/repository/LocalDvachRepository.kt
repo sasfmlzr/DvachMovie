@@ -6,41 +6,35 @@ import dvachmovie.architecture.logging.Logger
 import javax.inject.Inject
 
 class LocalDvachRepository @Inject constructor(
-        private val dvachApi: DvachMovieApi,
+        private val api: DvachMovieApi,
         private val logger: Logger) : DvachRepository {
 
     override suspend fun getNumThreadsFromCatalog(board: String) =
-            dvachApi.getCatalog(board).threads?.map { it.num }?:
-            throw RuntimeException("getThreadsFromCatalog return error")
+            api.getCatalog(board).threads.map { it.num }
 
-    override suspend fun getConcreteThreadByNum(board: String, numThread: String): List<FileItem> {
-        val listFiles = mutableListOf<FileItem>()
-        val request =  dvachApi.getThread(board, numThread)
-             //   errorMessage = "getConcreteThreadByNum return error")
-        logger.d("getConcreteThreadByNum", "parsing started for ${request.title}")
-        request.threads?.forEach { thread ->
-            thread.posts?.forEach { post ->
-                if (post.banned == 0) {
-                    listFiles.addAll(post.files?.map {
-                        FileItem(path = it.path,
-                                thumbnail = it.thumbnail,
-                                md5 = it.md5,
-                                numThread = request.currentThread.toLong(),
-                                numPost = post.num.toLong(),
-                                date = post.date,
-                                threadName = request.title)
-                    } ?: listOf())
+    override suspend fun getConcreteThreadByNum(board: String, numThread: String): List<FileItem> =
+            api.getThread(board, numThread).let { request ->
+                logger.d("getConcreteThreadByNum", "parsing started for ${request.title}")
+                val list = request.threads.flatMap { thread ->
+                    thread.posts.flatMap { post ->
+                        post.files.map {
+                            FileItem(path = it.path,
+                                    thumbnail = it.thumbnail,
+                                    md5 = it.md5,
+                                    numThread = request.currentThread.toLong(),
+                                    numPost = post.num.toLong(),
+                                    date = post.date,
+                                    threadName = request.title)
+                        }
+                    }
                 }
+                logger.d("getConcreteThreadByNum", "parsing finished for ${request.title}")
+                list
             }
-        }
-        logger.d("getConcreteThreadByNum", "parsing finished for ${request.title}")
-        return listFiles
-    }
 
     override suspend fun reportPost(board: String,
                                     thread: Long,
                                     post: Long,
                                     comment: String) =
-                dvachApi.reportPost("report", board, thread, comment, post).message
-                  //  errorMessage = "Report return error")?.message
+            api.reportPost("report", board, thread, comment, post).message
 }
