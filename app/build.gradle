@@ -80,8 +80,6 @@ dependencies {
     implementation "$exoplayer.ui"
 
     implementation "$lifecycle.extensions"
-    implementation "$lifecycle.livedataktx"
-    implementation "$lifecycle.viewmodelktx"
     kapt "$lifecycle.compiler"
 
     implementation "$glide.glide"
