@@ -21,7 +21,7 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun dvachRetrofitService(cookieJar: CookieJar, okHttpClient: OkHttpClient): DvachMovieApi {
+    fun dvachRetrofitService(okHttpClient: OkHttpClient): DvachMovieApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(AppConfig.DVACH_URL)
                 .client(okHttpClient)
@@ -54,9 +54,10 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun okHttp() = OkHttpClient.Builder()
+    fun okHttp(cookieJar: CookieJar) = OkHttpClient.Builder()
             .connectTimeout(3, TimeUnit.SECONDS)
             .readTimeout(3, TimeUnit.SECONDS)
+            .cookieJar(cookieJar)
             .build()
 
     @Provides
