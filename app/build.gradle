@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'jacoco-android'
 
 android {
     signingConfigs {
@@ -45,6 +46,7 @@ android {
             debuggable true
             minifyEnabled false
             shrinkResources false
+            testCoverageEnabled true
         }
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -63,6 +65,9 @@ android {
         }
     }
 }
+
+check.dependsOn jacocoTestReport
+
 dependencies {
     implementation "$kotlinSdk"
 

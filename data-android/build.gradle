@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -17,6 +18,8 @@ android {
         test.java.srcDirs += 'src/test/kotlin'
     }
 }
+
+check.dependsOn jacocoTestReport
 
 dependencies {
     implementation "$kotlinSdk"

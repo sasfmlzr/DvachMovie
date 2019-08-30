@@ -1,17 +1,61 @@
-install: gradle wrapper --gradle-version 5.4.1
 language: android
 jdk: oraclejdk8
+dist: trusty
+sudo: required
+env:
+  global:
+    - ANDROID_TARGET=android-24
+    - ANDROID_ABI=arm64-v8a
+
 android:
   components:
-    - platform-tools
-    - tools
+    #- platform-tools
+    #- tools
     - build-tools-28.0.2
     - android-28
+    - $ANDROID_TARGET
+    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    # Android SDK
+    - $HOME/android-sdk-dl
+    - $HOME/android-sdk
+    # Gradle dependencies
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+    # Android build cache (see http://tools.android.com/tech-docs/build-cache)
+    - $HOME/.android/build-cache
+
+licenses:
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
+
+before_install:
+  - wget http://services.gradle.org/distributions/gradle-5.4.1-all.zip
+  - unzip -qq gradle-5.4.1-all.zip
+  - export GRADLE_HOME=$PWD/gradle-5.4.1
+  - export PATH=$GRADLE_HOME/bin:$PATH
+  - gradle -v
+  - yes | sdkmanager "platforms;android-28"
+  - yes | sdkmanager "build-tools;28.0.3"
+install: gradle wrapper --gradle-version 5.4.1
 
 before_script:
-  - chmod +x gradlew
+  - chmod +x ./gradlew
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd test -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
 
 script:
-  - chmod +x ./gradlew
-  - ./gradlew assembleDebug
-  - ./gradlew test
+  - ./gradlew test assembleDebugAndroidTest check connectedCheck
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

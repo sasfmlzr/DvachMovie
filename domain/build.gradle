@@ -1,4 +1,5 @@
 apply plugin: 'kotlin'
+apply plugin: 'jacoco'
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
@@ -15,3 +16,5 @@ dependencies {
     testImplementation "$testing.junit"
     testImplementation "$testing.mockito"
 }
+
+check.dependsOn jacocoTestReport
