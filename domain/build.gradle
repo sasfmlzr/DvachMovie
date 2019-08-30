@@ -5,6 +5,8 @@ sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
 }
 
+check.dependsOn jacocoTestReport
+
 dependencies {
     implementation "$kotlinSdk"
     implementation "$dagger.dagger"

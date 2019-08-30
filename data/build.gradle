@@ -7,6 +7,8 @@ sourceSets {
     test.java.srcDirs += 'src/test/kotlin'
 }
 
+check.dependsOn jacocoTestReport
+
 dependencies {
     implementation "$kotlinSdk"
 
