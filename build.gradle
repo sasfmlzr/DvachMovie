@@ -16,6 +16,7 @@ buildscript {
         exoplayerVersion = '2.10.4'
         glideVersion = '4.9.0'
         gradleVersion = '3.5.0'
+        jacocoAndroidVersion = '0.1.4'
         junitVersion = '4.13-beta-3'
         junitExtentionVersion = '1.1.1'
         jodaTimeVersion = '2.10.3'
@@ -60,7 +61,6 @@ buildscript {
                 compiler  : "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
         ]
         material = "com.google.android.material:material:$materialVersion"
-
         navigation = [
                 fragment: "androidx.navigation:navigation-fragment-ktx:$navigationVersion",
                 ui      : "androidx.navigation:navigation-ui-ktx:$navigationVersion"
@@ -98,6 +98,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"
+        classpath "com.dicedmelon.gradle:jacoco-android:$jacocoAndroidVersion"
     }
 }
 
