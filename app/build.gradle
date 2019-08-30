@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'jacoco'
 apply plugin: 'jacoco-android'
 
 android {
@@ -57,13 +58,6 @@ android {
         }
     }
     testOptions.unitTests.includeAndroidResources = true
-    flavorDimensions "environment"
-    productFlavors {
-        pro {
-            dimension "environment"
-            applicationId "com.dvachmovie.android.pro"
-        }
-    }
     testOptions {
         unitTests.returnDefaultValues = true
         unitTests.all {
@@ -72,8 +66,15 @@ android {
             }
         }
     }
-}
 
+    flavorDimensions "environment"
+    productFlavors {
+        pro {
+            dimension "environment"
+            applicationId "com.dvachmovie.android.pro"
+        }
+    }
+}
 dependencies {
     implementation "$kotlinSdk"
 
