@@ -64,9 +64,15 @@ android {
             applicationId "com.dvachmovie.android.pro"
         }
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
 }
-
-check.dependsOn jacocoTestReport
 
 dependencies {
     implementation "$kotlinSdk"

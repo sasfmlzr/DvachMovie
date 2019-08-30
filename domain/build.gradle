@@ -16,5 +16,3 @@ dependencies {
     testImplementation "$testing.junit"
     testImplementation "$testing.mockito"
 }
-
-check.dependsOn jacocoTestReport
