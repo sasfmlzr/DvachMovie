@@ -74,8 +74,6 @@ android {
     }
 }
 
-check.dependsOn jacocoTestReport
-
 dependencies {
     implementation "$kotlinSdk"
 

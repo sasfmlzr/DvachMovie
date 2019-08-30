@@ -7,8 +7,6 @@ sourceSets {
     test.java.srcDirs += 'src/test/kotlin'
 }
 
-check.dependsOn jacocoTestReport
-
 dependencies {
     implementation "$kotlinSdk"
 
@@ -26,4 +24,9 @@ dependencies {
 
     testImplementation "$testing.junit"
     testImplementation "$testing.mockito"
+}
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
