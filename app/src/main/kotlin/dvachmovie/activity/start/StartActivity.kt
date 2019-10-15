@@ -2,16 +2,16 @@ package dvachmovie.activity.start
 
 import android.content.Intent
 import android.os.Bundle
+import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.activity.movie.MovieActivity
+import dvachmovie.api.DvachBoards
+import dvachmovie.api.FourChanBoards
+import dvachmovie.api.NeoChanBoards
 import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.databinding.ActivityStartBinding
 import dvachmovie.di.core.ActivityComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class StartActivity : BaseActivity<StartActivityVM,
@@ -39,8 +39,20 @@ class StartActivity : BaseActivity<StartActivityVM,
 
     private fun initializeApp() {
         coroutineScope.launch {
-            delay(MIN_SHOW_TIME)
+            when (intent.action) {
+                "android.intent.action.DVACH" -> {
+                    viewModel.setBaseUrl(AppConfig.DVACH_URL, DvachBoards.defaultMap.iterator().next().key)
+                }
+                "android.intent.action.FOURCH" -> {
+                    viewModel.setBaseUrl(AppConfig.FOURCHAN_URL, FourChanBoards.defaultMap.iterator().next().key)
+                }
+                "android.intent.action.NEOCHAN" -> {
+                    viewModel.setBaseUrl(AppConfig.NEOCHAN_URL, NeoChanBoards.defaultMap.iterator().next().key)
+                }
+            }
+
             viewModel.removeOldMovies()
+            delay(MIN_SHOW_TIME)
             loadingMainActivity()
         }
     }

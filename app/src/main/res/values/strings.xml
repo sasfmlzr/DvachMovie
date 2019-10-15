@@ -37,4 +37,8 @@
     <string name="set_imageboard">Set imageboard</string>
     <string name="hide_thread">Hide thread</string>
     <string name="set_board">Set board</string>
+    <string name="dvach">2ch</string>
+    <string name="fourch">4ch</string>
+    <string name="neochan">Neochan</string>
+
 </resources>

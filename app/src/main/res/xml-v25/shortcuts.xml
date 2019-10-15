@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="dvach"
+        android:enabled="true"
+        android:icon="@drawable/dvach"
+        android:shortcutShortLabel="@string/dvach"
+        android:shortcutLongLabel="@string/dvach">
+        <intent
+            android:action="android.intent.action.DVACH"
+            android:targetPackage="com.dvachmovie.android.pro"
+            android:targetClass="dvachmovie.activity.start.StartActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="fourch"
+        android:enabled="true"
+        android:icon="@drawable/fourch"
+        android:shortcutShortLabel="@string/fourch"
+        android:shortcutLongLabel="@string/fourch">
+        <intent
+            android:action="android.intent.action.FOURCH"
+            android:targetPackage="com.dvachmovie.android.pro"
+            android:targetClass="dvachmovie.activity.start.StartActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="neochan"
+        android:enabled="true"
+        android:icon="@drawable/neochan"
+        android:shortcutShortLabel="@string/neochan"
+        android:shortcutLongLabel="@string/neochan">
+        <intent
+            android:action="android.intent.action.NEOCHAN"
+            android:targetPackage="com.dvachmovie.android.pro"
+            android:targetClass="dvachmovie.activity.start.StartActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <!-- Specify more shortcuts here. -->
+</shortcuts>
