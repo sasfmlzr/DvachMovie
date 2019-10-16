@@ -6,7 +6,7 @@
 
     <style name="BlackTheme" parent="Base.V14.Theme.MaterialComponents">
         <!-- Customize your theme here. -->
-
+        <item name="colorPrimary">?attr/colorBackgroundFloating</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkOne</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@android:color/white</item>
@@ -18,7 +18,9 @@
     </style>
 
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">?attr/colorBackgroundFloating</item>
+        <item name="strokeColor">@color/mtrl_btn_stroke_color_selector</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="rippleColor">@android:color/darker_gray</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:focusable">true</item>
     </style>
