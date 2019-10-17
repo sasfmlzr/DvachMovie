@@ -13,21 +13,27 @@
             type="android.view.View.OnClickListener" />
     </data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:onClick="@{clickListener}"
-        android:selectableItemBackground="?attr/selectableItemBackground">
+        android:selectableItemBackground="?attr/selectableItemBackground"
+        app:cardCornerRadius="5dp"
+        app:strokeColor="@color/colorPrimaryDarkOne"
+        app:strokeWidth="1dp">
 
         <ImageView
             android:id="@+id/previewImage"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/preview_image"
+            android:elevation="5dp"
             android:scaleType="centerCrop"
             app:cookie="@{viewModel.cookie}"
             app:imageFromUrl="@{viewModel.imageUrl}" />
-    </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
