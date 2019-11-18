@@ -6,11 +6,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.os.Environment
+import android.view.*
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
@@ -29,7 +26,6 @@ import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.fragment.movie.PlayerCache.isRecreatedAfterHidden
 import dvachmovie.service.DownloadService
-import dvachmovie.utils.DirectoryHelper
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
 
@@ -42,8 +38,8 @@ class MovieFragment : BaseFragment<MovieVM,
     private val copyURLTask = { movieUrl: String ->
         val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
-        clipboard.primaryClip = ClipData
-                .newPlainText("Copied Text", movieUrl)
+        clipboard.setPrimaryClip(ClipData
+                .newPlainText("Copied Text", movieUrl))
         extensions.showMessage("URL video copied")!!
     }
     private val routeToPreviewTask = { router.navigateMovieToPreviewFragment() }
@@ -237,11 +233,10 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun downloadMovie(download: String, cookie: String) {
-        DirectoryHelper.createDirectory(context!!)
         activity?.startService(DownloadService.getDownloadService(
                 context!!,
                 download,
-                "${DirectoryHelper.ROOT_DIRECTORY_NAME}/",
+                Environment.DIRECTORY_DOWNLOADS,
                 cookie))
     }
 }

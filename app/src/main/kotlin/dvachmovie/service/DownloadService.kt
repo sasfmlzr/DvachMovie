@@ -39,7 +39,7 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
         startDownload(downloadPath, destinationPath, cookie)
     }
 
-    private fun startDownload(downloadPath: String, destinationPath: String, cookie: String) {
+    private fun startDownload(downloadPath: String?, destinationPath: String?, cookie: String?) {
         val uri = Uri.parse(downloadPath)
         val request = DownloadManager.Request(uri)
                 .addRequestHeader("Cookie", cookie)
@@ -48,7 +48,6 @@ class DownloadService : IntentService(Context.DOWNLOAD_SERVICE) {
                 .setNotificationVisibility(
                         DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 .setTitle(uri.pathSegments.last())
-                .setVisibleInDownloadsUi(true)
                 .setDestinationInExternalPublicDir(destinationPath, uri.lastPathSegment)
         (getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).enqueue(request)
     }

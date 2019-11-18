@@ -3,9 +3,9 @@ apply from: "${rootProject.projectDir.path}${File.separatorChar}gradle${File.sep
 
 buildscript {
     ext {
-        compileSdkVersion = 28
+        compileSdkVersion = 29
         minSdkVersion = 23
-        targetSdkVersion = 28
+        targetSdkVersion = 29
 
         appcompatVersion = '1.1.0'
         constraintLayoutVersion = '2.0.0-beta1'
