@@ -13,11 +13,11 @@ data class NullThread(override val thread: Long = 0,
 
         other as NullThread
 
-        if (thread != other.thread) return false
-        if (nameThread != other.nameThread) return false
-        if (baseUrl != other.baseUrl) return false
-        if (date != other.date) return false
-        if (isHidden != other.isHidden) return false
+        if (thread != other.thread ||
+                nameThread != other.nameThread ||
+                baseUrl != other.baseUrl ||
+                date != other.date ||
+                isHidden != other.isHidden) return false
 
         return true
     }

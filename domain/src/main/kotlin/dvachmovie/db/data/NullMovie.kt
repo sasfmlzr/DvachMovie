@@ -19,12 +19,12 @@ data class NullMovie(override val movieUrl: String = "",
 
         other as NullMovie
 
-        if (movieUrl != other.movieUrl) return false
-        if (previewUrl != other.previewUrl) return false
-        if (board != other.board) return false
-        if (isPlayed != other.isPlayed) return false
-        if (thread != other.thread) return false
-        if (baseUrl != other.baseUrl) return false
+        if (movieUrl != other.movieUrl ||
+                previewUrl != other.previewUrl ||
+                board != other.board ||
+                isPlayed != other.isPlayed ||
+                thread != other.thread ||
+                baseUrl != other.baseUrl) return false
 
         return true
     }
