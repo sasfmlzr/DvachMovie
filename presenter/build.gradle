@@ -35,3 +35,7 @@ dependencies {
     testImplementation "$testing.junit"
     testImplementation "$testing.mockito"
 }
+
+jacoco {
+    toolVersion = "0.8.5"
+}

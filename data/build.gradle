@@ -30,3 +30,7 @@ jacocoTestReport {
         xml.enabled true
     }
 }
+
+jacoco {
+    toolVersion = "0.8.5"
+}

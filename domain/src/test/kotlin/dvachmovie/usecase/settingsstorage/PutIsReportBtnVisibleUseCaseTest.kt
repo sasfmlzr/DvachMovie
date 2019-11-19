@@ -4,7 +4,6 @@ import dvachmovie.TestException
 import dvachmovie.storage.SettingsStorage
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,7 +23,7 @@ class PutIsReportBtnVisibleUseCaseTest {
 
     @Test
     fun `Happy pass`() {
-        runBlockingTest {
+        runBlocking {
             given(settingsStorage.putReportBtnVisible(false)).willReturn(CompletableDeferred(Unit))
             Assert.assertEquals(Unit, useCase.executeAsync(false))
         }
@@ -32,7 +31,7 @@ class PutIsReportBtnVisibleUseCaseTest {
 
     @Test(expected = TestException::class)
     fun `Something was wrong`() {
-        runBlockingTest {
+        runBlocking {
             given(settingsStorage.putReportBtnVisible(false)).willThrow(TestException())
             useCase.executeAsync(false)
         }

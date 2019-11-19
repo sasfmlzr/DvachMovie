@@ -4,9 +4,12 @@ import dvachmovie.storage.SettingsStorage
 import dvachmovie.usecase.base.UseCase
 import javax.inject.Inject
 
-open class PutIsReportBtnVisibleUseCase @Inject constructor(
+class PutIsReportBtnVisibleUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<Boolean, Unit>() {
 
-    override suspend fun executeAsync(input: Boolean) =
-            settingsStorage.putReportBtnVisible(input).await()
+    override suspend fun executeAsync(input: Boolean) {
+        val result = settingsStorage.putReportBtnVisible(input).await()
+        return result
+    }
+
 }
