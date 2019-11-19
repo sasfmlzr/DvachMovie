@@ -7,6 +7,7 @@ import javax.inject.Inject
 open class PutIsAllowGestureUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<Boolean, Unit>() {
 
-    override suspend fun executeAsync(input: Boolean) =
-            settingsStorage.putIsAllowGesture(input).await()
+    override suspend fun executeAsync(input: Boolean) {
+        settingsStorage.putIsAllowGesture(input).await()
+    }
 }
