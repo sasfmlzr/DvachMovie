@@ -23,7 +23,7 @@ class MarkCurrentMovieAsPlayedUseCaseTest {
     fun `Happy pass`() {
         useCase.execute(999)
 
-        given( movieStorage.movieList).willReturn(listOf(NullMovie()))
+        given(movieStorage.movieList).willReturn(listOf(NullMovie()))
         useCase.execute(0)
     }
 

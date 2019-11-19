@@ -8,6 +8,7 @@ open class PutBoardUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<String, Unit>() {
 
     override suspend fun executeAsync(input: String) {
-        settingsStorage.putBoard(input).await()
+        val result = settingsStorage.putBoard(input).await()
+        return result
     }
 }
