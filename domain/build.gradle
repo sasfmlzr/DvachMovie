@@ -13,6 +13,7 @@ dependencies {
 
     implementation "$jodaTime"
 
+    testImplementation "$testing.coroutines"
     testImplementation "$testing.junit"
     testImplementation "$testing.mockito"
 }
@@ -20,4 +21,8 @@ jacocoTestReport {
     reports {
         xml.enabled true
     }
+}
+
+jacoco {
+    toolVersion = "0.8.5"
 }

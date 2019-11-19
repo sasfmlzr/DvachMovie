@@ -7,6 +7,8 @@ import javax.inject.Inject
 open class PutIsListBtnVisibleUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<Boolean, Unit>() {
 
-    override suspend fun executeAsync(input: Boolean) =
-            settingsStorage.putListBtnVisible(input).await()
+    override suspend fun executeAsync(input: Boolean) {
+        val result = settingsStorage.putListBtnVisible(input).await()
+        return result
+    }
 }

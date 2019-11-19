@@ -8,6 +8,8 @@ import javax.inject.Inject
 open class InsertionThreadToDBUseCase @Inject constructor(
         private val threadDBRepository: ThreadDBRepository) : UseCase<Thread, Unit>() {
 
-    override suspend fun executeAsync(input: Thread) =
-            threadDBRepository.insert(input)
+    override suspend fun executeAsync(input: Thread) {
+        val result = threadDBRepository.insert(input)
+        return result
+    }
 }
