@@ -1,5 +1,6 @@
 # DvachMovie
 [![Build Status](https://travis-ci.com/sasfmlzr/DvachMovie.svg?branch=master)](https://travis-ci.org/sasfmlzr/DvachMovie)
+[![codecov.io](https://codecov.io/gh/sasfmlzr/DvachMovie/coverage.svg?branch=master)](https://codecov.io/gh/sasfmlzr/DvachMovie?branch=master)
 
 Player for videos from 2ch.hk
 
