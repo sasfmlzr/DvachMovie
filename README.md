@@ -1,4 +1,5 @@
 # DvachMovie
+[![Build Status](https://travis-ci.com/sasfmlzr/DvachMovie.svg?branch=master)](https://travis-ci.org/sasfmlzr/DvachMovie)
 Player for videos from 2ch.hk
 
 It has never been so easy to play movies from 2сh!
@@ -8,9 +9,9 @@ Also you can download videos.
 
 Screenshots
 -----------
-![Player](screenshots/DvachMovie1.jpeg "DvachMovie player")
-![List movies](screenshots/DvachMovie2.jpeg "List movies")
-![Settings](screenshots/DvachMovie3.jpeg "Settings")
+![Player](screenshots/DvachMovie1.jpg "DvachMovie player")
+![List movies](screenshots/DvachMovie2.jpg "List movies")
+![Settings](screenshots/DvachMovie3.jpg "Settings")
 
 Libraries Used
 --------------
