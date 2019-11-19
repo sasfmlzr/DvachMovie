@@ -4,7 +4,7 @@
 
 Player for videos from 2ch.hk
 
-It has never been so easy to play movies from 2сh!
+It has never been so easy to play movies from 2сh, 4chan and NeoChan!
 This app is based on MVVM architecture.
 You'll watch only new webm from different boards. 
 Also you can download videos. 
