@@ -5,7 +5,7 @@ import org.joda.time.LocalDateTime
 data class NullThread(override val thread: Long = 0,
                       override val nameThread: String = "",
                       override val baseUrl: String = "",
-                      override var date: LocalDateTime = LocalDateTime(),
+                      override var date: LocalDateTime = LocalDateTime.parse("2000"),
                       override var isHidden: Boolean = true) : Thread {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
