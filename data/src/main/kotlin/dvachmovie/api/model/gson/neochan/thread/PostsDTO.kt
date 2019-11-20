@@ -1,6 +1,7 @@
 package dvachmovie.api.model.gson.neochan.thread
 
 import com.google.gson.annotations.SerializedName
+import dvachmovie.api.model.gson.neochan.catalog.ExtraFilesDTO
 
 data class PostsDTO(
 

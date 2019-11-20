@@ -1,6 +1,7 @@
 package dvachmovie.api.model.gson.dvach.thread
 
 import com.google.gson.annotations.SerializedName
+import dvachmovie.api.model.gson.dvach.catalog.TopItem
 
 data class DvachThreadRequest(@SerializedName("enable_names")
                               val enableNames: Int = 0,
