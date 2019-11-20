@@ -8,6 +8,7 @@ class PutIsAllowGesturePipe @Inject constructor(
         private val useCase: PutIsAllowGestureUseCase) : PipeAsync<Boolean, Unit>() {
 
     override suspend fun execute(input: Boolean) {
-        useCase.executeAsync(input)
+        val result = useCase.executeAsync(input)
+        return result
     }
 }

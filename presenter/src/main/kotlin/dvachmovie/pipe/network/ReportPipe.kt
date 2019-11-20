@@ -46,7 +46,7 @@ class ReportPipe @Inject constructor(
         }
 
         withContext(handler) {
-            if (input.executorResult==null) {
+            if (input.executorResult == null) {
                 val inputModel = input.copy(executorResult = executorResult)
                 useCase.executeAsync(inputModel)
             } else {

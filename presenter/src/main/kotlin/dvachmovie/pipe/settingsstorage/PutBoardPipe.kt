@@ -8,6 +8,7 @@ class PutBoardPipe @Inject constructor(
         private val useCase: PutBoardUseCase) : PipeAsync<String, Unit>() {
 
     override suspend fun execute(input: String) {
-        useCase.executeAsync(input)
+        val result = useCase.executeAsync(input)
+        return result
     }
 }

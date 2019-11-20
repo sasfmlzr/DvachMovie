@@ -8,6 +8,7 @@ class PutCurrentBaseUrlPipe @Inject constructor(
         private val useCase: PutCurrentBaseUrlUseCase) : PipeAsync<String, Unit>() {
 
     override suspend fun execute(input: String) {
-        useCase.executeAsync(input)
+        val result = useCase.executeAsync(input)
+        return result
     }
 }

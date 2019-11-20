@@ -25,17 +25,20 @@ class GetHiddenThreadsPipeTest {
     @Test
     fun `Happy pass`() {
         val testThreads = listOf<Thread>(NullThread(0),
-                NullThread(1),
+                NullThread(1, isHidden = false),
+                NullThread(2))
+
+        val resultThreads = listOf<Thread>(NullThread(0),
                 NullThread(2))
 
         runBlocking {
             given(useCase.executeAsync("test")).willReturn(testThreads)
             val result = pipe.execute("test")
-            Assert.assertEquals(testThreads, result)
+            Assert.assertEquals(resultThreads, result)
         }
     }
 
-    @Test (expected = TestException::class)
+    @Test(expected = TestException::class)
     fun `Something was wrong`() {
         runBlocking {
             given(useCase.executeAsync("test")).willThrow(TestException())

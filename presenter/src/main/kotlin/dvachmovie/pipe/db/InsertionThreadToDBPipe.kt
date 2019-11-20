@@ -9,7 +9,8 @@ class InsertionThreadToDBPipe @Inject constructor(
         private val useCase: InsertionThreadToDBUseCase
 ) : PipeAsync<Thread, Unit>() {
 
-    override suspend fun execute(input: Thread): Unit =
-            useCase.executeAsync(input)
-
+    override suspend fun execute(input: Thread) {
+        val result = useCase.executeAsync(input)
+        return result
+    }
 }
