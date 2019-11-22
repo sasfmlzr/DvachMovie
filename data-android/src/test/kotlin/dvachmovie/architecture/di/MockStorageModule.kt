@@ -1,11 +1,11 @@
-package dvachmovie.di
+package dvachmovie.architecture.di
 
 import dagger.Binds
 import dagger.Module
 import dvachmovie.LocalScopeProvider
 import dvachmovie.architecture.ScopeProvider
-import dvachmovie.repository.MockMovieDBRepository
-import dvachmovie.repository.MockThreadDBRepository
+import dvachmovie.architecture.repository.MockMovieDBRepository
+import dvachmovie.architecture.repository.MockThreadDBRepository
 import dvachmovie.repository.MovieDBRepository
 import dvachmovie.repository.ThreadDBRepository
 import dvachmovie.storage.KeyValueStorage

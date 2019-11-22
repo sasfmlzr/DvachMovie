@@ -6,7 +6,7 @@ import dvachmovie.db.model.MovieEntity
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
-internal class LocalMovieDBRepository @Inject constructor(
+class LocalMovieDBRepository @Inject constructor(
         private val movieDao: MovieDao) : MovieDBRepository {
 
     override suspend fun getMovies(): List<Movie> {

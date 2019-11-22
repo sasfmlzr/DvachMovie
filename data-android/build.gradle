@@ -57,10 +57,10 @@ dependencies {
 
     androidTestImplementation "$testing.runner"
     androidTestImplementation "$testing.espresso"
-    androidTestImplementation "$testing.uiautomator"
-    androidTestImplementation "$testing.workmanager"
     androidTestImplementation "$testing.junitExtension"
     androidTestImplementation "$testing.mockito"
+    testImplementation "$testing.junit"
+    testImplementation "$testing.mockito"
 }
 
 jacoco {

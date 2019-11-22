@@ -1,9 +1,10 @@
-package dvachmovie.di
+package dvachmovie.architecture.di
 
 import android.content.Context
 import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
+import dvachmovie.di.RoomModule
 import javax.inject.Singleton
 
 @Module(includes = [RoomModule::class,

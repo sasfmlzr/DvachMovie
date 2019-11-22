@@ -1,6 +1,7 @@
-package dvachmovie.repository
+package dvachmovie.architecture.repository
 
 import dvachmovie.db.data.Movie
+import dvachmovie.repository.MovieDBRepository
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")

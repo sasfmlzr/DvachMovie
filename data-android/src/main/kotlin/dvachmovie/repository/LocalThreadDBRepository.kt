@@ -6,7 +6,7 @@ import dvachmovie.db.model.ThreadEntity
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
-internal class LocalThreadDBRepository @Inject constructor(
+class LocalThreadDBRepository @Inject constructor(
         private val threadDao: ThreadDao) : ThreadDBRepository {
 
     override suspend fun getThreads(baseUrl: String): List<Thread> {

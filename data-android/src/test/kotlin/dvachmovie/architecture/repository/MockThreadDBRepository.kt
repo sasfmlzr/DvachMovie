@@ -1,7 +1,8 @@
-package dvachmovie.repository
+package dvachmovie.architecture.repository
 
 import dvachmovie.db.data.NullThread
 import dvachmovie.db.data.Thread
+import dvachmovie.repository.ThreadDBRepository
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
