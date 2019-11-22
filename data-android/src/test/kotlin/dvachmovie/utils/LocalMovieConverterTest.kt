@@ -7,6 +7,7 @@ import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import org.junit.Assert
 import org.junit.Test
+import java.lang.RuntimeException
 
 class LocalMovieConverterTest {
 
@@ -15,6 +16,7 @@ class LocalMovieConverterTest {
     private val board = "testBoard"
     private val dvachBaseUrl = AppConfig.DVACH_URL
     private val fourChanBaseUrl = AppConfig.FOURCHAN_URL
+    private val neoChanBaseUrl = AppConfig.NEOCHAN_URL
     private val dvachFileOne = FileItem(path = "one.webm", date = "14/05/19 Втр 21:20:37")
     private val dvachFileTwo = FileItem(path = "two.webm", date = "14/05/19 Втр 21:20:37")
     private val dvachFileThree = FileItem(path = "three", date = "14/05/19 Втр 21:20:37")
@@ -59,6 +61,21 @@ class LocalMovieConverterTest {
     private val fourChanMovieEntities = listOf(fourChanMovieEntityOne,
             fourChanMovieEntityTwo,
             fourChanMovieEntityThree)
+    private val neoChanMovieEntityOne = MovieEntity(board = board,
+            movieUrl = fourChanFileOne.path,
+            date = parseDateFromFileItem(dvachFileOne),
+            baseUrl = neoChanBaseUrl)
+    private val neoChanMovieEntityTwo = MovieEntity(board = board,
+            movieUrl = fourChanFileTwo.path,
+            date = parseDateFromFileItem(dvachFileTwo),
+            baseUrl = neoChanBaseUrl)
+    private val neoChanMovieEntityThree = MovieEntity(board = board,
+            movieUrl = fourChanFileThree.path,
+            date = parseDateFromFileItem(dvachFileThree),
+            baseUrl = neoChanBaseUrl)
+    private val neoChanMovieEntities = listOf(neoChanMovieEntityOne,
+            neoChanMovieEntityTwo,
+            neoChanMovieEntityThree)
 
     @Test
     fun `Convert FileItem to MovieItem was successful for dvach`() {
@@ -73,6 +90,18 @@ class LocalMovieConverterTest {
         val resultList = movieConverter.convertFileItemToMovie(fourChanFileItems, board, AppConfig.FOURCHAN_URL)
 
         Assert.assertEquals(fourChanMovieEntities, resultList)
+    }
+
+    @Test
+    fun `Convert FileItem to MovieItem was successful for neochan`() {
+        val resultList = movieConverter.convertFileItemToMovie(fourChanFileItems, board, AppConfig.NEOCHAN_URL)
+
+        Assert.assertEquals(neoChanMovieEntities, resultList)
+    }
+
+    @Test (expected = RuntimeException::class)
+    fun `Convert FileItem to MovieItem threw error for unknown error`() {
+        movieConverter.convertFileItemToMovie(fourChanFileItems, board, "Unknown board")
     }
 
     @Test
