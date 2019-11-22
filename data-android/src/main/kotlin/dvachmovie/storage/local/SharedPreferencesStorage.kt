@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @SuppressLint("ApplySharedPref")
 @Singleton
-internal class SharedPreferencesStorage @Inject constructor(
+class SharedPreferencesStorage @Inject constructor(
         private val prefs: SharedPreferences
 ) : KeyValueStorage {
 

@@ -1,4 +1,4 @@
-package dvachmovie.di.architecture.repository
+package dvachmovie.architecture.repository
 
 import dvachmovie.db.data.Movie
 import dvachmovie.repository.MovieDBRepository
