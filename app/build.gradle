@@ -121,6 +121,7 @@ dependencies {
     testImplementation "$testing.junit"
     testImplementation "$testing.robolectric"
 
+    androidTestImplementation project(':data-android-test')
     androidTestImplementation "$testing.runner"
     androidTestImplementation "$testing.espresso"
     androidTestImplementation "$testing.uiautomator"

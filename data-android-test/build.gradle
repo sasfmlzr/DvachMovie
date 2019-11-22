@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -16,7 +15,6 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -25,14 +23,11 @@ android {
             debuggable true
             minifyEnabled false
             shrinkResources false
-            testCoverageEnabled true
         }
     }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
-        androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 }
 
@@ -42,27 +37,8 @@ dependencies {
 
     implementation "$dagger.dagger"
     kapt "$dagger.compiler"
-
-    implementation "$coroutines.core"
-
-    implementation "$room.room"
-    kapt "$room.compiler"
-
     implementation "$jodaTime"
 
     implementation project(':domain')
-
-    testImplementation "$testing.junit"
-    testImplementation "$testing.mockito"
-
-    androidTestImplementation "$testing.runner"
-    androidTestImplementation "$testing.espresso"
-    androidTestImplementation "$testing.junitExtension"
-    androidTestImplementation "$testing.mockito"
-    testImplementation "$testing.junit"
-    testImplementation "$testing.mockito"
-}
-
-jacoco {
-    toolVersion = "0.8.5"
+    implementation project(':data-android')
 }

@@ -1,4 +1,4 @@
-package dvachmovie.architecture.di
+package dvachmovie.di.architecture.di
 
 import android.content.Context
 import android.content.SharedPreferences

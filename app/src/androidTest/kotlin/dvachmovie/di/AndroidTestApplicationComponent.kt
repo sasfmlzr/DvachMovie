@@ -1,7 +1,7 @@
 package dvachmovie.di
 
 import dagger.Component
-import dvachmovie.architecture.di.MockRootDataAndroidModule
+import dvachmovie.di.architecture.di.MockRootDataAndroidModule
 import dvachmovie.di.core.ApplicationModule
 import dvachmovie.di.core.ExoModule
 import dvachmovie.di.core.FullApplicationComponent

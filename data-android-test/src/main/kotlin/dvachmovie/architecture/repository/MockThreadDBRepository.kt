@@ -1,4 +1,4 @@
-package dvachmovie.architecture.repository
+package dvachmovie.di.architecture.repository
 
 import dvachmovie.db.data.NullThread
 import dvachmovie.db.data.Thread
