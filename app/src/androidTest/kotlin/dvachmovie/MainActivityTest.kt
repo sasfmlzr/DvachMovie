@@ -2,6 +2,7 @@ package dvachmovie
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
+import dvachmovie.activity.movie.MovieActivity
 import dvachmovie.activity.start.StartActivity
 import dvachmovie.di.DaggerAndroidTestApplicationComponent
 import dvachmovie.di.RoomModule
@@ -20,6 +21,13 @@ class MainActivityTest {
     var activityTestRule = ActivityTestRule(StartActivity::class.java,
             false,
             false)
+
+    @Rule
+    @JvmField
+    var activitySecondTestRule = ActivityTestRule(MovieActivity::class.java,
+            false,
+            false)
+
 
     @Before
     fun setUp() {
@@ -43,5 +51,15 @@ class MainActivityTest {
       }
     }
 
+
+    @Test
+    fun uiOnlineTestNew() {
+        activitySecondTestRule.launchActivity(null)
+
+        runBlocking {
+            delay(30000)
+            activitySecondTestRule.finishActivity()
+        }
+    }
 
 }
