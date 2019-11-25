@@ -129,5 +129,6 @@ dependencies {
     androidTestImplementation "$testing.junitExtension"
     androidTestImplementation "$testing.mockito"
     androidTestImplementation "$jodaTime"
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     kaptAndroidTest "$dagger.compiler"
 }

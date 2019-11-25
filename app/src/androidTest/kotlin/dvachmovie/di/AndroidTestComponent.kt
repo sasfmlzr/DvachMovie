@@ -1,5 +1,6 @@
 package dvachmovie.di
 
+import dvachmovie.MainActivityTest
 import dagger.Subcomponent
 import dvachmovie.di.base.AndroidTestScope
 import dvachmovie.worker.DeleteDBWorkerTest
@@ -14,4 +15,5 @@ interface AndroidTestComponent {
     fun inject(androidTestComponent: InsertDBWorkerTest)
     fun inject(androidTestComponent: MarkThreadAsHiddenDBWorkerTest)
     fun inject(androidTestComponent: DeleteDBWorkerTest)
+    fun inject(androidTestComponent: MainActivityTest)
 }
