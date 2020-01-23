@@ -50,9 +50,9 @@ fun PlayerView.bindCurrentPosition(value: Pair<Int, Long>) {
     pos = value
     val default = 0.toLong()
     if (pos.second == default) {
-        this.player.seekToDefaultPosition(pos.first)
+        this.player?.seekToDefaultPosition(pos.first)
     } else {
-        this.player.seekTo(pos.first, pos.second)
+        this.player?.seekTo(pos.first, pos.second)
     }
 }
 

@@ -108,7 +108,7 @@ class MovieFragment : BaseFragment<MovieVM,
             viewModel.isPlayerControlVisibility.value = it == 0
         }
 
-        playerView.player.addListener(playerListener)
+        playerView.player?.addListener(playerListener)
 
         binding.playerView.setOnFocusChangeListener { _, _ ->
             viewModel.isPlayerControlVisibility.value = playerView.isControllerVisible
@@ -130,11 +130,11 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
             override fun onSwipeRight() {
-                playerView.player.previous()
+                playerView.player?.previous()
             }
 
             override fun onSwipeLeft() {
-                playerView.player.next()
+                playerView.player?.next()
             }
         }
     }
@@ -160,9 +160,10 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private val playerListener by lazy {
         object : Player.EventListener {
-            override fun onPlayerError(error: ExoPlaybackException?) {
+
+            override fun onPlayerError(error: ExoPlaybackException) {
                 if (playerView != null) {
-                    viewModel.markMovieAsPlayed(playerView.player.currentPeriodIndex)
+                    viewModel.markMovieAsPlayed(playerView.player?.currentPeriodIndex ?: 0)
 
                     extensions.showMessage("Network error")
 
@@ -170,15 +171,17 @@ class MovieFragment : BaseFragment<MovieVM,
                     player.retry()
                     player.next()
                 }
+                super.onPlayerError(error)
             }
 
-            override fun onTracksChanged(trackGroups: TrackGroupArray?,
-                                         trackSelections: TrackSelectionArray?) {
+            override fun onTracksChanged(trackGroups: TrackGroupArray,
+                                         trackSelections: TrackSelectionArray) {
                 var currentIndex = 0
                 if (playerView != null) {
-                    currentIndex = playerView.player.currentPeriodIndex
+                    currentIndex = playerView.player?.currentPeriodIndex ?: 0
                 }
                 viewModel.markMovieAsPlayed(currentIndex)
+                super.onTracksChanged(trackGroups, trackSelections)
             }
         }
     }
@@ -189,7 +192,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun initializePlayer() {
-        playerView.player.playWhenReady = PlayerCache.shouldAutoPlay
+        playerView.player?.playWhenReady = PlayerCache.shouldAutoPlay
         if (!PlayerCache.isPrepared) {
             bindPlayer(playerView)
             PlayerCache.isPrepared = true
@@ -197,7 +200,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     override fun onStop() {
-        val index = playerView.player.currentPeriodIndex
+        val index = playerView.player?.currentPeriodIndex ?: 0
 
         viewModel.markMovieAsPlayed(index)
 
@@ -209,23 +212,24 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun releasePlayer() {
         if (!isRecreatedAfterHidden) {
-            playerView.player.stop()
+            playerView.player?.stop()
         }
         isRecreatedAfterHidden = false
         updateStartPosition()
-        PlayerCache.shouldAutoPlay = playerView.player.playWhenReady
+        PlayerCache.shouldAutoPlay = playerView?.player?.playWhenReady ?: false  //////////DANGEROUS
     }
 
     private fun updateStartPosition() {
-        viewModel.currentPos.value = Pair(playerView.player.currentWindowIndex,
-                playerView.player.currentPosition)
+        viewModel.currentPos.value = Pair(playerView.player?.currentWindowIndex ?: 0,
+                playerView.player?.currentPosition ?: 0)
         PlayerCache.isPrepared = false
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
         if (permissions.isNotEmpty()) {
             viewModel.setCurrentMoviePipe.execute(
-                    viewModel.movieList.value?.get(playerView.player.currentWindowIndex)!!)
+                    viewModel.movieList.value?.get(playerView.player?.currentWindowIndex
+                            ?: 0)!!) //////////DANGEROUS
 
             downloadMovie(viewModel.currentMovie.value?.movieUrl
                     ?: "", viewModel.cookie.value ?: "")

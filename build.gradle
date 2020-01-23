@@ -13,7 +13,7 @@ buildscript {
         daggerVersion = '2.25.4'
         detektVersion = '1.2.0'     ///////
         espressoVersion = '3.2.0'
-        exoplayerVersion = '2.10.7' ///////
+        exoplayerVersion = '2.11.1'
         glideVersion = '4.11.0'
         gradleVersion = '3.5.3'
         jacocoAndroidVersion = '0.1.4'
