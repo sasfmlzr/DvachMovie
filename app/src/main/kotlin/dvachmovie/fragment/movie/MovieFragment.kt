@@ -9,10 +9,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.*
 import androidx.lifecycle.Observer
-import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
@@ -24,7 +21,6 @@ import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
-import dvachmovie.fragment.movie.PlayerCache.isRecreatedAfterHidden
 import dvachmovie.service.DownloadService
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
@@ -69,7 +65,6 @@ class MovieFragment : BaseFragment<MovieVM,
             if (PlayerCache.isHideMovieByThreadTask) {
                 (playerView.player as ExoPlayer).release()
                 router.navigateMovieToSelf()
-                isRecreatedAfterHidden = true
                 PlayerCache.isHideMovieByThreadTask = false
             }
         })
@@ -204,19 +199,17 @@ class MovieFragment : BaseFragment<MovieVM,
 
         viewModel.markMovieAsPlayed(index)
 
-        releasePlayer()
-
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+        stopPlayer()
         super.onStop()
     }
 
-    private fun releasePlayer() {
-        if (!isRecreatedAfterHidden) {
-            playerView.player?.stop()
-        }
-        isRecreatedAfterHidden = false
-        updateStartPosition()
-        PlayerCache.shouldAutoPlay = playerView?.player?.playWhenReady ?: false  //////////DANGEROUS
+    private fun stopPlayer() {
+        playerView.player?.playWhenReady = false
+
+        //updateStartPosition()
+        PlayerCache.shouldAutoPlay = playerView?.player?.playWhenReady ?: false
     }
 
     private fun updateStartPosition() {
