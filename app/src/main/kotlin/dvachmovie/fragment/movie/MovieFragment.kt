@@ -160,7 +160,11 @@ class MovieFragment : BaseFragment<MovieVM,
                 if (playerView != null) {
                     viewModel.markMovieAsPlayed(playerView.player?.currentPeriodIndex ?: 0)
 
-                    extensions.showMessage("Network error")
+                    if(error.message != "java.lang.IllegalArgumentException") {
+                        extensions.showMessage("Network error")
+                    } else {
+                        logger.d("Internal error")
+                    }
 
                     val player = (playerView.player as ExoPlayer)
                     player.retry()
