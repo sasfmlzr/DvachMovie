@@ -57,6 +57,8 @@ class MovieFragment : BaseFragment<MovieVM,
         viewModel.routeToPreviewTask = routeToPreviewTask
         viewModel.showMessageTask = showMessageTask
 
+        PlayerCache.shouldAutoPlay = true
+
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
                 WorkerManager.insertMovieInDB(context!!)
