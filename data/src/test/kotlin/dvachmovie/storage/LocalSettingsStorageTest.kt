@@ -79,10 +79,10 @@ class LocalSettingsStorageTest {
     @Test
     fun `Get ReportBtnVisible is fault, but return default value`() {
         doReturn(null).`when`(keyValueStorage).getBoolean(REPORT_BTN_VISIBLE)
-        Assert.assertEquals(true, settingsStorage.isReportBtnVisible())
+        Assert.assertEquals(false, settingsStorage.isReportBtnVisible())
 
         runBlocking {
-            Assert.assertEquals(true, settingsStorage.isReportBtnVisibleAsync().await())
+            Assert.assertEquals(false, settingsStorage.isReportBtnVisibleAsync().await())
         }
     }
 
@@ -274,10 +274,10 @@ class LocalSettingsStorageTest {
     @Test
     fun `Get AllowGesture is fault, but return default value`() {
         doReturn(null).`when`(keyValueStorage).getBoolean(GESTURE)
-        Assert.assertEquals(true, settingsStorage.isAllowGesture())
+        Assert.assertEquals(false, settingsStorage.isAllowGesture())
 
         runBlocking {
-            Assert.assertEquals(true, settingsStorage.isAllowGestureAsync().await())
+            Assert.assertEquals(false, settingsStorage.isAllowGestureAsync().await())
         }
     }
 }

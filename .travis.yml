@@ -38,14 +38,14 @@ licenses:
   - 'google-gdk-license-.+'
 
 before_install:
-  - wget http://services.gradle.org/distributions/gradle-5.4.1-all.zip
-  - unzip -qq gradle-5.4.1-all.zip
-  - export GRADLE_HOME=$PWD/gradle-5.4.1
+  - wget https://services.gradle.org/distributions/gradle-5.6.4-all.zip
+  - unzip -qq gradle-5.6.4-all.zip
+  - export GRADLE_HOME=$PWD/gradle-5.6.4
   - export PATH=$GRADLE_HOME/bin:$PATH
   - gradle -v
   - yes | sdkmanager "platforms;android-28"
   - yes | sdkmanager "build-tools;28.0.3"
-install: gradle wrapper --gradle-version 5.4.1
+install: gradle wrapper --gradle-version 5.6.4
 
 before_script:
   - chmod +x ./gradlew

@@ -21,10 +21,10 @@ class LocalSettingsStorage @Inject constructor(
     }
 
     override fun isReportBtnVisibleAsync() =
-            scopeProvider.ioScope.async { pref.getBoolean(REPORT_BTN_VISIBLE) ?: true }
+            scopeProvider.ioScope.async { pref.getBoolean(REPORT_BTN_VISIBLE) ?: false }
 
     override fun isReportBtnVisible() =
-            pref.getBoolean(REPORT_BTN_VISIBLE) ?: true
+            pref.getBoolean(REPORT_BTN_VISIBLE) ?: false
 
     override fun putReportBtnVisible(value: Boolean) =
             scopeProvider.ioScope.async { pref.putBoolean(REPORT_BTN_VISIBLE, value) }
@@ -70,10 +70,10 @@ class LocalSettingsStorage @Inject constructor(
             scopeProvider.ioScope.async { pref.putString(COOKIE, cookie) }
 
     override fun isAllowGestureAsync() =
-            scopeProvider.ioScope.async { pref.getBoolean(GESTURE) ?: true }
+            scopeProvider.ioScope.async { pref.getBoolean(GESTURE) ?: false }
 
     override fun isAllowGesture() =
-            pref.getBoolean(GESTURE) ?: true
+            pref.getBoolean(GESTURE) ?: false
 
     override fun putIsAllowGesture(value: Boolean) =
             scopeProvider.ioScope.async { pref.putBoolean(GESTURE, value) }

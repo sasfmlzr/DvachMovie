@@ -24,7 +24,9 @@ class BackFragment : BaseFragment<BackVM,
 
         viewModel.imageId.value = R.raw.kiss
 
-        binding.imageView.setOnClickListener { activity?.finish() }
+        binding.imageView.setOnClickListener { activity?.finish()
+
+            viewModel.eraseMovieStorage()}
 
         return binding.root
     }

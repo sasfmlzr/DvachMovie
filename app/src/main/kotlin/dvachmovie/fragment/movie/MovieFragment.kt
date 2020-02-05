@@ -24,7 +24,6 @@ import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
-import dvachmovie.fragment.movie.PlayerCache.isRecreatedAfterHidden
 import dvachmovie.service.DownloadService
 import dvachmovie.worker.WorkerManager
 import kotlinx.android.synthetic.main.fragment_movie.*
@@ -61,6 +60,8 @@ class MovieFragment : BaseFragment<MovieVM,
         viewModel.routeToPreviewTask = routeToPreviewTask
         viewModel.showMessageTask = showMessageTask
 
+        PlayerCache.shouldAutoPlay = true
+
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
                 WorkerManager.insertMovieInDB(context!!)
@@ -69,7 +70,6 @@ class MovieFragment : BaseFragment<MovieVM,
             if (PlayerCache.isHideMovieByThreadTask) {
                 (playerView.player as ExoPlayer).release()
                 router.navigateMovieToSelf()
-                isRecreatedAfterHidden = true
                 PlayerCache.isHideMovieByThreadTask = false
             }
         })
@@ -165,7 +165,11 @@ class MovieFragment : BaseFragment<MovieVM,
                 if (playerView != null) {
                     viewModel.markMovieAsPlayed(playerView.player?.currentPeriodIndex ?: 0)
 
-                    extensions.showMessage("Network error")
+                    if (error.message != "java.lang.IllegalArgumentException") {
+                        extensions.showMessage("Network error")
+                    } else {
+                        logger.d("Internal error")
+                    }
 
                     val player = (playerView.player as ExoPlayer)
                     player.retry()
@@ -204,19 +208,17 @@ class MovieFragment : BaseFragment<MovieVM,
 
         viewModel.markMovieAsPlayed(index)
 
-        releasePlayer()
-
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+        stopPlayer()
         super.onStop()
     }
 
-    private fun releasePlayer() {
-        if (!isRecreatedAfterHidden) {
-            playerView.player?.stop()
-        }
-        isRecreatedAfterHidden = false
-        updateStartPosition()
-        PlayerCache.shouldAutoPlay = playerView?.player?.playWhenReady ?: false  //////////DANGEROUS
+    private fun stopPlayer() {
+        playerView.player?.playWhenReady = false
+
+        //updateStartPosition()
+        PlayerCache.shouldAutoPlay = playerView?.player?.playWhenReady ?: false
     }
 
     private fun updateStartPosition() {
@@ -229,7 +231,7 @@ class MovieFragment : BaseFragment<MovieVM,
         if (permissions.isNotEmpty()) {
             viewModel.setCurrentMoviePipe.execute(
                     viewModel.movieList.value?.get(playerView.player?.currentWindowIndex
-                            ?: 0)!!) //////////DANGEROUS
+                            ?: 0)!!)
 
             downloadMovie(viewModel.currentMovie.value?.movieUrl
                     ?: "", viewModel.cookie.value ?: "")
