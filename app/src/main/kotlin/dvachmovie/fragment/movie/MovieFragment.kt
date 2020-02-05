@@ -9,7 +9,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.*
 import androidx.lifecycle.Observer
-import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
@@ -162,7 +165,7 @@ class MovieFragment : BaseFragment<MovieVM,
                 if (playerView != null) {
                     viewModel.markMovieAsPlayed(playerView.player?.currentPeriodIndex ?: 0)
 
-                    if(error.message != "java.lang.IllegalArgumentException") {
+                    if (error.message != "java.lang.IllegalArgumentException") {
                         extensions.showMessage("Network error")
                     } else {
                         logger.d("Internal error")
@@ -228,7 +231,7 @@ class MovieFragment : BaseFragment<MovieVM,
         if (permissions.isNotEmpty()) {
             viewModel.setCurrentMoviePipe.execute(
                     viewModel.movieList.value?.get(playerView.player?.currentWindowIndex
-                            ?: 0)!!) //////////DANGEROUS
+                            ?: 0)!!)
 
             downloadMovie(viewModel.currentMovie.value?.movieUrl
                     ?: "", viewModel.cookie.value ?: "")
