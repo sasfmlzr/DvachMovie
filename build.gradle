@@ -33,7 +33,7 @@ buildscript {
         timberVersion = '4.7.1'
         testRunnerVersion = '1.2.0'
         uiautomatorVersion = '2.2.0'
-        workVersion = '2.2.0' ///////
+        workVersion = '2.3.0'
 
         appcompat = "androidx.appcompat:appcompat:$appcompatVersion"
         constraintLayout = "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
