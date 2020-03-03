@@ -103,4 +103,27 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+    <fragment
+        android:id="@+id/navAloneMovieFragment"
+        android:name="dvachmovie.fragment.alonemovie.AloneMovieFragment"
+        android:label="AloneMovieFragment">
+
+        <argument
+            android:name="board"
+            app:argType="string" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://2ch.hk/{board}/src/{numberThread}/{numVideo}.webm" />
+        <argument
+            android:name="numberThread"
+            app:argType="string" />
+        <argument
+            android:name="numVideo"
+            app:argType="string" />
+        <deepLink
+            android:id="@+id/deepLink2"
+            app:uri="https://2ch.hk/{board}/src/{numberThread}/{numVideo}.mp4" />
+
+    </fragment>
+
 </navigation>

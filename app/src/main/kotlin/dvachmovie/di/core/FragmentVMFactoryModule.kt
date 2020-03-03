@@ -10,6 +10,7 @@ import dvachmovie.activity.start.StartActivityVM
 import dvachmovie.architecture.AndroidViewModelFactory
 import dvachmovie.architecture.ViewModelKey
 import dvachmovie.di.base.FragmentScope
+import dvachmovie.fragment.alonemovie.AloneMovieVM
 import dvachmovie.fragment.back.BackVM
 import dvachmovie.fragment.movie.MovieVM
 import dvachmovie.fragment.preview.PreviewVM
@@ -27,6 +28,11 @@ internal abstract class FragmentVMFactoryModule {
     @IntoMap
     @ViewModelKey(MovieVM::class)
     internal abstract fun movieVM(VM: MovieVM): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AloneMovieVM::class)
+    internal abstract fun aloneMovieVM(VM: AloneMovieVM): ViewModel
 
     @Binds
     @IntoMap
