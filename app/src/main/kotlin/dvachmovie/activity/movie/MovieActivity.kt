@@ -46,6 +46,9 @@ class MovieActivity : BaseActivity<MovieActivityVM,
             "StartFragment" -> {
                 finish()
             }
+            "AloneMovieFragment" -> {
+                finish()
+            }
             else -> super.onBackPressed()
         }
     }
