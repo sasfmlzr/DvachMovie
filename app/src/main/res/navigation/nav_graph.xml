@@ -228,6 +228,15 @@
         <deepLink
             android:id="@+id/deepLinkDioChanMp4WWW"
             app:uri="https://www.diochan.com/{board}/src/{numVideo}.mp4" />
+        <!-- https://55chan.org/ -->
+
+        <deepLink
+            android:id="@+id/deepLinkHailbaneWebm"
+            app:uri="https://haibane.ru/upload/{numThread}/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkHailbaneMp4"
+            app:uri="https://haibane.ru/upload/{numThread}/{numVideo}.mp4" />
     </fragment>
 
 </navigation>
