@@ -157,20 +157,36 @@
             app:uri="https://s.neochan.ru/{board}/{numVideo}.mp4" />
 
         <deepLink
-            android:id="@+id/deepLinkIIChanWebmOld"
+            android:id="@+id/deepLinkIIChanWebm"
             app:uri="https://iichan.hk/{board}/src/{numVideo}.webm" />
 
         <deepLink
-            android:id="@+id/deepLinkIIChanMp4Old"
+            android:id="@+id/deepLinkIIChanMp4"
             app:uri="https://iichan.hk/{board}/src/{numVideo}.mp4" />
 
         <deepLink
-            android:id="@+id/deepLinkAllChanWebmOld"
+            android:id="@+id/deepLinkAllChanWebm"
             app:uri="https://allchan.su/{board}/src/{numVideo}.webm" />
 
         <deepLink
-            android:id="@+id/deepLinkAllChanMp4Old"
+            android:id="@+id/deepLinkAllChanMp4"
             app:uri="https://allchan.su/{board}/src/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLinkAlterChanWebmHTTP"
+            app:uri="http://alterchan.in/var/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkAlterChanMp4HTTP"
+            app:uri="http://alterchan.in/var/src/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLinkAlterChanWebmHTTPS"
+            app:uri="https://alterchan.in/var/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkAlterChanMp4HTTPS"
+            app:uri="https://alterchan.in/var/src/{numVideo}.mp4" />
     </fragment>
 
 </navigation>
