@@ -155,6 +155,14 @@
         <deepLink
             android:id="@+id/deepLinkNeoChanMp4Old"
             app:uri="https://s.neochan.ru/{board}/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLinkIIChanWebmOld"
+            app:uri="https://iichan.hk/{board}/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkIIChanMp4Old"
+            app:uri="https://iichan.hk/{board}/src/{numVideo}.mp4" />
     </fragment>
 
 </navigation>
