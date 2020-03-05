@@ -124,6 +124,21 @@
             android:id="@+id/deepLink2"
             app:uri="https://2ch.hk/{board}/src/{numberThread}/{numVideo}.mp4" />
 
+        <deepLink
+            android:id="@+id/deepLink3"
+            app:uri="https://i.4cdn.org/{board}/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLink4"
+            app:uri="http://i.4cdn.org/{board}/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLink5"
+            app:uri="https://i.4cdn.org/{board}/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLink6"
+            app:uri="http://i.4cdn.org/{board}/{numVideo}.mp4" />
     </fragment>
 
 </navigation>
