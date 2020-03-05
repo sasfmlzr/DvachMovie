@@ -212,6 +212,22 @@
         <deepLink
             android:id="@+id/deepLink410ChanMp4HTTP"
             app:uri="http://410chan.org/{board}/src/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLinkDioChanWebm"
+            app:uri="https://diochan.com/{board}/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkDioChanMp4"
+            app:uri="https://diochan.com/{board}/src/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLinkDioChanWebmWWW"
+            app:uri="https://www.diochan.com/{board}/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkDioChanMp4WWW"
+            app:uri="https://www.diochan.com/{board}/src/{numVideo}.mp4" />
     </fragment>
 
 </navigation>
