@@ -245,6 +245,14 @@
         <deepLink
             android:id="@+id/deepLinkHorochanMp4"
             app:uri="https://static2.horochan.ru/src/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLinkKropyvaWebm"
+            app:uri="https://www.kropyva.ch/{board}/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkKropyvaMp4"
+            app:uri="https://www.kropyva.ch/{board}/src/{numVideo}.mp4" />
     </fragment>
 
 </navigation>
