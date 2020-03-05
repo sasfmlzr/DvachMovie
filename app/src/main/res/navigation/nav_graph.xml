@@ -270,6 +270,13 @@
             android:id="@+id/deepLinkUboaChanMp4"
             app:uri="https://uboachan.net/{board}/src/{numVideo}.mp4" />
 
+        <deepLink
+            android:id="@+id/deepLink2--chWebm"
+            app:uri="https://2--ch.ru/{board}/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLink2--chMp4"
+            app:uri="https://2--ch.ru/{board}/{numVideo}.mp4" />
     </fragment>
 
 </navigation>
