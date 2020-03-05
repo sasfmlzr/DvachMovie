@@ -187,6 +187,15 @@
         <deepLink
             android:id="@+id/deepLinkAlterChanMp4HTTPS"
             app:uri="https://alterchan.in/var/src/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLinkVHSChanWebm"
+            app:uri="https://vhschan.org/{board}/pica/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkVHSChanMp4"
+            app:uri="https://vhschan.org/{board}/pica/{numVideo}.mp4" />
+
     </fragment>
 
 </navigation>
