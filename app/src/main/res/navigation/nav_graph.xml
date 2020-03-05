@@ -163,6 +163,14 @@
         <deepLink
             android:id="@+id/deepLinkIIChanMp4Old"
             app:uri="https://iichan.hk/{board}/src/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLinkAllChanWebmOld"
+            app:uri="https://allchan.su/{board}/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkAllChanMp4Old"
+            app:uri="https://allchan.su/{board}/src/{numVideo}.mp4" />
     </fragment>
 
 </navigation>
