@@ -188,6 +188,7 @@
             android:id="@+id/deepLinkAlterChanMp4HTTPS"
             app:uri="https://alterchan.in/var/src/{numVideo}.mp4" />
 
+        <!-- VHS works unstable because it has cloudfront-->
         <deepLink
             android:id="@+id/deepLinkVHSChanWebm"
             app:uri="https://vhschan.org/{board}/pica/{numVideo}.webm" />
@@ -196,6 +197,21 @@
             android:id="@+id/deepLinkVHSChanMp4"
             app:uri="https://vhschan.org/{board}/pica/{numVideo}.mp4" />
 
+        <deepLink
+            android:id="@+id/deepLink410ChanWebmHTTPS"
+            app:uri="https://410chan.org/{board}/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLink410ChanMp4HTTPS"
+            app:uri="https://410chan.org/{board}/src/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLink410ChanWebmHTTP"
+            app:uri="http://410chan.org/{board}/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLink410ChanMp4HTTP"
+            app:uri="http://410chan.org/{board}/src/{numVideo}.mp4" />
     </fragment>
 
 </navigation>
