@@ -261,6 +261,15 @@
         <deepLink
             android:id="@+id/deepLink40ChanMp4"
             app:uri="https://4.0-chan.ru/assets/images/src/{numVideo}.mp4" />
+
+        <deepLink
+            android:id="@+id/deepLinkUboaChanWebm"
+            app:uri="https://uboachan.net/{board}/src/{numVideo}.webm" />
+
+        <deepLink
+            android:id="@+id/deepLinkUboaChanMp4"
+            app:uri="https://uboachan.net/{board}/src/{numVideo}.mp4" />
+
     </fragment>
 
 </navigation>
