@@ -1,7 +1,6 @@
 package dvachmovie.di.core
 
 import android.content.Context
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import dagger.Module
 import dagger.Provides
@@ -10,8 +9,7 @@ import dagger.Provides
 class ExoModule {
 
     @Provides
-    internal fun provideExoPlayer(context: Context): SimpleExoPlayer =
-            ExoPlayerFactory.newSimpleInstance(context)
-
+    internal fun provideExoPlayer(context: Context): SimpleExoPlayer = SimpleExoPlayer.Builder(context)
+            .build()
 
 }

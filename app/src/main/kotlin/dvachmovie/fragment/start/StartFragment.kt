@@ -42,7 +42,7 @@ class StartFragment : BaseFragment<StartVM,
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
-        initDBTask = { WorkerManager.initDB(context!!, viewModel.getBoardPipe.execute(Unit)) }
+        initDBTask = { WorkerManager.initDB(requireContext(), viewModel.getBoardPipe.execute(Unit)) }
 
         viewModel.routeToMovieFragmentTask = routeToMovieFragmentTask
         viewModel.showErrorTask = showErrorTask
@@ -64,10 +64,10 @@ class StartFragment : BaseFragment<StartVM,
             val movies = viewModel.getMoviesFromDBByBoardPipe
                     .execute(Pair(viewModel.getBoardPipe.execute(Unit), AppConfig.currentBaseUrl))
             if (movies.size < MINIMUM_COUNT_MOVIES ||
-                    StartFragmentArgs.fromBundle(arguments!!).refreshMovies) {
+                    StartFragmentArgs.fromBundle(requireArguments()).refreshMovies) {
                 viewModel.loadNewMovies()
             } else {
-                WorkerManager.fillCacheFromDB(context!!, viewModel.getBoardPipe.execute(Unit))
+                WorkerManager.fillCacheFromDB(requireContext(), viewModel.getBoardPipe.execute(Unit))
                 router.navigateStartToMovieFragment()
             }
         }

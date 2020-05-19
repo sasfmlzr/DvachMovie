@@ -15,8 +15,8 @@ import androidx.core.view.children
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.R
@@ -80,7 +80,8 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initPlayer(playerView: PlayerView) {
-        playerView.player = ExoPlayerFactory.newSimpleInstance(playerView.context)
+        playerView.player = SimpleExoPlayer.Builder(playerView.context)
+                .build()
 
         binding.playerView.findViewById<PlayerControlView>(R.id.exo_controller)
         val controlView = (playerView.children.filter { it is PlayerControlView }.first() as PlayerControlView)
@@ -120,7 +121,7 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
     }
 
     private val specificGestureListener by lazy {
-        object : OnSwipeTouchListener(context!!) {
+        object : OnSwipeTouchListener(requireContext()) {
             override fun onEventTouch(event: MotionEvent) {}
 
             override fun onSwipeTop() {
@@ -142,7 +143,7 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
     }
 
     private val defaultGestureListener by lazy {
-        object : OnSwipeTouchListener(context!!) {
+        object : OnSwipeTouchListener(requireContext()) {
             override fun onEventTouch(event: MotionEvent) {
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     viewModel.isPlayerControlVisibility.value = toggleControlsVisibility()
@@ -214,7 +215,7 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
 
     private fun downloadMovie(download: String, cookie: String) {
         activity?.startService(DownloadService.getDownloadService(
-                context!!,
+                requireContext(),
                 download,
                 Environment.DIRECTORY_DOWNLOADS,
                 cookie))

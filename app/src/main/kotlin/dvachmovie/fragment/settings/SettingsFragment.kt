@@ -62,7 +62,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.recreateMoviesDB = {
             logger.d(this.javaClass.name, "refresh database")
-            WorkerManager.deleteAllInDB(context!!, this) {
+            WorkerManager.deleteAllInDB(requireContext(), this) {
                 viewModel.reInitMovies(false)
             }
         }

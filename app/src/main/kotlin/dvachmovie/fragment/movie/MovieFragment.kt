@@ -11,8 +11,8 @@ import android.view.*
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
@@ -64,7 +64,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
         viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
             if (it?.isPlayed == true) {
-                WorkerManager.insertMovieInDB(context!!)
+                WorkerManager.insertMovieInDB(requireContext())
             }
 
             if (PlayerCache.isHideMovieByThreadTask) {
@@ -95,7 +95,8 @@ class MovieFragment : BaseFragment<MovieVM,
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initPlayer(playerView: PlayerView) {
-        playerView.player = ExoPlayerFactory.newSimpleInstance(playerView.context)
+        playerView.player = SimpleExoPlayer.Builder(playerView.context)
+                .build()
         viewModel.isGestureEnabled.observe(viewLifecycleOwner, Observer { isAllowGesture ->
             if (isAllowGesture) {
                 playerView.setOnTouchListener(specificGestureListener)
@@ -118,7 +119,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private val specificGestureListener by lazy {
-        object : OnSwipeTouchListener(context!!) {
+        object : OnSwipeTouchListener(requireContext()) {
             override fun onEventTouch(event: MotionEvent) {}
 
             override fun onSwipeTop() {
@@ -140,7 +141,7 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private val defaultGestureListener by lazy {
-        object : OnSwipeTouchListener(context!!) {
+        object : OnSwipeTouchListener(requireContext()) {
             override fun onEventTouch(event: MotionEvent) {
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     viewModel.isPlayerControlVisibility.value = toggleControlsVisibility()
@@ -240,7 +241,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun downloadMovie(download: String, cookie: String) {
         activity?.startService(DownloadService.getDownloadService(
-                context!!,
+                requireContext(),
                 download,
                 Environment.DIRECTORY_DOWNLOADS,
                 cookie))
