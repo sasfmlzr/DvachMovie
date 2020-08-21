@@ -21,10 +21,10 @@ internal abstract class ActivityVMFactoryModule {
     @Binds
     @IntoMap
     @ViewModelKey(MovieActivityVM::class)
-    internal abstract fun movieActivityVM(VM: MovieActivityVM): ViewModel
+    internal abstract fun movieActivityVM(viewModel: MovieActivityVM): ViewModel
 
     @Binds
     @IntoMap
     @ViewModelKey(StartActivityVM::class)
-    internal abstract fun startActivityVM(VM: StartActivityVM): ViewModel
+    internal abstract fun startActivityVM(viewModel: StartActivityVM): ViewModel
 }
