@@ -59,7 +59,7 @@ class Navigator(private val router: NavController,
                 .actionShowMovieFragment()
         navigate(direction)
     }
-    
+
     private fun navigate(direction: NavDirections) {
         try {
             logger.d(router.currentDestination.toString())

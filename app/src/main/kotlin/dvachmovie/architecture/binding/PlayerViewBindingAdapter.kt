@@ -23,26 +23,24 @@ fun PlayerView.bindCookie(cookies: String) {
 
 @BindingAdapter("movie")
 fun PlayerView.bindMovie(urlVideo: List<Uri>?) {
-    if (urlVideo != null) {
-        if (urlVideo.isNotEmpty()) {
-            val agent = Util.getUserAgent(this.context, "AppName")
-            val defaultHttpDataSource = DefaultHttpDataSourceFactory(agent, null)
-            defaultHttpDataSource.defaultRequestProperties.set("Cookie", BindingCache.cookie)
+    if (urlVideo == null) return
+    if (urlVideo.isNotEmpty()) {
+        val agent = Util.getUserAgent(this.context, "AppName")
+        val defaultHttpDataSource = DefaultHttpDataSourceFactory(agent, null)
+        defaultHttpDataSource.defaultRequestProperties.set("Cookie", BindingCache.cookie)
 
-            val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(this.context,
-                    null, defaultHttpDataSource)
+        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(this.context,
+                null, defaultHttpDataSource)
 
-            val mediaSources = ConcatenatingMediaSource()
-            mediaSources.addMediaSources(urlVideo.map { url ->
-                ProgressiveMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(url) as MediaSource
-            })
+        val mediaSources = ConcatenatingMediaSource()
+        mediaSources.addMediaSources(urlVideo.map { url ->
+            ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(url) as MediaSource
+        })
 
-            BindingCache.media = mediaSources
-            bindPlayer(this)
-        }
+        BindingCache.media = mediaSources
+        bindPlayer(this)
     }
-
 }
 
 @BindingAdapter("movie_position")

@@ -9,6 +9,6 @@ class SetCurrentMoviePipe @Inject constructor(
         private val useCase: SetCurrentMovieUseCase
 ) : PipeSync<Movie, Unit>() {
 
-    override fun execute(input: Movie): Unit =
+    override fun execute(input: Movie) =
             useCase.execute(input)
 }

@@ -1,7 +1,6 @@
 package dvachmovie.pipe
 
 import dvachmovie.PresenterModel
-import dvachmovie.api.Cookie
 import dvachmovie.db.data.Movie
 import dvachmovie.db.data.Thread
 

@@ -12,7 +12,6 @@ import android.view.*
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.core.view.children
-import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
@@ -84,22 +83,22 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
                 .build()
 
         binding.playerView.findViewById<PlayerControlView>(R.id.exo_controller)
-        val controlView = (playerView.children.filter { it is PlayerControlView }.first() as PlayerControlView)
+        val controlView = playerView.children.filter { it is PlayerControlView }.first() as PlayerControlView
         val buttonsGroup = ((controlView.getChildAt(0) as LinearLayout).getChildAt(0) as LinearLayout).children.filter {
             it is ImageButton
         }.toList()
         val copyUrlDescription = resources.getString(R.string.copy_url_button)
         val downloadDescription = resources.getString(R.string.download)
-        val copyUrlButton = buttonsGroup.filter {
+        val copyUrlButton = buttonsGroup.first {
             it.contentDescription == copyUrlDescription
-        }.first()
-        val downloadButton = buttonsGroup.filter {
+        }
+        val downloadButton = buttonsGroup.first {
             it.contentDescription == downloadDescription
-        }.first()
+        }
         copyUrlButton.setOnClickListener(viewModel.onBtnCopyURLClicked)
         downloadButton.setOnClickListener(viewModel.onBtnDownloadClicked)
 
-        viewModel.isGestureEnabled.observe(viewLifecycleOwner, Observer { isAllowGesture ->
+        viewModel.isGestureEnabled.observe(viewLifecycleOwner, { isAllowGesture ->
             if (isAllowGesture) {
                 playerView.setOnTouchListener(specificGestureListener)
             } else {
@@ -173,8 +172,9 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
                         logger.d("Internal error")
                     }
 
-                    val player = (playerView.player as ExoPlayer)
-                    player.retry()
+                    (playerView.player as ExoPlayer).apply {
+                        retry()
+                    }
                 }
                 super.onPlayerError(error)
             }

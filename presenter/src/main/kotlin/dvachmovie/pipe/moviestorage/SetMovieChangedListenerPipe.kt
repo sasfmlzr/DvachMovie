@@ -9,6 +9,6 @@ class SetMovieChangedListenerPipe @Inject constructor(
         private val useCase: SetMovieChangedListenerUseCase
 ) : PipeSync<OnMovieChangedListener, Unit>() {
 
-    override fun execute(input: OnMovieChangedListener): Unit =
+    override fun execute(input: OnMovieChangedListener) =
             useCase.execute(input)
 }

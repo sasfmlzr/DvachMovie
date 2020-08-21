@@ -1,9 +1,7 @@
 package dvachmovie.usecase.db
 
 import dvachmovie.TestException
-import dvachmovie.db.data.NullMovie
 import dvachmovie.db.data.NullThread
-import dvachmovie.repository.MovieDBRepository
 import dvachmovie.repository.ThreadDBRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

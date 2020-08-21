@@ -2,18 +2,11 @@ package dvachmovie.repository
 
 import dvachmovie.AppConfig
 import dvachmovie.TestException
-import dvachmovie.api.DvachMovieApi
 import dvachmovie.api.FourchanApi
 import dvachmovie.api.model.gson.b4chan.catalog.FourChanCatalogDTO
 import dvachmovie.api.model.gson.b4chan.catalog.ThreadsDTO
 import dvachmovie.api.model.gson.b4chan.thread.FourChanThreadDTO
 import dvachmovie.api.model.gson.b4chan.thread.PostsDTO
-import dvachmovie.api.model.gson.dvach.DvachReportRequest
-import dvachmovie.api.model.gson.dvach.catalog.DvachCatalogRequest
-import dvachmovie.api.model.gson.dvach.catalog.ThreadsItem
-import dvachmovie.api.model.gson.dvach.thread.DvachThreadRequest
-import dvachmovie.api.model.gson.dvach.thread.FileItem
-import dvachmovie.api.model.gson.dvach.thread.PostsItem
 import dvachmovie.architecture.logging.Logger
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert

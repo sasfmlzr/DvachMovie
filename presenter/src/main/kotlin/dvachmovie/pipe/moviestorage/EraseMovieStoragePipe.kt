@@ -8,7 +8,7 @@ class EraseMovieStoragePipe @Inject constructor(
         private val useCase: EraseMovieStorageUseCase
 ) : PipeSync<Unit, Unit>() {
 
-    override fun execute(input: Unit): Unit =
+    override fun execute(input: Unit) =
             useCase.execute(input)
 
 }

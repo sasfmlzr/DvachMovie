@@ -4,13 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 
-class WorkerManager {
+class WorkerManager private constructor() {
     companion object {
         fun initDB(context: Context, board: String) {
             val initRequest = OneTimeWorkRequestBuilder<InitDBWorker>()
@@ -43,7 +42,7 @@ class WorkerManager {
 
             mSavedWorkInfo.observe(
                     lifecycleOwner,
-                    Observer { workStatus ->
+                    { workStatus ->
                         if (workStatus.state == WorkInfo.State.SUCCEEDED) {
                             doOnSuccess()
                         }

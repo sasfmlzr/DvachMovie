@@ -84,7 +84,8 @@ class MarkThreadAsHiddenDBWorker(@NonNull context: Context,
         }
         return if (newPlaylist.size <= newIndex) {
             Pair(newPlaylist[0], newPlaylist)
-        } else
+        } else {
             Pair(newPlaylist[newIndex], newPlaylist)
+        }
     }
 }

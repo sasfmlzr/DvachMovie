@@ -172,9 +172,10 @@ class MovieFragment : BaseFragment<MovieVM,
                         logger.d("Internal error")
                     }
 
-                    val player = (playerView.player as ExoPlayer)
-                    player.retry()
-                    player.next()
+                    (playerView.player as ExoPlayer).let {
+                        it.retry()
+                        it.next()
+                    }
                 }
                 super.onPlayerError(error)
             }

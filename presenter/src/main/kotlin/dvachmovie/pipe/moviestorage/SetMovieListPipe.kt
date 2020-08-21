@@ -9,6 +9,6 @@ class SetMovieListPipe @Inject constructor(
         private val useCase: SetMovieListUseCase
 ) : PipeSync<List<Movie>, Unit>() {
 
-    override fun execute(input: List<Movie>): Unit =
+    override fun execute(input: List<Movie>) =
             useCase.execute(input)
 }

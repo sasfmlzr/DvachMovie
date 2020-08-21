@@ -8,7 +8,7 @@ class MarkCurrentMovieAsPlayedPipe @Inject constructor(
         private val useCase: MarkCurrentMovieAsPlayedUseCase
 ) : PipeSync<Int, Unit>() {
 
-    override fun execute(input: Int): Unit =
+    override fun execute(input: Int) =
             useCase.execute(input)
 
 }

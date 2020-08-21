@@ -11,13 +11,11 @@ import dvachmovie.di.RoomModule
 import dvachmovie.di.core.ApplicationModule
 import dvachmovie.di.core.Injector
 import dvachmovie.di.core.MainApplication
-import dvachmovie.repository.MovieDBRepository
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 class InsertDBWorkerTest {

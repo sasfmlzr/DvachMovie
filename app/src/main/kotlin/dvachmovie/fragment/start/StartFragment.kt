@@ -32,8 +32,7 @@ class StartFragment : BaseFragment<StartVM,
 
     private val routeToMovieFragmentTask = { router.navigateStartToMovieFragment() }
     private val showErrorTask = { throwable: Throwable ->
-        extensions.showMessage(throwable.message ?: "Please try again")
-        Unit
+        extensions.showMessage(throwable.message ?: "Please try again") ?: Unit
     }
     private lateinit var initDBTask: () -> Unit
 
