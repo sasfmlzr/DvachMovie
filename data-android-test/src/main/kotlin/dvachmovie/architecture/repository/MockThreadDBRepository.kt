@@ -16,12 +16,9 @@ internal class MockThreadDBRepository @Inject constructor() : ThreadDBRepository
         return NullThread()
     }
 
-    override suspend fun insert(threadEntity: Thread) {
-    }
+    override suspend fun insert(threadEntity: Thread) = Unit
 
-    override suspend fun insertAll(threadEntity: List<Thread>) {
-    }
+    override suspend fun insertAll(threadEntity: List<Thread>) = Unit
 
-    override suspend fun deleteAll() {
-    }
+    override suspend fun deleteAll() = Unit
 }

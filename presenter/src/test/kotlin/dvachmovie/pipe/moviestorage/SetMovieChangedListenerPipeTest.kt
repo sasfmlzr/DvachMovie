@@ -21,8 +21,7 @@ class SetMovieChangedListenerPipeTest {
     lateinit var useCase: SetMovieChangedListenerUseCase
 
     private val testListener = object : OnMovieChangedListener {
-        override fun onMovieChanged(movie: Movie) {
-        }
+        override fun onMovieChanged(movie: Movie) = Unit
     }
 
     @Test

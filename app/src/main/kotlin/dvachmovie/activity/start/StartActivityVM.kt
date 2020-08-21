@@ -42,10 +42,10 @@ class StartActivityVM @Inject constructor() : ViewModel() {
         putCurrentBaseUrlPipe.execute(baseUrl)
         putBoardPipe.execute(board)
         setMovieListChangedListenerPipe.execute(object : OnMovieListChangedListener {
-            override fun onListChanged(movies: List<Movie>) {}
+            override fun onListChanged(movies: List<Movie>) = Unit
         })
         setMovieChangedListenerPipe.execute(object : OnMovieChangedListener {
-            override fun onMovieChanged(movie: Movie) {}
+            override fun onMovieChanged(movie: Movie) = Unit
         })
         eraseMovieStorage.execute(Unit)
     }

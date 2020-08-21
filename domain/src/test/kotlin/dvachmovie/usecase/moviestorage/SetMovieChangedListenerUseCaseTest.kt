@@ -22,8 +22,7 @@ class SetMovieChangedListenerUseCaseTest {
     @Test
     fun `Happy pass`() {
         val testListener = object : OnMovieChangedListener {
-            override fun onMovieChanged(movie: Movie) {
-            }
+            override fun onMovieChanged(movie: Movie) = Unit
         }
         useCase.execute(testListener)
     }

@@ -15,15 +15,11 @@ internal class MockMovieDBRepository @Inject constructor() : MovieDBRepository {
         return listOf()
     }
 
-    override suspend fun insert(movieEntity: Movie) {
-    }
+    override suspend fun insert(movieEntity: Movie) = Unit
 
-    override suspend fun insertAll(moviesEntity: List<Movie>) {
-    }
+    override suspend fun insertAll(moviesEntity: List<Movie>) = Unit
 
-    override suspend fun deleteAll() {
-    }
+    override suspend fun deleteAll() = Unit
 
-    override suspend fun deleteMovies(movies: List<Movie>) {
-    }
+    override suspend fun deleteMovies(movies: List<Movie>) = Unit
 }

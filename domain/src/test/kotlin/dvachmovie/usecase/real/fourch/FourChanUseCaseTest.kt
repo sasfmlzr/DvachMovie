@@ -35,6 +35,7 @@ class FourChanUseCaseTest {
 
     @Mock
     lateinit var getThreadsFromFourchUseCase: GetThreadsFromFourchUseCase
+
     @Mock
     lateinit var getLinkFilesFromThreadsFourchUseCase:
             GetLinkFilesFromThreadsFourchUseCase
@@ -134,17 +135,23 @@ class FourChanUseCaseTest {
         runBlocking {
             given(getThreadsFromFourchUseCase.executeAsync(threadModel)).willReturn(model)
 
-            val modelOne = GetLinkFilesFromThreadsFourchUseCase.Params(board, model.listThreads[0].first.toString(), model.listThreads[0].second)
-            given(getLinkFilesFromThreadsFourchUseCase.executeAsync(modelOne)).willReturn(GetLinkFilesFromThreadsUseCaseModel(listOf()))
+            val modelOne = GetLinkFilesFromThreadsFourchUseCase.Params(board, model.listThreads[0]
+                    .first.toString(), model.listThreads[0].second)
+            given(getLinkFilesFromThreadsFourchUseCase.executeAsync(modelOne))
+                    .willReturn(GetLinkFilesFromThreadsUseCaseModel(listOf()))
 
-            val modelTwo = GetLinkFilesFromThreadsFourchUseCase.Params(board, model.listThreads[1].first.toString(), model.listThreads[1].second)
+            val modelTwo = GetLinkFilesFromThreadsFourchUseCase.Params(board, model.listThreads[1]
+                    .first.toString(), model.listThreads[1].second)
             val files = listOf(FileItem("Asdas"))
-            given(getLinkFilesFromThreadsFourchUseCase.executeAsync(modelTwo)).willReturn(GetLinkFilesFromThreadsUseCaseModel(files))
+            given(getLinkFilesFromThreadsFourchUseCase.executeAsync(modelTwo))
+                    .willReturn(GetLinkFilesFromThreadsUseCaseModel(files))
             given(movieUtils.filterFileItemOnlyAsMovie(files)).willReturn(files)
             val resultMovies = listOf(movieEntityOne, movieEntityTwo)
-            given(movieConverter.convertFileItemToMovie(files, board, AppConfig.FOURCHAN_URL)).willReturn(resultMovies)
+            given(movieConverter.convertFileItemToMovie(files, board, AppConfig.FOURCHAN_URL))
+                    .willReturn(resultMovies)
             val resultThreads = listOf(NullThread())
-            given(threadConverter.convertFileItemToThread(files, AppConfig.FOURCHAN_URL)).willReturn(resultThreads)
+            given(threadConverter.convertFileItemToThread(files, AppConfig.FOURCHAN_URL))
+                    .willReturn(resultThreads)
             val dvachInputModel = DvachUseCase.Params(board, happyExecutorResult)
             fourChanUseCase.executeAsync(dvachInputModel)
             fourChanUseCase.forceStart()

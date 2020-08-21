@@ -27,40 +27,40 @@ internal abstract class FragmentVMFactoryModule {
     @Binds
     @IntoMap
     @ViewModelKey(MovieVM::class)
-    internal abstract fun movieVM(VM: MovieVM): ViewModel
+    internal abstract fun movieVM(viewModel: MovieVM): ViewModel
 
     @Binds
     @IntoMap
     @ViewModelKey(AloneMovieVM::class)
-    internal abstract fun aloneMovieVM(VM: AloneMovieVM): ViewModel
+    internal abstract fun aloneMovieVM(viewModel: AloneMovieVM): ViewModel
 
     @Binds
     @IntoMap
     @ViewModelKey(PreviewVM::class)
-    internal abstract fun previewVM(VM: PreviewVM): ViewModel
+    internal abstract fun previewVM(viewModel: PreviewVM): ViewModel
 
     @Binds
     @IntoMap
     @ViewModelKey(BackVM::class)
-    internal abstract fun backVM(VM: BackVM): ViewModel
+    internal abstract fun backVM(viewModel: BackVM): ViewModel
 
     @Binds
     @IntoMap
     @ViewModelKey(SettingsVM::class)
-    internal abstract fun settingsVM(VM: SettingsVM): ViewModel
+    internal abstract fun settingsVM(viewModel: SettingsVM): ViewModel
 
     @Binds
     @IntoMap
     @ViewModelKey(StartVM::class)
-    internal abstract fun startVM(VM: StartVM): ViewModel
+    internal abstract fun startVM(viewModel: StartVM): ViewModel
 
     @Binds
     @IntoMap
     @ViewModelKey(MovieActivityVM::class)
-    internal abstract fun movieActivityVM(VM: MovieActivityVM): ViewModel
+    internal abstract fun movieActivityVM(viewModel: MovieActivityVM): ViewModel
 
     @Binds
     @IntoMap
     @ViewModelKey(StartActivityVM::class)
-    internal abstract fun startActivityVM(VM: StartActivityVM): ViewModel
+    internal abstract fun startActivityVM(viewModel: StartActivityVM): ViewModel
 }

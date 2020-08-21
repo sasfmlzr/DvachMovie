@@ -51,12 +51,10 @@ class MarkThreadAsHiddenDBWorkerTest {
                 .build()
 
         storage.onMovieListChangedListener = object : OnMovieListChangedListener {
-            override fun onListChanged(movies: List<Movie>) {
-            }
+            override fun onListChanged(movies: List<Movie>) = Unit
         }
         storage.onMovieChangedListener = object : OnMovieChangedListener {
-            override fun onMovieChanged(movie: Movie) {
-            }
+            override fun onMovieChanged(movie: Movie) = Unit
         }
         storage.setMovieListAndUpdate(listOf(NullMovie()))
 

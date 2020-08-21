@@ -31,11 +31,9 @@ class ReportPipeTest {
     lateinit var scopeProvider: ScopeProvider
 
     private val executorResult = object : ExecutorResult {
-        override suspend fun onSuccess(useCaseModel: UseCaseModel) {
-        }
+        override suspend fun onSuccess(useCaseModel: UseCaseModel) = Unit
 
-        override suspend fun onFailure(t: Throwable) {
-        }
+        override suspend fun onFailure(t: Throwable) = Unit
     }
 
     @Test

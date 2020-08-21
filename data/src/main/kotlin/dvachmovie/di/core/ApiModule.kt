@@ -19,6 +19,10 @@ import javax.inject.Singleton
 @Module
 internal class ApiModule {
 
+    companion object {
+        const val OK_HTTP_TIMEOUT = 3L
+    }
+
     @Provides
     @Singleton
     fun dvachRetrofitService(okHttpClient: OkHttpClient): DvachMovieApi {
@@ -55,8 +59,8 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun okHttp(cookieJar: CookieJar) = OkHttpClient.Builder()
-            .connectTimeout(3, TimeUnit.SECONDS)
-            .readTimeout(3, TimeUnit.SECONDS)
+            .connectTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
             .cookieJar(cookieJar)
             .build()
 
@@ -67,8 +71,7 @@ internal class ApiModule {
 
         val cookieValue = settingsStorage.getCookie()
 
-        override fun saveFromResponse(url: HttpUrl, cookies: List<okhttp3.Cookie>) {
-        }
+        override fun saveFromResponse(url: HttpUrl, cookies: List<okhttp3.Cookie>) = Unit
 
         override fun loadForRequest(url: HttpUrl): MutableList<okhttp3.Cookie> {
             return mutableListOf(okhttp3.Cookie

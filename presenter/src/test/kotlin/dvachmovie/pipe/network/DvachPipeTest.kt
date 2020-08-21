@@ -48,11 +48,9 @@ class DvachPipeTest {
     lateinit var neoChanUseCase: NeoChanUseCase
 
     private val executorResult = object : ExecutorResult {
-        override suspend fun onSuccess(useCaseModel: UseCaseModel) {
-        }
+        override suspend fun onSuccess(useCaseModel: UseCaseModel) = Unit
 
-        override suspend fun onFailure(t: Throwable) {
-        }
+        override suspend fun onFailure(t: Throwable) = Unit
     }
 
     private val params = DvachUseCase.Params("test", executorResult)

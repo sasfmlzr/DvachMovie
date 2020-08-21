@@ -157,8 +157,7 @@ class SettingsVM @Inject constructor(
                     }
                 }
                 .setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         view?.isPressed = true
@@ -249,8 +248,7 @@ class SettingsVM @Inject constructor(
                     }
                 }
                 .setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         view?.isPressed = true

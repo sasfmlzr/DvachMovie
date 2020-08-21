@@ -122,7 +122,7 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
 
     private val specificGestureListener by lazy {
         object : OnSwipeTouchListener(requireContext()) {
-            override fun onEventTouch(event: MotionEvent) {}
+            override fun onEventTouch(event: MotionEvent) = Unit
 
             override fun onSwipeTop() {
                 router.navigateMovieToPreviewFragment()

@@ -134,17 +134,23 @@ internal class NeoChanUseCaseTest {
         runBlocking {
             given(getThreadsFromNeoChanUseCase.executeAsync(threadModel)).willReturn(model)
 
-            val modelOne = GetLinkFilesFromThreadsNeoChanUseCase.Params(board, model.listThreads[0].first.toString(), model.listThreads[0].second)
-            given(getLinkFilesFromThreadsNeoChanUseCase.executeAsync(modelOne)).willReturn(GetLinkFilesFromThreadsUseCaseModel(listOf()))
+            val modelOne = GetLinkFilesFromThreadsNeoChanUseCase.Params(board, model.listThreads[0]
+                    .first.toString(), model.listThreads[0].second)
+            given(getLinkFilesFromThreadsNeoChanUseCase.executeAsync(modelOne))
+                    .willReturn(GetLinkFilesFromThreadsUseCaseModel(listOf()))
 
-            val modelTwo = GetLinkFilesFromThreadsNeoChanUseCase.Params(board, model.listThreads[1].first.toString(), model.listThreads[1].second)
+            val modelTwo = GetLinkFilesFromThreadsNeoChanUseCase.Params(board, model.listThreads[1]
+                    .first.toString(), model.listThreads[1].second)
             val files = listOf(FileItem("Asdas"))
-            given(getLinkFilesFromThreadsNeoChanUseCase.executeAsync(modelTwo)).willReturn(GetLinkFilesFromThreadsUseCaseModel(files))
+            given(getLinkFilesFromThreadsNeoChanUseCase.executeAsync(modelTwo))
+                    .willReturn(GetLinkFilesFromThreadsUseCaseModel(files))
             given(movieUtils.filterFileItemOnlyAsMovie(files)).willReturn(files)
             val resultMovies = listOf(movieEntityOne, movieEntityTwo)
-            given(movieConverter.convertFileItemToMovie(files, board, AppConfig.NEOCHAN_URL)).willReturn(resultMovies)
+            given(movieConverter.convertFileItemToMovie(files, board, AppConfig.NEOCHAN_URL))
+                    .willReturn(resultMovies)
             val resultThreads = listOf(NullThread())
-            given(threadConverter.convertFileItemToThread(files, AppConfig.NEOCHAN_URL)).willReturn(resultThreads)
+            given(threadConverter.convertFileItemToThread(files, AppConfig.NEOCHAN_URL))
+                    .willReturn(resultThreads)
             val dvachInputModel = DvachUseCase.Params(board, happyExecutorResult)
             neoChanUseCase.executeAsync(dvachInputModel)
             neoChanUseCase.forceStart()

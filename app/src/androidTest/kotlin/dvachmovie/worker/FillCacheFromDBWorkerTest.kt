@@ -51,8 +51,7 @@ class FillCacheFromDBWorkerTest {
                 .build()
 
         storage.onMovieListChangedListener = object : OnMovieListChangedListener {
-            override fun onListChanged(movies: List<Movie>) {
-            }
+            override fun onListChanged(movies: List<Movie>) = Unit
         }
 
         runBlocking {

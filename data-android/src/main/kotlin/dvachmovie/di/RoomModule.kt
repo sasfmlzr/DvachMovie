@@ -16,28 +16,36 @@ import javax.inject.Singleton
 class RoomModule(private val application: Application) {
 
     companion object {
-        private val MIGRATION_1_2 = object : Migration(1, 2) {
+        private const val VERSION_DB_ONE = 1
+        private const val VERSION_DB_TWO = 2
+        private const val VERSION_DB_THREE = 3
+        private const val VERSION_DB_FOUR = 4
+        private const val VERSION_DB_FIVE = 5
+        private const val VERSION_DB_SIX = 6
+        private const val COUNT_REMOVED_YEARS = 1
+
+        private val MIGRATION_1_2 = object : Migration(VERSION_DB_ONE, VERSION_DB_TWO) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                val date = LocalDateTime().minusYears(1)
+                val date = LocalDateTime().minusYears(COUNT_REMOVED_YEARS)
                 database.execSQL("ALTER TABLE movieData ADD COLUMN date TEXT DEFAULT '$date' NOT NULL")
                 database.execSQL("ALTER TABLE movieData ADD COLUMN md5 TEXT DEFAULT '' NOT NULL")
             }
         }
 
-        private val MIGRATION_1_3 = object : Migration(2, 3) {
+        private val MIGRATION_1_3 = object : Migration(VERSION_DB_TWO, VERSION_DB_THREE) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE movieData ADD COLUMN thread INTEGER DEFAULT '0' NOT NULL")
                 database.execSQL("ALTER TABLE movieData ADD COLUMN post INTEGER DEFAULT '0' NOT NULL")
             }
         }
 
-        private val MIGRATION_1_4 = object : Migration(3, 4) {
+        private val MIGRATION_1_4 = object : Migration(VERSION_DB_THREE, VERSION_DB_FOUR) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE movieData ADD COLUMN baseUrl TEXT DEFAULT 'https://2ch.hk' NOT NULL")
             }
         }
 
-        private val MIGRATION_1_5 = object : Migration(4, 5) {
+        private val MIGRATION_1_5 = object : Migration(VERSION_DB_FOUR, VERSION_DB_FIVE) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("" +
                         "CREATE TABLE IF NOT EXISTS threadData " +
@@ -46,7 +54,7 @@ class RoomModule(private val application: Application) {
             }
         }
 
-        private val MIGRATION_1_6 = object : Migration(5, 6) {
+        private val MIGRATION_1_6 = object : Migration(VERSION_DB_FIVE, VERSION_DB_SIX) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE movieData ADD COLUMN dateAddedToDB TEXT DEFAULT '' NOT NULL")
                 database.execSQL("UPDATE movieData SET dateAddedToDB = date")
