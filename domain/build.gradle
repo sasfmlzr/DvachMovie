@@ -1,5 +1,4 @@
 apply plugin: 'kotlin'
-apply plugin: 'jacoco'
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
@@ -16,13 +15,4 @@ dependencies {
     testImplementation "$testing.coroutines"
     testImplementation "$testing.junit"
     testImplementation "$testing.mockito"
-}
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
-
-jacoco {
-    toolVersion = "0.8.5"
 }

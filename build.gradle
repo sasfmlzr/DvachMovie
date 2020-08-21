@@ -16,7 +16,6 @@ buildscript {
         exoplayerVersion = '2.11.4'
         glideVersion = '4.11.0'
         gradleVersion = '3.6.2'
-        jacocoAndroidVersion = '0.1.4'
         junitVersion = '4.13'
         junitExtentionVersion = '1.1.1'
         jodaTimeVersion = '2.10.5'
@@ -98,7 +97,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"
-        classpath "com.dicedmelon.gradle:jacoco-android:$jacocoAndroidVersion"
     }
 }
 

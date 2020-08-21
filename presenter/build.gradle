@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -34,8 +33,4 @@ dependencies {
 
     testImplementation "$testing.junit"
     testImplementation "$testing.mockito"
-}
-
-jacoco {
-    toolVersion = "0.8.5"
 }

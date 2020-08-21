@@ -3,8 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
-apply plugin: 'jacoco'
-apply plugin: 'jacoco-android'
 
 android {
     signingConfigs {
@@ -60,11 +58,6 @@ android {
     testOptions.unitTests.includeAndroidResources = true
     testOptions {
         unitTests.returnDefaultValues = true
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
     }
 
     flavorDimensions "environment"
@@ -74,10 +67,6 @@ android {
             applicationId "com.dvachmovie.android.pro"
         }
     }
-}
-
-jacoco {
-    toolVersion = "0.8.5"
 }
 
 dependencies {
