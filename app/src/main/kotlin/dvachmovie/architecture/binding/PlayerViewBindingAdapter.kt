@@ -2,9 +2,9 @@ package dvachmovie.architecture.binding
 
 import android.net.Uri
 import androidx.databinding.BindingAdapter
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
-import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
@@ -34,8 +34,9 @@ fun PlayerView.bindMovie(urlVideo: List<Uri>?) {
 
         val mediaSources = ConcatenatingMediaSource()
         mediaSources.addMediaSources(urlVideo.map { url ->
+            val mediaItem = MediaItem.Builder().setUri(url).build()
             ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(url) as MediaSource
+                    .createMediaSource(mediaItem)
         })
 
         BindingCache.media = mediaSources

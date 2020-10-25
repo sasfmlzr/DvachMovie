@@ -29,9 +29,8 @@ android {
         signingConfig signingConfigs.releaseConfig
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    dataBinding {
-        enabled = true
-    }
+    buildFeatures.dataBinding = true
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -85,7 +84,6 @@ dependencies {
     implementation "$exoplayer.core"
     implementation "$exoplayer.ui"
 
-    implementation "$lifecycle.extensions"
     kapt "$lifecycle.compiler"
 
     implementation "$glide.glide"

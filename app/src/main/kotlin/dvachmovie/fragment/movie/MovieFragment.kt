@@ -173,7 +173,7 @@ class MovieFragment : BaseFragment<MovieVM,
                     }
 
                     (playerView.player as ExoPlayer).let {
-                        it.retry()
+                        it.prepare()
                         it.next()
                     }
                 }
