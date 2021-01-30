@@ -19,6 +19,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
+            style="@style/MyToolBarStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
@@ -26,7 +27,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:theme="@style/MyToolBarStyle"
             app:title="Settings" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
