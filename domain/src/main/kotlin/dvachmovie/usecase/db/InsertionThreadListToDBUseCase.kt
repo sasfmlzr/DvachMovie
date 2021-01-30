@@ -9,7 +9,6 @@ open class InsertionThreadListToDBUseCase @Inject constructor(
         private val threadDBRepository: ThreadDBRepository) : UseCase<List<Thread>, Unit>() {
 
     override suspend fun executeAsync(input: List<Thread>) {
-        val result = threadDBRepository.insertAll(input)
-        return result
+        return threadDBRepository.insertAll(input)
     }
 }

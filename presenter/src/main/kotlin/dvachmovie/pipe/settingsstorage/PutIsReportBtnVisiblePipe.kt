@@ -8,7 +8,6 @@ class PutIsReportBtnVisiblePipe @Inject constructor(
         private val useCase: PutIsReportBtnVisibleUseCase) : PipeAsync<Boolean, Unit>() {
 
     override suspend fun execute(input: Boolean) {
-        val result = useCase.executeAsync(input)
-        return result
+        return useCase.executeAsync(input)
     }
 }

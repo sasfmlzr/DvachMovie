@@ -12,7 +12,7 @@ internal class MockThreadDBRepository @Inject constructor() : ThreadDBRepository
         return listOf()
     }
 
-    override suspend fun getThreadByNum(boardThread: String, baseUrl: String): Thread? {
+    override suspend fun getThreadByNum(boardThread: String, baseUrl: String): Thread {
         return NullThread()
     }
 

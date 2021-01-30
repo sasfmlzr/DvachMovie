@@ -9,7 +9,6 @@ open class InsertionMovieListToDBUseCase @Inject constructor(
         private val movieDBRepository: MovieDBRepository) : UseCase<List<Movie>, Unit>() {
 
     override suspend fun executeAsync(input: List<Movie>) {
-        val result = movieDBRepository.insertAll(input)
-        return result
+        return movieDBRepository.insertAll(input)
     }
 }

@@ -18,7 +18,7 @@ class BackFragment : BaseFragment<BackVM,
     override fun inject(component: FragmentComponent) = component.inject(this)
 
     @SuppressLint("ResourceType")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 

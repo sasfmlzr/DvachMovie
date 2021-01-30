@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 internal fun getOwnerContactConverterFactory(): GsonConverterFactory {
     val ownerContactsParser = GsonBuilder()
             .registerTypeAdapter(DvachCatalogRequest::class.java,
-                    JsonDeserializer<DvachCatalogRequest> { json, _, _ ->
+                    JsonDeserializer { json, _, _ ->
                         val jComment = json.asJsonObject
                         GsonBuilder().create().fromJson(jComment, DvachCatalogRequest::class.java)
                     })

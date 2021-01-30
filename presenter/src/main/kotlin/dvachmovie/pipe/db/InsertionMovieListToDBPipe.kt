@@ -10,7 +10,6 @@ class InsertionMovieListToDBPipe @Inject constructor(
 ) : PipeAsync<List<Movie>, Unit>() {
 
     override suspend fun execute(input: List<Movie>) {
-        val result =   useCase.executeAsync(input)
-        return result
+        return useCase.executeAsync(input)
     }
 }

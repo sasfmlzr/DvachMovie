@@ -45,7 +45,7 @@ class StartFragment : BaseFragment<StartVM,
     private lateinit var initDBTask: () -> Unit
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
@@ -69,17 +69,17 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun initializePlayer() {
         val player = SimpleExoPlayer.Builder(requireContext()).build()
-        val uri = RawResourceDataSource.buildRawResourceUri(R.raw.samplevideo);
+        val uri = RawResourceDataSource.buildRawResourceUri(R.raw.samplevideo)
         val mediaSource: MediaSource = ProgressiveMediaSource.Factory(DefaultDataSourceFactory(requireContext(), "Exoplayer"))
                 .createMediaSource(MediaItem.fromUri(uri))
 
         player.setMediaSource(mediaSource)
-        player.prepare();
-        player.playWhenReady = true;
+        player.prepare()
+        player.playWhenReady = true
         player.volume = 0f
         player.repeatMode = Player.REPEAT_MODE_ONE
-        binding.player.player = player;
-        binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM;
+        binding.player.player = player
+        binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
     }
 
     private fun prepareData() {

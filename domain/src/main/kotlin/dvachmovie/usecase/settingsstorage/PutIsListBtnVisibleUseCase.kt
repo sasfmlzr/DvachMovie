@@ -8,7 +8,6 @@ open class PutIsListBtnVisibleUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<Boolean, Unit>() {
 
     override suspend fun executeAsync(input: Boolean) {
-        val result = settingsStorage.putListBtnVisible(input).await()
-        return result
+        return settingsStorage.putListBtnVisible(input).await()
     }
 }

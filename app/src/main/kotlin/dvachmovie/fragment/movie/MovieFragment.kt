@@ -7,8 +7,10 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Environment
-import android.view.*
-import androidx.lifecycle.Observer
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
@@ -63,7 +65,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
         PlayerCache.shouldAutoPlay = true
 
-        viewModel.currentMovie.observe(viewLifecycleOwner, Observer {
+        viewModel.currentMovie.observe(viewLifecycleOwner, {
             if (it?.isPlayed == true) {
                 WorkerManager.insertMovieInDB(requireContext())
             }
@@ -97,7 +99,7 @@ class MovieFragment : BaseFragment<MovieVM,
     private fun initPlayer(playerView: PlayerView) {
         playerView.player = SimpleExoPlayer.Builder(playerView.context)
                 .build()
-        viewModel.isGestureEnabled.observe(viewLifecycleOwner, Observer { isAllowGesture ->
+        viewModel.isGestureEnabled.observe(viewLifecycleOwner, { isAllowGesture ->
             if (isAllowGesture) {
                 playerView.setOnTouchListener(specificGestureListener)
             } else {

@@ -21,7 +21,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         viewModel.addFields()
 
