@@ -1,16 +1,12 @@
 package dvachmovie.fragment.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
+import dvachmovie.architecture.binding.BindingCache
 import dvachmovie.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
@@ -62,6 +58,7 @@ class SettingsFragment : BaseFragment<SettingsVM,
 
         viewModel.recreateMoviesDB = {
             logger.d(this.javaClass.name, "refresh database")
+            BindingCache.media = listOf()
             WorkerManager.deleteAllInDB(requireContext(), this) {
                 viewModel.reInitMovies(false)
             }

@@ -20,6 +20,7 @@ import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
+import dvachmovie.architecture.binding.BindingCache
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import dvachmovie.databinding.FragmentMovieBinding
@@ -84,7 +85,6 @@ class MovieFragment : BaseFragment<MovieVM,
             }
         }
 
-        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         return binding.root
     }
 
@@ -170,6 +170,7 @@ class MovieFragment : BaseFragment<MovieVM,
                         extensions.showMessage("Network error")
                     } else {
                         logger.d("Internal error")
+                        error.printStackTrace()
                     }
 
                     (playerView.player as ExoPlayer).let {
@@ -199,7 +200,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun initializePlayer() {
         playerView.player?.playWhenReady = PlayerCache.shouldAutoPlay
-        if (!PlayerCache.isPrepared) {
+        if (!PlayerCache.isPrepared && BindingCache.media.isNotEmpty()) {
             bindPlayer(playerView)
             PlayerCache.isPrepared = true
         }
@@ -210,23 +211,25 @@ class MovieFragment : BaseFragment<MovieVM,
 
         viewModel.markMovieAsPlayed(index)
 
-        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
         stopPlayer()
         super.onStop()
     }
 
     private fun stopPlayer() {
-        playerView.player?.playWhenReady = false
-
-        //updateStartPosition()
+        updateStartPosition()
         PlayerCache.shouldAutoPlay = playerView?.player?.playWhenReady ?: false
+        playerView.player?.playWhenReady = false
     }
 
     private fun updateStartPosition() {
         viewModel.currentPos.value = Pair(playerView.player?.currentWindowIndex ?: 0,
                 playerView.player?.currentPosition ?: 0)
+    }
+
+    override fun onDestroyView() {
         PlayerCache.isPrepared = false
+        binding.playerView.player?.release()
+        super.onDestroyView()
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {

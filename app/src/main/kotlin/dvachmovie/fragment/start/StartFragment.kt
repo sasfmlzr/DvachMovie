@@ -95,4 +95,9 @@ class StartFragment : BaseFragment<StartVM,
             }
         }
     }
+
+    override fun onDestroy() {
+        binding.player.player?.release()
+        super.onDestroy()
+    }
 }

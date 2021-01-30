@@ -1,5 +1,6 @@
 package dvachmovie.architecture.binding
 
+import android.content.Context
 import android.net.Uri
 import androidx.databinding.BindingAdapter
 import com.google.android.exoplayer2.MediaItem
@@ -12,11 +13,12 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import dvachmovie.architecture.binding.BindingCache.pos
+import dvachmovie.fragment.movie.PlayerCache
 
 @BindingAdapter("cookie")
 fun PlayerView.bindCookie(cookies: String) {
     BindingCache.cookie = cookies
-    if (BindingCache.media != BindingCache.defaultMediaSource) {
+    if (BindingCache.media.isNotEmpty()) {
         bindPlayer(this)
     }
 }
@@ -25,22 +27,11 @@ fun PlayerView.bindCookie(cookies: String) {
 fun PlayerView.bindMovie(urlVideo: List<Uri>?) {
     if (urlVideo == null) return
     if (urlVideo.isNotEmpty()) {
-        val agent = Util.getUserAgent(this.context, "AppName")
-        val defaultHttpDataSource = DefaultHttpDataSourceFactory(agent, null)
-        defaultHttpDataSource.defaultRequestProperties.set("Cookie", BindingCache.cookie)
-
-        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(this.context,
-                null, defaultHttpDataSource)
-
-        val mediaSources = ConcatenatingMediaSource()
-        mediaSources.addMediaSources(urlVideo.map { url ->
-            val mediaItem = MediaItem.Builder().setUri(url).build()
-            ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(mediaItem)
-        })
-
-        BindingCache.media = mediaSources
-        bindPlayer(this)
+        BindingCache.media = urlVideo
+        (this.player as SimpleExoPlayer)
+        if (!PlayerCache.isPrepared) {
+            bindPlayer(this)
+        }
     }
 }
 
@@ -56,8 +47,26 @@ fun PlayerView.bindCurrentPosition(value: Pair<Int, Long>) {
 }
 
 fun bindPlayer(playerView: PlayerView) {
-    (playerView.player as SimpleExoPlayer)
-            .prepare(BindingCache.media,
-                    true,
-                    false)
+    if (BindingCache.media.isNotEmpty()) {
+        (playerView.player as SimpleExoPlayer).setMediaSource(createMediaSourcesByUri(BindingCache.media, playerView.context), true)
+        (playerView.player as SimpleExoPlayer)
+                .prepare()
+    }
+}
+
+private fun createMediaSourcesByUri(urlVideo: List<Uri>?, context: Context): ConcatenatingMediaSource {
+    val agent = Util.getUserAgent(context, "AppName")
+    val defaultHttpDataSource = DefaultHttpDataSourceFactory(agent, null)
+    defaultHttpDataSource.defaultRequestProperties.set("Cookie", BindingCache.cookie)
+
+    val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(context,
+            null, defaultHttpDataSource)
+
+    val mediaSources = ConcatenatingMediaSource()
+    urlVideo?.map { url ->
+        val mediaItem = MediaItem.Builder().setUri(url).build()
+        ProgressiveMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(mediaItem)
+    }?.let { mediaSources.addMediaSources(it) }
+    return mediaSources
 }
