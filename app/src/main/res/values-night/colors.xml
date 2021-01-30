@@ -2,8 +2,8 @@
 <resources>
     <color name="colorAccent">#D81B60</color>
     <color name="colorPrimaryDarkOne">#080609</color>
-    <color name="textColorPrimary">#080609</color>
-    <color name="windowBackground">#ffffff</color>
-    <color name="colorControlNormal">?attr/colorControlNormal</color>
+    <color name="textColorPrimary">#DCDCDC</color>
+    <color name="windowBackground">#080609</color>
+    <color name="colorControlNormal">#DCDCDC</color>
     <color name="progressBackgroundTint">#403D3D</color>
 </resources>

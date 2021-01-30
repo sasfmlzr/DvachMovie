@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <Switch
+                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/gesture_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                         android:onCheckedChanged="@{viewModel.onGestureLoadingClicked}"
                         android:text="@string/gesture" />
 
-                    <Switch
+                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/report_btn_visibility_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                         android:text="@string/report_button_visible"
                         android:visibility="@{safeUnbox(viewModel.isReportBtnVisible)? View.VISIBLE : View.GONE}" />
 
-                    <Switch
+                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/list_btn_visibility_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
