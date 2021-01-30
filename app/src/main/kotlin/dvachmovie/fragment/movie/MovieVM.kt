@@ -122,7 +122,7 @@ class MovieVM @Inject constructor(
     val onBtnSettingsClicked = View.OnClickListener { routeToSettingsTask() }
 
     val onBtnCopyURLClicked = View.OnClickListener {
-        copyURLTask(currentMovie.value?.movieUrl ?: "")
+        copyURLTask(currentMovie.value?.movieUrl.orEmpty())
     }
     val onBtnListVideosClicked = View.OnClickListener { routeToPreviewTask() }
 

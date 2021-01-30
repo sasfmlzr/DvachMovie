@@ -29,7 +29,6 @@ import dvachmovie.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.service.DownloadService
 import dvachmovie.worker.WorkerManager
-import kotlinx.android.synthetic.main.fragment_movie.*
 
 class MovieFragment : BaseFragment<MovieVM,
         FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
@@ -71,7 +70,7 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
             if (PlayerCache.isHideMovieByThreadTask) {
-                (playerView.player as ExoPlayer).release()
+                (binding.playerView.player as ExoPlayer).release()
                 router.navigateMovieToSelf()
                 PlayerCache.isHideMovieByThreadTask = false
             }
@@ -92,7 +91,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initPlayer(playerView)
+        initPlayer(binding.playerView)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -133,11 +132,11 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
             override fun onSwipeRight() {
-                playerView.player?.previous()
+                binding.playerView.player?.previous()
             }
 
             override fun onSwipeLeft() {
-                playerView.player?.next()
+                binding.playerView.player?.next()
             }
         }
     }
@@ -153,11 +152,11 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun toggleControlsVisibility() =
-            if (playerView.isControllerVisible) {
-                playerView.hideController()
+            if (binding.playerView.isControllerVisible) {
+                binding.playerView.hideController()
                 false
             } else {
-                playerView.showController()
+                binding.playerView.showController()
                 true
             }
 
@@ -165,30 +164,25 @@ class MovieFragment : BaseFragment<MovieVM,
         object : Player.EventListener {
 
             override fun onPlayerError(error: ExoPlaybackException) {
-                if (playerView != null) {
-                    viewModel.markMovieAsPlayed(playerView.player?.currentPeriodIndex ?: 0)
+                viewModel.markMovieAsPlayed(binding.playerView.player?.currentPeriodIndex ?: 0)
 
-                    if (error.message != "java.lang.IllegalArgumentException") {
-                        extensions.showMessage("Network error")
-                    } else {
-                        logger.d("Internal error")
-                        error.printStackTrace()
-                    }
+                if (error.message != "java.lang.IllegalArgumentException") {
+                    extensions.showMessage("Network error")
+                } else {
+                    logger.d("Internal error")
+                    error.printStackTrace()
+                }
 
-                    (playerView.player as ExoPlayer).let {
-                        it.prepare()
-                        it.next()
-                    }
+                (binding.playerView.player as ExoPlayer).let {
+                    it.prepare()
+                    it.next()
                 }
                 super.onPlayerError(error)
             }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray,
                                          trackSelections: TrackSelectionArray) {
-                var currentIndex = 0
-                if (playerView != null) {
-                    currentIndex = playerView.player?.currentPeriodIndex ?: 0
-                }
+                val currentIndex: Int = binding.playerView.player?.currentPeriodIndex ?: 0
                 viewModel.markMovieAsPlayed(currentIndex)
                 super.onTracksChanged(trackGroups, trackSelections)
             }
@@ -201,15 +195,15 @@ class MovieFragment : BaseFragment<MovieVM,
     }
 
     private fun initializePlayer() {
-        playerView.player?.playWhenReady = PlayerCache.shouldAutoPlay
+        binding.playerView.player?.playWhenReady = PlayerCache.shouldAutoPlay
         if (!PlayerCache.isPrepared && BindingCache.media.isNotEmpty()) {
-            bindPlayer(playerView)
+            bindPlayer(binding.playerView)
             PlayerCache.isPrepared = true
         }
     }
 
     override fun onStop() {
-        val index = playerView.player?.currentPeriodIndex ?: 0
+        val index = binding.playerView.player?.currentPeriodIndex ?: 0
 
         viewModel.markMovieAsPlayed(index)
 
@@ -219,13 +213,13 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private fun stopPlayer() {
         updateStartPosition()
-        PlayerCache.shouldAutoPlay = playerView?.player?.playWhenReady ?: false
-        playerView.player?.playWhenReady = false
+        PlayerCache.shouldAutoPlay = binding.playerView.player?.playWhenReady ?: false
+        binding.playerView.player?.playWhenReady = false
     }
 
     private fun updateStartPosition() {
-        viewModel.currentPos.value = Pair(playerView.player?.currentWindowIndex ?: 0,
-                playerView.player?.currentPosition ?: 0)
+        viewModel.currentPos.value = Pair(binding.playerView.player?.currentWindowIndex ?: 0,
+                binding.playerView.player?.currentPosition ?: 0)
     }
 
     override fun onDestroyView() {
@@ -237,11 +231,11 @@ class MovieFragment : BaseFragment<MovieVM,
     override fun onPermissionsGranted(permissions: List<String>) {
         if (permissions.isNotEmpty()) {
             viewModel.setCurrentMoviePipe.execute(
-                    viewModel.movieList.value?.get(playerView.player?.currentWindowIndex
+                    viewModel.movieList.value?.get(binding.playerView.player?.currentWindowIndex
                             ?: 0)!!)
 
             downloadMovie(viewModel.currentMovie.value?.movieUrl
-                    ?: "", viewModel.cookie.value ?: "")
+                    .orEmpty(), viewModel.cookie.value.orEmpty())
         }
     }
 
