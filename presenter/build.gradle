@@ -1,26 +1,11 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin'
 
-android {
-    compileSdkVersion rootProject.compileSdkVersion
-
-    defaultConfig {
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
-    }
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
 }
 
 dependencies {
     implementation "$kotlinSdk"
-    implementation "$appcompat"
 
     implementation "$dagger.dagger"
 
@@ -29,7 +14,6 @@ dependencies {
     implementation "$jodaTime"
 
     implementation project(':domain')
-    implementation project(':data-android')
 
     testImplementation "$testing.junit"
     testImplementation "$testing.mockito"
