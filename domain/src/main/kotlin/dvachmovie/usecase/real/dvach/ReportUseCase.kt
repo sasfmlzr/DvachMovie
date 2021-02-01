@@ -20,7 +20,7 @@ open class ReportUseCase @Inject constructor(private val dvachRepository: DvachR
                     input.post,
                     comment)
             input.executorResult?.onSuccess(DvachReportUseCaseModel(response
-                    ?: ""))
+                    .orEmpty()))
         } catch (e: Exception) {
             input.executorResult?.onFailure(e)
         }

@@ -8,7 +8,6 @@ class PutCookiePipe @Inject constructor(
         private val useCase: PutCookieUseCase) : PipeAsync<String, Unit>() {
 
     override suspend fun execute(input: String) {
-        val result = useCase.executeAsync(input)
-        return result
+        return useCase.executeAsync(input)
     }
 }

@@ -39,10 +39,6 @@ open class StartVM @Inject constructor(
 
     val viewRetryBtn = MutableLiveData(false)
 
-    val imageId by lazy {
-        MutableLiveData<Int>()
-    }
-
     val progressLoadingMovies = MutableLiveData<Int>()
     val amountMovies = MutableLiveData<Int>()
 

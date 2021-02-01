@@ -17,6 +17,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/player"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:use_controller="false"
+            android:contentDescription="@string/loading_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <TextView
             android:id="@+id/firstInitText"
             android:layout_width="wrap_content"
@@ -27,19 +38,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageLoading"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:contentDescription="@string/loading_image"
-            app:imageFromResource="@{safeUnbox(viewModel.imageId)}"
-            app:layout_constraintBottom_toTopOf="@+id/firstInitText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
 
         <Button
             android:id="@+id/buttonChangeDefaultBoard"
@@ -90,6 +88,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

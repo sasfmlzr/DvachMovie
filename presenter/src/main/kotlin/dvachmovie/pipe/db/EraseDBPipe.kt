@@ -9,7 +9,6 @@ class EraseDBPipe @Inject constructor(
 ) : PipeAsync<Unit, Unit>() {
 
     override suspend fun execute(input: Unit) {
-        val result = useCase.executeAsync(input)
-        return result
+        return useCase.executeAsync(input)
     }
 }

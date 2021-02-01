@@ -17,6 +17,7 @@ import dvachmovie.api.DvachBoards
 import dvachmovie.api.FourChanBoards
 import dvachmovie.api.NeoChanBoards
 import dvachmovie.architecture.ScopeProvider
+import dvachmovie.architecture.binding.BindingCache
 import dvachmovie.pipe.moviestorage.EraseMovieStoragePipe
 import dvachmovie.pipe.settingsstorage.GetBoardPipe
 import dvachmovie.pipe.settingsstorage.GetCurrentBaseUrlPipe
@@ -128,6 +129,7 @@ class SettingsVM @Inject constructor(
     lateinit var routeToStartFragment: (isRefresh: Boolean) -> Unit
 
     fun reInitMovies(isRefresh: Boolean) {
+        BindingCache.media = listOf()
         eraseMovieStoragePipe.execute(Unit)
         routeToStartFragment(isRefresh)
     }

@@ -27,7 +27,6 @@ import dvachmovie.databinding.FragmentAloneMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.fragment.movie.PlayerCache
 import dvachmovie.service.DownloadService
-import kotlinx.android.synthetic.main.fragment_movie.*
 
 class AloneMovieFragment : BaseFragment<AloneMovieVM,
         FragmentAloneMovieBinding>(AloneMovieVM::class), PermissionsCallback {
@@ -74,7 +73,7 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initPlayer(playerView)
+        initPlayer(binding.playerView)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -132,11 +131,11 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
             }
 
             override fun onSwipeRight() {
-                playerView.player?.previous()
+                binding.playerView.player?.previous()
             }
 
             override fun onSwipeLeft() {
-                playerView.player?.next()
+                binding.playerView.player?.next()
             }
         }
     }
@@ -152,11 +151,11 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
     }
 
     private fun toggleControlsVisibility() =
-            if (playerView.isControllerVisible) {
-                playerView.hideController()
+            if (binding.playerView.isControllerVisible) {
+                binding.playerView.hideController()
                 false
             } else {
-                playerView.showController()
+                binding.playerView.showController()
                 true
             }
 
@@ -164,17 +163,15 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
         object : Player.EventListener {
 
             override fun onPlayerError(error: ExoPlaybackException) {
-                if (playerView != null) {
 
-                    if (error.message != "java.lang.IllegalArgumentException") {
-                        extensions.showMessage("Network error")
-                    } else {
-                        logger.d("Internal error")
-                    }
+                if (error.message != "java.lang.IllegalArgumentException") {
+                    extensions.showMessage("Network error")
+                } else {
+                    logger.d("Internal error")
+                }
 
-                    (playerView.player as ExoPlayer).apply {
-                        retry()
-                    }
+                (binding.playerView.player as ExoPlayer).apply {
+                    prepare()
                 }
                 super.onPlayerError(error)
             }
@@ -187,9 +184,9 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
     }
 
     private fun initializePlayer() {
-        playerView.player?.playWhenReady = PlayerCache.shouldAutoPlay
+        binding.playerView.player?.playWhenReady = PlayerCache.shouldAutoPlay
         if (!PlayerCache.isPrepared) {
-            bindPlayer(playerView)
+            bindPlayer(binding.playerView)
             PlayerCache.isPrepared = true
         }
     }
@@ -202,14 +199,14 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
     }
 
     private fun stopPlayer() {
-        playerView.player?.playWhenReady = false
-        PlayerCache.shouldAutoPlay = playerView?.player?.playWhenReady ?: false
+        binding.playerView.player?.playWhenReady = false
+        PlayerCache.shouldAutoPlay = binding.playerView.player?.playWhenReady ?: false
     }
 
     override fun onPermissionsGranted(permissions: List<String>) {
         if (permissions.isNotEmpty()) {
             downloadMovie(viewModel.currentMovie.value
-                    ?: "", viewModel.cookie.value ?: "")
+                    .orEmpty(), viewModel.cookie.value.orEmpty())
         }
     }
 

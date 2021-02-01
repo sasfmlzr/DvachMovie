@@ -18,15 +18,16 @@ class BackFragment : BaseFragment<BackVM,
     override fun inject(component: FragmentComponent) = component.inject(this)
 
     @SuppressLint("ResourceType")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
         viewModel.imageId.value = R.raw.kiss
 
-        binding.imageView.setOnClickListener { activity?.finish()
-
-            viewModel.eraseMovieStorage()}
+        binding.imageView.setOnClickListener {
+            activity?.finish()
+            viewModel.eraseMovieStorage()
+        }
 
         return binding.root
     }

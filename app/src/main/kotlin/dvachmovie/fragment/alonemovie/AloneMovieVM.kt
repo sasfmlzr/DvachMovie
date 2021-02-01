@@ -32,7 +32,7 @@ class AloneMovieVM @Inject constructor(
         refreshVM()
     }
 
-    fun refreshVM() {
+    private fun refreshVM() {
         isGestureEnabled.value = getIsAllowGesturePipe.execute(Unit)
     }
 
@@ -44,11 +44,11 @@ class AloneMovieVM @Inject constructor(
     val onBtnDownloadClicked = View.OnClickListener { downloadBtnClicked() }
 
     val onBtnCopyURLClicked = View.OnClickListener {
-        copyURLTask(currentMovie.value ?: "")
+        copyURLTask(currentMovie.value.orEmpty())
     }
 
     val currentMovie by lazy {
-        MutableLiveData<String>(getUrlTask())
+        MutableLiveData(getUrlTask())
     }
 
     fun fillCurrentPos() {

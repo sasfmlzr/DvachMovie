@@ -18,7 +18,7 @@ class StartActivity : BaseActivity<StartActivityVM,
         ActivityStartBinding>(StartActivityVM::class) {
 
     companion object {
-        const val MIN_SHOW_TIME: Long = 2000
+        const val MIN_SHOW_TIME: Long = 1
     }
 
     override val layoutId = R.layout.activity_start

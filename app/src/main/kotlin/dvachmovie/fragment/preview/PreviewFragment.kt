@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.databinding.FragmentPreviewMoviesBinding
@@ -40,7 +39,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
 
     private fun subscribeUi(adapter: PreviewMovieAdapter) {
         binding.viewModel?.uriMovie
-                ?.observe(viewLifecycleOwner, Observer { movies ->
+                ?.observe(viewLifecycleOwner, { movies ->
                     if (movies != null) {
                         adapter.submitList(movies)
                     }

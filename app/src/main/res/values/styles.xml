@@ -1,31 +1,46 @@
 <resources>
+
     <style name="MyToolBarStyle" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:title">false</item>
     </style>
 
-    <style name="BlackTheme" parent="Base.V14.Theme.MaterialComponents">
+    <style name="Theme" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">?attr/colorBackgroundFloating</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkOne</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
         <item name="alertDialogStyle">@style/AlertDialogStyle</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="android:progressBackgroundTint">@color/progressBackgroundTint</item>
     </style>
 
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="strokeColor">@color/mtrl_btn_stroke_color_selector</item>
         <item name="strokeWidth">1dp</item>
         <item name="rippleColor">@android:color/darker_gray</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:focusable">true</item>
     </style>
 
     <style name="AlertDialogStyle" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:background">?attr/colorBackgroundFloating</item>
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:checkedTextViewStyle">@style/CheckedTextViewStyle</item>
+        <item name="materialButtonStyle">@style/MaterialButtonStyle</item>
+        <item name="android:listViewStyle">@style/ListViewStyle</item>
+    </style>
+
+
+    <style name="AlertDialogStyleeee" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="android:background">?attr/colorBackgroundFloating</item>
         <item name="colorPrimary">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>

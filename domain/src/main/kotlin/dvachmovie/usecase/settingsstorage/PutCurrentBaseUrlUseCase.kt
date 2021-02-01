@@ -8,7 +8,6 @@ open class PutCurrentBaseUrlUseCase @Inject constructor(
         private val settingsStorage: SettingsStorage) : UseCase<String, Unit>() {
 
     override suspend fun executeAsync(input: String) {
-        val result = settingsStorage.putCurrentBaseUrl(input).await()
-        return result
+        return settingsStorage.putCurrentBaseUrl(input).await()
     }
 }

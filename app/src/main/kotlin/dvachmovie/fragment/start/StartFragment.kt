@@ -4,6 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.RawResourceDataSource
 import dvachmovie.AppConfig
 import dvachmovie.R
 import dvachmovie.architecture.ScopeProvider
@@ -37,7 +45,7 @@ class StartFragment : BaseFragment<StartVM,
     private lateinit var initDBTask: () -> Unit
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
 
@@ -48,14 +56,30 @@ class StartFragment : BaseFragment<StartVM,
         viewModel.initDBTask = initDBTask
         AppConfig.currentBaseUrl = viewModel.getCurrentBaseUrl()
 
-        when (AppConfig.currentBaseUrl) {
-            AppConfig.NEOCHAN_URL -> viewModel.imageId.value = R.raw.neochangif
-            else -> viewModel.imageId.value = R.raw.cybermilosgif
-        }
-
+        initializePlayer()
         prepareData()
 
         return binding.root
+    }
+
+    private fun initializePlayer() {
+        val player = SimpleExoPlayer.Builder(requireContext()).build()
+        val rawUri = when (AppConfig.currentBaseUrl) {
+            AppConfig.NEOCHAN_URL -> R.raw.twice404
+            else -> R.raw.milos01
+        }
+
+        val uri = RawResourceDataSource.buildRawResourceUri(rawUri)
+        val mediaSource: MediaSource = ProgressiveMediaSource.Factory(DefaultDataSourceFactory(requireContext(), "Exoplayer"))
+                .createMediaSource(MediaItem.fromUri(uri))
+
+        player.setMediaSource(mediaSource)
+        player.prepare()
+        player.playWhenReady = true
+        player.volume = 0f
+        player.repeatMode = Player.REPEAT_MODE_ONE
+        binding.player.player = player
+        binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
     }
 
     private fun prepareData() {
@@ -70,5 +94,10 @@ class StartFragment : BaseFragment<StartVM,
                 router.navigateStartToMovieFragment()
             }
         }
+    }
+
+    override fun onDestroy() {
+        binding.player.player?.release()
+        super.onDestroy()
     }
 }

@@ -10,7 +10,6 @@ class InsertionMovieToDBPipe @Inject constructor(
 ) : PipeAsync<Movie, Unit>() {
 
     override suspend fun execute(input: Movie) {
-        val result = useCase.executeAsync(input)
-        return result
+        return useCase.executeAsync(input)
     }
 }
