@@ -22,7 +22,7 @@ class LocalFourChanRepository @Inject constructor(
                                                 nameThread: String): List<FileItem> =
             api.getThread(board, numThread).let { request ->
                 logger.d("getConcreteThreadByNum", "parsing started for $numThread")
-                val list = request.posts.filter { it.tim != 0L }.map { post ->
+                val list = request.posts.filter { it.tim != 0L && it.ext != ".jpg" && it.ext != ".png"}.map { post ->
                     FileItem(path = "${AppConfig.FOURCHAN_WEBM_URL}/$board/${post.tim}${post.ext}",
                             thumbnail = "${AppConfig.FOURCHAN_THUMBNAIL_URL}/$board/${post.tim}s.jpg",
                             md5 = post.md5,
