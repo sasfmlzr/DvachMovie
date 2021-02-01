@@ -56,11 +56,6 @@ class StartFragment : BaseFragment<StartVM,
         viewModel.initDBTask = initDBTask
         AppConfig.currentBaseUrl = viewModel.getCurrentBaseUrl()
 
-        when (AppConfig.currentBaseUrl) {
-            AppConfig.NEOCHAN_URL -> viewModel.imageId.value = R.raw.neochangif
-            else -> viewModel.imageId.value = R.raw.cybermilosgif
-        }
-
         initializePlayer()
         prepareData()
 
@@ -69,7 +64,12 @@ class StartFragment : BaseFragment<StartVM,
 
     private fun initializePlayer() {
         val player = SimpleExoPlayer.Builder(requireContext()).build()
-        val uri = RawResourceDataSource.buildRawResourceUri(R.raw.samplevideo)
+        val rawUri = when (AppConfig.currentBaseUrl) {
+            AppConfig.NEOCHAN_URL -> R.raw.twice404
+            else -> R.raw.milos01
+        }
+
+        val uri = RawResourceDataSource.buildRawResourceUri(rawUri)
         val mediaSource: MediaSource = ProgressiveMediaSource.Factory(DefaultDataSourceFactory(requireContext(), "Exoplayer"))
                 .createMediaSource(MediaItem.fromUri(uri))
 

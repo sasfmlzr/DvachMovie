@@ -39,20 +39,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <!--
-            Migrating to exoplayer
-            <ImageView
-            android:id="@+id/imageLoading"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:contentDescription="@string/loading_image"
-            app:imageFromResource="@{safeUnbox(viewModel.imageId)}"
-            app:layout_constraintBottom_toTopOf="@+id/firstInitText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />-->
-
         <Button
             android:id="@+id/buttonChangeDefaultBoard"
             android:layout_width="wrap_content"
