@@ -9,6 +9,9 @@ This app is based on MVVM architecture.
 You'll watch only new webm from different boards. 
 Also you can download videos. 
 
+Link for ru community:
+https://t.me/dvachmovie
+
 Screenshots
 -----------
 ![Player](screenshots/DvachMovie1.jpg "DvachMovie player")
