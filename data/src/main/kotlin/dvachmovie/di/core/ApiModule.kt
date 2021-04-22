@@ -11,10 +11,12 @@ import dvachmovie.storage.SettingsStorage
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+
 
 @Module
 internal class ApiModule {
@@ -58,11 +60,16 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun okHttp(cookieJar: CookieJar) = OkHttpClient.Builder()
-            .connectTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
-            .readTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
-            .cookieJar(cookieJar)
-            .build()
+    fun okHttp(cookieJar: CookieJar):OkHttpClient {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        return OkHttpClient.Builder()
+                .connectTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
+                .addInterceptor(interceptor)
+                .cookieJar(cookieJar)
+                .build()
+    }
 
     @Provides
     @Singleton
