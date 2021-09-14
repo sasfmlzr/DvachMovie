@@ -11,10 +11,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
@@ -163,7 +160,7 @@ class MovieFragment : BaseFragment<MovieVM,
     private val playerListener by lazy {
         object : Player.EventListener {
 
-            override fun onPlayerError(error: ExoPlaybackException) {
+            override fun onPlayerError(error: PlaybackException) {
                 viewModel.markMovieAsPlayed(binding.playerView.player?.currentPeriodIndex ?: 0)
 
                 if (error.message != "java.lang.IllegalArgumentException") {

@@ -12,10 +12,7 @@ import android.view.*
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.core.view.children
-import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.R
@@ -162,7 +159,7 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
     private val playerListener by lazy {
         object : Player.EventListener {
 
-            override fun onPlayerError(error: ExoPlaybackException) {
+            override fun onPlayerError(error: PlaybackException) {
 
                 if (error.message != "java.lang.IllegalArgumentException") {
                     extensions.showMessage("Network error")
