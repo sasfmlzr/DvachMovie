@@ -16,7 +16,7 @@
         android:required="false" />
 
     <application
-        android:name=".di.core.MainApplication"
+        android:name=".di.core .MainApplication"
         android:allowBackup="false"
         android:banner="@mipmap/ic_launcher"
         android:icon="@mipmap/ic_launcher"
