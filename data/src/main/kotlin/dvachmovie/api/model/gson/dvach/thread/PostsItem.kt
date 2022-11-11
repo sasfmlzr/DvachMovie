@@ -29,7 +29,7 @@ data class PostsItem(@SerializedName("date")
                      @SerializedName("closed")
                      val closed: Int = 0,
                      @SerializedName("files")
-                     val files: List<FileItem> = listOf(),
+                     val files: List<FileItem?>? = listOf(),
                      @SerializedName("comment")
                      val comment: String = "",
                      @SerializedName("banned")

@@ -17,15 +17,19 @@ class LocalDvachRepository @Inject constructor(
                 logger.d("getConcreteThreadByNum", "parsing started for ${request.title}")
                 val list = request.threads.flatMap { thread ->
                     thread.posts.flatMap { post ->
-                        post.files.map {
-                            FileItem(path = it.path,
-                                    thumbnail = it.thumbnail,
-                                    md5 = it.md5,
-                                    numThread = request.currentThread.toLong(),
-                                    numPost = post.num.toLong(),
-                                    date = post.date,
-                                    threadName = request.title)
-                        }
+                        post.files?.mapNotNull {
+                            if (it == null) {
+                                null
+                            } else {
+                                FileItem(path = it.path,
+                                        thumbnail = it.thumbnail,
+                                        md5 = it.md5,
+                                        numThread = request.currentThread.toLong(),
+                                        numPost = post.num.toLong(),
+                                        date = post.date,
+                                        threadName = request.title)
+                            }
+                        } ?: listOf()
                     }
                 }
                 logger.d("getConcreteThreadByNum", "parsing finished for ${request.title}")

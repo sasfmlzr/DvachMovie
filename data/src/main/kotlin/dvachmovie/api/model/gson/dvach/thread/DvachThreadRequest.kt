@@ -46,7 +46,7 @@ data class DvachThreadRequest(@SerializedName("enable_names")
                               @SerializedName("news_abu")
                               val newsAbu: List<NewsAbuItem> = listOf(),
                               @SerializedName("is_index")
-                              val isIndex: Int = 0,
+                              val isIndex: Boolean?,
                               @SerializedName("files_count")
                               val filesCount: Int = 0,
                               @SerializedName("BoardInfo")
@@ -62,7 +62,7 @@ data class DvachThreadRequest(@SerializedName("enable_names")
                               @SerializedName("threads")
                               val threads: List<ThreadsItem> = listOf(),
                               @SerializedName("is_board")
-                              val isBoard: Int = 0,
+                              val isBoard: Boolean?,
                               @SerializedName("enable_subject")
                               val enableSubject: Int = 0,
                               @SerializedName("default_name")
