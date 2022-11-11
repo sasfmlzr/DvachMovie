@@ -110,16 +110,22 @@
 
         <argument
             android:name="board"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
         <deepLink
             android:id="@+id/deepLink2chHkWebm"
             app:uri="https://2ch.hk/{board}/src/{numberThread}/{numVideo}.webm" />
         <argument
             android:name="numberThread"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
         <argument
             android:name="numVideo"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
         <deepLink
             android:id="@+id/deepLink2chHkMp4"
             app:uri="https://2ch.hk/{board}/src/{numberThread}/{numVideo}.mp4" />
@@ -127,7 +133,6 @@
         <deepLink
             android:id="@+id/deepLink4ChanWebmHTTPS"
             app:uri="https://i.4cdn.org/{board}/{numVideo}.webm" />
-
         <deepLink
             android:id="@+id/deepLink4ChanWebmHTTP"
             app:uri="http://i.4cdn.org/{board}/{numVideo}.webm" />
@@ -271,11 +276,11 @@
             app:uri="https://uboachan.net/{board}/src/{numVideo}.mp4" />
 
         <deepLink
-            android:id="@+id/deepLink2--chWebm"
+            android:id="@+id/deepLink2chWebm"
             app:uri="https://2--ch.ru/{board}/{numVideo}.webm" />
 
         <deepLink
-            android:id="@+id/deepLink2--chMp4"
+            android:id="@+id/deepLink2chMp4"
             app:uri="https://2--ch.ru/{board}/{numVideo}.mp4" />
     </fragment>
 
