@@ -44,6 +44,7 @@
         <activity
             android:name=".activity.movie.MovieActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
