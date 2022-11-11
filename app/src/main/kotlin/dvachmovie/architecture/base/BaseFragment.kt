@@ -1,6 +1,5 @@
 package dvachmovie.architecture.base
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -69,12 +68,12 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
     }
 
     val runtimePermissions = object : RuntimePermissions {
-        override fun request(permission: String) {
-            request(listOf(permission))
-        }
-
         override fun request(permissions: List<String>) {
             requestPermissions(permissions.toTypedArray(), permissionRequestCode)
+        }
+
+        override fun request(permission: String) {
+            request(listOf(permission))
         }
     }
 
@@ -90,11 +89,7 @@ protected constructor(private val viewModelClass: KClass<VM>) : Fragment() {
 
         if (permissions.isNotEmpty() && grantResults.isNotEmpty()) {
             for ((index, value) in grantResults.withIndex()) {
-                if (value == PackageManager.PERMISSION_GRANTED) {
-                    grantedPermissions.add(permissions[index])
-                } else {
-                    extensions.showMessage("Permission must be granted")
-                }
+                grantedPermissions.add(permissions[index])
             }
         }
 

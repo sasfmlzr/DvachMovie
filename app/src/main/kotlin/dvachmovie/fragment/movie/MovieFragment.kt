@@ -12,8 +12,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.AppConfig
 import dvachmovie.R
@@ -61,7 +59,7 @@ class MovieFragment : BaseFragment<MovieVM,
 
         PlayerCache.shouldAutoPlay = true
 
-        viewModel.currentMovie.observe(viewLifecycleOwner, {
+        viewModel.currentMovie.observe(viewLifecycleOwner) {
             if (it?.isPlayed == true) {
                 WorkerManager.insertMovieInDB(requireContext())
             }
@@ -71,7 +69,7 @@ class MovieFragment : BaseFragment<MovieVM,
                 router.navigateMovieToSelf()
                 PlayerCache.isHideMovieByThreadTask = false
             }
-        })
+        }
 
         viewModel.fillCurrentPos()
 
@@ -95,19 +93,19 @@ class MovieFragment : BaseFragment<MovieVM,
     private fun initPlayer(playerView: PlayerView) {
         playerView.player = SimpleExoPlayer.Builder(playerView.context)
                 .build()
-        viewModel.isGestureEnabled.observe(viewLifecycleOwner, { isAllowGesture ->
+        viewModel.isGestureEnabled.observe(viewLifecycleOwner) { isAllowGesture ->
             if (isAllowGesture) {
                 playerView.setOnTouchListener(specificGestureListener)
             } else {
                 playerView.setOnTouchListener(defaultGestureListener)
             }
-        })
+        }
 
         playerView.setControllerVisibilityListener {
             viewModel.isPlayerControlVisibility.value = it == 0
         }
 
-        playerView.player?.addListener(playerListener)
+        (playerView.player as ExoPlayer).addListener(playerListener)
 
         binding.playerView.setOnFocusChangeListener { _, _ ->
             viewModel.isPlayerControlVisibility.value = playerView.isControllerVisible
@@ -158,7 +156,7 @@ class MovieFragment : BaseFragment<MovieVM,
             }
 
     private val playerListener by lazy {
-        object : Player.EventListener {
+        object : Player.Listener {
 
             override fun onPlayerError(error: PlaybackException) {
                 viewModel.markMovieAsPlayed(binding.playerView.player?.currentPeriodIndex ?: 0)
@@ -177,11 +175,10 @@ class MovieFragment : BaseFragment<MovieVM,
                 super.onPlayerError(error)
             }
 
-            override fun onTracksChanged(trackGroups: TrackGroupArray,
-                                         trackSelections: TrackSelectionArray) {
+            override fun onTracksChanged(tracks: Tracks) {
                 val currentIndex: Int = binding.playerView.player?.currentPeriodIndex ?: 0
                 viewModel.markMovieAsPlayed(currentIndex)
-                super.onTracksChanged(trackGroups, trackSelections)
+                super.onTracksChanged(tracks)
             }
         }
     }

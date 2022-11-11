@@ -94,19 +94,19 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
         copyUrlButton.setOnClickListener(viewModel.onBtnCopyURLClicked)
         downloadButton.setOnClickListener(viewModel.onBtnDownloadClicked)
 
-        viewModel.isGestureEnabled.observe(viewLifecycleOwner, { isAllowGesture ->
+        viewModel.isGestureEnabled.observe(viewLifecycleOwner) { isAllowGesture ->
             if (isAllowGesture) {
                 playerView.setOnTouchListener(specificGestureListener)
             } else {
                 playerView.setOnTouchListener(defaultGestureListener)
             }
-        })
+        }
 
         playerView.setControllerVisibilityListener {
             viewModel.isPlayerControlVisibility.value = it == 0
         }
 
-        playerView.player?.addListener(playerListener)
+        (playerView.player as ExoPlayer).addListener(playerListener)
 
         binding.playerView.setOnFocusChangeListener { _, _ ->
             viewModel.isPlayerControlVisibility.value = playerView.isControllerVisible
@@ -157,7 +157,7 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
             }
 
     private val playerListener by lazy {
-        object : Player.EventListener {
+        object : Player.Listener {
 
             override fun onPlayerError(error: PlaybackException) {
 

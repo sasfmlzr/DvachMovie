@@ -41,7 +41,9 @@ class AloneMovieVM @Inject constructor(
     lateinit var showMessageTask: (message: String) -> Unit
     lateinit var getUrlTask: () -> String
 
-    val onBtnDownloadClicked = View.OnClickListener { downloadBtnClicked() }
+    val onBtnDownloadClicked = View.OnClickListener {
+        downloadBtnClicked()
+    }
 
     val onBtnCopyURLClicked = View.OnClickListener {
         copyURLTask(currentMovie.value.orEmpty())
