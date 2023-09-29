@@ -11,8 +11,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dvachmovie.AppConfig
-import dvachmovie.BuildConfig
-import dvachmovie.R
+import com.dvachmovie.android.BuildConfig
+import com.dvachmovie.android.R
 import dvachmovie.api.DvachBoards
 import dvachmovie.api.FourChanBoards
 import dvachmovie.api.NeoChanBoards

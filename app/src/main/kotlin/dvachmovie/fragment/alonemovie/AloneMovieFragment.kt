@@ -12,15 +12,15 @@ import android.view.*
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.core.view.children
+import com.dvachmovie.android.R
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
-import dvachmovie.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
-import dvachmovie.databinding.FragmentAloneMovieBinding
+import com.dvachmovie.android.databinding.FragmentAloneMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.fragment.movie.PlayerCache
 import dvachmovie.service.DownloadService
@@ -78,7 +78,7 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
         playerView.player = SimpleExoPlayer.Builder(playerView.context)
                 .build()
 
-        binding.playerView.findViewById<PlayerControlView>(R.id.exo_controller)
+        binding.playerView.findViewById<PlayerControlView>(com.google.android.exoplayer2.ui.R.id.exo_controller)
         val controlView = playerView.children.filter { it is PlayerControlView }.first() as PlayerControlView
         val buttonsGroup = ((controlView.getChildAt(0) as LinearLayout).getChildAt(0) as LinearLayout).children.filter {
             it is ImageButton

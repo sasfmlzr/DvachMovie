@@ -2,7 +2,7 @@ package dvachmovie.activity.start
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dvachmovie.BuildConfig
+import com.dvachmovie.android.BuildConfig
 import dvachmovie.db.data.Movie
 import dvachmovie.pipe.db.DeleteOldMoviesPipe
 import dvachmovie.pipe.moviestorage.EraseMovieStoragePipe
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class StartActivityVM @Inject constructor() : ViewModel() {
     val initText = MutableLiveData("Preparing...")
-    val version = MutableLiveData(BuildConfig.VERSION_NAME)
+    val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
 
     @Inject
     lateinit var deleteOldMoviesPipe: DeleteOldMoviesPipe

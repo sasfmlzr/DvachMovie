@@ -3,11 +3,11 @@ package dvachmovie.activity.movie
 import android.os.Bundle
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import dvachmovie.R
+import com.dvachmovie.android.R
 import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.base.BaseActivity
 import dvachmovie.architecture.logging.Logger
-import dvachmovie.databinding.ActivityMovieBinding
+import com.dvachmovie.android.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
 import javax.inject.Inject
 

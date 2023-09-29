@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="dvachmovie">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
@@ -18,7 +17,7 @@
         android:required="false" />
 
     <application
-        android:name=".di.core.MainApplication"
+        android:name="dvachmovie.di.core.MainApplication"
         android:allowBackup="false"
         android:banner="@mipmap/ic_launcher"
         android:icon="@mipmap/ic_launcher"
@@ -29,7 +28,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activity.start.StartActivity"
+            android:name="dvachmovie.activity.start.StartActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
@@ -44,7 +43,7 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name=".activity.movie.MovieActivity"
+            android:name="dvachmovie.activity.movie.MovieActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTop">
@@ -57,7 +56,7 @@
         </activity>
 
         <service
-            android:name=".service.DownloadService"
+            android:name="dvachmovie.service.DownloadService"
             android:enabled="true"
             android:exported="false" />
 

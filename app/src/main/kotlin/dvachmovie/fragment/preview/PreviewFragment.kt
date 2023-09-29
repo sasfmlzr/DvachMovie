@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dvachmovie.R
+import com.dvachmovie.android.R
 import dvachmovie.architecture.base.BaseFragment
-import dvachmovie.databinding.FragmentPreviewMoviesBinding
+import com.dvachmovie.android.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.di.core.FragmentComponent
 import javax.inject.Inject
 

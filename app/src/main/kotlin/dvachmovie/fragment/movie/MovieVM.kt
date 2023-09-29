@@ -3,15 +3,13 @@ package dvachmovie.fragment.movie
 import android.net.Uri
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.arch.core.util.Function
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import dvachmovie.AppConfig
 import dvachmovie.PresenterModel
-import dvachmovie.R
+import com.dvachmovie.android.R
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.db.data.Movie
 import dvachmovie.db.data.Thread
@@ -184,18 +182,14 @@ class MovieVM @Inject constructor(
 
     val isPlayerControlVisibility = MutableLiveData(true)
 
-
-    private val function = Function<List<Movie>, LiveData<List<Uri>>> { values ->
-        val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
-        if (urlVideo.isNotEmpty()) {
-            cookie.value = getCookiePipe.execute(Unit).toString()
-        }
-        MutableLiveData(urlVideo)
-    }
-
     val uriMovies: MutableLiveData<List<Uri>> =
-            Transformations.switchMap(movieList, function)
-                    as MutableLiveData<List<Uri>>
+            movieList.switchMap { values ->
+                val urlVideo: List<Uri> = values.map { value -> Uri.parse(value.movieUrl) }
+                if (urlVideo.isNotEmpty()) {
+                    cookie.value = getCookiePipe.execute(Unit).toString()
+                }
+                MutableLiveData(urlVideo)
+            } as MutableLiveData<List<Uri>>
 
     fun markMovieAsPlayed(pos: Int) {
         markCurrentMovieAsPlayedPipe.execute(pos)

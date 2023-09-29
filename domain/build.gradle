@@ -12,7 +12,4 @@ dependencies {
 
     implementation "$jodaTime"
 
-    testImplementation "$testing.coroutines"
-    testImplementation "$testing.junit"
-    testImplementation "$testing.mockito"
 }

@@ -67,15 +67,12 @@ class AloneMovieVM @Inject constructor(
 
     val isPlayerControlVisibility = MutableLiveData(true)
 
-    private val function = Function<String, LiveData<List<Uri>>> { value ->
-        cookie.value = getCookiePipe.execute(Unit).toString()
-
-        MutableLiveData(listOf(Uri.parse(value)))
-    }
-
     val uriMovies: MutableLiveData<List<Uri>> by lazy {
-        Transformations.switchMap(currentMovie, function)
-                as MutableLiveData<List<Uri>>
+        currentMovie.switchMap { value ->
+            cookie.value = getCookiePipe.execute(Unit).toString()
+
+            MutableLiveData(listOf(Uri.parse(value)))
+        } as MutableLiveData<List<Uri>>
     }
 
     private fun render(model: PresenterModel) {

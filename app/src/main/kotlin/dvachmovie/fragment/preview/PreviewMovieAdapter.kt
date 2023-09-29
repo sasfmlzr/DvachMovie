@@ -7,11 +7,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import dvachmovie.R
+import com.dvachmovie.android.R
 import dvachmovie.api.Cookie
 import dvachmovie.architecture.Navigator
 import dvachmovie.architecture.logging.Logger
-import dvachmovie.databinding.ItemPreviewMoviesBinding
+import com.dvachmovie.android.databinding.ItemPreviewMoviesBinding
 import dvachmovie.db.data.Movie
 import dvachmovie.pipe.moviestorage.SetCurrentMoviePipe
 import dvachmovie.pipe.network.GetCookiePipe

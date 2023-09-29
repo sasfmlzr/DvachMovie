@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import dvachmovie.AppConfig
-import dvachmovie.R
+import com.dvachmovie.android.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.binding.BindingCache
-import dvachmovie.databinding.FragmentSettingsBinding
+import com.dvachmovie.android.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.worker.WorkerManager
@@ -70,5 +70,8 @@ class SettingsFragment : BaseFragment<SettingsVM,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).setSupportActionBar(binding.root.findViewById(R.id.toolbar))
+        viewModel.version.observe(viewLifecycleOwner) {
+            binding.versionText.text = it
+        }
     }
 }

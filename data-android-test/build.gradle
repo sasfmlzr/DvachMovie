@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
+    namespace = "com.dvachmovie.android.dataandroidtest"
     compileSdkVersion rootProject.compileSdkVersion
 
     compileOptions {

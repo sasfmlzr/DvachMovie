@@ -13,10 +13,10 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.RawResourceDataSource
 import dvachmovie.AppConfig
-import dvachmovie.R
+import com.dvachmovie.android.R
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseFragment
-import dvachmovie.databinding.FragmentStartBinding
+import com.dvachmovie.android.databinding.FragmentStartBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.di.core.Injector
 import dvachmovie.worker.WorkerManager

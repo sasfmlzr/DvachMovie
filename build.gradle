@@ -3,9 +3,9 @@ apply from: "${rootProject.projectDir.path}${File.separatorChar}gradle${File.sep
 
 buildscript {
     ext {
-        compileSdkVersion = 31
+        compileSdkVersion = 33
         minSdkVersion = 23
-        targetSdkVersion = 31
+        targetSdkVersion = 33
 
         appcompatVersion = '1.4.0'
         constraintLayoutVersion = '2.1.4'
@@ -90,7 +90,7 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:8.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"

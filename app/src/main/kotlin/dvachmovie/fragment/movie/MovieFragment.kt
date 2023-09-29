@@ -14,13 +14,13 @@ import android.view.ViewGroup
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.AppConfig
-import dvachmovie.R
+import com.dvachmovie.android.R
 import dvachmovie.architecture.base.BaseFragment
 import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.BindingCache
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
-import dvachmovie.databinding.FragmentMovieBinding
+import com.dvachmovie.android.databinding.FragmentMovieBinding
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.service.DownloadService
 import dvachmovie.worker.WorkerManager

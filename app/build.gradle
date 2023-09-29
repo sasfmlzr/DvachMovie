@@ -4,6 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
+    namespace = "com.dvachmovie.android"
     signingConfigs {
         releaseConfig {
             keyAlias 'keyAlias'
@@ -28,6 +29,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures.dataBinding = true
+    buildFeatures.buildConfig = true
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
