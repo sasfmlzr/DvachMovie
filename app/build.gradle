@@ -45,7 +45,8 @@ android {
             debuggable true
             minifyEnabled false
             shrinkResources false
-            testCoverageEnabled true
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
         }
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
