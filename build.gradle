@@ -4,7 +4,7 @@ apply from: "${rootProject.projectDir.path}${File.separatorChar}gradle${File.sep
 buildscript {
     ext {
         compileSdkVersion = 36
-        minSdkVersion = 23
+        minSdkVersion = 26
         targetSdkVersion = 36
 
         appcompatVersion = '1.4.0'
