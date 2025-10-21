@@ -7,18 +7,18 @@ sourceSets {
 }
 
 dependencies {
-    implementation "$kotlinSdk"
+    implementation libs.kotlinSdk
 
-    implementation "$dagger.dagger"
-    kapt "$dagger.compiler"
+    implementation libs.dagger.dagger
+    kapt libs.dagger.compiler
 
-    implementation "$coroutines.core"
+    implementation libs.coroutines.core
 
-    implementation "$retrofit.retrofit"
-    implementation "$retrofit.gsonConverter"
-    implementation "$okhttp"
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0-RC1'
-    implementation "$jodaTime"
+    implementation libs.retrofit.retrofit
+    implementation libs.retrofit.gsonConverter
+    implementation libs.okhttp
+    implementation libs.logging.interceptor
+    implementation libs.jodaTime
 
     implementation project(':domain')
 

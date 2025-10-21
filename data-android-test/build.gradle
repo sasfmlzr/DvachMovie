@@ -34,12 +34,12 @@ android {
 }
 
 dependencies {
-    implementation "$kotlinSdk"
-    implementation "$appcompat"
+    implementation libs.kotlinSdk
+    implementation libs.appcompat
 
-    implementation "$dagger.dagger"
-    kapt "$dagger.compiler"
-    implementation "$jodaTime"
+    implementation libs.dagger.dagger
+    kapt libs.dagger.compiler
+    implementation libs.jodaTime
 
     implementation project(':domain')
     implementation project(':data-android')

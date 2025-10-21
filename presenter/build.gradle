@@ -5,13 +5,13 @@ sourceSets {
 }
 
 dependencies {
-    implementation "$kotlinSdk"
+    implementation libs.kotlinSdk
 
-    implementation "$dagger.dagger"
+    implementation libs.dagger.dagger
 
-    implementation "$coroutines.core"
+    implementation libs.coroutines.core
 
-    implementation "$jodaTime"
+    implementation libs.jodaTime
 
     implementation project(':domain')
 

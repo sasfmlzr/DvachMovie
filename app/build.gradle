@@ -73,54 +73,54 @@ android {
 }
 
 dependencies {
-    implementation "$kotlinSdk"
+    implementation libs.kotlinSdk
 
-    implementation "$appcompat"
-    implementation "$constraintLayout"
-    implementation "$material"
+    implementation libs.appcompat
+    implementation libs.constraintLayout
+    implementation libs.material
 
-    implementation "$dagger.dagger"
-    implementation 'androidx.profileinstaller:profileinstaller:1.4.1'
+    implementation libs.dagger.dagger
+    implementation libs.profileinstaller
     baselineProfile project(':baselineprofile')
-    kapt "$dagger.compiler"
+    kapt libs.dagger.compiler
 
-    implementation "$coroutines.core"
-    implementation "$coroutines.android"
+    implementation libs.coroutines.core
+    implementation libs.coroutines.android
 
-    implementation "$exoplayer.core"
-    implementation "$exoplayer.ui"
+    implementation libs.exoplayer.core
+    implementation libs.exoplayer.ui
 
-    kapt "$lifecycle.compiler"
+    kapt libs.lifecycle.compiler
 
-    implementation "$glide.glide"
-    kapt "$glide.compiler"
+    implementation libs.glide.glide
+    kapt libs.glide.compiler
 
-    implementation "$navigation.fragment"
-    implementation "$navigation.ui"
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
 
-    implementation "$workmanager"
+    implementation libs.workmanager
 
-    implementation "$timber"
+    implementation libs.logger.timber
 
-    implementation "$retrofit.retrofit"
+    implementation libs.retrofit.retrofit
 
-    implementation "$ktx"
+    implementation libs.core.ktx
 
     implementation project(':data')
     implementation project(':domain')
     implementation project(':data-android')
     implementation project(':presenter')
 
-    testImplementation "$testing.junit"
-    testImplementation "$testing.robolectric"
+    testImplementation libs.testing.junit
+    testImplementation libs.testing.robolectric
 
     androidTestImplementation project(':data-android-test')
-    androidTestImplementation "$testing.runner"
-    androidTestImplementation "$testing.espresso"
-    androidTestImplementation "$testing.uiautomator"
-    androidTestImplementation "$testing.workmanager"
-    androidTestImplementation "$testing.junitExtension"
-    androidTestImplementation "$testing.mockito"
-    androidTestImplementation "$jodaTime"
-    kaptAndroidTest "$dagger.compiler"
+    androidTestImplementation libs.testing.runner
+    androidTestImplementation libs.testing.espresso
+    androidTestImplementation libs.testing.uiautomator
+    androidTestImplementation libs.testing.workmanager
+    androidTestImplementation libs.testing.junitExtension
+    androidTestImplementation libs.testing.mockito
+    androidTestImplementation libs.jodaTime
+    kaptAndroidTest libs.dagger.compiler
 }
