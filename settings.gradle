@@ -1,1 +1,2 @@
 include ':app', ':data', ':data-android', ':data-android-test', ':domain', ':presenter'
+include ':baselineprofile'

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'androidx.baselineprofile'
 
 android {
     namespace = "com.dvachmovie.android"
@@ -27,6 +28,7 @@ android {
         versionCode project["versionCode"].toInteger()
         signingConfig signingConfigs.releaseConfig
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
     buildFeatures.dataBinding = true
     buildFeatures.buildConfig = true
@@ -53,7 +55,7 @@ android {
             debuggable false
             minifyEnabled true
             shrinkResources true
-            signingConfig signingConfigs.releaseConfig
+            signingConfig signingConfigs.debug
         }
     }
     testOptions.unitTests.includeAndroidResources = true
@@ -78,6 +80,8 @@ dependencies {
     implementation "$material"
 
     implementation "$dagger.dagger"
+    implementation 'androidx.profileinstaller:profileinstaller:1.4.1'
+    baselineProfile project(':baselineprofile')
     kapt "$dagger.compiler"
 
     implementation "$coroutines.core"
