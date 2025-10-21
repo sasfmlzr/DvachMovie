@@ -85,7 +85,7 @@ internal class ApiModule {
                     .Builder()
                     .name(header)
                     .value(cookieValue)
-                    .domain("2ch.hk")
+                    .domain("2ch.org")
                     .build())
         }
     }

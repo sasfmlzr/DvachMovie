@@ -31,7 +31,7 @@
                 android:scaleX="1.2"
                 android:scaleY="1.2"
                 android:src="@drawable/outline_file_copy_24"
-                app:tint="@android:color/white" />
+                android:tint="@android:color/white" />
 
             <ImageButton
                 android:id="@id/exo_rew"
@@ -62,7 +62,7 @@
                 android:scaleX="1.2"
                 android:scaleY="1.2"
                 android:src="@drawable/outline_cloud_download_24"
-                app:tint="@android:color/white" />
+                android:tint="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
