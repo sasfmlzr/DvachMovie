@@ -62,7 +62,9 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
-
+    buildFeatures {
+        buildConfig = true
+    }
     flavorDimensions "environment"
     productFlavors {
         pro {
@@ -70,6 +72,14 @@ android {
             applicationId "com.dvachmovie.android.pro"
         }
     }
+}
+baselineProfile {
+    // Don't build on every iteration of a full assemble.
+    // Instead enable generation directly for the release build variant.
+    automaticGenerationDuringBuild = false
+
+    // Make use of Dex Layout Optimizations via Startup Profiles
+    dexLayoutOptimization = true
 }
 
 dependencies {
@@ -81,7 +91,7 @@ dependencies {
 
     implementation libs.dagger.dagger
     implementation libs.profileinstaller
-    baselineProfile project(':baselineprofile')
+    baselineProfile project(':baselineProfile')
     kapt libs.dagger.compiler
 
     implementation libs.coroutines.core
