@@ -3,10 +3,13 @@ package dvachmovie.fragment.preview
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.dvachmovie.android.R
 import dvachmovie.api.Cookie
 import dvachmovie.architecture.Navigator
@@ -18,16 +21,14 @@ import dvachmovie.pipe.network.GetCookiePipe
 import javax.inject.Inject
 
 class PreviewMovieAdapter @Inject constructor(
-        private val setCurrentMovieStoragePipe: SetCurrentMoviePipe,
-        getCookiePipe: GetCookiePipe,
-        private val logger: Logger) :
-        ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>(PreviewMovieDiffCallback()) {
+    private val setCurrentMovieStoragePipe: SetCurrentMoviePipe,
+    getCookiePipe: GetCookiePipe,
+    private val logger: Logger
+) :
+    ListAdapter<Movie, PreviewMovieAdapter.ViewHolder>(PreviewMovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                DataBindingUtil.inflate(
-                        LayoutInflater.from(parent.context),
-                        R.layout.item_preview_movies, parent, false
-                )
+            ItemPreviewMoviesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -50,13 +51,17 @@ class PreviewMovieAdapter @Inject constructor(
     }
 
     class ViewHolder(
-            private val binding: ItemPreviewMoviesBinding
+        private val binding: ItemPreviewMoviesBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie, cookie: Cookie, listener: View.OnClickListener) {
-            with(binding) {
-                viewModel = PreviewItemVM(movie, cookie)
-                clickListener = listener
-                executePendingBindings()
+            binding.root.setOnClickListener(listener)
+            if (movie.previewUrl.isNotEmpty()) {
+                val builder = LazyHeaders.Builder().addHeader("Cookie", cookie.toString())
+                val glideUrl = GlideUrl(movie.previewUrl, builder.build())
+                Glide.with(binding.previewImage)
+                    .load(glideUrl)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(binding.previewImage)
             }
         }
     }

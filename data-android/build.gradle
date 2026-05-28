@@ -1,6 +1,8 @@
+plugins {
+    alias(libs.plugins.ksp)
+}
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 
 android {
     namespace = "com.dvachmovie.android.dataandroid"
@@ -43,12 +45,12 @@ dependencies {
     implementation libs.appcompat
 
     implementation libs.dagger.dagger
-    kapt libs.dagger.compiler
+    ksp libs.dagger.compiler
 
     implementation libs.coroutines.core
 
     api libs.room
-    kapt libs.room.compiler
+    ksp libs.room.compiler
 
     implementation libs.jodaTime
 

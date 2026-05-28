@@ -1,6 +1,8 @@
+plugins {
+    alias(libs.plugins.ksp)
+}
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'androidx.baselineprofile'
 
@@ -30,7 +32,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
-    buildFeatures.dataBinding = true
+    buildFeatures.viewBinding = true
     buildFeatures.buildConfig = true
 
     compileOptions {
@@ -92,7 +94,7 @@ dependencies {
     implementation libs.dagger.dagger
     implementation libs.profileinstaller
     baselineProfile project(':baselineProfile')
-    kapt libs.dagger.compiler
+    ksp libs.dagger.compiler
 
     implementation libs.coroutines.core
     implementation libs.coroutines.android
@@ -100,10 +102,10 @@ dependencies {
     implementation libs.exoplayer.core
     implementation libs.exoplayer.ui
 
-    kapt libs.lifecycle.compiler
+    ksp libs.lifecycle.compiler
 
     implementation libs.glide.glide
-    kapt libs.glide.compiler
+    ksp libs.glide.compiler
 
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
@@ -113,6 +115,7 @@ dependencies {
     implementation libs.logger.timber
 
     implementation libs.retrofit.retrofit
+    implementation libs.livedata
 
     implementation libs.core.ktx
 
@@ -132,5 +135,5 @@ dependencies {
     androidTestImplementation libs.testing.junitExtension
     androidTestImplementation libs.testing.mockito
     androidTestImplementation libs.jodaTime
-    kaptAndroidTest libs.dagger.compiler
+    kspAndroidTest libs.dagger.compiler
 }

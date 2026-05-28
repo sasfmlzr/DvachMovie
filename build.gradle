@@ -1,6 +1,4 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply from: "${rootProject.projectDir.path}${File.separatorChar}gradle${File.separatorChar}detekt${File.separatorChar}detekt.gradle"
-
 buildscript {
     ext {
         compileSdkVersion = 36
@@ -16,9 +14,15 @@ buildscript {
         classpath (libs.gradle.plugin.kotlin)
         classpath( libs.gradle.plugin.navigation)
         classpath (libs.gradle.plugin.detekt)
-        classpath(libs.gradle.plugin.benchmark )
-     }
+        classpath(libs.gradle.plugin.benchmark)
+    }
 }
+plugins {
+    alias(libs.plugins.ksp) apply false
+}
+apply from: "${rootProject.projectDir.path}${File.separatorChar}gradle${File.separatorChar}detekt${File.separatorChar}detekt.gradle"
+
+
 
 allprojects {
     repositories {

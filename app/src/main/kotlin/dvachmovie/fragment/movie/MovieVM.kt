@@ -39,7 +39,7 @@ import dvachmovie.worker.WorkerManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -47,7 +47,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MovieVM @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<PresenterModel>,
+        private val broadcastChannel: MutableSharedFlow<PresenterModel>,
         getCookiePipe: GetCookiePipe,
         getMovieListPipe: GetMovieListPipe,
         getCurrentMoviePipe: GetCurrentMoviePipe,
@@ -88,7 +88,7 @@ class MovieVM @Inject constructor(
         })
 
         viewModelScope.launch {
-            broadcastChannel.asFlow().collect {
+            broadcastChannel.collect {
                 render(it)
             }
         }

@@ -11,20 +11,19 @@ import com.dvachmovie.android.databinding.ActivityMovieBinding
 import dvachmovie.di.core.ActivityComponent
 import javax.inject.Inject
 
-class MovieActivity : BaseActivity<MovieActivityVM,
-        ActivityMovieBinding>(MovieActivityVM::class) {
+class MovieActivity : BaseActivity<MovieActivityVM>(MovieActivityVM::class) {
 
     @Inject
     lateinit var logger: Logger
 
-    override val layoutId = R.layout.activity_movie
-
     override fun inject(component: ActivityComponent) = component.inject(this)
+
+    private lateinit var binding: ActivityMovieBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding.viewModel = viewModel
+        binding = ActivityMovieBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         viewModel.initCurrentBaseUrl()
     }
 

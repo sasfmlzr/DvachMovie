@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import com.dvachmovie.android.R
 import dvachmovie.architecture.base.BaseFragment
 import com.dvachmovie.android.databinding.FragmentPreviewMoviesBinding
+import com.dvachmovie.android.databinding.FragmentSettingsBinding
 import dvachmovie.di.core.FragmentComponent
 import javax.inject.Inject
 
-class PreviewFragment : BaseFragment<PreviewVM,
-        FragmentPreviewMoviesBinding>(PreviewVM::class) {
+class PreviewFragment : BaseFragment<PreviewVM>(PreviewVM::class) {
 
     companion object {
         private const val SMOOTH_POSITION = 70
@@ -20,7 +20,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
     @Inject
     lateinit var adapter: PreviewMovieAdapter
 
-    override fun getLayoutId() = R.layout.fragment_preview_movies
+    private lateinit var binding: FragmentPreviewMoviesBinding
 
     override fun inject(component: FragmentComponent) = component.inject(this)
 
@@ -28,7 +28,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        binding.viewModel = viewModel
+        binding = FragmentPreviewMoviesBinding.inflate(inflater, container, false)
         binding.moviesList.adapter = adapter
 
         subscribeUi(adapter)
@@ -38,8 +38,7 @@ class PreviewFragment : BaseFragment<PreviewVM,
     }
 
     private fun subscribeUi(adapter: PreviewMovieAdapter) {
-        binding.viewModel?.uriMovie
-                ?.observe(viewLifecycleOwner, { movies ->
+        viewModel.uriMovie.observe(viewLifecycleOwner, { movies ->
                     if (movies != null) {
                         adapter.submitList(movies)
                     }

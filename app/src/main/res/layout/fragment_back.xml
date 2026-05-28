@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="dvachmovie.fragment.back.BackFragment">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="dvachmovie.fragment.back.BackVM" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragment.back.BackFragment">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/exit_image"
-            app:imageFromResource="@{safeUnbox(viewModel.imageId)}" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+        android:contentDescription="@string/exit_image" />
+</androidx.constraintlayout.widget.ConstraintLayout>

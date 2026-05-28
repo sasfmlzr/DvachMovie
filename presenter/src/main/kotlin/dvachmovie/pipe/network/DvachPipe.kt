@@ -20,13 +20,13 @@ import dvachmovie.usecase.settingsstorage.GetBoardUseCase
 import dvachmovie.usecase.settingsstorage.GetCurrentBaseUrlUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DvachPipe @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<PresenterModel>,
+        private val broadcastChannel: MutableSharedFlow<PresenterModel>,
         private val dvachUseCase: DvachUseCase,
         private val fourChanUseCase: FourChanUseCase,
         private val neoChanUseCase: NeoChanUseCase,
@@ -46,7 +46,7 @@ class DvachPipe @Inject constructor(
         val handler = CoroutineExceptionHandler { _, throwable ->
             scopeProvider.ioScope.launch {
                 if (throwable !is CancellationException) {
-                    broadcastChannel.send(ErrorModel(throwable))
+                    broadcastChannel.emit(ErrorModel(throwable))
                 }
             }
         }
@@ -55,17 +55,17 @@ class DvachPipe @Inject constructor(
             override suspend fun onSuccess(useCaseModel: UseCaseModel) {
                 when (useCaseModel) {
                     is DvachUseCaseModel ->
-                        broadcastChannel.send(DvachModel(useCaseModel.movies, useCaseModel.threads))
+                        broadcastChannel.emit(DvachModel(useCaseModel.movies, useCaseModel.threads))
                     is DvachCountRequestUseCaseModel ->
-                        broadcastChannel.send(CountCompletedRequestsModel(useCaseModel.count))
+                        broadcastChannel.emit(CountCompletedRequestsModel(useCaseModel.count))
                     is DvachAmountRequestsUseCaseModel ->
-                        broadcastChannel.send(AmountRequestsModel(useCaseModel.max))
+                        broadcastChannel.emit(AmountRequestsModel(useCaseModel.max))
                 }
             }
 
             override suspend fun onFailure(t: Throwable) {
                 if (t !is CancellationException) {
-                    broadcastChannel.send(ErrorModel(t))
+                    broadcastChannel.emit(ErrorModel(t))
                 }
             }
         }

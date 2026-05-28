@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class StartActivityVM @Inject constructor() : ViewModel() {
-    val initText = MutableLiveData("Preparing...")
+    val initText = "Preparing..."
     val version = MutableLiveData<String>(BuildConfig.VERSION_NAME)
 
     @Inject

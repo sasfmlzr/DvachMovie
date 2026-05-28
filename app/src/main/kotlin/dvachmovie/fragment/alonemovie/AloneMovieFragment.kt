@@ -21,40 +21,46 @@ import dvachmovie.architecture.base.PermissionsCallback
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import com.dvachmovie.android.databinding.FragmentAloneMovieBinding
+import com.dvachmovie.android.databinding.FragmentPreviewMoviesBinding
+import dvachmovie.architecture.binding.BindingCache
+import dvachmovie.architecture.binding.BindingCache.pos
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.fragment.movie.PlayerCache
 import dvachmovie.service.DownloadService
 
-class AloneMovieFragment : BaseFragment<AloneMovieVM,
-        FragmentAloneMovieBinding>(AloneMovieVM::class), PermissionsCallback {
+class AloneMovieFragment : BaseFragment<AloneMovieVM>(AloneMovieVM::class), PermissionsCallback {
 
-    private val downloadBtnClicked = { runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE) }
+    private val downloadBtnClicked =
+        { runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE) }
 
     private val copyURLTask = { movieUrl: String ->
         val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
-        clipboard.setPrimaryClip(ClipData
-                .newPlainText("Copied Text", movieUrl))
+        clipboard.setPrimaryClip(
+            ClipData
+                .newPlainText("Copied Text", movieUrl)
+        )
         extensions.showMessage("URL video copied")!!
     }
-
+    private lateinit var binding: FragmentAloneMovieBinding
     private val showMessageTask = { message: String -> extensions.showMessage(message)!! }
 
     private var url = ""
 
-    override fun getLayoutId() = R.layout.fragment_alone_movie
-
     override fun inject(component: FragmentComponent) = component.inject(this)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
         super.onCreateView(inflater, container, savedInstanceState)
 
-        url = (arguments?.get("android-support-nav:controller:deepLinkIntent") as Intent).data.toString()
+        url =
+            (arguments?.get("android-support-nav:controller:deepLinkIntent") as Intent).data.toString()
         viewModel.getUrlTask = { url }
 
-        binding.viewModel = viewModel
+        binding = FragmentAloneMovieBinding.inflate(inflater, container, false)
 
         viewModel.downloadBtnClicked = downloadBtnClicked
         viewModel.copyURLTask = copyURLTask
@@ -71,18 +77,47 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
         super.onViewCreated(view, savedInstanceState)
 
         initPlayer(binding.playerView)
+
+        viewModel.cookie.observe(viewLifecycleOwner) { cookies ->
+            BindingCache.cookie = cookies
+            if (BindingCache.media.isNotEmpty()) {
+                bindPlayer(binding.playerView)
+            }
+        }
+        viewModel.uriMovies.observe(viewLifecycleOwner) { uri ->
+            if (uri == null) return@observe
+            if (uri.isNotEmpty()) {
+                BindingCache.media = uri
+                val player = binding.playerView
+                (player.player as SimpleExoPlayer)
+                if (!PlayerCache.isPrepared) {
+                    bindPlayer(player)
+                }
+            }
+        }
+        viewModel.currentPos.observe(viewLifecycleOwner) { position ->
+            pos = position
+            val default = 0.toLong()
+            if (pos.second == default) {
+                binding.playerView.player?.seekToDefaultPosition(pos.first)
+            } else {
+                binding.playerView.player?.seekTo(pos.first, pos.second)
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initPlayer(playerView: PlayerView) {
         playerView.player = SimpleExoPlayer.Builder(playerView.context)
-                .build()
+            .build()
 
         binding.playerView.findViewById<PlayerControlView>(com.google.android.exoplayer2.ui.R.id.exo_controller)
-        val controlView = playerView.children.filter { it is PlayerControlView }.first() as PlayerControlView
-        val buttonsGroup = ((controlView.getChildAt(0) as LinearLayout).getChildAt(0) as LinearLayout).children.filter {
-            it is ImageButton
-        }.toList()
+        val controlView =
+            playerView.children.filter { it is PlayerControlView }.first() as PlayerControlView
+        val buttonsGroup =
+            ((controlView.getChildAt(0) as LinearLayout).getChildAt(0) as LinearLayout).children.filter {
+                it is ImageButton
+            }.toList()
         val copyUrlDescription = resources.getString(R.string.copy_url_button)
         val downloadDescription = resources.getString(R.string.download)
         val copyUrlButton = buttonsGroup.first {
@@ -148,13 +183,13 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
     }
 
     private fun toggleControlsVisibility() =
-            if (binding.playerView.isControllerVisible) {
-                binding.playerView.hideController()
-                false
-            } else {
-                binding.playerView.showController()
-                true
-            }
+        if (binding.playerView.isControllerVisible) {
+            binding.playerView.hideController()
+            false
+        } else {
+            binding.playerView.showController()
+            true
+        }
 
     private val playerListener by lazy {
         object : Player.Listener {
@@ -202,16 +237,21 @@ class AloneMovieFragment : BaseFragment<AloneMovieVM,
 
     override fun onPermissionsGranted(permissions: List<String>) {
         if (permissions.isNotEmpty()) {
-            downloadMovie(viewModel.currentMovie.value
-                    .orEmpty(), viewModel.cookie.value.orEmpty())
+            downloadMovie(
+                viewModel.currentMovie.value
+                    .orEmpty(), viewModel.cookie.value.orEmpty()
+            )
         }
     }
 
     private fun downloadMovie(download: String, cookie: String) {
-        activity?.startService(DownloadService.getDownloadService(
+        activity?.startService(
+            DownloadService.getDownloadService(
                 requireContext(),
                 download,
                 Environment.DIRECTORY_DOWNLOADS,
-                cookie))
+                cookie
+            )
+        )
     }
 }

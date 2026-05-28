@@ -3,7 +3,7 @@ package dvachmovie.pipe.utils
 import dvachmovie.PresenterModel
 import dvachmovie.db.data.NullMovie
 import dvachmovie.usecase.utils.ShuffleMoviesUseCase
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,7 +22,7 @@ class ShuffleMoviesPipeTest {
     lateinit var useCase: ShuffleMoviesUseCase
 
     @Mock
-    lateinit var broadcastChannel: BroadcastChannel<PresenterModel>
+    lateinit var broadcastChannel: MutableSharedFlow<PresenterModel>
 
     private val movieOne = NullMovie("testOne")
 

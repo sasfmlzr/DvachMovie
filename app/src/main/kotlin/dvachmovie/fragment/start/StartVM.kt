@@ -18,24 +18,22 @@ import dvachmovie.pipe.settingsstorage.GetCurrentBaseUrlPipe
 import dvachmovie.pipe.settingsstorage.PutBoardPipe
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 open class StartVM @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<PresenterModel>,
-        private val dvachPipe: DvachPipe,
-        putBoardPipe: PutBoardPipe,
-        private val scopeProvider: ScopeProvider,
-        val getBoardPipe: GetBoardPipe,
-        val getMoviesFromDBByBoardPipe: GetMoviesFromDBByBoardPipe,
-        private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe) : ViewModel() {
+    private val broadcastChannel: MutableSharedFlow<PresenterModel>,
+    private val dvachPipe: DvachPipe,
+    putBoardPipe: PutBoardPipe,
+    private val scopeProvider: ScopeProvider,
+    val getBoardPipe: GetBoardPipe,
+    val getMoviesFromDBByBoardPipe: GetMoviesFromDBByBoardPipe,
+    private val getCurrentBaseUrlPipe: GetCurrentBaseUrlPipe) : ViewModel() {
 
     private lateinit var dvachJob: Job
 
-    val initText = MutableLiveData("Initialization")
+    val initText = "Initialization"
 
     val viewRetryBtn = MutableLiveData(false)
 
@@ -73,7 +71,7 @@ open class StartVM @Inject constructor(
 
     init {
         viewModelScope.launch {
-            broadcastChannel.asFlow().collect {
+            broadcastChannel.collect {
                 render(it)
             }
         }

@@ -9,23 +9,23 @@ import dvachmovie.pipe.ErrorModel
 import dvachmovie.pipe.network.GetCookiePipe
 import dvachmovie.pipe.settingsstorage.GetIsAllowGesturePipe
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AloneMovieVM @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<PresenterModel>,
-        getCookiePipe: GetCookiePipe,
-        private val getIsAllowGesturePipe: GetIsAllowGesturePipe) : ViewModel() {
+    private val broadcastChannel: MutableSharedFlow<PresenterModel>,
+    getCookiePipe: GetCookiePipe,
+    private val getIsAllowGesturePipe: GetIsAllowGesturePipe) : ViewModel() {
 
     val isGestureEnabled = MutableLiveData<Boolean>()
 
     init {
 
         viewModelScope.launch {
-            broadcastChannel.asFlow().collect {
+            broadcastChannel.collect {
                 render(it)
             }
         }

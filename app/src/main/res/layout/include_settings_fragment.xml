@@ -1,150 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools">
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="dvachmovie.fragment.settings.SettingsVM" />
-
-        <import type="android.view.View" />
-    </data>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/MyToolBarStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title="Settings" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/root"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/scrollContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/MyToolBarStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="Settings" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/scrollContainer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
-            <ScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/gesture_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="@string/gesture" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/report_btn_visibility_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="@string/report_button_visible" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/list_btn_visibility_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="@string/list_button_visible" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/gesture_switch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@{safeUnbox(viewModel.isGestureEnabled)}"
-                        android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:onCheckedChanged="@{viewModel.onGestureLoadingClicked}"
-                        android:text="@string/gesture" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/report_btn_visibility_switch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@{safeUnbox(viewModel.isReportBtnShow)}"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:onCheckedChanged="@{viewModel.onReportSwitchClicked}"
-                        android:text="@string/report_button_visible"
-                        android:visibility="@{safeUnbox(viewModel.isReportBtnVisible)? View.VISIBLE : View.GONE}" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/list_btn_visibility_switch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@{safeUnbox(viewModel.isListBtnShow)}"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:onCheckedChanged="@{viewModel.onListSwitchClicked}"
-                        android:text="@string/list_button_visible" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/buttonCleanDatabase"
-                            android:layout_width="match_parent"
-                            android:layout_height="70dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1"
-                            android:onClick="@{viewModel.onCleanDatabase}"
-                            android:text="@string/clean_movies"
-                            android:textSize="12sp" />
-
-                        <Button
-                            android:id="@+id/buttonRefreshMovies"
-                            android:layout_width="match_parent"
-                            android:layout_height="70dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_weight="1"
-                            android:onClick="@{viewModel.onRefreshMovies}"
-                            android:text="@string/refresh_movies"
-                            android:textSize="12sp" />
-                    </LinearLayout>
+                    android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/buttonImageBoard"
+                        android:id="@+id/buttonCleanDatabase"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="70dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:onClick="@{viewModel.onSetImageBoard}"
-                        android:text="@string/set_imageboard"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/clean_movies"
                         android:textSize="12sp" />
 
-                    <include
-                        layout="@layout/include_dvach_boards"
-                        android:visibility="@{safeUnbox(viewModel.isDvachBoardsVisible)? View.VISIBLE : View.GONE}"
-                        bind:viewModel="@{viewModel}" />
-
-                    <include
-                        layout="@layout/include_fourchan_boards"
-                        android:visibility="@{safeUnbox(viewModel.isFourChanBoardsVisible)? View.VISIBLE : View.GONE}"
-                        bind:viewModel="@{viewModel}" />
-
-                    <include
-                        layout="@layout/include_neochan_boards"
-                        android:visibility="@{safeUnbox(viewModel.isNeoChanBoardsVisible)? View.VISIBLE : View.GONE}"
-                        bind:viewModel="@{viewModel}" />
+                    <Button
+                        android:id="@+id/buttonRefreshMovies"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
+                        android:text="@string/refresh_movies"
+                        android:textSize="12sp" />
                 </LinearLayout>
-            </ScrollView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/buttonImageBoard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/set_imageboard"
+                    android:textSize="12sp" />
+
+                <include
+                    android:id="@+id/dvachBoards"
+                    layout="@layout/include_dvach_boards" />
+
+                <include
+                    android:id="@+id/fourchanBoards"
+                    layout="@layout/include_fourchan_boards" />
+
+                <include
+                    android:id="@+id/neochanBoards"
+                    layout="@layout/include_neochan_boards" />
+            </LinearLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

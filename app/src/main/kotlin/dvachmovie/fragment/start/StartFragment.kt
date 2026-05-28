@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -14,6 +15,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.RawResourceDataSource
 import dvachmovie.AppConfig
 import com.dvachmovie.android.R
+import com.dvachmovie.android.databinding.FragmentPreviewMoviesBinding
 import dvachmovie.architecture.ScopeProvider
 import dvachmovie.architecture.base.BaseFragment
 import com.dvachmovie.android.databinding.FragmentStartBinding
@@ -24,8 +26,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class StartFragment : BaseFragment<StartVM,
-        FragmentStartBinding>(StartVM::class) {
+class StartFragment : BaseFragment<StartVM>(StartVM::class) {
 
     companion object {
         private const val MINIMUM_COUNT_MOVIES = 100
@@ -34,7 +35,7 @@ class StartFragment : BaseFragment<StartVM,
     @Inject
     lateinit var scopeProvider: ScopeProvider
 
-    override fun getLayoutId() = R.layout.fragment_start
+    private lateinit var binding: FragmentStartBinding
 
     override fun inject(component: FragmentComponent) = Injector.viewComponent().inject(this)
 
@@ -47,7 +48,7 @@ class StartFragment : BaseFragment<StartVM,
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding.viewModel = viewModel
+        binding = FragmentStartBinding.inflate(inflater, container, false)
 
         initDBTask = { WorkerManager.initDB(requireContext(), viewModel.getBoardPipe.execute(Unit)) }
 
@@ -60,6 +61,28 @@ class StartFragment : BaseFragment<StartVM,
         prepareData()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.firstInitText.text = viewModel.initText
+
+        binding.buttonChangeDefaultBoard.setOnClickListener(viewModel.onButtonChangeDefaultBoardClicked)
+        binding.buttonRetry.setOnClickListener(viewModel.onButtonRetryClicked)
+        binding.buttonStartMovies.setOnClickListener(viewModel.onButtonStartClicked)
+
+        viewModel.amountMovies.observe(viewLifecycleOwner) { amountMovies->
+            binding.progressLoadingSource.max =amountMovies
+        }
+        viewModel.progressLoadingMovies.observe(viewLifecycleOwner) { progressLoadingMovies->
+            binding.progressLoadingSource.progress =progressLoadingMovies
+        }
+
+        viewModel.viewRetryBtn.observe(viewLifecycleOwner) { isViewRetryBtnVisible->
+            binding.buttonChangeDefaultBoard.isVisible =isViewRetryBtnVisible
+            binding.buttonRetry.isVisible =isViewRetryBtnVisible
+        }
     }
 
     private fun initializePlayer() {

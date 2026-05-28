@@ -4,11 +4,11 @@ import dagger.Module
 import dagger.Provides
 import dvachmovie.PresenterModel
 import dvachmovie.di.base.FragmentScope
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 @Module
 class FragmentModule {
     @Provides
     @FragmentScope
-    internal fun broadcastChannel() = BroadcastChannel<PresenterModel>(1)
+    internal fun broadcastChannel() = MutableSharedFlow<PresenterModel>(1)
 }

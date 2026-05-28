@@ -1,5 +1,7 @@
+plugins {
+    alias(libs.plugins.ksp)
+}
 apply plugin: 'kotlin'
-apply plugin: 'kotlin-kapt'
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
@@ -10,7 +12,7 @@ dependencies {
     implementation libs.kotlinSdk
 
     implementation libs.dagger.dagger
-    kapt libs.dagger.compiler
+    ksp libs.dagger.compiler
 
     implementation libs.coroutines.core
 

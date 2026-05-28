@@ -5,14 +5,14 @@ import dvachmovie.architecture.PipeAsync
 import dvachmovie.db.data.Movie
 import dvachmovie.pipe.ShuffledMoviesModel
 import dvachmovie.usecase.utils.ShuffleMoviesUseCase
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
 
 class ShuffleMoviesPipe @Inject constructor(
-        private val broadcastChannel: BroadcastChannel<PresenterModel>,
+        private val broadcastChannel: MutableSharedFlow<PresenterModel>,
         private val useCase: ShuffleMoviesUseCase) : PipeAsync<List<Movie>, Unit>() {
 
     override suspend fun execute(input: List<Movie>) {
-        broadcastChannel.send(ShuffledMoviesModel(useCase.executeAsync(input)))
+        broadcastChannel.emit(ShuffledMoviesModel(useCase.executeAsync(input)))
     }
 }

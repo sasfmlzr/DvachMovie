@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import dvachmovie.AppConfig
 import com.dvachmovie.android.R
+import com.dvachmovie.android.databinding.ActivityMovieBinding
 import dvachmovie.activity.movie.MovieActivity
 import dvachmovie.api.DvachBoards
 import dvachmovie.api.FourChanBoards
@@ -14,30 +15,31 @@ import dvachmovie.di.core.ActivityComponent
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-class StartActivity : BaseActivity<StartActivityVM,
-        ActivityStartBinding>(StartActivityVM::class) {
+class StartActivity : BaseActivity<StartActivityVM>(StartActivityVM::class) {
 
     companion object {
         const val MIN_SHOW_TIME: Long = 1
     }
 
-    override val layoutId = R.layout.activity_start
-
     private val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + Job()
     private val coroutineScope = CoroutineScope(coroutineContext)
+    private lateinit var binding: ActivityStartBinding
 
     override fun inject(component: ActivityComponent) = component.inject(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.viewModel = viewModel
+        binding = ActivityStartBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         if (savedInstanceState == null) {
             initializeApp()
         }
         viewModel.version.observe(this) {
             binding.versionText.text = it
         }
+
+        binding.firstInitText.text = viewModel.initText
     }
 
     private fun initializeApp() {

@@ -1,39 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:selectableItemBackground="?attr/selectableItemBackground"
+    app:cardCornerRadius="5dp"
+    app:strokeColor="@color/colorPrimaryDarkOne"
+    app:strokeWidth="1dp">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="dvachmovie.fragment.preview.PreviewItemVM" />
-
-        <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener" />
-    </data>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:onClick="@{clickListener}"
-        android:selectableItemBackground="?attr/selectableItemBackground"
-        app:cardCornerRadius="5dp"
-        app:strokeColor="@color/colorPrimaryDarkOne"
-        app:strokeWidth="1dp">
-
-        <ImageView
-            android:id="@+id/previewImage"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/preview_image"
-            android:elevation="5dp"
-            android:scaleType="centerCrop"
-            app:cookie="@{viewModel.cookie}"
-            app:imageFromUrl="@{viewModel.imageUrl}" />
-    </com.google.android.material.card.MaterialCardView>
-</layout>
+    <ImageView
+        android:id="@+id/previewImage"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/preview_image"
+        android:elevation="5dp"
+        android:scaleType="centerCrop" />
+</com.google.android.material.card.MaterialCardView>

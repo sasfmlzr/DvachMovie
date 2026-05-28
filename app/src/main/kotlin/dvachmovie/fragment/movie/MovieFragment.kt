@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.ui.PlayerView
 import dvachmovie.AppConfig
@@ -21,16 +22,17 @@ import dvachmovie.architecture.binding.BindingCache
 import dvachmovie.architecture.binding.bindPlayer
 import dvachmovie.architecture.listener.OnSwipeTouchListener
 import com.dvachmovie.android.databinding.FragmentMovieBinding
+import com.dvachmovie.android.databinding.FragmentPreviewMoviesBinding
+import dvachmovie.architecture.binding.BindingCache.pos
 import dvachmovie.di.core.FragmentComponent
 import dvachmovie.service.DownloadService
 import dvachmovie.worker.WorkerManager
 
-class MovieFragment : BaseFragment<MovieVM,
-        FragmentMovieBinding>(MovieVM::class), PermissionsCallback {
+class MovieFragment : BaseFragment<MovieVM>(MovieVM::class), PermissionsCallback {
 
     private val routeToSettingsTask = { router.navigateMovieToSettingsFragment() }
     private val downloadBtnClicked = { runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE) }
-
+    private lateinit var binding: FragmentMovieBinding
     private val copyURLTask = { movieUrl: String ->
         val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
@@ -42,15 +44,13 @@ class MovieFragment : BaseFragment<MovieVM,
 
     private val showMessageTask = { message: String -> extensions.showMessage(message)!! }
 
-    override fun getLayoutId() = R.layout.fragment_movie
-
     override fun inject(component: FragmentComponent) = component.inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        binding.viewModel = viewModel
+        binding = FragmentMovieBinding.inflate(inflater, container, false)
         viewModel.downloadBtnClicked = downloadBtnClicked
         viewModel.routeToSettingsTask = routeToSettingsTask
         viewModel.copyURLTask = copyURLTask
@@ -87,6 +87,60 @@ class MovieFragment : BaseFragment<MovieVM,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initPlayer(binding.playerView)
+
+        viewModel.cookie.observe(viewLifecycleOwner) { cookies ->
+            BindingCache.cookie = cookies
+            if (BindingCache.media.isNotEmpty()) {
+                bindPlayer(binding.playerView)
+            }
+        }
+        viewModel.uriMovies.observe(viewLifecycleOwner) { uri ->
+            if (uri == null) return@observe
+            if (uri.isNotEmpty()) {
+                BindingCache.media = uri
+                val player = binding.playerView
+                (player.player as SimpleExoPlayer)
+                if (!PlayerCache.isPrepared) {
+                    bindPlayer(player)
+                }
+            }
+        }
+        viewModel.currentPos.observe(viewLifecycleOwner) { position ->
+            pos = position
+            val default = 0.toLong()
+            if (pos.second == default) {
+                binding.playerView.player?.seekToDefaultPosition(pos.first)
+            } else {
+                binding.playerView.player?.seekTo(pos.first, pos.second)
+            }
+        }
+
+        viewModel.isPlayerControlVisibility.observe(viewLifecycleOwner) { isVisible ->
+            binding.topButtonLayer.isVisible = isVisible
+            binding.shuffleButton.isVisible = isVisible
+            binding.downloadButton.isVisible = isVisible
+            binding.settingsButton.isVisible = isVisible
+            binding.copyURLButton.isVisible = isVisible
+            binding.reportButton.isVisible = isVisible && viewModel.isReportBtnVisible.value == true
+            binding.hideThreadButton.isVisible = isVisible && viewModel.isHideThreadBtnVisible.value == true
+            binding.listVideosButton.isVisible = isVisible && viewModel.isListBtnVisible.value == true
+        }
+        viewModel.isReportBtnVisible.observe(viewLifecycleOwner) { isVisible ->
+            binding.reportButton.isVisible = isVisible && viewModel.isPlayerControlVisibility.value == true
+        }
+        viewModel.isHideThreadBtnVisible.observe(viewLifecycleOwner) { isVisible ->
+            binding.hideThreadButton.isVisible = isVisible && viewModel.isPlayerControlVisibility.value == true
+        }
+        viewModel.isListBtnVisible.observe(viewLifecycleOwner) { isVisible ->
+            binding.listVideosButton.isVisible = isVisible && viewModel.isPlayerControlVisibility.value == true
+        }
+        binding.shuffleButton.setOnClickListener(viewModel.onBtnShuffleClicked)
+        binding.downloadButton.setOnClickListener(viewModel.onBtnDownloadClicked)
+        binding.settingsButton.setOnClickListener(viewModel.onBtnSettingsClicked)
+        binding.copyURLButton.setOnClickListener(viewModel.onBtnCopyURLClicked)
+        binding.reportButton.setOnClickListener(viewModel.onBtnReportClicked)
+        binding.hideThreadButton.setOnClickListener(viewModel.onBtnHideThreadClicked)
+        binding.listVideosButton.setOnClickListener(viewModel.onBtnListVideosClicked)
     }
 
     @SuppressLint("ClickableViewAccessibility")
