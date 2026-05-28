@@ -36,14 +36,14 @@ class WorkerManager private constructor() {
             val request = OneTimeWorkRequestBuilder<DeleteDBWorker>()
                     .build()
 
-            val mSavedWorkInfo: LiveData<WorkInfo>
+            val mSavedWorkInfo: LiveData<WorkInfo?>
 
             mSavedWorkInfo = WorkManager.getInstance(context).getWorkInfoByIdLiveData(request.id)
 
             mSavedWorkInfo.observe(
                     lifecycleOwner,
                     { workStatus ->
-                        if (workStatus.state == WorkInfo.State.SUCCEEDED) {
+                        if (workStatus?.state == WorkInfo.State.SUCCEEDED) {
                             doOnSuccess()
                         }
                     }
