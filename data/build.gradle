@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.ksp)
+    id("kotlin")
 }
-apply plugin: 'kotlin'
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'

@@ -13,14 +13,14 @@ buildscript {
         classpath (libs.gradle.plugin.agp)
         classpath (libs.gradle.plugin.kotlin)
         classpath( libs.gradle.plugin.navigation)
-        classpath (libs.gradle.plugin.detekt)
+        //classpath (libs.gradle.plugin.detekt)
         classpath(libs.gradle.plugin.benchmark)
     }
 }
 plugins {
     alias(libs.plugins.ksp) apply false
 }
-apply from: "${rootProject.projectDir.path}${File.separatorChar}gradle${File.separatorChar}detekt${File.separatorChar}detekt.gradle"
+//apply from: "${rootProject.projectDir.path}${File.separatorChar}gradle${File.separatorChar}detekt${File.separatorChar}detekt.gradle"
 
 
 

@@ -1,8 +1,7 @@
 plugins {
     alias(libs.plugins.ksp)
+    id("com.android.library")
 }
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
     namespace = "com.dvachmovie.android.dataandroidtest"
@@ -13,10 +12,6 @@ android {
         targetCompatibility JavaVersion.VERSION_21
     }
 
-    kotlinOptions {
-        jvmTarget = "21"
-    }
-
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
@@ -24,7 +19,7 @@ android {
 
     buildTypes {
         debug {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled false
             shrinkResources false
         }
@@ -34,7 +29,11 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 }
-
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
 dependencies {
     implementation libs.kotlinSdk
     implementation libs.appcompat
